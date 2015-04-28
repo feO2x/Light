@@ -45,6 +45,7 @@
     <Compile Include="Json\JsonFormatterNullObject.cs" />
     <Compile Include="Json\JsonWriter.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\BasePrimitiveTypeFormatter.cs" />
+    <Compile Include="Json\PrimitiveTypeFormatters\BooleanFormatter.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\ToStringPrimitiveTypeFormatter.cs" />
     <Compile Include="Json\TypeSerializers\JsonPrimitiveTypeSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

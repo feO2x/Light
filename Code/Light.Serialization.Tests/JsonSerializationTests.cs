@@ -37,6 +37,14 @@ namespace Light.Serialization.Tests
             CompareJsonToExpected(number, number.ToString());
         }
 
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void BooleanIsSerializedCorrectly(bool value)
+        {
+            CompareJsonToExpected(value, value.ToString().ToLower());
+        }
+
         private void CompareJsonToExpected<T>(T value, string expected)
         {
             var json = JsonSerializer.Serialize(value);
