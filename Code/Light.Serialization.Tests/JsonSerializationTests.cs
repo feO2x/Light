@@ -71,6 +71,22 @@ namespace Light.Serialization.Tests
             CompareJsonToExpected(value, expected);
         }
 
+        [Theory]
+        [InlineData(42.0f, "42.0")]
+        [InlineData(42.01f, "42.01")]
+        [InlineData(42.0001f, "42.0001")]
+        [InlineData(float.MaxValue, "3.40282347E+38")]
+        [InlineData(float.MinValue, "-3.40282347E+38")]
+        [InlineData(float.Epsilon, "1.401298E-45")]
+        [InlineData(float.NegativeInfinity, "\"-Infinity\"")]
+        [InlineData(float.PositiveInfinity, "\"Infinity\"")]
+        [InlineData(float.NaN, "\"NaN\"")]
+        [InlineData(-42.00200f, "-42.002")]
+        public void FloatsMustBeSerializedCorrectly(float value, string expected)
+        {
+            CompareJsonToExpected(value, expected);
+        }
+
         private void CompareJsonToExpected<T>(T value, string expected)
         {
             var json = JsonSerializer.Serialize(value);

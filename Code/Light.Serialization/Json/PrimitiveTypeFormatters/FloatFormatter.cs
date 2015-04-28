@@ -1,0 +1,34 @@
+﻿using Light.Core;
+using System;
+using System.Globalization;
+
+namespace Light.Serialization.Json.PrimitiveTypeFormatters
+{
+    public sealed class FloatFormatter : IPrimitiveTypeFormatter
+    {
+        private readonly Type _targetType = typeof (float);
+
+        public Type TargetType
+        {
+            get { return _targetType; }
+        }
+
+        public string FormatPrimitiveType(object @object)
+        {
+            var value = (float) @object;
+
+            return FormatRoundTripFloatValue(value, value.ToString("R", CultureInfo.InvariantCulture));
+        }
+
+        private static string FormatRoundTripFloatValue(float value, string text)
+        {
+            if (float.IsInfinity(value) || float.IsNaN(value))
+                return text.SurroundWithQuotationMarks();
+
+            if (text.IndexOf('.') == -1 && text.IndexOf('E') == -1 && text.IndexOf('e') == -1)
+                return text + ".0";
+
+            return text;
+        }
+    }
+}

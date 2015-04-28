@@ -23,6 +23,7 @@ namespace Light.Serialization.Json
                                               new ToStringWithQuotationMarksFormatter<Guid>(),
                                               new BooleanFormatter(),
                                               new ToStringPrimitiveTypeFormatter<long>(),
+                                              new FloatFormatter(),
                                               new ToStringPrimitiveTypeFormatter<short>(),
                                               new ToStringPrimitiveTypeFormatter<byte>(),
                                               new ToStringPrimitiveTypeFormatter<uint>(),
