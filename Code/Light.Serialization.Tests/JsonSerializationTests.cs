@@ -111,5 +111,14 @@ namespace Light.Serialization.Tests
 
             json.Should().Be(expected);
         }
+
+        [Theory]
+        [InlineData('a', "\"a\"")]
+        [InlineData('b', "\"b\"")]
+        [InlineData(char.MinValue, "\"\\u0000\"")] // TODO: We have to implement string escaping but we also have to think about where to do it
+        public void ChararctersMustBeSerializedCorrectly(char value, string expected)
+        {
+            CompareJsonToExpected(value, expected);
+        }
     }
 }

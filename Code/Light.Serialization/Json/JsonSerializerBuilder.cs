@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Light.Serialization.Json.PrimitiveTypeFormatters;
+using Light.Serialization.Json.TypeSerializers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Light.Serialization.Json.PrimitiveTypeFormatters;
-using Light.Serialization.Json.TypeSerializers;
 
 namespace Light.Serialization.Json
 {
@@ -25,6 +25,7 @@ namespace Light.Serialization.Json
                                               new DecimalFormatter(),
                                               new ToStringPrimitiveTypeFormatter<long>(),
                                               new FloatFormatter(),
+                                              new ToStringWithQuotationMarksFormatter<char>(),
                                               new ToStringPrimitiveTypeFormatter<short>(),
                                               new ToStringPrimitiveTypeFormatter<byte>(),
                                               new ToStringPrimitiveTypeFormatter<uint>(),
