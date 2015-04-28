@@ -34,7 +34,7 @@ namespace Light.Serialization.Tests
         [InlineData(ushort.MinValue)]
         [InlineData(byte.MaxValue)]
         [InlineData(byte.MinValue)]
-        public void IntegerNumbersAreSerializedCorrectly<T>(T number)
+        public void IntegerNumbersMustBeSerializedCorrectly<T>(T number)
         {
             CompareJsonToExpected(number, number.ToString());
         }
@@ -42,7 +42,7 @@ namespace Light.Serialization.Tests
         [Theory]
         [InlineData(false)]
         [InlineData(true)]
-        public void BooleanIsSerializedCorrectly(bool value)
+        public void BooleansMustBeSerializedCorrectly(bool value)
         {
             CompareJsonToExpected(value, value.ToString().ToLower());
         }
@@ -53,6 +53,22 @@ namespace Light.Serialization.Tests
             var guid = Guid.NewGuid();
 
             CompareJsonToExpected(guid, guid.ToString().SurroundWithQuotationMarks());
+        }
+
+        [Theory]
+        [InlineData(42.0, "42.0")]
+        [InlineData(42.01, "42.01")]
+        [InlineData(42.0001, "42.0001")]
+        [InlineData(double.MaxValue, "1.7976931348623157E+308")]
+        [InlineData(double.MinValue, "-1.7976931348623157E+308")]
+        [InlineData(double.Epsilon, "4.94065645841247E-324")]
+        [InlineData(double.NegativeInfinity, "\"-Infinity\"")]
+        [InlineData(double.PositiveInfinity, "\"Infinity\"")]
+        [InlineData(double.NaN, "\"NaN\"")]
+        [InlineData(-42.00200000, "-42.002")]
+        public void DoubleValuesMustBeSerializedCorrectly(double value, string expected)
+        {
+            CompareJsonToExpected(value, expected);
         }
 
         private void CompareJsonToExpected<T>(T value, string expected)
