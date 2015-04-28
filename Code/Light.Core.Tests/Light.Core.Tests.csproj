@@ -6,14 +6,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C5B65A88-58C1-474A-80D2-3DC86E94C455}</ProjectGuid>
+    <ProjectGuid>{910B4702-2BFF-44F7-932A-1C9C4C60F877}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Light.Serialization.Tests</RootNamespace>
-    <AssemblyName>Light.Serialization.Tests</AssemblyName>
+    <RootNamespace>Light.Core.Tests</RootNamespace>
+    <AssemblyName>Light.Core.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>9f9c068a</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>99d647f3</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,9 +43,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
       <HintPath>..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
       <Private>True</Private>
@@ -60,7 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JsonSerializationTests.cs" />
+    <Compile Include="StringExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,9 +68,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Light.Serialization\Light.Serialization.csproj">
-      <Project>{a9586f6b-11ee-4984-ac27-7211da43f656}</Project>
-      <Name>Light.Serialization</Name>
+    <ProjectReference Include="..\Light.Core\Light.Core.csproj">
+      <Project>{9d7d6846-d701-4218-985a-ec46bee84287}</Project>
+      <Name>Light.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
