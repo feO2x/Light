@@ -3,6 +3,7 @@ using FluentAssertions;
 using Light.Core;
 using Light.Serialization.Json;
 using Xunit;
+using TestData = System.Collections.Generic.IEnumerable<object[]>;
 
 namespace Light.Serialization.Tests
 {
@@ -86,6 +87,23 @@ namespace Light.Serialization.Tests
         {
             CompareJsonToExpected(value, expected);
         }
+
+        [Theory]
+        [MemberData("DecimalTestData")]
+        public void DecimalsMustBeSerializedCorrectly(decimal value, string expected)
+        {
+            CompareJsonToExpected(value, expected);
+        }
+
+        public static readonly TestData DecimalTestData = new[]
+                                                          {
+                                                              new object[] { 42m, "42.0" },
+                                                              new object[] { 42.01m, "42.01" },
+                                                              new object[] { 42.0001m, "42.0001" },
+                                                              new object[] { decimal.MaxValue, "79228162514264337593543950335.0" },
+                                                              new object[] { decimal.MinValue, "-79228162514264337593543950335.0" },
+                                                              new object[] { -42.00200m, "-42.00200" }
+                                                          };
 
         private void CompareJsonToExpected<T>(T value, string expected)
         {
