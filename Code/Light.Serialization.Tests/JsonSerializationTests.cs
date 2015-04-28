@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
+using Light.Core;
 using Light.Serialization.Json;
 using Xunit;
 
@@ -43,6 +45,14 @@ namespace Light.Serialization.Tests
         public void BooleanIsSerializedCorrectly(bool value)
         {
             CompareJsonToExpected(value, value.ToString().ToLower());
+        }
+
+        [Fact]
+        public void GuidsMustBeSerializedCorrectly()
+        {
+            var guid = Guid.NewGuid();
+
+            CompareJsonToExpected(guid, guid.ToString().SurroundWithQuotationMarks());
         }
 
         private void CompareJsonToExpected<T>(T value, string expected)

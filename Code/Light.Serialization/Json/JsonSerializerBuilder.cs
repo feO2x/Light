@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Light.Serialization.Json.PrimitiveTypeFormatters;
 using Light.Serialization.Json.TypeSerializers;
@@ -19,6 +20,7 @@ namespace Light.Serialization.Json
                                           {
                                               new ToStringPrimitiveTypeFormatter<int>(),
                                               new BooleanFormatter(),
+                                              new ToStringWithQuotationMarksFormatter<Guid>(),
                                               new ToStringPrimitiveTypeFormatter<long>(),
                                               new ToStringPrimitiveTypeFormatter<short>(),
                                               new ToStringPrimitiveTypeFormatter<byte>(),
