@@ -20,14 +20,14 @@ namespace Light.Serialization.Json.TypeSerializers
 
         public int SequenceID { get; set; }
 
-        public bool AppliesToObject(object @object, Type objectType)
+        public bool AppliesToObject(object @object, Type actualType, Type referencedType)
         {
-            return _primitiveTypeToFormatterMapping.ContainsKey(objectType);
+            return _primitiveTypeToFormatterMapping.ContainsKey(actualType);
         }
 
-        public void Serialize(object @object, Type objectType, Action<object, Type> serializeChildObject)
+        public void Serialize(object @object, Type actualType, Type referencedType, Action<object, Type, Type> serializeChildObject)
         {
-            var stringRepresentation = _primitiveTypeToFormatterMapping[objectType].FormatPrimitiveType(@object);
+            var stringRepresentation = _primitiveTypeToFormatterMapping[actualType].FormatPrimitiveType(@object);
             _writer.WriteRaw(stringRepresentation);
         }
     }

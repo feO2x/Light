@@ -25,32 +25,33 @@ namespace Light.Serialization
                 throw new ArgumentNullException("objectGraphRoot");
 
             _writer.BeginDocument();
-            SerializeObject(objectGraphRoot, objectGraphRoot.GetType());
+            SerializeObject(objectGraphRoot, objectGraphRoot.GetType(), typeof(T));
 
             _writer.EndDocument();
             return _writer.Document;
         }
 
-        private void SerializeObject(object @object, Type objectType)
+        private void SerializeObject(object @object, Type actualType, Type referencedType)
         {
             ITypeSerializer targetTypeSerializer;
-            if (_typeToSerializerMapping.TryGetValue(objectType, out targetTypeSerializer) == false)
+            if (_typeToSerializerMapping.TryGetValue(actualType, out targetTypeSerializer) == false)
             {
-                targetTypeSerializer = FindTargetTypeSerializer(@object, objectType);
+                targetTypeSerializer = FindTargetTypeSerializer(@object, actualType, referencedType);
                 if (targetTypeSerializer == null)
                     return;
 
-                _typeToSerializerMapping.Add(objectType, targetTypeSerializer);
+                _typeToSerializerMapping.Add(actualType, targetTypeSerializer);
             }
 
-            targetTypeSerializer.Serialize(@object, objectType, SerializeObject);
+            targetTypeSerializer.Serialize(@object, actualType, referencedType, SerializeObject);
         }
 
-        private ITypeSerializer FindTargetTypeSerializer(object @object, Type objectType)
+        private ITypeSerializer FindTargetTypeSerializer(object @object, Type objectType, Type referencedType)
         {
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var typeSerializer in _typeSerializers)
             {
-                if (typeSerializer.AppliesToObject(@object, objectType))
+                if (typeSerializer.AppliesToObject(@object, objectType, referencedType))
                     return typeSerializer;
             }
             return null;
