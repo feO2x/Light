@@ -60,7 +60,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JsonSerializationTests.cs" />
+    <Compile Include="BaseDefaultJsonSerializerTest.cs" />
+    <Compile Include="ClassWithPublicFieldAndPublicAndPrivateProperties.cs" />
+    <Compile Include="ClassWithPublicPropertiesAndPrivateFields.cs" />
+    <Compile Include="JsonComplexTypesSerializationTests.cs" />
+    <Compile Include="JsonPrimitiveTypesSerializationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

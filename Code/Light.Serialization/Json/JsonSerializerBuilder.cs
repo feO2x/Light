@@ -3,6 +3,7 @@ using Light.Serialization.Json.TypeSerializers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Light.Serialization.Json.ComplexTypeDecomposition;
 
 namespace Light.Serialization.Json
 {
@@ -19,6 +20,7 @@ namespace Light.Serialization.Json
             var primitiveTypeFormatters = new List<IPrimitiveTypeFormatter>
                                           {
                                               new ToStringPrimitiveTypeFormatter<int>(),
+                                              new ToStringWithQuotationMarksFormatter<string>(),
                                               new DoubleFormatter(),
                                               new ToStringWithQuotationMarksFormatter<Guid>(),
                                               new BooleanFormatter(),
@@ -35,7 +37,8 @@ namespace Light.Serialization.Json
                                           };
             _typeSerializers = new List<ITypeSerializer>
                                {
-                                   new JsonPrimitiveTypeSerializer(documentWriter, primitiveTypeFormatters.ToDictionary(f => f.TargetType))
+                                   new JsonPrimitiveTypeSerializer(documentWriter, primitiveTypeFormatters.ToDictionary(f => f.TargetType)),
+                                   new JsonComplexTypeSerializer(new Dictionary<Type, IList<IValueProvider>>(), new PublicPropertiesAndFieldsAnalyzer(), documentWriter)
                                };
         }
 

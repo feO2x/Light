@@ -1,21 +1,12 @@
 ﻿using System;
-using FluentAssertions;
 using Light.Core;
-using Light.Serialization.Json;
 using Xunit;
 using TestData = System.Collections.Generic.IEnumerable<object[]>;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonSerializationTests
+    public sealed class JsonPrimitiveTypesSerializationTests : BaseDefaultJsonSerializerTest
     {
-        public readonly ISerializer JsonSerializer;
-
-        public JsonSerializationTests()
-        {
-            JsonSerializer = new JsonSerializerBuilder().Build();
-        }
-
         [Theory]
         [InlineData(42)]
         [InlineData(int.MaxValue)]
@@ -105,20 +96,24 @@ namespace Light.Serialization.Tests
                                                               new object[] { -42.00200m, "-42.00200" }
                                                           };
 
-        private void CompareJsonToExpected<T>(T value, string expected)
-        {
-            var json = JsonSerializer.Serialize(value);
-
-            json.Should().Be(expected);
-        }
-
         [Theory]
         [InlineData('a', "\"a\"")]
         [InlineData('b', "\"b\"")]
-        [InlineData(char.MinValue, "\"\\u0000\"")] // TODO: We have to implement string escaping but we also have to think about where to do it
+        [InlineData(char.MinValue, "\"\\u0000\"")] // TODO: Add tests for strings that must be escaped
         public void ChararctersMustBeSerializedCorrectly(char value, string expected)
         {
             CompareJsonToExpected(value, expected);
         }
+
+        // TODO: add tests for strings that must be escaped
+        [Fact]
+        public void StringsMustBeSerializedCorrectly()
+        {
+            var @string = Guid.NewGuid().ToString();
+            var expected = @string.SurroundWithQuotationMarks();
+
+            CompareJsonToExpected(@string, expected);
+        }
+        
     }
 }
