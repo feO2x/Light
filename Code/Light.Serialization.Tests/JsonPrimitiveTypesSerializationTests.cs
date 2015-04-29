@@ -114,6 +114,14 @@ namespace Light.Serialization.Tests
 
             CompareJsonToExpected(@string, expected);
         }
+
+        [Fact]
+        public void EnumerationsMustBeSerializedCorrectly()
+        {
+            var enumValue = ConsoleColor.Black;
+
+            CompareJsonToExpected(enumValue, enumValue.ToString());
+        }
         
     }
 }

@@ -40,6 +40,7 @@ namespace Light.Serialization.Json
             _typeSerializers = new List<ITypeSerializer>
                                {
                                    new PrimitiveTypeSerializer(documentWriter, primitiveTypeToFormattersMapping),
+                                   new EnumerationSerializer(documentWriter),
                                    new DictionarySerializer(primitiveTypeToFormattersMapping, documentWriter),
                                    new CollectionSerializer(documentWriter),
                                    new ComplexTypeSerializer(new Dictionary<Type, IList<IValueProvider>>(), new PublicPropertiesAndFieldsAnalyzer(), documentWriter)
