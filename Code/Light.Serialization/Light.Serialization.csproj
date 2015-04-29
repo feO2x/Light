@@ -57,8 +57,9 @@
     <Compile Include="Json\PrimitiveTypeFormatters\ToStringWithQuotationMarksFormatter.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\IReadableValuesTypeAnalyzer.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\IValueProvider.cs" />
-    <Compile Include="Json\TypeSerializers\JsonComplexTypeSerializer.cs" />
-    <Compile Include="Json\TypeSerializers\JsonPrimitiveTypeSerializer.cs" />
+    <Compile Include="Json\TypeSerializers\CollectionSerializer.cs" />
+    <Compile Include="Json\TypeSerializers\ComplexTypeSerializer.cs" />
+    <Compile Include="Json\TypeSerializers\PrimitiveTypeSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serializer.cs" />
   </ItemGroup>

@@ -37,8 +37,9 @@ namespace Light.Serialization.Json
                                           };
             _typeSerializers = new List<ITypeSerializer>
                                {
-                                   new JsonPrimitiveTypeSerializer(documentWriter, primitiveTypeFormatters.ToDictionary(f => f.TargetType)),
-                                   new JsonComplexTypeSerializer(new Dictionary<Type, IList<IValueProvider>>(), new PublicPropertiesAndFieldsAnalyzer(), documentWriter)
+                                   new PrimitiveTypeSerializer(documentWriter, primitiveTypeFormatters.ToDictionary(f => f.TargetType)),
+                                   new CollectionSerializer(documentWriter),
+                                   new ComplexTypeSerializer(new Dictionary<Type, IList<IValueProvider>>(), new PublicPropertiesAndFieldsAnalyzer(), documentWriter)
                                };
         }
 

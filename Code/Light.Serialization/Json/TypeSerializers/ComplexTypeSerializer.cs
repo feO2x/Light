@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 namespace Light.Serialization.Json.TypeSerializers
 {
-    public sealed class JsonComplexTypeSerializer : ITypeSerializer
+    public sealed class ComplexTypeSerializer : ITypeSerializer
     {
         private readonly IDictionary<Type, IList<IValueProvider>> _typeToValueProvidersMapping;
         private readonly IReadableValuesTypeAnalyzer _typeAnalyzer;
         private readonly IJsonWriter _writer;
 
-        public JsonComplexTypeSerializer(IDictionary<Type, IList<IValueProvider>> typeToValueProvidersMapping,
+        public ComplexTypeSerializer(IDictionary<Type, IList<IValueProvider>> typeToValueProvidersMapping,
                                          IReadableValuesTypeAnalyzer typeAnalyzer,
                                          IJsonWriter writer)
         {

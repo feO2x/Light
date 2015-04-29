@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Light.Serialization.Json.TypeSerializers
 {
-    public sealed class JsonPrimitiveTypeSerializer : ITypeSerializer
+    public sealed class PrimitiveTypeSerializer : ITypeSerializer
     {
         private readonly IJsonWriter _writer;
         private readonly IDictionary<Type, IPrimitiveTypeFormatter> _primitiveTypeToFormatterMapping;
 
-        public JsonPrimitiveTypeSerializer(IJsonWriter writer,
+        public PrimitiveTypeSerializer(IJsonWriter writer,
                                            IDictionary<Type, IPrimitiveTypeFormatter> primitiveTypeToFormatterMapping)
         {
             if (writer == null) throw new ArgumentNullException("writer");
