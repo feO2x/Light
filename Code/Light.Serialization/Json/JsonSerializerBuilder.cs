@@ -35,9 +35,12 @@ namespace Light.Serialization.Json
                                               new ToStringPrimitiveTypeFormatter<ushort>(),
                                               new ToStringPrimitiveTypeFormatter<sbyte>()
                                           };
+            var primitiveTypeToFormattersMapping = primitiveTypeFormatters.ToDictionary(f => f.TargetType);
+
             _typeSerializers = new List<ITypeSerializer>
                                {
-                                   new PrimitiveTypeSerializer(documentWriter, primitiveTypeFormatters.ToDictionary(f => f.TargetType)),
+                                   new PrimitiveTypeSerializer(documentWriter, primitiveTypeToFormattersMapping),
+                                   new DictionarySerializer(primitiveTypeToFormattersMapping, documentWriter),
                                    new CollectionSerializer(documentWriter),
                                    new ComplexTypeSerializer(new Dictionary<Type, IList<IValueProvider>>(), new PublicPropertiesAndFieldsAnalyzer(), documentWriter)
                                };
