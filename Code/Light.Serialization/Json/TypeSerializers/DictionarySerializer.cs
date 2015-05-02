@@ -4,18 +4,15 @@ using System.Collections.Generic;
 
 namespace Light.Serialization.Json.TypeSerializers
 {
-    public sealed class DictionarySerializer : ITypeSerializer
+    public sealed class DictionarySerializer : IJsonTypeSerializer
     {
         private readonly IDictionary<Type, IPrimitiveTypeFormatter> _primitiveTypeToFormattersMapping;
-        private readonly IJsonWriter _writer;
 
-        public DictionarySerializer(IDictionary<Type, IPrimitiveTypeFormatter> primitiveTypeToFormattersMapping,
-                                    IJsonWriter writer)
+        public DictionarySerializer(IDictionary<Type, IPrimitiveTypeFormatter> primitiveTypeToFormattersMapping)
         {
             if (primitiveTypeToFormattersMapping == null) throw new ArgumentNullException("primitiveTypeToFormattersMapping");
 
             _primitiveTypeToFormattersMapping = primitiveTypeToFormattersMapping;
-            _writer = writer;
         }
 
         public bool AppliesToObject(object @object, Type actualType, Type referencedType)
@@ -23,14 +20,15 @@ namespace Light.Serialization.Json.TypeSerializers
             return @object is IDictionary;
         }
 
-        public void Serialize(object @object, Type actualType, Type referencedType, Action<object, Type, Type> serializeChildObject)
+        public void Serialize(JsonSerializationContext serializationContext)
         {
-            var dictionary = (IDictionary) @object;
+            var dictionary = (IDictionary) serializationContext.ObjectToBeSerialized;
 
             if (dictionary.Count == 0)
                 throw new NotImplementedException("What should happen if a dictionary is empty?");
 
-            _writer.BeginComplexObject();
+            var writer = serializationContext.Writer;
+            writer.BeginComplexObject();
 
             var dicitionaryEnumerator = dictionary.GetEnumerator();
             dicitionaryEnumerator.MoveNext();
@@ -44,25 +42,25 @@ namespace Light.Serialization.Json.TypeSerializers
                 var keyType = key.GetType();
                 // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                 if (_primitiveTypeToFormattersMapping.ContainsKey(keyType))
-                    _writer.WriteKey(_primitiveTypeToFormattersMapping[keyType].FormatPrimitiveType(key));
+                    writer.WriteKey(_primitiveTypeToFormattersMapping[keyType].FormatPrimitiveType(key));
                 else
-                    _writer.WriteKey(key.ToString());
+                    writer.WriteKey(key.ToString());
 
                 var value = dicitionaryEnumerator.Value;
                 if (value == null)
-                    _writer.WriteNull();
+                    writer.WriteNull();
                 else
                 {
                     var valueType = value.GetType();
-                    serializeChildObject(value, valueType, valueType);
+                    serializationContext.SerializeChildObject(value, valueType, valueType);
                 }
 
                 if (dicitionaryEnumerator.MoveNext())
-                    _writer.WriteDelimiter();
+                    writer.WriteDelimiter();
                 else
                     break;
             }
-            _writer.EndComplexObject();
+            writer.EndComplexObject();
         }
     }
 }

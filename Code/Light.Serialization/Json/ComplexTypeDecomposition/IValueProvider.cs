@@ -6,7 +6,7 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
     {
         string Name { get; }
 
-        Type ReferencedType { get; }
+        Type ReferenceType { get; }
 
         object GetValue(object @object);
     }

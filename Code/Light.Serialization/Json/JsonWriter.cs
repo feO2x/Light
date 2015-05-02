@@ -6,46 +6,46 @@ namespace Light.Serialization.Json
 {
     public sealed class JsonWriter : IJsonWriter
     {
-        private readonly TextWriter _streamWriter;
+        private readonly TextWriter _textWriter;
         private readonly IJsonFormatter _formatter;
 
-        public JsonWriter(TextWriter writer)
-            : this(writer, new JsonFormatterNullObject())
+        public JsonWriter(TextWriter textWriter)
+            : this(textWriter, new JsonFormatterNullObject())
         {
 
         }
 
-        public JsonWriter(TextWriter streamWriter, IJsonFormatter formatter)
+        public JsonWriter(TextWriter textWriter, IJsonFormatter formatter)
         {
-            if (streamWriter == null) throw new ArgumentNullException("streamWriter");
+            if (textWriter == null) throw new ArgumentNullException("textWriter");
             if (formatter == null) throw new ArgumentNullException("formatter");
 
-            _streamWriter = streamWriter;
+            _textWriter = textWriter;
             _formatter = formatter;
         }
 
         public void BeginCollection()
         {
-            _streamWriter.Write('[');
+            _textWriter.Write('[');
             _formatter.NewlineAndIncreaseIndent(this);
         }
 
         public void EndCollection()
         {
             _formatter.NewlineAndDecreaseIndent(this);
-            _streamWriter.Write(']');
+            _textWriter.Write(']');
         }
 
         public void BeginComplexObject()
         {
-            _streamWriter.Write('{');
+            _textWriter.Write('{');
             _formatter.NewlineAndIncreaseIndent(this);
         }
 
         public void EndComplexObject()
         {
             _formatter.NewlineAndDecreaseIndent(this);
-            _streamWriter.Write('}');
+            _textWriter.Write('}');
 
         }
 
@@ -54,25 +54,25 @@ namespace Light.Serialization.Json
             if (key.IsSurroundedByQuotationMarks() == false)
                 key = key.SurroundWithQuotationMarks();
 
-            _streamWriter.Write(key);
-            _streamWriter.Write(':');
+            _textWriter.Write(key);
+            _textWriter.Write(':');
             _formatter.InsertWhitespaceBetweenKeyAndValue(this);
         }
 
         public void WriteDelimiter()
         {
-            _streamWriter.Write(',');
+            _textWriter.Write(',');
             _formatter.Newline(this);
         }
 
         public void WriteRaw(string @string)
         {
-            _streamWriter.Write(@string);
+            _textWriter.Write(@string);
         }
 
         public void WriteNull()
         {
-            _streamWriter.Write("null");
+            _textWriter.Write("null");
         }
     }
 }

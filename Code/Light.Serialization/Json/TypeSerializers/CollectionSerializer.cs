@@ -3,48 +3,39 @@ using System.Collections;
 
 namespace Light.Serialization.Json.TypeSerializers
 {
-    public sealed class CollectionSerializer : ITypeSerializer
+    public sealed class CollectionSerializer : IJsonTypeSerializer
     {
-        private readonly IJsonWriter _writer;
-
-        public CollectionSerializer(IJsonWriter writer)
-        {
-            if (writer == null) throw new ArgumentNullException("writer");
-
-            _writer = writer;
-        }
-
         public bool AppliesToObject(object @object, Type actualType, Type referencedType)
         {
             return @object is IEnumerable;
         }
 
-        public void Serialize(object @object, Type actualType, Type referencedType, Action<object, Type, Type> serializeChildObject)
+        public void Serialize(JsonSerializationContext serializationContext)
         {
-            var enumerable = (IEnumerable) @object;
+            var enumerable = (IEnumerable)serializationContext.@ObjectToBeSerialized;
 
             var enumerator = enumerable.GetEnumerator();
             if (enumerator.MoveNext() == false)
                 throw new NotImplementedException("What should happen if the collection is empty?");
 
-
-            _writer.BeginCollection();
+            var writer = serializationContext.Writer;
+            writer.BeginCollection();
             while (true)
             {
                 var currentChildObject = enumerator.Current;
                 if (currentChildObject == null)
-                    _writer.WriteNull();
+                    writer.WriteNull();
                 else
                 {
                     var childType = currentChildObject.GetType();
-                    serializeChildObject(currentChildObject, childType, childType);
+                    serializationContext.SerializeChildObject(currentChildObject, childType, childType);
                 }
                 if (enumerator.MoveNext())
-                    _writer.WriteDelimiter();
+                    writer.WriteDelimiter();
                 else
                     break;
             }
-            _writer.EndCollection();
+            writer.EndCollection();
         }
     }
 }

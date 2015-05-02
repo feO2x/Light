@@ -1,22 +1,19 @@
-﻿using Light.Serialization.Json.PrimitiveTypeFormatters;
+﻿using Light.Serialization.Json.ComplexTypeDecomposition;
+using Light.Serialization.Json.PrimitiveTypeFormatters;
 using Light.Serialization.Json.TypeSerializers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Light.Serialization.Json.ComplexTypeDecomposition;
 
 namespace Light.Serialization.Json
 {
     public class JsonSerializerBuilder
     {
-        private readonly IDocumentWriter _documentWriter;
-        private readonly IList<ITypeSerializer> _typeSerializers;
+        private readonly IList<IJsonTypeSerializer> _typeSerializers;
+        private readonly IJsonWriterFactory _writerFactory;
 
         public JsonSerializerBuilder()
         {
-            // TODO: the creation of this is lame, I have to change the dependency of IDocumentWriter
-            var documentWriter = new JsonDocumentWriter();
-            _documentWriter = documentWriter;
             var primitiveTypeFormatters = new List<IPrimitiveTypeFormatter>
                                           {
                                               new ToStringPrimitiveTypeFormatter<int>(),
@@ -37,19 +34,21 @@ namespace Light.Serialization.Json
                                           };
             var primitiveTypeToFormattersMapping = primitiveTypeFormatters.ToDictionary(f => f.TargetType);
 
-            _typeSerializers = new List<ITypeSerializer>
+            _typeSerializers = new List<IJsonTypeSerializer>
                                {
-                                   new PrimitiveTypeSerializer(documentWriter, primitiveTypeToFormattersMapping),
-                                   new EnumerationSerializer(documentWriter),
-                                   new DictionarySerializer(primitiveTypeToFormattersMapping, documentWriter),
-                                   new CollectionSerializer(documentWriter),
-                                   new ComplexTypeSerializer(new Dictionary<Type, IList<IValueProvider>>(), new PublicPropertiesAndFieldsAnalyzer(), documentWriter)
+                                   new PrimitiveJsonTypeSerializer(primitiveTypeToFormattersMapping),
+                                   new EnumerationSerializer(),
+                                   new DictionarySerializer(primitiveTypeToFormattersMapping),
+                                   new CollectionSerializer(),
+                                   new ComplexJsonTypeSerializer(new PublicPropertiesAndFieldsAnalyzer())
                                };
+
+            _writerFactory = new JsonWriterFactory();
         }
 
         public ISerializer Build()
         {
-            return new Serializer(_documentWriter, _typeSerializers);
+            return new JsonSerializer(_typeSerializers, _writerFactory);
         }
     }
 }

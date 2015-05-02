@@ -4,23 +4,25 @@ using System.Collections.Generic;
 
 namespace Light.Serialization.Json.TypeSerializers
 {
-    public sealed class ComplexTypeSerializer : ITypeSerializer
+    public sealed class ComplexJsonTypeSerializer : IJsonTypeSerializer
     {
         private readonly IDictionary<Type, IList<IValueProvider>> _typeToValueProvidersMapping;
         private readonly IReadableValuesTypeAnalyzer _typeAnalyzer;
-        private readonly IJsonWriter _writer;
 
-        public ComplexTypeSerializer(IDictionary<Type, IList<IValueProvider>> typeToValueProvidersMapping,
-                                         IReadableValuesTypeAnalyzer typeAnalyzer,
-                                         IJsonWriter writer)
+        public ComplexJsonTypeSerializer(IReadableValuesTypeAnalyzer typeAnalyzer)
+            : this(typeAnalyzer, new Dictionary<Type, IList<IValueProvider>>())
         {
-            if (typeToValueProvidersMapping == null) throw new ArgumentNullException("typeToValueProvidersMapping");
-            if (typeAnalyzer == null) throw new ArgumentNullException("typeAnalyzer");
-            if (writer == null) throw new ArgumentNullException("writer");
+            
+        }
 
-            _typeToValueProvidersMapping = typeToValueProvidersMapping;
+        public ComplexJsonTypeSerializer(IReadableValuesTypeAnalyzer typeAnalyzer,
+                                         IDictionary<Type, IList<IValueProvider>> typeToValueProvidersMapping)
+        {
+            if (typeAnalyzer == null) throw new ArgumentNullException("typeAnalyzer");
+            if (typeToValueProvidersMapping == null) throw new ArgumentNullException("typeToValueProvidersMapping");
+
             _typeAnalyzer = typeAnalyzer;
-            _writer = writer;
+            _typeToValueProvidersMapping = typeToValueProvidersMapping;
         }
 
 
@@ -29,9 +31,10 @@ namespace Light.Serialization.Json.TypeSerializers
             return @object is Delegate == false;
         }
 
-        public void Serialize(object @object, Type actualType, Type referencedType, Action<object, Type, Type> serializeChildObject)
+        public void Serialize(JsonSerializationContext serializationContext)
         {
             IList<IValueProvider> valueProviders;
+            var actualType = serializationContext.ActualType;
             if (_typeToValueProvidersMapping.TryGetValue(actualType, out valueProviders) == false)
             {
                 valueProviders = _typeAnalyzer.AnalyzeType(actualType);
@@ -42,30 +45,31 @@ namespace Light.Serialization.Json.TypeSerializers
             if (valueProviders.Count == 0)
                 throw new NotImplementedException("What should happen if an object has no members to serialize? I would recommend to not serialize it by default");
 
-            _writer.BeginComplexObject();
+            var writer = serializationContext.Writer;
+            writer.BeginComplexObject();
 
             for (var i = 0; i < valueProviders.Count; i++)
             {
                 var valueProvider = valueProviders[i];
-                var childObject = valueProvider.GetValue(@object);
+                var childObject = valueProvider.GetValue(serializationContext.ObjectToBeSerialized);
 
                 if (childObject == null)
                 {
-                    _writer.WriteKey(valueProvider.Name);
-                    _writer.WriteNull();
+                    writer.WriteKey(valueProvider.Name);
+                    writer.WriteNull();
                 }
                 else
                 {
                     var childObjectType = childObject.GetType();
-                    _writer.WriteKey(valueProvider.Name);
-                    serializeChildObject(childObject, childObjectType, valueProvider.ReferencedType);
+                    writer.WriteKey(valueProvider.Name);
+                    serializationContext.SerializeChildObject(childObject, childObjectType, valueProvider.ReferenceType);
                 }
 
                 if (i < valueProviders.Count - 1)
-                    _writer.WriteDelimiter();
+                    writer.WriteDelimiter();
             }
 
-            _writer.EndComplexObject();
+            writer.EndComplexObject();
         }
     }
 }

@@ -34,20 +34,21 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="IDocumentWriter.cs" />
     <Compile Include="ISerializer.cs" />
-    <Compile Include="ITypeSerializer.cs" />
+    <Compile Include="Json\IJsonTypeSerializer.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\IValueProviderFactory.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\PublicPropertiesAndFieldsAnalyzer.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\ValueProviderFactoryUsingLambdas.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\ValueProviderUsingLambda.cs" />
+    <Compile Include="Json\IJsonWriterFactory.cs" />
+    <Compile Include="Json\JsonSerializationContext.cs" />
     <Compile Include="Json\JsonSerializerBuilder.cs" />
     <Compile Include="Json\IJsonFormatter.cs" />
     <Compile Include="Json\IJsonWriter.cs" />
     <Compile Include="Json\IPrimitiveTypeFormatter.cs" />
-    <Compile Include="Json\JsonDocumentWriter.cs" />
     <Compile Include="Json\JsonFormatterNullObject.cs" />
     <Compile Include="Json\JsonWriter.cs" />
+    <Compile Include="Json\JsonWriterFactory.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\BasePrimitiveTypeFormatter.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\BooleanFormatter.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\DecimalFormatter.cs" />
@@ -58,12 +59,12 @@
     <Compile Include="Json\ComplexTypeDecomposition\IReadableValuesTypeAnalyzer.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\IValueProvider.cs" />
     <Compile Include="Json\TypeSerializers\CollectionSerializer.cs" />
-    <Compile Include="Json\TypeSerializers\ComplexTypeSerializer.cs" />
+    <Compile Include="Json\TypeSerializers\ComplexJsonTypeSerializer.cs" />
     <Compile Include="Json\TypeSerializers\DictionarySerializer.cs" />
     <Compile Include="Json\TypeSerializers\EnumerationSerializer.cs" />
-    <Compile Include="Json\TypeSerializers\PrimitiveTypeSerializer.cs" />
+    <Compile Include="Json\TypeSerializers\PrimitiveJsonTypeSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serializer.cs" />
+    <Compile Include="Json\JsonSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Light.Core\Light.Core.csproj">
