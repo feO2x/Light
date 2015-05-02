@@ -40,7 +40,7 @@ namespace Light.Serialization.Json
             {
                 targetJsonTypeSerializer = FindTargetTypeSerializer(@object, actualType, referencedType);
                 if (targetJsonTypeSerializer == null)
-                    return;  // TODO: we should throw an exception here to indicate that a certain object / value could not be serialized
+                    throw new SerializationException(string.Format("Type {0} cannot be serialized.", actualType.FullName));
 
                 _typeToSerializerMapping.Add(actualType, targetJsonTypeSerializer);
             }
