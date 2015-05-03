@@ -99,7 +99,16 @@ namespace Light.Serialization.Tests
         [Theory]
         [InlineData('a', "\"a\"")]
         [InlineData('b', "\"b\"")]
-        [InlineData(char.MinValue, "\"\\u0000\"")] // TODO: Add tests for strings that must be escaped
+        [InlineData(char.MinValue, "\"\\u0000\"")]
+        [InlineData('\t', @"""\t""")]
+        [InlineData('\n', @"""\n""")]
+        [InlineData('\r', @"""\r""")]
+        [InlineData('\f', @"""\f""")]
+        [InlineData('\b', @"""\b""")]
+        [InlineData('\\', @"""\\""")]
+        [InlineData('\u0085', @"""\u0085""")]  // Next Line Character
+        [InlineData('\u2028', @"""\u2028""")]  // Line Separator Character
+        [InlineData('\u2029', @"""\u2029""")]  // Paragraph Separator
         public void ChararctersMustBeSerializedCorrectly(char value, string expected)
         {
             CompareJsonToExpected(value, expected);

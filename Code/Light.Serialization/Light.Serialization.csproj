@@ -51,9 +51,12 @@
     <Compile Include="Json\JsonWriterFactory.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\BasePrimitiveTypeFormatter.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\BooleanFormatter.cs" />
+    <Compile Include="Json\PrimitiveTypeFormatters\CharFormatter.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\DecimalFormatter.cs" />
+    <Compile Include="Json\PrimitiveTypeFormatters\DefaultCharacterEscaper.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\DoubleFormatter.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\FloatFormatter.cs" />
+    <Compile Include="Json\PrimitiveTypeFormatters\ICharacterEscaper.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\ToStringPrimitiveTypeFormatter.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\ToStringWithQuotationMarksFormatter.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\IReadableValuesTypeAnalyzer.cs" />

@@ -14,6 +14,7 @@ namespace Light.Serialization.Json
 
         public JsonSerializerBuilder()
         {
+            var characterEscaper = new DefaultCharacterEscaper();
             var primitiveTypeFormatters = new List<IPrimitiveTypeFormatter>
                                           {
                                               new ToStringPrimitiveTypeFormatter<int>(),
@@ -24,7 +25,7 @@ namespace Light.Serialization.Json
                                               new DecimalFormatter(),
                                               new ToStringPrimitiveTypeFormatter<long>(),
                                               new FloatFormatter(),
-                                              new ToStringWithQuotationMarksFormatter<char>(),
+                                              new CharFormatter(characterEscaper),
                                               new ToStringPrimitiveTypeFormatter<short>(),
                                               new ToStringPrimitiveTypeFormatter<byte>(),
                                               new ToStringPrimitiveTypeFormatter<uint>(),
