@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace Light.Core
 {
     public static class StringExtensions
@@ -11,13 +7,30 @@ namespace Light.Core
         {
             if (value == string.Empty)
                 return @string;
-            return @string.Insert(@string.Length, value).Insert(0, value);
+            var charBuffer = new char[@string.Length + (2 * value.Length)];
+            for (var i = 0; i < value.Length; i++)
+            {
+                var characterToBeCopied = value[i];
+                charBuffer[i] = characterToBeCopied;
+                charBuffer[i + @string.Length + value.Length] = characterToBeCopied;
+            }
+
+            for (var i = 0; i < @string.Length; i++)
+            {
+                charBuffer[i + value.Length] = @string[i];
+            }
+            return new string(charBuffer);
         }
 
         public static string SurroundWith(this string @string, char character)
         {
-            var length = @string.Length;
-            return @string.PadRight(++length, character).PadLeft(++length, character);
+            var characterBuffer = new char[@string.Length + 2];
+            characterBuffer[0] = characterBuffer[characterBuffer.Length - 1] = character;
+            for (var i = 0; i < @string.Length; i++)
+            {
+                characterBuffer[i + 1] = @string[i];
+            }
+            return new string(characterBuffer);
         }
 
         public static string SurroundWithQuotationMarks(this string @string)

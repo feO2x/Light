@@ -18,7 +18,7 @@ namespace Light.Serialization.Json
             var primitiveTypeFormatters = new List<IPrimitiveTypeFormatter>
                                           {
                                               new ToStringPrimitiveTypeFormatter<int>(),
-                                              new ToStringWithQuotationMarksFormatter<string>(),
+                                              new StringFormatter(characterEscaper),
                                               new DoubleFormatter(),
                                               new ToStringWithQuotationMarksFormatter<Guid>(),
                                               new BooleanFormatter(),

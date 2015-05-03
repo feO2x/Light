@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Light.Core;
 using Xunit;
 using TestData = System.Collections.Generic.IEnumerable<object[]>;
@@ -114,13 +115,13 @@ namespace Light.Serialization.Tests
             CompareJsonToExpected(value, expected);
         }
 
-        // TODO: add tests for strings that must be escaped
-        [Fact]
-        public void StringsMustBeSerializedCorrectly()
+        [Theory]
+        [InlineData("a", "\"a\"")]
+        [InlineData("Foo", "\"Foo\"")]
+        [InlineData("It is\r\na good day, \tmy \"sunshine\"", @"""It is\r\na good day, \tmy \""sunshine\""""")]
+        [InlineData("Here is the\u0085next line", @"""Here is the\u0085next line""")]
+        public void StringsMustBeSerializedCorrectly(string @string, string expected)
         {
-            var @string = Guid.NewGuid().ToString();
-            var expected = @string.SurroundWithQuotationMarks();
-
             CompareJsonToExpected(@string, expected);
         }
 

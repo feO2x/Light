@@ -24,9 +24,8 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
         {
             var value = (char) @object;
 
-            string jsonRepresenation;
-            if (_characterEscaper.Escape(value, out jsonRepresenation) == false)
-                jsonRepresenation = @object.ToString();
+            var characterBuffer = _characterEscaper.Escape(value);
+            var jsonRepresenation = characterBuffer != null ? new string(characterBuffer) : value.ToString();
 
             return jsonRepresenation.SurroundWithQuotationMarks();
         }

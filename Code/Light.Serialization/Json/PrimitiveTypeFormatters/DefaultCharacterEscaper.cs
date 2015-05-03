@@ -38,44 +38,28 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
             _escapedCharacters = escapedCharacters;
         }
 
-        public bool Escape(char character, out string result)
+        public char[] Escape(char character)
         {
             if (_escapedCharacters.Contains(character) == false)
-            {
-                result = null;
-                return false;
-            }
+                return null;
 
             // The following characters are escaped in a special way
-            if (character == '\t')
+            switch (character)
             {
-                result = @"\t";
-                return true;
-            }
-            if (character == '\n')
-            {
-                result = @"\n";
-                return true;
-            }
-            if (character == '\r')
-            {
-                result = @"\r";
-                return true;
-            }
-            if (character == '\f')
-            {
-                result = @"\f";
-                return true;
-            }
-            if (character == '\b')
-            {
-                result = @"\b";
-                return true;
-            }
-            if (character == '\\')
-            {
-                result = @"\\";
-                return true;
+                case '\t':
+                    return new[] { '\\', 't' };
+                case '\n':
+                    return new[] { '\\', 'n' };
+                case '\r':
+                    return new[] { '\\', 'r' };
+                case '\f':
+                    return new[] { '\\', 'f' };
+                case '\b':
+                    return new[] { '\\', 'b' };
+                case '\\':
+                    return new[] { '\\', '\\' };
+                case '"':
+                    return new[] { '\\', '"' };
             }
 
             // All other characters will be represented in the "\uxxxx" format
@@ -88,8 +72,8 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
                              ConvertIntToChar((character >> 4) & X000F),
                              ConvertIntToChar(character & X000F)
                          };
-            result = new string(buffer);
-            return true;
+            return buffer;
+
         }
 
         private static char ConvertIntToChar(int value)
