@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Light.Core;
+﻿using Light.Core;
+using System;
 using Xunit;
 using TestData = System.Collections.Generic.IEnumerable<object[]>;
 
@@ -128,10 +127,9 @@ namespace Light.Serialization.Tests
         [Fact]
         public void EnumerationsMustBeSerializedCorrectly()
         {
-            var enumValue = ConsoleColor.Black;
+            const ConsoleColor enumValue = ConsoleColor.Black;
 
             CompareJsonToExpected(enumValue, enumValue.ToString());
         }
-        
     }
 }

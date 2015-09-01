@@ -9,7 +9,7 @@ namespace Light.Serialization.Json.TypeSerializers
 
         public PrimitiveJsonTypeSerializer(IDictionary<Type, IPrimitiveTypeFormatter> primitiveTypeToFormattersMapping)
         {
-            if (primitiveTypeToFormattersMapping == null) throw new ArgumentNullException("primitiveTypeToFormattersMapping");
+            if (primitiveTypeToFormattersMapping == null) throw new ArgumentNullException(nameof(primitiveTypeToFormattersMapping));
 
             _primitiveTypeToFormattersMapping = primitiveTypeToFormattersMapping;
         }

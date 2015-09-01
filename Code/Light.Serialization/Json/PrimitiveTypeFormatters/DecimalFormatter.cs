@@ -1,14 +1,9 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace Light.Serialization.Json.PrimitiveTypeFormatters
 {
-    public sealed class DecimalFormatter : IPrimitiveTypeFormatter
+    public sealed class DecimalFormatter : BasePrimitiveTypeFormatter<decimal>, IPrimitiveTypeFormatter
     {
-        private readonly Type _targetType = typeof (decimal);
-
-        public Type TargetType { get { return _targetType; } }
-
         public string FormatPrimitiveType(object @object)
         {
             var value = (decimal)@object;

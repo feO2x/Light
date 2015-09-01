@@ -4,19 +4,13 @@ using System.Text;
 
 namespace Light.Serialization.Json.PrimitiveTypeFormatters
 {
-    public sealed class StringFormatter : IPrimitiveTypeFormatter
+    public sealed class StringFormatter : BasePrimitiveTypeFormatter<string>, IPrimitiveTypeFormatter
     {
         private readonly ICharacterEscaper _characterEscaper;
-        private readonly Type _targetType = typeof (string);
-
-        public Type TargetType
-        {
-            get { return _targetType; }
-        }
 
         public StringFormatter(ICharacterEscaper characterEscaper)
         {
-            if (characterEscaper == null) throw new ArgumentNullException("characterEscaper");
+            if (characterEscaper == null) throw new ArgumentNullException(nameof(characterEscaper));
 
             _characterEscaper = characterEscaper;
         }

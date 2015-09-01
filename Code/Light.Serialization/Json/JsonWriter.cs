@@ -17,8 +17,8 @@ namespace Light.Serialization.Json
 
         public JsonWriter(TextWriter textWriter, IJsonFormatter formatter)
         {
-            if (textWriter == null) throw new ArgumentNullException("textWriter");
-            if (formatter == null) throw new ArgumentNullException("formatter");
+            if (textWriter == null) throw new ArgumentNullException(nameof(textWriter));
+            if (formatter == null) throw new ArgumentNullException(nameof(formatter));
 
             _textWriter = textWriter;
             _formatter = formatter;

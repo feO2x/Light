@@ -13,8 +13,8 @@ namespace Light.Serialization.Json
         public JsonSerializer(IList<IJsonTypeSerializer> typeSerializers,
                               IJsonWriterFactory writerFactory)
         {
-            if (typeSerializers == null) throw new ArgumentNullException("typeSerializers");
-            if (writerFactory == null) throw new ArgumentNullException("writerFactory");
+            if (typeSerializers == null) throw new ArgumentNullException(nameof(typeSerializers));
+            if (writerFactory == null) throw new ArgumentNullException(nameof(writerFactory));
 
             _typeSerializers = typeSerializers;
             _writerFactory = writerFactory;
@@ -23,7 +23,7 @@ namespace Light.Serialization.Json
         public string Serialize<T>(T objectGraphRoot)
         {
             if (objectGraphRoot == null)
-                throw new ArgumentNullException("objectGraphRoot");
+                throw new ArgumentNullException(nameof(objectGraphRoot));
 
             _jsonWriter = _writerFactory.Create();
             SerializeObject(objectGraphRoot, objectGraphRoot.GetType(), typeof(T));
@@ -40,7 +40,7 @@ namespace Light.Serialization.Json
             {
                 targetJsonTypeSerializer = FindTargetTypeSerializer(@object, actualType, referencedType);
                 if (targetJsonTypeSerializer == null)
-                    throw new SerializationException(string.Format("Type {0} cannot be serialized.", actualType.FullName));
+                    throw new SerializationException($"Type {actualType.FullName} cannot be serialized.");
 
                 _typeToSerializerMapping.Add(actualType, targetJsonTypeSerializer);
             }

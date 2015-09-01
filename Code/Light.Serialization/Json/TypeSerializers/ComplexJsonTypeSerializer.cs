@@ -18,8 +18,8 @@ namespace Light.Serialization.Json.TypeSerializers
         public ComplexJsonTypeSerializer(IReadableValuesTypeAnalyzer typeAnalyzer,
                                          IDictionary<Type, IList<IValueProvider>> typeToValueProvidersMapping)
         {
-            if (typeAnalyzer == null) throw new ArgumentNullException("typeAnalyzer");
-            if (typeToValueProvidersMapping == null) throw new ArgumentNullException("typeToValueProvidersMapping");
+            if (typeAnalyzer == null) throw new ArgumentNullException(nameof(typeAnalyzer));
+            if (typeToValueProvidersMapping == null) throw new ArgumentNullException(nameof(typeToValueProvidersMapping));
 
             _typeAnalyzer = typeAnalyzer;
             _typeToValueProvidersMapping = typeToValueProvidersMapping;

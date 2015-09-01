@@ -10,7 +10,20 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
 
         public DefaultCharacterEscaper()
         {
-            var escapedCharacters = new List<char> { '"', '\\' };
+            _escapedCharacters = CreateDefaultEscapedCharacters();
+        }
+
+        public static IList<char> CreateDefaultEscapedCharacters()
+        {
+            return CreateDefaultEscapedCharacters(CreateList);
+        }
+
+        public static IList<char> CreateDefaultEscapedCharacters(Func<IList<char>> createList)
+        {
+            var escapedCharacters = createList();
+
+            escapedCharacters.Add('"');
+            escapedCharacters.Add('\\');
 
             // Unicode C0 block
             for (var i = 0; i < ' '; i++)
@@ -28,12 +41,17 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
             escapedCharacters.Add('\u2028');
             escapedCharacters.Add('\u2029');
 
-            _escapedCharacters = escapedCharacters;
+            return escapedCharacters;
+        }
+
+        private static IList<char> CreateList()
+        {
+            return new List<char>();
         }
 
         public DefaultCharacterEscaper(IList<char> escapedCharacters)
         {
-            if (escapedCharacters == null) throw new ArgumentNullException("escapedCharacters");
+            if (escapedCharacters == null) throw new ArgumentNullException(nameof(escapedCharacters));
 
             _escapedCharacters = escapedCharacters;
         }

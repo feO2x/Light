@@ -2,23 +2,14 @@
 {
     public class ClassWithPublicPropertiesAndPrivateFields
     {
-        private readonly int _intField;
-        private readonly string _stringField;
-
         public ClassWithPublicPropertiesAndPrivateFields(int intField, string stringField)
         {
-            _intField = intField;
-            _stringField = stringField;
+            Int = intField;
+            String = stringField;
         }
 
-        public int Int
-        {
-            get { return _intField; }
-        }
+        public int Int { get; }
 
-        public string String
-        {
-            get { return _stringField; }
-        }
+        public string String { get; }
     }
 }

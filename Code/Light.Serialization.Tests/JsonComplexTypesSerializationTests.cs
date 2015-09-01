@@ -18,16 +18,12 @@ namespace Light.Serialization.Tests
                                                                 new object[]
                                                                 {
                                                                     new ClassWithPublicPropertiesAndPrivateFields(42, "Foo"),
-                                                                    string.Format("{{{0}:42,{1}:\"Foo\"}}",
-                                                                                  "Int".SurroundWithQuotationMarks(),
-                                                                                  "String".SurroundWithQuotationMarks())
+                                                                    $"{{{"Int".SurroundWithQuotationMarks()}:42,{"String".SurroundWithQuotationMarks()}:\"Foo\"}}"
                                                                 },
                                                                 new object[]
                                                                 {
                                                                     new ClassWithPublicFieldAndPublicAndPrivateProperties("Foo", 42.7),
-                                                                    string.Format("{{{0}:42.7,{1}:\"Foo\"}}",
-                                                                                  "Value".SurroundWithQuotationMarks(),
-                                                                                  "StringField".SurroundWithQuotationMarks())
+                                                                    $"{{{"Value".SurroundWithQuotationMarks()}:42.7,{"StringField".SurroundWithQuotationMarks()}:\"Foo\"}}"
                                                                 }
                                                             };
     }

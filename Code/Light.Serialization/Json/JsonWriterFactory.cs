@@ -15,7 +15,7 @@ namespace Light.Serialization.Json
             get { return _jsonFormatter; }
             set
             {
-                if (value == null) throw new ArgumentNullException("value");
+                if (value == null) throw new ArgumentNullException(nameof(value));
                 _jsonFormatter = value;
             }
         }

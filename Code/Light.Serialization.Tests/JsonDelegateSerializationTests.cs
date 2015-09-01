@@ -16,7 +16,7 @@ namespace Light.Serialization.Tests
 
             Action act = () => testTarget.Serialize(action);
 
-            act.ShouldThrow<SerializationException>().And.Message.Should().Be(string.Format("Type {0} cannot be serialized.", action.GetType()));
+            act.ShouldThrow<SerializationException>().And.Message.Should().Be($"Type {action.GetType()} cannot be serialized.");
         }
     }
 }
