@@ -1,8 +1,9 @@
 ﻿using System;
+using Light.Core;
 
 namespace Light.Serialization.Json.TypeSerializers
 {
-    public sealed class EnumerationSerializer : IJsonTypeSerializer
+    public sealed class EnumerationToStringSerializer : IJsonTypeSerializer
     {
         public bool AppliesToObject(object @object, Type actualType, Type referencedType)
         {
@@ -11,7 +12,7 @@ namespace Light.Serialization.Json.TypeSerializers
 
         public void Serialize(JsonSerializationContext serializationContext)
         {
-            serializationContext.Writer.WriteRaw(serializationContext.ObjectToBeSerialized.ToString());
+            serializationContext.Writer.WriteRaw(serializationContext.ObjectToBeSerialized.ToString().SurroundWithQuotationMarks());
         }
     }
 }

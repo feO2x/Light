@@ -65,7 +65,7 @@
     <Compile Include="Json\TypeSerializers\CollectionSerializer.cs" />
     <Compile Include="Json\TypeSerializers\ComplexJsonTypeSerializer.cs" />
     <Compile Include="Json\TypeSerializers\DictionarySerializer.cs" />
-    <Compile Include="Json\TypeSerializers\EnumerationSerializer.cs" />
+    <Compile Include="Json\TypeSerializers\EnumerationToStringSerializer.cs" />
     <Compile Include="Json\TypeSerializers\PrimitiveJsonTypeSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Json\JsonSerializer.cs" />

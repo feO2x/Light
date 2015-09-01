@@ -38,7 +38,7 @@ namespace Light.Serialization.Json
             _typeSerializers = new List<IJsonTypeSerializer>
                                {
                                    new PrimitiveJsonTypeSerializer(primitiveTypeToFormattersMapping),
-                                   new EnumerationSerializer(),
+                                   new EnumerationToStringSerializer(),
                                    new DictionarySerializer(primitiveTypeToFormattersMapping),
                                    new CollectionSerializer(),
                                    new ComplexJsonTypeSerializer(new PublicPropertiesAndFieldsAnalyzer())

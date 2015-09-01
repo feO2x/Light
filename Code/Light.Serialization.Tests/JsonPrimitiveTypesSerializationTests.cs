@@ -129,7 +129,7 @@ namespace Light.Serialization.Tests
         {
             const ConsoleColor enumValue = ConsoleColor.Black;
 
-            CompareJsonToExpected(enumValue, enumValue.ToString());
+            CompareJsonToExpected(enumValue, enumValue.ToString().SurroundWithQuotationMarks());
         }
     }
 }
