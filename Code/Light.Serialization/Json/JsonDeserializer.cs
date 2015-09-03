@@ -7,9 +7,9 @@ namespace Light.Serialization.Json
     public sealed class JsonDeserializer
     {
         private readonly IJsonReaderFactory _jsonReaderFactory;
-        private readonly IList<IJsonValueDeserializer> _valueAnalyzers;
+        private readonly IList<IJsonValueParser> _valueAnalyzers;
 
-        public JsonDeserializer(IJsonReaderFactory jsonReaderFactory, IList<IJsonValueDeserializer> valueAnalyzers)
+        public JsonDeserializer(IJsonReaderFactory jsonReaderFactory, IList<IJsonValueParser> valueAnalyzers)
         {
             if (jsonReaderFactory == null) throw new ArgumentNullException(nameof(jsonReaderFactory));
             if (valueAnalyzers == null) throw new ArgumentNullException(nameof(valueAnalyzers));

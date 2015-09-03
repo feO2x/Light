@@ -37,8 +37,8 @@
     <Compile Include="DeserializationException.cs" />
     <Compile Include="Json\IJsonReader.cs" />
     <Compile Include="Json\IJsonReaderFactory.cs" />
-    <Compile Include="Json\IJsonValueDeserializer.cs" />
-    <Compile Include="Json\JsonValueDeserilizers\IntDeserializer.cs" />
+    <Compile Include="Json\IJsonValueParser.cs" />
+    <Compile Include="Json\JsonValueParsers\IntParser.cs" />
     <Compile Include="Json\JsonCharacterBuffer.cs" />
     <Compile Include="ISerializer.cs" />
     <Compile Include="Json\JsonDeserializer.cs" />

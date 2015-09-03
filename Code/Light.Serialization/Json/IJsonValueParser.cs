@@ -2,7 +2,7 @@ using System;
 
 namespace Light.Serialization.Json
 {
-    public interface IJsonValueDeserializer
+    public interface IJsonValueParser
     {
         bool IsSuitableFor(JsonCharacterBuffer buffer, Type requestedType);
 
