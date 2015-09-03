@@ -10,7 +10,8 @@ namespace Light.Serialization.Json
         private readonly IList<IJsonValueParser> _jsonValueDeserializers = new IJsonValueParser[]
                                                                                  {
                                                                                      new IntParser(),
-                                                                                     new StringParser()
+                                                                                     new StringParser(),
+                                                                                     new CharacterParser()
                                                                                  };
 
         public JsonDeserializer Build()
