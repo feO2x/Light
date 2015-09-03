@@ -34,7 +34,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DeserializationException.cs" />
+    <Compile Include="Json\IJsonReader.cs" />
+    <Compile Include="Json\IJsonReaderFactory.cs" />
+    <Compile Include="Json\IJsonValueDeserializer.cs" />
+    <Compile Include="Json\JsonValueDeserilizers\IntDeserializer.cs" />
+    <Compile Include="Json\JsonCharacterBuffer.cs" />
     <Compile Include="ISerializer.cs" />
+    <Compile Include="Json\JsonDeserializer.cs" />
+    <Compile Include="Json\JsonDeserializerBuilder.cs" />
+    <Compile Include="Json\JsonReaderFactory.cs" />
+    <Compile Include="Json\JsonType.cs" />
+    <Compile Include="Json\SingleBufferJsonReader.cs" />
     <Compile Include="Json\IJsonTypeSerializer.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\IValueProviderFactory.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\PublicPropertiesAndFieldsAnalyzer.cs" />
