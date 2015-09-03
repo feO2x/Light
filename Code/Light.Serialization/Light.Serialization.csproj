@@ -45,6 +45,7 @@
     <Compile Include="Json\JsonDeserializerBuilder.cs" />
     <Compile Include="Json\JsonReaderFactory.cs" />
     <Compile Include="Json\JsonType.cs" />
+    <Compile Include="Json\JsonValueParsers\StringParser.cs" />
     <Compile Include="Json\SingleBufferJsonReader.cs" />
     <Compile Include="Json\IJsonTypeSerializer.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\IValueProviderFactory.cs" />

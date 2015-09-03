@@ -16,9 +16,11 @@ namespace Light.Serialization.Json
 
         public JsonCharacterBuffer ReadNextValue()
         {
-            var nextCharacter = _buffer[_currentIndex++];
-            if (char.IsDigit(nextCharacter) || nextCharacter == '-')
+            var firstCharacter = _buffer[_currentIndex++];
+            if (char.IsDigit(firstCharacter) || firstCharacter == '-')
                 return ReadNumber();
+            if (firstCharacter == '"')
+                return ReadString();
 
             throw new NotImplementedException();
         }
@@ -30,6 +32,17 @@ namespace Light.Serialization.Json
             {
                 if (_currentIndex == _buffer.Length)
                     return new JsonCharacterBuffer(_buffer, startIndex, _currentIndex - startIndex, JsonType.Number);
+                _currentIndex++;
+            }
+        }
+
+        private JsonCharacterBuffer ReadString()
+        {
+            var startIndex = _currentIndex - 1;
+            while (true)
+            {
+                if (_currentIndex == _buffer.Length)
+                    return new JsonCharacterBuffer(_buffer, startIndex, _currentIndex - startIndex, JsonType.String);
                 _currentIndex++;
             }
         }

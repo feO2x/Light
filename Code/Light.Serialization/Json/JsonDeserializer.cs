@@ -40,7 +40,7 @@ namespace Light.Serialization.Json
             }
 
 
-            throw new DeserializationException($"Cannot deserialize value {value} with requested type {requestedType.FullName} because there is no value deserilizer that is suitable for this context.");
+            throw new DeserializationException($"Cannot deserialize value {value} with requested type {requestedType.FullName} because there is no parser that is suitable for this context.");
         }
     }
 }

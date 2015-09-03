@@ -8,6 +8,7 @@ namespace Light.Serialization.Json
         private readonly int _startIndex;
         private readonly int _count;
         private readonly JsonType _jsonType;
+        private readonly bool _isCrossingBufferBoundary;
 
         public JsonCharacterBuffer(char[] buffer, int startIndex, int count, JsonType jsonType)
         {
@@ -30,6 +31,7 @@ namespace Light.Serialization.Json
             _startIndex = startIndex;
             _count = count;
             _jsonType = jsonType;
+            _isCrossingBufferBoundary = startIndex + count > buffer.Length;
         }
 
         public int Count => _count;
@@ -47,11 +49,9 @@ namespace Light.Serialization.Json
             }
         }
 
-        private bool IsOverflowing => _startIndex + _count > _buffer.Length;
-
         public override string ToString()
         {
-            if (IsOverflowing == false)
+            if (_isCrossingBufferBoundary == false)
                 return new string(_buffer, _startIndex, _count);
 
             var characterArray = new char[_count];
