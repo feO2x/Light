@@ -11,7 +11,8 @@ namespace Light.Serialization.Json
                                                                                  {
                                                                                      new IntParser(),
                                                                                      new StringParser(),
-                                                                                     new CharacterParser()
+                                                                                     new CharacterParser(),
+                                                                                     new BooleanParser()
                                                                                  };
 
         public JsonDeserializer Build()

@@ -65,6 +65,7 @@
     <Compile Include="ClassWithPublicPropertiesAndPrivateFields.cs" />
     <Compile Include="DummyPerson.cs" />
     <Compile Include="IDummyPerson.cs" />
+    <Compile Include="JsonBooleanDeserializationTests.cs" />
     <Compile Include="JsonCharacterDeserializationTests.cs" />
     <Compile Include="JsonCollectionSerializationTests.cs" />
     <Compile Include="JsonComplexTypesSerializationTests.cs" />
