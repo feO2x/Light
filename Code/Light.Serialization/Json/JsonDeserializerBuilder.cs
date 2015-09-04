@@ -11,6 +11,7 @@ namespace Light.Serialization.Json
                                                                                  {
                                                                                      new IntParser(),
                                                                                      new StringParser(),
+                                                                                     new DoubleParser(),
                                                                                      new CharacterParser(),
                                                                                      new BooleanParser()
                                                                                  };

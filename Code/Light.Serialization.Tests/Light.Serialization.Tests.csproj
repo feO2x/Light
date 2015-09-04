@@ -71,6 +71,7 @@
     <Compile Include="JsonComplexTypesSerializationTests.cs" />
     <Compile Include="JsonDelegateSerializationTests.cs" />
     <Compile Include="JsonDictionarySerializationTests.cs" />
+    <Compile Include="JsonDoubleDeserializationTests.cs" />
     <Compile Include="JsonIntDeserializationTests.cs" />
     <Compile Include="JsonPrimitiveTypesSerializationTests.cs" />
     <Compile Include="JsonStringDeserializationTests.cs" />
