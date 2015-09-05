@@ -19,7 +19,7 @@ namespace Light.Serialization.Json.JsonValueParsers
             if (double.TryParse(doubleString, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out result))
                 return result;
 
-            throw new DeserializationException($"Cannot deserialize value {doubleString} into a double value.");
+            throw new DeserializationException($"Cannot deserialize value {doubleString} to a double value.");
         }
     }
 }
