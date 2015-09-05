@@ -8,13 +8,14 @@ namespace Light.Serialization.Json
         private readonly IJsonReaderFactory _jsonReaderFactory = new JsonReaderFactory();
 
         private readonly IList<IJsonValueParser> _jsonValueDeserializers = new IJsonValueParser[]
-                                                                                 {
-                                                                                     new IntParser(),
-                                                                                     new StringParser(),
-                                                                                     new DoubleParser(),
-                                                                                     new CharacterParser(),
-                                                                                     new BooleanParser()
-                                                                                 };
+                                                                           {
+                                                                               new IntParser(),
+                                                                               new StringParser(),
+                                                                               new DoubleParser(),
+                                                                               new NullParser(),
+                                                                               new CharacterParser(),
+                                                                               new BooleanParser()
+                                                                           };
 
         public JsonDeserializer Build()
         {

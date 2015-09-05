@@ -23,8 +23,21 @@ namespace Light.Serialization.Json
                 return ReadString();
             if (firstCharacter == 'f' || firstCharacter == 't')
                 return ReadBool();
+            if (firstCharacter == 'n')
+                return ReadNull();
 
             throw new NotImplementedException();
+        }
+
+        private JsonCharacterBuffer ReadNull()
+        {
+            var startIndex = _currentIndex - 1;
+            while (true)
+            {
+                if (_currentIndex == _buffer.Length)
+                    return new JsonCharacterBuffer(_buffer, startIndex, _currentIndex - startIndex, JsonType.Null);
+                _currentIndex++;
+            }
         }
 
         private JsonCharacterBuffer ReadBool()
