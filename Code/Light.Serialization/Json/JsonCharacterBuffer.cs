@@ -45,7 +45,7 @@ namespace Light.Serialization.Json
                 if (index >= _count) throw new IndexOutOfRangeException($"index must not be larger than Count ({_count}), but you specified {index}.");
                 if (index < 0) throw new IndexOutOfRangeException($"index must not be less than zero, but you specified {index}.");
 
-                return _buffer[(_startIndex + index) % _count];
+                return _buffer[(_startIndex + index) % _buffer.Length];
             }
         }
 
