@@ -16,6 +16,8 @@ namespace Light.Serialization.Json
 
         public JsonCharacterBuffer ReadNextValue()
         {
+            IgnoreWhitespace();
+
             var firstCharacter = _buffer[_currentIndex++];
             if (char.IsDigit(firstCharacter) || firstCharacter == '-')
                 return ReadNumber();
@@ -27,6 +29,12 @@ namespace Light.Serialization.Json
                 return ReadNull();
 
             throw new NotImplementedException();
+        }
+
+        private void IgnoreWhitespace()
+        {
+            while (_buffer[_currentIndex] == ' ')
+                _currentIndex++;
         }
 
         private JsonCharacterBuffer ReadNull()
