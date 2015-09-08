@@ -25,14 +25,13 @@ namespace Light.Serialization.Tests
         [InlineData("tr")]
         [InlineData("fasle")]
         [InlineData("flse")]
-        [InlineData("flse")]
         [InlineData("fse")]
         [InlineData("fa")]
         public void ExceptionIsThrownWhenFalseOrTrueAreNotSpelledCorrectly(string json)
         {
             var testTarget = new JsonDeserializerBuilder().Build();
             Action act = () => testTarget.Deserialize<bool>(json);
-            act.ShouldThrow<DeserializationException>().And.Message.Should().Be($"Cannot deserialize value {json} to a boolean value.");
+            act.ShouldThrow<DeserializationException>().And.Message.Should().Contain($"Cannot deserialize value {json} to");
         }
     }
 }

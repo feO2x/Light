@@ -6,8 +6,8 @@ namespace Light.Serialization.Json
     {
         private readonly char[] _buffer;
         private readonly int _startIndex;
-        private readonly int _count;
-        private readonly JsonType _jsonType;
+        public readonly int Count;
+        public readonly JsonType JsonType;
         private readonly bool _isCrossingBufferBoundary;
 
         public JsonCharacterBuffer(char[] buffer, int startIndex, int count, JsonType jsonType)
@@ -29,20 +29,16 @@ namespace Light.Serialization.Json
 
             _buffer = buffer;
             _startIndex = startIndex;
-            _count = count;
-            _jsonType = jsonType;
+            Count = count;
+            JsonType = jsonType;
             _isCrossingBufferBoundary = startIndex + count > buffer.Length;
         }
-
-        public int Count => _count;
-
-        public JsonType JsonType => _jsonType;
 
         public char this[int index]
         {
             get
             {
-                if (index >= _count) throw new IndexOutOfRangeException($"index must not be larger than Count ({_count}), but you specified {index}.");
+                if (index >= Count) throw new IndexOutOfRangeException($"index must not be larger than Count ({Count}), but you specified {index}.");
                 if (index < 0) throw new IndexOutOfRangeException($"index must not be less than zero, but you specified {index}.");
 
                 return _buffer[(_startIndex + index) % _buffer.Length];
@@ -52,10 +48,10 @@ namespace Light.Serialization.Json
         public override string ToString()
         {
             if (_isCrossingBufferBoundary == false)
-                return new string(_buffer, _startIndex, _count);
+                return new string(_buffer, _startIndex, Count);
 
-            var characterArray = new char[_count];
-            for (var i = 0; i < _count; i++)
+            var characterArray = new char[Count];
+            for (var i = 0; i < Count; i++)
             {
                 characterArray[i] = this[i];
             }

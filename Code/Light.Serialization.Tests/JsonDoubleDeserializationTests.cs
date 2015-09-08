@@ -30,7 +30,7 @@ namespace Light.Serialization.Tests
         {
             var testTarget = new JsonDeserializerBuilder().Build();
             Action act = () => testTarget.Deserialize<double>(json);
-            act.ShouldThrow<DeserializationException>().And.Message.Should().Be(($"Cannot deserialize value {json} to a double value."));
+            act.ShouldThrow<DeserializationException>().And.Message.Should().Contain(($"Cannot deserialize value {json} to"));
         }
     }
 }

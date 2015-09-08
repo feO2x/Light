@@ -20,6 +20,18 @@ namespace Light.Serialization.Tests
             actual.Should().Be(expected);
         }
 
-        
+        [Theory]
+        [InlineData("-42 ", -42)]
+        [InlineData("true  ", true)]
+        [InlineData("false    ", false)]
+        [InlineData("3255.25 ", 3255.25)]
+        [InlineData("\"Hi there\"  ", "Hi there")]
+        [InlineData("null ", null)]
+        public void SpacesAfterSingleValueAreIgnoredCorrectly<T>(string json, T expected)
+        {
+            var testTarget = new JsonDeserializerBuilder().Build();
+            var actual = testTarget.Deserialize<T>(json);
+            actual.Should().Be(expected);
+        }
     }
 }

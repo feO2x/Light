@@ -6,7 +6,8 @@ namespace Light.Serialization.Json
         Number,
         Object,
         Array,
-        Boolean,
+        True,
+        False,
         Null
     }
 }
