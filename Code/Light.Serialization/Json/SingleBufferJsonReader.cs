@@ -1,100 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using Light.Core;
+﻿using Light.Core;
+using System;
 
 namespace Light.Serialization.Json
 {
     public sealed class SingleBufferJsonReader : IJsonReader
     {
         private readonly char[] _buffer;
+        private readonly KnownJsonTokens _knownJsonTokens;
         private int _currentIndex;
 
-        private string _trueToken = "true";
-        public string TrueToken
-        {
-            get { return _trueToken; }
-            set
-            {
-                if (value == null) throw new ArgumentNullException(nameof(value));
-                _trueToken = value;
-            }
-        }
-
-        private string _falseToken = "false";
-        public string FalseToken
-        {
-            get { return _falseToken; }
-            set
-            {
-                if (value == null) throw new ArgumentNullException(nameof(value));
-                _falseToken = value;
-            }
-        }
-
-        private string _nullToken = "null";
-        public string NullToken
-        {
-            get { return _nullToken; }
-            set
-            {
-                if (value == null) throw new ArgumentNullException(nameof(value));
-                _nullToken = value;
-            }
-        }
-
-        private char _stringDelimiter = '"';
-        public char StringDelimiter
-        {
-            get { return _stringDelimiter; }
-            set { _stringDelimiter = value; }
-        }
-
-        private char _decimalPoint = '.';
-
-        public char DecimalPoint
-        {
-            get { return _decimalPoint; }
-            set { _decimalPoint = value; }
-        }
-
-        private IList<char> _exponentialTokens = new[] { 'e', 'E' };
-        public IList<char> ExponentialTokens
-        {
-            get { return _exponentialTokens; }
-            set
-            {
-                if (value == null) throw new ArgumentNullException(nameof(value));
-                _exponentialTokens = value;
-            }
-        }
-
-        private char _positiveSign = '+';
-        public char PositiveSign
-        {
-            get { return _positiveSign; }
-            set { _positiveSign = value; }
-        }
-
-        private char _negativeSign = '-';
-        public char NegativeSign
-        {
-            get { return _negativeSign; }
-            set { _negativeSign = value; }
-        }
-
-        private char _stringEscapeCharacter = '\\';
-
-        public char StringEscapeCharacter
-        {
-            get { return _stringEscapeCharacter; }
-            set { _stringEscapeCharacter = value; }
-        }
-
         public SingleBufferJsonReader(char[] buffer)
+            : this(buffer, new KnownJsonTokens())
+        {
+            
+        }
+
+        public SingleBufferJsonReader(char[] buffer, KnownJsonTokens knownJsonTokens)
         {
             if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+            if (knownJsonTokens == null) throw new ArgumentNullException(nameof(knownJsonTokens));
 
             _buffer = buffer;
+            _knownJsonTokens = knownJsonTokens;
         }
 
         public JsonCharacterBuffer ReadNextValue()
@@ -104,16 +31,16 @@ namespace Light.Serialization.Json
             var firstCharacter = _buffer[_currentIndex++];
             if (char.IsDigit(firstCharacter))
                 return ReadPositiveNumber(firstCharacter);
-            if (firstCharacter == _negativeSign)
+            if (firstCharacter == _knownJsonTokens.NegativeSign)
                 return ReadNegativeNumber();
-            if (firstCharacter == _stringDelimiter)
+            if (firstCharacter == _knownJsonTokens.StringDelimiter)
                 return ReadString();
-            if (firstCharacter == _falseToken[0])
-                return ReadConstantToken(_falseToken, JsonType.False);
-            if (firstCharacter == _trueToken[0])
-                return ReadConstantToken(_trueToken, JsonType.True);
-            if (firstCharacter == _nullToken[0])
-                return ReadConstantToken(_nullToken, JsonType.Null);
+            if (firstCharacter == _knownJsonTokens.FalseToken[0])
+                return ReadConstantToken(_knownJsonTokens.FalseToken, JsonType.False);
+            if (firstCharacter == _knownJsonTokens.TrueToken[0])
+                return ReadConstantToken(_knownJsonTokens.TrueToken, JsonType.True);
+            if (firstCharacter == _knownJsonTokens.NullToken[0])
+                return ReadConstantToken(_knownJsonTokens.NullToken, JsonType.Null);
 
             throw new NotImplementedException();
         }
@@ -196,7 +123,7 @@ namespace Light.Serialization.Json
 
         private bool CheckDecimalPartOfNumber(char currentCharacter)
         {
-            if (currentCharacter != _decimalPoint)
+            if (currentCharacter != _knownJsonTokens.DecimalPoint)
                 return CheckExponentOfNumber(currentCharacter);
 
             // Here we definitely have a decimal point
@@ -230,7 +157,7 @@ namespace Light.Serialization.Json
         private bool CheckExponentOfNumber(char currentCharacter)
         {
             // Check if the e or E sign is present
-            if (_exponentialTokens.Contains(currentCharacter) == false)
+            if (_knownJsonTokens.ExponentialTokens.Contains(currentCharacter) == false)
                 return false;
 
             _currentIndex++;
@@ -239,7 +166,7 @@ namespace Light.Serialization.Json
 
             // Check if possible + or - sign is present
             currentCharacter = _buffer[_currentIndex];
-            if (currentCharacter == _negativeSign || currentCharacter == _positiveSign)
+            if (currentCharacter == _knownJsonTokens.NegativeSign || currentCharacter == _knownJsonTokens.PositiveSign)
             {
                 _currentIndex++;
                 if (IsEndOfToken())
@@ -277,41 +204,36 @@ namespace Light.Serialization.Json
                 // Check if the previous character was an escape character
                 if (isPreviousCharacterEscapeCharacter)
                 {
-                    switch (currentCharacter)
+                    // If yes then check if the current character is a specially escaped character that only has one letter
+                    foreach (var singleEscapedCharacter in _knownJsonTokens.SingleEscapedCharacters)
                     {
-                        // b, f, n, r, t, \, /, and " are valid characters after are character escape
-                        case 'b':
-                        case 'f':
-                        case 'n':
-                        case 'r':
-                        case 't':
-                        case '\\':
-                        case '/':
-                            isPreviousCharacterEscapeCharacter = false;
-                            goto CheckEndOfBuffer;
-                        case 'u':   // In case of u, four hexadecimal digits must follow after the \u (e.g. "\u002f" or "\u002F")
-                        case 'U':
-                            if (CheckFourHexadecimalDigitsOfJsonEscapeSequence() == false)
-                            {
-                                ReadUntilEndOfToken();
-                                throw CreateDeserializationException(startIndex, JsonType.String);
-                            }
-                            // If everything is ok, then reset the boolean to false
-                            isPreviousCharacterEscapeCharacter = false;
-                            goto CheckEndOfBuffer;
-                        default:
-                            // If none of the above where found, then the string is not a valid Json string
-                            ReadUntilEndOfToken();
-                            throw CreateDeserializationException(startIndex, JsonType.String);
+                        if (singleEscapedCharacter.ValueAfterEscapeCharacter != currentCharacter) continue;
+
+                        isPreviousCharacterEscapeCharacter = false;
+                        goto CheckEndOfBuffer;
                     }
+
+                    // Otherwise check if this is an escape sequence of four hexadecimal digits
+                    if (currentCharacter == _knownJsonTokens.HexadicamalEscapeIndicator)
+                    {
+                        if (CheckFourHexadecimalDigitsOfJsonEscapeSequence() == false)
+                            goto ThrowException;
+
+                        isPreviousCharacterEscapeCharacter = false;
+                        goto CheckEndOfBuffer;
+                    }
+                    // When non of the above conditions fit, then the string is not a valid Json string
+                    ThrowException:
+                    ReadUntilEndOfToken();
+                    throw CreateDeserializationException(startIndex, JsonType.String);
                 }
 
                 // If not, then treat this character as a normal one
-                if (currentCharacter == _stringDelimiter)
+                if (currentCharacter == _knownJsonTokens.StringDelimiter)
                     return CreateBuffer(startIndex, JsonType.String);
 
                 // Set the boolean value indicating that the next character is part of an escape sequence
-                if (currentCharacter == _stringEscapeCharacter)
+                if (currentCharacter == _knownJsonTokens.StringEscapeCharacter)
                     isPreviousCharacterEscapeCharacter = true;
 
                 // If the end of the buffer is reached for the next index, then throw an exception

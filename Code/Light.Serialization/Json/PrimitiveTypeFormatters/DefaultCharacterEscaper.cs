@@ -32,7 +32,7 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
             }
 
             // Unicode C1 block
-            for (int i = '\u007F'; i <= '\u009f'; i++)
+            for (int i = '\u007f'; i <= '\u009f'; i++)
             {
                 escapedCharacters.Add((char)i);
             }

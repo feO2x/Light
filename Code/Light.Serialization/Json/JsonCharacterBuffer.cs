@@ -57,5 +57,26 @@ namespace Light.Serialization.Json
             }
             return new string(characterArray);
         }
+
+        public string ToString(int startIndex, int numberOfCharacters)
+        {
+            if (startIndex < 0)
+                throw new ArgumentOutOfRangeException(nameof(startIndex), $"startIndex must not be less than zero, but you specified {startIndex}.");
+            if (numberOfCharacters < 1)
+                throw new ArgumentOutOfRangeException(nameof(numberOfCharacters), $"numberOfCharacters must not be less than one, but you specified {numberOfCharacters}.");
+            var numberOfCharactersLeft = Count - startIndex;
+            if (numberOfCharacters > numberOfCharactersLeft)
+                throw new ArgumentOutOfRangeException($"You specified that {numberOfCharacters} characters should be inserted into the string, but only {numberOfCharactersLeft} characters are left from your starting position ({startIndex})." );
+
+            if (_isCrossingBufferBoundary == false)
+                return new string(_buffer, _startIndex + startIndex, numberOfCharacters);
+
+            var characterArray = new char[numberOfCharacters];
+            for (var i = 0; i < numberOfCharacters; i++)
+            {
+                characterArray[i] = this[i];
+            }
+            return new string(characterArray);
+        }
     }
 }

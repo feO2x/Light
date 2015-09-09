@@ -50,6 +50,7 @@
     <Compile Include="Json\JsonType.cs" />
     <Compile Include="Json\JsonValueParsers\NullParser.cs" />
     <Compile Include="Json\JsonValueParsers\StringParser.cs" />
+    <Compile Include="Json\KnownJsonTokens.cs" />
     <Compile Include="Json\SingleBufferJsonReader.cs" />
     <Compile Include="Json\IJsonTypeSerializer.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\IValueProviderFactory.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Json\PrimitiveTypeFormatters\ToStringWithQuotationMarksFormatter.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\IReadableValuesTypeAnalyzer.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\IValueProvider.cs" />
+    <Compile Include="Json\SingleEscapedCharacter.cs" />
     <Compile Include="Json\TypeSerializers\CollectionSerializer.cs" />
     <Compile Include="Json\TypeSerializers\ComplexJsonTypeSerializer.cs" />
     <Compile Include="Json\TypeSerializers\DictionarySerializer.cs" />
