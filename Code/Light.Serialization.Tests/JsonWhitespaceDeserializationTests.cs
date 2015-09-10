@@ -1,10 +1,8 @@
-﻿using FluentAssertions;
-using Light.Serialization.Json;
-using Xunit;
+﻿using Xunit;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonWhitespaceDeserializationTests
+    public sealed class JsonWhitespaceDeserializationTests : BaseDefaultJsonDeserializationTest
     {
         [Theory]
         [InlineData(" 42", 42)]
@@ -15,9 +13,7 @@ namespace Light.Serialization.Tests
         [InlineData("   null", null)]
         public void SpacesBeforeSingleValueIsIgnoredCorrectly<T>(string json, T expected)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var actual = testTarget.Deserialize<T>(json);
-            actual.Should().Be(expected);
+            CompareDeserializedJsonToExpected(json, expected);
         }
 
         [Theory]
@@ -29,9 +25,7 @@ namespace Light.Serialization.Tests
         [InlineData("null ", null)]
         public void SpacesAfterSingleValueAreIgnoredCorrectly<T>(string json, T expected)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var actual = testTarget.Deserialize<T>(json);
-            actual.Should().Be(expected);
+            CompareDeserializedJsonToExpected(json, expected);
         }
     }
 }

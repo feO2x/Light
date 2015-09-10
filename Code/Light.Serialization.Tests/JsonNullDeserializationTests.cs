@@ -6,21 +6,17 @@ using Xunit;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonNullDeserializationTests
+    public sealed class JsonNullDeserializationTests : BaseDefaultJsonDeserializationTest
     {
-        [Fact]
-        public void NullValuesAreParsedCorrectly()
-        {
-            NullValuesAreParsedCorrectly<object>(); // Check that it works for classes
-            NullValuesAreParsedCorrectly<IComparable>(); // Check that it works for interfaces
-            NullValuesAreParsedCorrectly<Stream>(); // Check that it works for abstract base classes
-        }
-
-        private static void NullValuesAreParsedCorrectly<T>()
+        [Theory]
+        [InlineData(typeof(object))]    // Normal class
+        [InlineData(typeof(IComparable))]   // Interface
+        [InlineData(typeof(Stream))]    // Abstract base class
+        public void NullValuesAreParsedCorrectly(Type requestedType)
         {
             const string json = "null";
             var testTarget = new JsonDeserializerBuilder().Build();
-            var result = testTarget.Deserialize<T>(json);
+            var result = testTarget.Deserialize(json, requestedType);
             result.Should().BeNull();
         }
 
@@ -30,9 +26,7 @@ namespace Light.Serialization.Tests
         [InlineData("nul")]
         public void ExceptionIsThrownWhenNullIsMisspelled(string json)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            Action act = () => testTarget.Deserialize<object>(json);
-            act.ShouldThrow<DeserializationException>().And.Message.Should().Be($"Cannot deserialize value {json} to Null.");
+            CheckDeserializerThrowsExceptionWithMessage<object>(json, $"Cannot deserialize value {json} to Null.");
         }
     }
 }

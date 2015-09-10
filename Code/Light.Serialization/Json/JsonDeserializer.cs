@@ -25,6 +25,12 @@ namespace Light.Serialization.Json
             return (T) DeserializeValue(jsonReader, typeof(T));
         }
 
+        public object Deserialize(string json, Type requestedType)
+        {
+            var jsonReader = _jsonReaderFactory.CreateFromString(json);
+            return DeserializeValue(jsonReader, requestedType);
+        }
+
         public T Deserialize<T>(Stream jsonStream)
         {
             throw new NotImplementedException();

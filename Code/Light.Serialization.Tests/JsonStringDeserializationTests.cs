@@ -1,10 +1,8 @@
-﻿using FluentAssertions;
-using Light.Serialization.Json;
-using Xunit;
+﻿using Xunit;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonStringDeserializationTests
+    public sealed class JsonStringDeserializationTests : BaseDefaultJsonDeserializationTest
     {
         [Theory]
         [InlineData("\"Hello\"", "Hello")]
@@ -13,9 +11,7 @@ namespace Light.Serialization.Tests
         [InlineData("\"\"", "")]
         public void SimpleStringCanBeDeserializedCorrectly(string json, string expected)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var actual = testTarget.Deserialize<string>(json);
-            actual.Should().Be(expected);
+            CompareDeserializedJsonToExpected(json, expected);
         }
 
         // TODO: add more complicated cases for strings

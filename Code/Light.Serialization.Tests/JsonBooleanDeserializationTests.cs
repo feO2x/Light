@@ -1,20 +1,15 @@
-﻿using System;
-using FluentAssertions;
-using Light.Serialization.Json;
-using Xunit;
+﻿using Xunit;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonBooleanDeserializationTests
+    public sealed class JsonBooleanDeserializationTests : BaseDefaultJsonDeserializationTest
     {
         [Theory]
         [InlineData("true", true)]
         [InlineData("false", false)]
         public void BooleanValuesCanBeDeserializedCorrectly(string json, bool expected)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var actual = testTarget.Deserialize<bool>(json);
-            actual.Should().Be(expected);
+            CompareDeserializedJsonToExpected(json, expected);
         }
 
         [Theory]
@@ -29,9 +24,7 @@ namespace Light.Serialization.Tests
         [InlineData("fa")]
         public void ExceptionIsThrownWhenFalseOrTrueAreNotSpelledCorrectly(string json)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            Action act = () => testTarget.Deserialize<bool>(json);
-            act.ShouldThrow<DeserializationException>().And.Message.Should().Contain($"Cannot deserialize value {json} to");
+            CheckDeserializerThrowsExceptionWithMessageContaining<bool>(json, $"Cannot deserialize value {json} to");
         }
     }
 }

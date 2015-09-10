@@ -1,13 +1,10 @@
-﻿using FluentAssertions;
-using Light.Serialization.Json;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Xunit;
 using TestData = System.Collections.Generic.IEnumerable<object[]>;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonCharacterDeserializationTests
+    public sealed class JsonCharacterDeserializationTests : BaseDefaultJsonDeserializationTest
     {
         [Theory]
         [InlineData("\"c\"", 'c')]
@@ -16,9 +13,7 @@ namespace Light.Serialization.Tests
         [InlineData("\" \"", ' ')]
         public void SimpleCharacterCanBeDeserializedCorrectly(string json, char expected)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var actual = testTarget.Deserialize<char>(json);
-            actual.Should().Be(expected);
+            CompareDeserializedJsonToExpected(json, expected);
         }
 
         [Theory]
@@ -32,9 +27,7 @@ namespace Light.Serialization.Tests
         [InlineData("\"\\/\"", '/')] // Slash
         public void SingleEscapedCharactersCanBeDeserializedCorrectly(string json, char expected)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var actual = testTarget.Deserialize<char>(json);
-            actual.Should().Be(expected);
+            CompareDeserializedJsonToExpected(json, expected);
         }
 
         [Theory]
@@ -44,9 +37,7 @@ namespace Light.Serialization.Tests
         [MemberData(nameof(UnicodeC1Block))] // Unicode C1 Block
         public void HexadecimalEscapedCharactersCanBeDeserializedCorrectly(string json, char expected)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var actual = testTarget.Deserialize<char>(json);
-            actual.Should().Be(expected);
+            CompareDeserializedJsonToExpected(json, expected);
         }
 
         public static TestData UnicodeC0Block => CreateCharacterSequence(0, ' '); // Unicode C0 block starts at zero and ends at whitespace
@@ -76,9 +67,7 @@ namespace Light.Serialization.Tests
         [InlineData("\"\\u01C\"")] // Incorrect hexadecimal character (3)
         public void ExceptionIsThrownWhenJsonStringIsNotASingleCharacter(string json)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            Action act = () => testTarget.Deserialize<char>(json);
-            act.ShouldThrow<DeserializationException>().And.Message.Should().Contain($"Cannot deserialize value {json} to");
+            CheckDeserializerThrowsExceptionWithMessageContaining<char>(json, $"Cannot deserialize value {json} to");
         }
     }
 }

@@ -1,11 +1,10 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Light.Serialization.Json;
 using Xunit;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonDoubleDeserializationTests
+    public sealed class JsonDoubleDeserializationTests : BaseDefaultJsonDeserializationTest
     {
         [Theory]
         [InlineData("42.0", 42.0, 0.1)]
@@ -28,9 +27,7 @@ namespace Light.Serialization.Tests
         [InlineData("3.141E1f")]
         public void ExceptionIsThrownWhenNumberCannotBeParsed(string json)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            Action act = () => testTarget.Deserialize<double>(json);
-            act.ShouldThrow<DeserializationException>().And.Message.Should().Contain(($"Cannot deserialize value {json} to"));
+            CheckDeserializerThrowsExceptionWithMessageContaining<double>(json, $"Cannot deserialize value {json} to");
         }
     }
 }

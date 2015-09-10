@@ -1,11 +1,8 @@
-﻿using FluentAssertions;
-using Light.Serialization.Json;
-using System;
-using Xunit;
+﻿using Xunit;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonIntDeserializationTests
+    public sealed class JsonIntDeserializationTests : BaseDefaultJsonDeserializationTest
     {
         [Theory]
         [InlineData("42", 42)]
@@ -13,9 +10,7 @@ namespace Light.Serialization.Tests
         [InlineData("-420", -420)]
         public void IntValueCanBeDeserializedCorrectly(string json, int expected)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var result = testTarget.Deserialize<int>(json);
-            result.Should().Be(expected);
+            CompareDeserializedJsonToExpected(json, expected);
         }
 
         [Theory]
@@ -25,11 +20,7 @@ namespace Light.Serialization.Tests
         [InlineData("-375000000000")]
         public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-
-            Action act = () => testTarget.Deserialize<int>(json);
-
-            act.ShouldThrow<DeserializationException>().And.Message.Should().Be($"Could not deserialize value {json} because it produces an overflow for type int.");
+            CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it produces an overflow for type int.");
         }
 
         [Theory]
@@ -39,9 +30,7 @@ namespace Light.Serialization.Tests
         [InlineData("0.000000", 0)]
         public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, int expected)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var result = testTarget.Deserialize<int>(json);
-            result.Should().Be(expected);
+            CompareDeserializedJsonToExpected(json, expected);
         }
 
         [Theory]
@@ -51,11 +40,7 @@ namespace Light.Serialization.Tests
         [InlineData("0.00000856")]
         public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-
-            Action act = () => testTarget.Deserialize<int>(json);
-
-            act.ShouldThrow<DeserializationException>().And.Message.Should().Be($"Could not deserialize value {json} because it is no integer, but a real number");
+            CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number");
         }
     }
 }
