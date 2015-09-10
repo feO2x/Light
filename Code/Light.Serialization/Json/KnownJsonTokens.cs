@@ -88,6 +88,6 @@ namespace Light.Serialization.Json
             }
         }
 
-        public char HexadicamalEscapeIndicator = 'u';
+        public char HexadecimalEscapeIndicator = 'u';
     }
 }

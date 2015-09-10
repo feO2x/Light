@@ -11,7 +11,7 @@ namespace Light.Serialization.Json.JsonValueParsers
             return buffer.JsonType == JsonType.Null && (requestedType.IsClass || requestedType.IsInterface);
         }
 
-        public object DeserializeValue(JsonCharacterBuffer buffer, Type requestedType)
+        public object ParseValue(JsonCharacterBuffer buffer, Type requestedType)
         {
             if (buffer.Count != Null.Length)
                 throw new DeserializationException($"Cannot deserialize value {buffer} to null");

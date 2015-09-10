@@ -11,7 +11,7 @@ namespace Light.Serialization.Json.JsonValueParsers
             return (buffer.JsonType == JsonType.True || buffer.JsonType == JsonType.False) && requestedType == _booleanType;
         }
 
-        public object DeserializeValue(JsonCharacterBuffer buffer, Type requestedType)
+        public object ParseValue(JsonCharacterBuffer buffer, Type requestedType)
         {
             return buffer.JsonType == JsonType.True;
         }

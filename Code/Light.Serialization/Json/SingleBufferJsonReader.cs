@@ -214,7 +214,7 @@ namespace Light.Serialization.Json
                     }
 
                     // Otherwise check if this is an escape sequence of four hexadecimal digits
-                    if (currentCharacter == _knownJsonTokens.HexadicamalEscapeIndicator)
+                    if (currentCharacter == _knownJsonTokens.HexadecimalEscapeIndicator)
                     {
                         if (CheckFourHexadecimalDigitsOfJsonEscapeSequence() == false)
                             goto ThrowException;

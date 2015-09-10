@@ -12,7 +12,7 @@ namespace Light.Serialization.Json.JsonValueParsers
             return buffer.JsonType == JsonType.Number && requestedType == _doubleType;
         }
 
-        public object DeserializeValue(JsonCharacterBuffer buffer, Type requestedType)
+        public object ParseValue(JsonCharacterBuffer buffer, Type requestedType)
         {
             var doubleString = buffer.ToString();
             double result;

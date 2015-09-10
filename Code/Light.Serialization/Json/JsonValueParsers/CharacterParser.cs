@@ -25,7 +25,7 @@ namespace Light.Serialization.Json.JsonValueParsers
             return buffer.JsonType == JsonType.String && requestedType == _charType;
         }
 
-        public object DeserializeValue(JsonCharacterBuffer buffer, Type requestedType)
+        public object ParseValue(JsonCharacterBuffer buffer, Type requestedType)
         {
             // The buffer has at least two elements, thus accessing the second one is safe
             var currentCharacter = buffer[1];
@@ -46,7 +46,7 @@ namespace Light.Serialization.Json.JsonValueParsers
         {
             var currentCharacter = buffer[2];
             // Check if the current character indicates a hexadecimal escape sequence
-            if (currentCharacter == _knownJsonTokens.HexadicamalEscapeIndicator)
+            if (currentCharacter == _knownJsonTokens.HexadecimalEscapeIndicator)
                 return ReadHexadimalEscapeSequence(buffer);
 
             // If it is not hexadecimal, then it must be a special escape sequence with only a single character

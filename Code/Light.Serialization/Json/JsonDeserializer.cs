@@ -42,7 +42,7 @@ namespace Light.Serialization.Json
             foreach (var analyzer in _valueAnalyzers)
             {
                 if (analyzer.IsSuitableFor(value, requestedType))
-                    return analyzer.DeserializeValue(value, requestedType);
+                    return analyzer.ParseValue(value, requestedType);
             }
 
 
