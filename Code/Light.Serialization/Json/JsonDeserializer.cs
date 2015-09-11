@@ -42,9 +42,8 @@ namespace Light.Serialization.Json
             foreach (var analyzer in _valueAnalyzers)
             {
                 if (analyzer.IsSuitableFor(value, requestedType))
-                    return analyzer.ParseValue(value, requestedType);
+                    return analyzer.ParseValue(new JsonDeserializationContext(value, requestedType, jsonReader, DeserializeValue));
             }
-
 
             throw new DeserializationException($"Cannot deserialize value {value} with requested type {requestedType.FullName} because there is no parser that is suitable for this context.");
         }

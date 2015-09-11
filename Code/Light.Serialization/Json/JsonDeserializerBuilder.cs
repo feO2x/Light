@@ -14,7 +14,8 @@ namespace Light.Serialization.Json
                                                                                new DoubleParser(),
                                                                                new NullParser(),
                                                                                new CharacterParser(),
-                                                                               new BooleanParser()
+                                                                               new BooleanParser(),
+                                                                               new ArrayToGenericCollectionParser(new DefaultGenericCollectionFactory())
                                                                            };
 
         public JsonDeserializer Build()

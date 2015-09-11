@@ -17,8 +17,9 @@ namespace Light.Serialization.Json.JsonValueParsers
             return buffer.JsonType == JsonType.Number && requestedType == _intType;
         }
 
-        public object ParseValue(JsonCharacterBuffer buffer, Type requestedType)
+        public object ParseValue(JsonDeserializationContext context)
         {
+            var buffer = context.Buffer;
             var decimalPointInfo = GetIndexOfDecimalPoint(buffer);
             var positionsBeforeDecimalPoint = buffer.Count;
 

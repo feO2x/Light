@@ -6,6 +6,6 @@ namespace Light.Serialization.Json
     {
         bool IsSuitableFor(JsonCharacterBuffer buffer, Type requestedType);
 
-        object ParseValue(JsonCharacterBuffer buffer, Type requestedType);
+        object ParseValue(JsonDeserializationContext context);
     }
 }

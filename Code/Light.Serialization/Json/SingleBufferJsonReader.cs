@@ -41,8 +41,22 @@ namespace Light.Serialization.Json
                 return ReadConstantToken(_knownJsonTokens.TrueToken, JsonType.True);
             if (firstCharacter == _knownJsonTokens.NullToken[0])
                 return ReadConstantToken(_knownJsonTokens.NullToken, JsonType.Null);
+            if (firstCharacter == _knownJsonTokens.StartCollectionCharacter)
+                return CreateBuffer(_currentIndex - 1, JsonType.Array);
 
             throw new NotImplementedException();
+        }
+
+        public bool CheckEndOfCollection()
+        {
+            IgnoreWhitespace();
+            var currentCharacter = _buffer[_currentIndex++];
+            if (currentCharacter == _knownJsonTokens.ValueSeperator)
+                return false;
+            if (currentCharacter == _knownJsonTokens.StopCollectionCharacter)
+                return true;
+
+            throw new DeserializationException($"Unexpected JSON token: expected either either end of collection ({_knownJsonTokens.StopCollectionCharacter}) or value separator ({_knownJsonTokens.ValueSeperator}), but found {currentCharacter}.");
         }
 
         private void IgnoreWhitespace()

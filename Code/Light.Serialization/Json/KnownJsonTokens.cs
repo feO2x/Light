@@ -42,8 +42,6 @@ namespace Light.Serialization.Json
         }
 
         public char StringDelimiter = '"';
-
-
         public char DecimalPoint = '.';
 
 
@@ -60,9 +58,7 @@ namespace Light.Serialization.Json
         }
 
         public char PositiveSign = '+';
-
         public char NegativeSign = '-';
-
         public char StringEscapeCharacter = '\\';
 
 
@@ -89,5 +85,9 @@ namespace Light.Serialization.Json
         }
 
         public char HexadecimalEscapeIndicator = 'u';
+        public char StartCollectionCharacter = '[';
+        public char StopCollectionCharacter = ']';
+        public char ValueSeperator = ',';
+        public char NameValueSeparator = ':';
     }
 }

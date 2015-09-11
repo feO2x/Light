@@ -26,8 +26,9 @@ namespace Light.Serialization.Json.JsonValueParsers
             return buffer.JsonType == JsonType.String && requestedType == _stringType;
         }
 
-        public object ParseValue(JsonCharacterBuffer buffer, Type requestedType)
+        public object ParseValue(JsonDeserializationContext context)
         {
+            var buffer = context.Buffer;
             // If the buffer has only two character, then it is an empty string.
             if (buffer.Count == 2)
                 return string.Empty;

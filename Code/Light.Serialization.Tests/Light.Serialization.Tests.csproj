@@ -68,6 +68,7 @@
     <Compile Include="IDummyPerson.cs" />
     <Compile Include="JsonBooleanDeserializationTests.cs" />
     <Compile Include="JsonCharacterDeserializationTests.cs" />
+    <Compile Include="JsonCollectionDeserializationTests.cs" />
     <Compile Include="JsonCollectionSerializationTests.cs" />
     <Compile Include="JsonComplexTypesSerializationTests.cs" />
     <Compile Include="JsonDelegateSerializationTests.cs" />
