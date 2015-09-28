@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Light.Serialization.Json;
+using System.Collections.Generic;
 using Xunit;
 using TestData = System.Collections.Generic.IEnumerable<object[]>;
 
@@ -21,7 +21,48 @@ namespace Light.Serialization.Tests
             new[]
             {
                 new object[] { "[1,2,3]", new[] { 1, 2, 3 } },
-                new object[] { "[9,83]", new[] { 9, 83 } }
+                new object[] { "[9,83]", new[] { 9, 83 } },
+                new object[] { "[138, 145, 633]", new[] { 138, 145, 633 } },
+                new object[] { "[]", new int[0] }
+            };
+
+        [Theory]
+        [MemberData(nameof(StringCollections))]
+        public void StringCollectionsCanBeDeserializedCorrectly(string json, string[] expected)
+        {
+            var testTarget = new JsonDeserializerBuilder().Build();
+            var actual = testTarget.Deserialize<List<string>>(json);
+            actual.ShouldAllBeEquivalentTo(expected);
+        }
+
+        public static readonly TestData StringCollections =
+            new[]
+            {
+                new object[] { "[\"Hello\", \"World\"]", new[] { "Hello", "World" } },
+                new object[] { "[\"3\"]", new[] { "3" } },
+                new object[] { "[\"Hey\\u2028you\", \"What's\\tup?\"]", new[] { "Hey\u2028you", "What's\tup?" } },
+                new object[] { "[]", new string[0] }
+            };
+
+        [Theory]
+        [MemberData(nameof(DoubleCollections))]
+        public void DoubleCollectionsCanBeDeserializedCorrectly(string json, double[] expected, double tolerance)
+        {
+            var testTarget = new JsonDeserializerBuilder().Build();
+            var actual = testTarget.Deserialize<List<double>>(json);
+            actual.Should().HaveCount(expected.Length);
+            for (var i = 0; i < expected.Length; i++)
+            {
+                actual[i].Should().BeApproximately(expected[i], tolerance);
+            }
+        }
+
+        public static readonly TestData DoubleCollections =
+            new[]
+            {
+                new object[] { "[12.23, 3.11, 15556.99]", new[] { 12.23, 3.11, 15556.99 }, 0.001 },
+                new object[] { "[3.141,1.6e10]", new[] { 3.141, 1.6e10 }, 0.0001 },
+                new object[] { "[]", new double[0], 0.0 }
             };
     }
 }

@@ -30,6 +30,9 @@ namespace Light.Serialization.Json.JsonValueParsers
         {
             var collection = _collectionFactory.CreateCollection(context.RequestedType);
 
+            if (context.JsonReader.CheckEndOfCollection())
+                return collection;
+
             var specificEnumerableType = context.RequestedType.GetSpecificTypeThatCorrespondsToGenericInterface(_iEnumerableType);
             var specificPopulateGenericCollectionMethod = _populateGenericCollectionMethodInfo.MakeGenericMethod(specificEnumerableType.GetGenericArguments());
 

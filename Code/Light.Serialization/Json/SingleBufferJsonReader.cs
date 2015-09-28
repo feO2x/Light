@@ -50,13 +50,18 @@ namespace Light.Serialization.Json
         public bool CheckEndOfCollection()
         {
             IgnoreWhitespace();
-            var currentCharacter = _buffer[_currentIndex++];
-            if (currentCharacter == _knownJsonTokens.ValueSeperator)
-                return false;
+            var currentCharacter = _buffer[_currentIndex];
             if (currentCharacter == _knownJsonTokens.EndOfCollectionCharacter)
+            {
+                _currentIndex++;
                 return true;
-
-            throw new DeserializationException($"Unexpected JSON token: expected either end of collection ({_knownJsonTokens.EndOfCollectionCharacter}) or value separator ({_knownJsonTokens.ValueSeperator}), but found {currentCharacter}.");
+            }
+            if (currentCharacter == _knownJsonTokens.ValueSeperator)
+            {
+                _currentIndex++;
+                return false;
+            }
+            return false;
         }
 
         private void IgnoreWhitespace()
