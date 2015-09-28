@@ -13,7 +13,7 @@ namespace Light.Serialization.Tests
         public void IntegerCollectionsCanBeDeserialized(string json, int[] expected)
         {
             var testTarget = new JsonDeserializerBuilder().Build();
-            var actual = testTarget.Deserialize<IList<int>>(json);
+            var actual = testTarget.Deserialize<List<int>>(json);
             actual.ShouldAllBeEquivalentTo(expected);
         }
 

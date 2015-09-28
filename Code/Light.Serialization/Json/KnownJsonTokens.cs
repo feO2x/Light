@@ -85,8 +85,8 @@ namespace Light.Serialization.Json
         }
 
         public char HexadecimalEscapeIndicator = 'u';
-        public char StartCollectionCharacter = '[';
-        public char StopCollectionCharacter = ']';
+        public char StartOfCollectionCharacter = '[';
+        public char EndOfCollectionCharacter = ']';
         public char ValueSeperator = ',';
         public char NameValueSeparator = ':';
     }

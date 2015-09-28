@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Light.Core;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Light.Core;
 
 namespace Light.Serialization.Json.JsonValueParsers
 {
@@ -10,13 +10,14 @@ namespace Light.Serialization.Json.JsonValueParsers
         private readonly Type _iEnumerableType = typeof (IEnumerable<>);
         private readonly ICollectionFactory _collectionFactory;
         private readonly MethodInfo _populateGenericCollectionMethodInfo;
+        private readonly object[] _populateGenericCollectionParameters = new object[2];
 
         public ArrayToGenericCollectionParser(ICollectionFactory collectionFactory)
         {
             if (collectionFactory == null) throw new ArgumentNullException(nameof(collectionFactory));
 
             _collectionFactory = collectionFactory;
-            _populateGenericCollectionMethodInfo = GetType().GetMethod(nameof(PopulateGenericCollection));
+            _populateGenericCollectionMethodInfo = GetType().GetMethod(nameof(PopulateGenericCollection), BindingFlags.Static | BindingFlags.NonPublic);
         }
 
         public bool IsSuitableFor(JsonCharacterBuffer buffer, Type requestedType)
@@ -27,13 +28,19 @@ namespace Light.Serialization.Json.JsonValueParsers
 
         public object ParseValue(JsonDeserializationContext context)
         {
-            // I have to create a collection that implements
             var collection = _collectionFactory.CreateCollection(context.RequestedType);
-            
-            throw new NotImplementedException();
+
+            var specificEnumerableType = context.RequestedType.GetSpecificTypeThatCorrespondsToGenericInterface(_iEnumerableType);
+            var specificPopulateGenericCollectionMethod = _populateGenericCollectionMethodInfo.MakeGenericMethod(specificEnumerableType.GetGenericArguments());
+
+            _populateGenericCollectionParameters[0] = collection;
+            _populateGenericCollectionParameters[1] = context;
+
+            specificPopulateGenericCollectionMethod.Invoke(null, _populateGenericCollectionParameters);
+            return collection;
         }
 
-        private void PopulateGenericCollection<T>(ICollection<T> collection, JsonDeserializationContext context)
+        private static void PopulateGenericCollection<T>(ICollection<T> collection, JsonDeserializationContext context)
         {
             var itemType = typeof (T);
             do

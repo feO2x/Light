@@ -41,7 +41,7 @@ namespace Light.Serialization.Json
                 return ReadConstantToken(_knownJsonTokens.TrueToken, JsonType.True);
             if (firstCharacter == _knownJsonTokens.NullToken[0])
                 return ReadConstantToken(_knownJsonTokens.NullToken, JsonType.Null);
-            if (firstCharacter == _knownJsonTokens.StartCollectionCharacter)
+            if (firstCharacter == _knownJsonTokens.StartOfCollectionCharacter)
                 return CreateBuffer(_currentIndex - 1, JsonType.Array);
 
             throw new NotImplementedException();
@@ -53,10 +53,10 @@ namespace Light.Serialization.Json
             var currentCharacter = _buffer[_currentIndex++];
             if (currentCharacter == _knownJsonTokens.ValueSeperator)
                 return false;
-            if (currentCharacter == _knownJsonTokens.StopCollectionCharacter)
+            if (currentCharacter == _knownJsonTokens.EndOfCollectionCharacter)
                 return true;
 
-            throw new DeserializationException($"Unexpected JSON token: expected either either end of collection ({_knownJsonTokens.StopCollectionCharacter}) or value separator ({_knownJsonTokens.ValueSeperator}), but found {currentCharacter}.");
+            throw new DeserializationException($"Unexpected JSON token: expected either end of collection ({_knownJsonTokens.EndOfCollectionCharacter}) or value separator ({_knownJsonTokens.ValueSeperator}), but found {currentCharacter}.");
         }
 
         private void IgnoreWhitespace()
@@ -82,17 +82,17 @@ namespace Light.Serialization.Json
             // Read all digits until we hit the end or a decimal point
             while (true)
             {
-                _currentIndex++;
                 if (IsEndOfToken())
                     return CreateBuffer(startIndex, JsonType.Number);
 
-                var currentCharacter = _buffer[_currentIndex];
+                var currentCharacter = _buffer[_currentIndex++];
                 if (char.IsDigit(currentCharacter))
                     continue;
 
                 if (CheckDecimalPartOfNumber(currentCharacter))
                     return CreateBuffer(startIndex, JsonType.Number);
 
+                ReadUntilEndOfToken();
                 throw CreateDeserializationException(startIndex, JsonType.Number);
             }
         }
@@ -105,7 +105,7 @@ namespace Light.Serialization.Json
             if (IsEndOfToken())
                 throw CreateDeserializationException(startIndex, JsonType.Number);
             
-            var currentCharacter = _buffer[_currentIndex];
+            var currentCharacter = _buffer[_currentIndex++];
             // Check if it is zero
             if (currentCharacter == '0')
             {
@@ -120,11 +120,10 @@ namespace Light.Serialization.Json
             // Read all digits until we hit the end or a decimal point
             while (true)
             {
-                _currentIndex++;
                 if (IsEndOfToken())
                     return CreateBuffer(startIndex, JsonType.Number);
 
-                currentCharacter = _buffer[_currentIndex];
+                currentCharacter = _buffer[_currentIndex++];
                 if (char.IsDigit(currentCharacter))
                     continue;
 
@@ -142,30 +141,35 @@ namespace Light.Serialization.Json
 
             // Here we definitely have a decimal point
             // If the token ends now, this is an error
-            _currentIndex++;
             if (IsEndOfToken())
                 return false;
 
-            // There must be at least one digit
+            // Also the next character must be a digit, no exponential token is allowed
             currentCharacter = _buffer[_currentIndex++];
             if (char.IsDigit(currentCharacter) == false)
                 return false;
 
+            // Else check the rest of the digits after the decimal point
             while (true)
             {
                 if (IsEndOfToken())
                     return true;
 
                 currentCharacter = _buffer[_currentIndex++];
-                if (char.IsDigit(currentCharacter) == false)
-                    return false;
+                if (char.IsDigit(currentCharacter))
+                    continue;
+
+                if (_knownJsonTokens.ExponentialTokens.Contains(currentCharacter))
+                    return CheckExponentOfNumber(currentCharacter);
+
+                return false;
             }
         }
 
         private bool IsNumberFinishedOrNumberWithDecimalPart()
         {
             // Check if the end of the buffer is reached.
-            return IsEndOfToken() || CheckDecimalPartOfNumber(_buffer[_currentIndex]);
+            return IsEndOfToken() || CheckDecimalPartOfNumber(_buffer[_currentIndex++]);
         }
 
         private bool CheckExponentOfNumber(char currentCharacter)
@@ -275,7 +279,12 @@ namespace Light.Serialization.Json
 
         private bool IsEndOfToken()
         {
-            return _currentIndex == _buffer.Length || char.IsWhiteSpace(_buffer[_currentIndex]);
+            if (_currentIndex == _buffer.Length)
+                return true;
+            var currentCharacter = _buffer[_currentIndex];
+            return char.IsWhiteSpace(currentCharacter) ||
+                   currentCharacter == _knownJsonTokens.ValueSeperator ||
+                   currentCharacter == _knownJsonTokens.EndOfCollectionCharacter;
         }
 
         private bool IsEndOfBuffer()

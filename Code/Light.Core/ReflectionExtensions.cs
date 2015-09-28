@@ -62,5 +62,25 @@ namespace Light.Core
             }
             return false;
         }
+
+        public static Type GetSpecificTypeThatCorrespondsToGenericInterface(this Type sourceType, Type genericTypeDefinition)
+        {
+            if (sourceType == null) throw new ArgumentNullException(nameof(sourceType));
+            if (genericTypeDefinition == null) throw new ArgumentNullException(nameof(genericTypeDefinition));
+
+            var allInterfaces = sourceType.GetAllInterfacesOfInheritanceHierarchy();
+            // ReSharper disable once ForCanBeConvertedToForeach
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            for (var i = 0; i < allInterfaces.Count; i++)
+            {
+                var @interface = allInterfaces[i];
+                if (@interface.IsGenericType == false)
+                    continue;
+                if (@interface.IsGenericTypeDefinition == false &&
+                    @interface.GetGenericTypeDefinition() == genericTypeDefinition)
+                    return @interface;
+            }
+            return null;
+        }
     }
 }
