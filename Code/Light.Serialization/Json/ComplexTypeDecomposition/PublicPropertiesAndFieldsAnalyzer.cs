@@ -12,7 +12,7 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
             get { return _valueProviderFactory; }
             set
             {
-                if (value == null) throw new ArgumentNullException("value");
+                if (value == null) throw new ArgumentNullException(nameof(value));
                 _valueProviderFactory = value;
             }
         }

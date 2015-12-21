@@ -4,24 +4,22 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
 {
     public sealed class ValueProviderUsingLambda : IValueProvider
     {
-        private readonly string _name;
         private readonly Func<object, object> _lambda;
-        private readonly Type _referenceType;
 
         public ValueProviderUsingLambda(string name, Func<object, object> lambda, Type referenceType)
         {
-            if (name == null) throw new ArgumentNullException("name");
-            if (lambda == null) throw new ArgumentNullException("lambda");
-            if (referenceType == null) throw new ArgumentNullException("referenceType");
+            if (name == null) throw new ArgumentNullException(nameof(name));
+            if (lambda == null) throw new ArgumentNullException(nameof(lambda));
+            if (referenceType == null) throw new ArgumentNullException(nameof(referenceType));
 
-            _name = name;
+            Name = name;
             _lambda = lambda;
-            _referenceType = referenceType;
+            ReferenceType = referenceType;
         }
 
-        public string Name { get { return _name; } }
+        public string Name { get; }
 
-        public Type ReferenceType { get { return _referenceType; } }
+        public Type ReferenceType { get; }
 
         public object GetValue(object @object)
         {
