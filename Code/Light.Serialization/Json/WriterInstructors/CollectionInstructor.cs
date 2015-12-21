@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 
-namespace Light.Serialization.Json.TypeSerializers
+namespace Light.Serialization.Json.WriterInstructors
 {
-    public sealed class CollectionSerializer : IJsonTypeSerializer
+    public sealed class CollectionInstructor : IJsonWriterInstructor
     {
         public bool AppliesToObject(object @object, Type actualType, Type referencedType)
         {

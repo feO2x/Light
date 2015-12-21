@@ -1,15 +1,15 @@
 ﻿using Light.Serialization.Json.ComplexTypeDecomposition;
 using Light.Serialization.Json.PrimitiveTypeFormatters;
-using Light.Serialization.Json.TypeSerializers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Light.Serialization.Json.WriterInstructors;
 
 namespace Light.Serialization.Json
 {
     public class JsonSerializerBuilder
     {
-        private readonly IList<IJsonTypeSerializer> _typeSerializers;
+        private readonly IList<IJsonWriterInstructor> _typeSerializers;
         private readonly IJsonWriterFactory _writerFactory;
 
         public JsonSerializerBuilder()
@@ -35,13 +35,13 @@ namespace Light.Serialization.Json
                                           };
             var primitiveTypeToFormattersMapping = primitiveTypeFormatters.ToDictionary(f => f.TargetType);
 
-            _typeSerializers = new List<IJsonTypeSerializer>
+            _typeSerializers = new List<IJsonWriterInstructor>
                                {
-                                   new PrimitiveJsonTypeSerializer(primitiveTypeToFormattersMapping),
-                                   new EnumerationToStringSerializer(),
-                                   new DictionarySerializer(primitiveTypeToFormattersMapping),
-                                   new CollectionSerializer(),
-                                   new ComplexJsonTypeSerializer(new PublicPropertiesAndFieldsAnalyzer())
+                                   new PrimitiveWriterInstructor(primitiveTypeToFormattersMapping),
+                                   new EnumerationToStringInstructor(),
+                                   new DictionaryInstructor(primitiveTypeToFormattersMapping),
+                                   new CollectionInstructor(),
+                                   new ComplexWriterInstructor(new PublicPropertiesAndFieldsAnalyzer())
                                };
 
             _writerFactory = new JsonWriterFactory();

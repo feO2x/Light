@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Light.Serialization.Json.TypeSerializers
+namespace Light.Serialization.Json.WriterInstructors
 {
-    public sealed class DictionarySerializer : IJsonTypeSerializer
+    public sealed class DictionaryInstructor : IJsonWriterInstructor
     {
         private readonly IDictionary<Type, IPrimitiveTypeFormatter> _primitiveTypeToFormattersMapping;
 
-        public DictionarySerializer(IDictionary<Type, IPrimitiveTypeFormatter> primitiveTypeToFormattersMapping)
+        public DictionaryInstructor(IDictionary<Type, IPrimitiveTypeFormatter> primitiveTypeToFormattersMapping)
         {
             if (primitiveTypeToFormattersMapping == null) throw new ArgumentNullException(nameof(primitiveTypeToFormattersMapping));
 

@@ -1,21 +1,21 @@
-﻿using Light.Serialization.Json.ComplexTypeDecomposition;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Light.Serialization.Json.ComplexTypeDecomposition;
 
-namespace Light.Serialization.Json.TypeSerializers
+namespace Light.Serialization.Json.WriterInstructors
 {
-    public sealed class ComplexJsonTypeSerializer : IJsonTypeSerializer
+    public sealed class ComplexWriterInstructor : IJsonWriterInstructor
     {
         private readonly IDictionary<Type, IList<IValueProvider>> _typeToValueProvidersMapping;
         private readonly IReadableValuesTypeAnalyzer _typeAnalyzer;
 
-        public ComplexJsonTypeSerializer(IReadableValuesTypeAnalyzer typeAnalyzer)
+        public ComplexWriterInstructor(IReadableValuesTypeAnalyzer typeAnalyzer)
             : this(typeAnalyzer, new Dictionary<Type, IList<IValueProvider>>())
         {
             
         }
 
-        public ComplexJsonTypeSerializer(IReadableValuesTypeAnalyzer typeAnalyzer,
+        public ComplexWriterInstructor(IReadableValuesTypeAnalyzer typeAnalyzer,
                                          IDictionary<Type, IList<IValueProvider>> typeToValueProvidersMapping)
         {
             if (typeAnalyzer == null) throw new ArgumentNullException(nameof(typeAnalyzer));

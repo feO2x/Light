@@ -2,7 +2,7 @@
 
 namespace Light.Serialization.Json
 {
-    public interface IJsonTypeSerializer
+    public interface IJsonWriterInstructor
     {
         bool AppliesToObject(object @object, Type actualType, Type referencedType);
 
