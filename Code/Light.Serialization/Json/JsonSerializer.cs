@@ -22,11 +22,18 @@ namespace Light.Serialization.Json
 
         public string Serialize<T>(T objectGraphRoot)
         {
+            return Serialize(objectGraphRoot, typeof (T));
+        }
+
+        public string Serialize(object objectGraphRoot, Type requestedType)
+        {
             if (objectGraphRoot == null)
                 throw new ArgumentNullException(nameof(objectGraphRoot));
+            if (requestedType == null)
+                throw new ArgumentNullException(nameof(requestedType));
 
             _jsonWriter = _writerFactory.Create();
-            SerializeObject(objectGraphRoot, objectGraphRoot.GetType(), typeof(T));
+            SerializeObject(objectGraphRoot, objectGraphRoot.GetType(), requestedType);
 
             var json = _writerFactory.FinishWriteProcessAndReleaseResources();
             _jsonWriter = null;
