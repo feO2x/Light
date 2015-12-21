@@ -1,7 +1,7 @@
-﻿using Light.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Light.Serialization.FrameworkExtensions;
 
 namespace Light.Serialization.Json.JsonValueParsers
 {

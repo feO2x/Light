@@ -35,6 +35,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DeserializationException.cs" />
+    <Compile Include="FrameworkExtensions\CharExtensions.cs" />
+    <Compile Include="FrameworkExtensions\ReflectionExtensions.cs" />
+    <Compile Include="FrameworkExtensions\StringExtensions.cs" />
     <Compile Include="Json\IJsonReader.cs" />
     <Compile Include="Json\IJsonReaderFactory.cs" />
     <Compile Include="Json\IJsonValueParser.cs" />
@@ -92,12 +95,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Json\JsonSerializer.cs" />
     <Compile Include="SerializationException.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Light.Core\Light.Core.csproj">
-      <Project>{9d7d6846-d701-4218-985a-ec46bee84287}</Project>
-      <Name>Light.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

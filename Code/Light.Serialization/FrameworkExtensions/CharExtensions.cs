@@ -1,4 +1,4 @@
-﻿namespace Light.Core
+﻿namespace Light.Serialization.FrameworkExtensions
 {
     public static class CharExtensions
     {

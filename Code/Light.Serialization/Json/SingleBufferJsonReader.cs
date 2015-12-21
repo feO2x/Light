@@ -1,5 +1,5 @@
-﻿using Light.Core;
-using System;
+﻿using System;
+using Light.Serialization.FrameworkExtensions;
 
 namespace Light.Serialization.Json
 {

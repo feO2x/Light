@@ -1,5 +1,5 @@
 ﻿using System;
-using Light.Core;
+using Light.Serialization.FrameworkExtensions;
 
 namespace Light.Serialization.Json.TypeSerializers
 {

@@ -1,7 +1,8 @@
 ﻿using FluentAssertions;
+using Light.Serialization.FrameworkExtensions;
 using Xunit;
 
-namespace Light.Core.Tests
+namespace Light.Serialization.Tests
 {
     public sealed class StringExtensionsTests
     {

@@ -1,4 +1,4 @@
-﻿using Light.Core;
+﻿using Light.Serialization.FrameworkExtensions;
 using Xunit;
 using TestData = System.Collections.Generic.IEnumerable<object[]>;
 

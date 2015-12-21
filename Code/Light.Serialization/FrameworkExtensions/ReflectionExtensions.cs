@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Light.Core
+namespace Light.Serialization.FrameworkExtensions
 {
     public static class ReflectionExtensions
     {

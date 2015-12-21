@@ -84,16 +84,13 @@
     <Compile Include="JsonStringDeserializationTests.cs" />
     <Compile Include="JsonWhitespaceDeserializationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Light.Core\Light.Core.csproj">
-      <Project>{9d7d6846-d701-4218-985a-ec46bee84287}</Project>
-      <Name>Light.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Light.Serialization\Light.Serialization.csproj">
       <Project>{a9586f6b-11ee-4984-ac27-7211da43f656}</Project>
       <Name>Light.Serialization</Name>

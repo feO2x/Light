@@ -1,5 +1,5 @@
-﻿using Light.Core;
-using System.Globalization;
+﻿using System.Globalization;
+using Light.Serialization.FrameworkExtensions;
 
 namespace Light.Serialization.Json.PrimitiveTypeFormatters
 {
