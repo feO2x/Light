@@ -25,15 +25,15 @@ namespace Light.Serialization.Json
             return Serialize(objectGraphRoot, typeof (T));
         }
 
-        public string Serialize(object objectGraphRoot, Type requestedType)
+        public string Serialize(object objectGraphRoot, Type referencedType)
         {
             if (objectGraphRoot == null)
                 throw new ArgumentNullException(nameof(objectGraphRoot));
-            if (requestedType == null)
-                throw new ArgumentNullException(nameof(requestedType));
+            if (referencedType == null)
+                throw new ArgumentNullException(nameof(referencedType));
 
             _jsonWriter = _writerFactory.Create();
-            SerializeObject(objectGraphRoot, objectGraphRoot.GetType(), requestedType);
+            SerializeObject(objectGraphRoot, objectGraphRoot.GetType(), referencedType);
 
             var json = _writerFactory.FinishWriteProcessAndReleaseResources();
             _jsonWriter = null;
