@@ -1,8 +1,8 @@
-﻿using Light.Serialization.Json.ComplexTypeDecomposition;
-using Light.Serialization.Json.PrimitiveTypeFormatters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Light.Serialization.Json.ComplexTypeDecomposition;
+using Light.Serialization.Json.PrimitiveTypeFormatters;
 using Light.Serialization.Json.WriterInstructors;
 
 namespace Light.Serialization.Json
@@ -15,25 +15,24 @@ namespace Light.Serialization.Json
         public JsonSerializerBuilder()
         {
             var characterEscaper = new DefaultCharacterEscaper();
-            var primitiveTypeFormatters = new List<IPrimitiveTypeFormatter>
-                                          {
-                                              new ToStringPrimitiveTypeFormatter<int>(),
-                                              new StringFormatter(characterEscaper),
-                                              new DoubleFormatter(),
-                                              new ToStringWithQuotationMarksFormatter<Guid>(),
-                                              new BooleanFormatter(),
-                                              new DecimalFormatter(),
-                                              new ToStringPrimitiveTypeFormatter<long>(),
-                                              new FloatFormatter(),
-                                              new CharFormatter(characterEscaper),
-                                              new ToStringPrimitiveTypeFormatter<short>(),
-                                              new ToStringPrimitiveTypeFormatter<byte>(),
-                                              new ToStringPrimitiveTypeFormatter<uint>(),
-                                              new ToStringPrimitiveTypeFormatter<ulong>(),
-                                              new ToStringPrimitiveTypeFormatter<ushort>(),
-                                              new ToStringPrimitiveTypeFormatter<sbyte>()
-                                          };
-            var primitiveTypeToFormattersMapping = primitiveTypeFormatters.ToDictionary(f => f.TargetType);
+            var primitiveTypeToFormattersMapping = new IPrimitiveTypeFormatter[]
+                                                   {
+                                                       new ToStringPrimitiveTypeFormatter<int>(),
+                                                       new StringFormatter(characterEscaper),
+                                                       new DoubleFormatter(),
+                                                       new ToStringWithQuotationMarksFormatter<Guid>(),
+                                                       new BooleanFormatter(),
+                                                       new DecimalFormatter(),
+                                                       new ToStringPrimitiveTypeFormatter<long>(),
+                                                       new FloatFormatter(),
+                                                       new CharFormatter(characterEscaper),
+                                                       new ToStringPrimitiveTypeFormatter<short>(),
+                                                       new ToStringPrimitiveTypeFormatter<byte>(),
+                                                       new ToStringPrimitiveTypeFormatter<uint>(),
+                                                       new ToStringPrimitiveTypeFormatter<ulong>(),
+                                                       new ToStringPrimitiveTypeFormatter<ushort>(),
+                                                       new ToStringPrimitiveTypeFormatter<sbyte>()
+                                                   }.ToDictionary(f => f.TargetType);
 
             _typeSerializers = new List<IJsonWriterInstructor>
                                {
