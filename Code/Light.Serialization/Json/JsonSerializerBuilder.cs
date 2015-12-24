@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Light.Serialization.Json.ComplexTypeDecomposition;
 using Light.Serialization.Json.PrimitiveTypeFormatters;
@@ -9,6 +10,7 @@ namespace Light.Serialization.Json
     {
         private IJsonWriterFactory _writerFactory;
         private IList<IJsonWriterInstructor> _writerInstructors;
+        private IDictionary<Type, IJsonWriterInstructor> _instructorCache; 
 
         public JsonSerializerBuilder()
         {
@@ -21,6 +23,8 @@ namespace Light.Serialization.Json
                                                                                                publicPropertiesAndFieldsAnalyzer);
 
             _writerFactory = new JsonWriterFactory();
+
+            _instructorCache = new Dictionary<Type, IJsonWriterInstructor>();
         }
 
         public JsonSerializerBuilder WithWriterInstructors(IList<IJsonWriterInstructor> writerInstructors)
@@ -35,9 +39,15 @@ namespace Light.Serialization.Json
             return this;
         }
 
+        public JsonSerializerBuilder WithInstructorCache(IDictionary<Type, IJsonWriterInstructor> instructorCache)
+        {
+            _instructorCache = instructorCache;
+            return this;
+        }
+
         public ISerializer Build()
         {
-            return new JsonSerializer(_writerInstructors, _writerFactory);
+            return new JsonSerializer(_writerInstructors, _writerFactory, _instructorCache);
         }
     }
 }

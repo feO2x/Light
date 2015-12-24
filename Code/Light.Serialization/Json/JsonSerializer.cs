@@ -7,17 +7,20 @@ namespace Light.Serialization.Json
     {
         private readonly IList<IJsonWriterInstructor> _writerInstructors;
         private readonly IJsonWriterFactory _writerFactory;
-        private readonly Dictionary<Type, IJsonWriterInstructor> _typeToInstructorMapping = new Dictionary<Type, IJsonWriterInstructor>();
+        private readonly IDictionary<Type, IJsonWriterInstructor> _instructorCache;
         private IJsonWriter _jsonWriter;
 
         public JsonSerializer(IList<IJsonWriterInstructor> writerInstructors,
-                              IJsonWriterFactory writerFactory)
+                              IJsonWriterFactory writerFactory,
+                              IDictionary<Type, IJsonWriterInstructor> intructorCache)
         {
             if (writerInstructors == null) throw new ArgumentNullException(nameof(writerInstructors));
             if (writerFactory == null) throw new ArgumentNullException(nameof(writerFactory));
+            if (intructorCache == null) throw new ArgumentNullException(nameof(intructorCache));
 
             _writerInstructors = writerInstructors;
             _writerFactory = writerFactory;
+            _instructorCache = intructorCache;
         }
 
         public string Serialize<T>(T objectGraphRoot)
@@ -43,13 +46,13 @@ namespace Light.Serialization.Json
         private void SerializeObject(object @object, Type actualType, Type referencedType)
         {
             IJsonWriterInstructor targetWriterInstructor;
-            if (_typeToInstructorMapping.TryGetValue(actualType, out targetWriterInstructor) == false)
+            if (_instructorCache.TryGetValue(actualType, out targetWriterInstructor) == false)
             {
                 targetWriterInstructor = FindTargetInstructor(@object, actualType, referencedType);
                 if (targetWriterInstructor == null)
                     throw new SerializationException($"Type {actualType.FullName} cannot be serialized.");
 
-                _typeToInstructorMapping.Add(actualType, targetWriterInstructor);
+                _instructorCache.Add(actualType, targetWriterInstructor);
             }
 
             targetWriterInstructor.Serialize(new JsonSerializationContext(@object, actualType, referencedType, SerializeObject, _jsonWriter));
