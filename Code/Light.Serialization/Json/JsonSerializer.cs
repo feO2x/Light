@@ -45,7 +45,7 @@ namespace Light.Serialization.Json
             IJsonWriterInstructor targetWriterInstructor;
             if (_typeToInstructorMapping.TryGetValue(actualType, out targetWriterInstructor) == false)
             {
-                targetWriterInstructor = FindTargetTypeSerializer(@object, actualType, referencedType);
+                targetWriterInstructor = FindTargetInstructor(@object, actualType, referencedType);
                 if (targetWriterInstructor == null)
                     throw new SerializationException($"Type {actualType.FullName} cannot be serialized.");
 
@@ -55,13 +55,13 @@ namespace Light.Serialization.Json
             targetWriterInstructor.Serialize(new JsonSerializationContext(@object, actualType, referencedType, SerializeObject, _jsonWriter));
         }
 
-        private IJsonWriterInstructor FindTargetTypeSerializer(object @object, Type objectType, Type referencedType)
+        private IJsonWriterInstructor FindTargetInstructor(object @object, Type objectType, Type referencedType)
         {
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var typeSerializer in _writerInstructors)
+            foreach (var writerInstructor in _writerInstructors)
             {
-                if (typeSerializer.AppliesToObject(@object, objectType, referencedType))
-                    return typeSerializer;
+                if (writerInstructor.AppliesToObject(@object, objectType, referencedType))
+                    return writerInstructor;
             }
             return null;
         }
