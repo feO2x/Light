@@ -28,7 +28,7 @@ namespace Light.Serialization.Json.WriterInstructors
                 throw new NotImplementedException("What should happen if a dictionary is empty?");
 
             var writer = serializationContext.Writer;
-            writer.BeginComplexObject();
+            writer.BeginObject();
 
             var dicitionaryEnumerator = dictionary.GetEnumerator();
             dicitionaryEnumerator.MoveNext();
@@ -60,7 +60,7 @@ namespace Light.Serialization.Json.WriterInstructors
                 else
                     break;
             }
-            writer.EndComplexObject();
+            writer.EndObject();
         }
     }
 }

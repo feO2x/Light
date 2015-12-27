@@ -2,13 +2,13 @@
 {
     public interface IJsonWriter
     {
-        void BeginCollection();
-        void EndCollection();
-        void BeginComplexObject();
-        void EndComplexObject();
+        void BeginArray();
+        void EndArray();
+        void BeginObject();
+        void EndObject();
         void WriteKey(string key);
         void WriteDelimiter();
-        void WriteRaw(string @string);
+        void WritePrimitiveValue(string @string);
         void WriteNull();
     }
 }

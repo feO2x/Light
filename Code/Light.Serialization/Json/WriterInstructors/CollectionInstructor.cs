@@ -19,7 +19,7 @@ namespace Light.Serialization.Json.WriterInstructors
                 throw new NotImplementedException("What should happen if the collection is empty?");
 
             var writer = serializationContext.Writer;
-            writer.BeginCollection();
+            writer.BeginArray();
             while (true)
             {
                 var currentChildObject = enumerator.Current;
@@ -35,7 +35,7 @@ namespace Light.Serialization.Json.WriterInstructors
                 else
                     break;
             }
-            writer.EndCollection();
+            writer.EndArray();
         }
     }
 }

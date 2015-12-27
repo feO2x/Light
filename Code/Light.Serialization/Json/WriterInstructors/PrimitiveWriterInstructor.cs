@@ -22,7 +22,7 @@ namespace Light.Serialization.Json.WriterInstructors
         public void Serialize(JsonSerializationContext serializationContext)
         {
             var stringRepresentation = _primitiveTypeToFormattersMapping[serializationContext.ActualType].FormatPrimitiveType(serializationContext.ObjectToBeSerialized);
-            serializationContext.Writer.WriteRaw(stringRepresentation);
+            serializationContext.Writer.WritePrimitiveValue(stringRepresentation);
         }
     }
 }

@@ -58,7 +58,6 @@
     <Compile Include="Json\JsonType.cs" />
     <Compile Include="Json\JsonValueParsers\NullParser.cs" />
     <Compile Include="Json\JsonValueParsers\StringParser.cs" />
-    <Compile Include="Json\JsonWriterState.cs" />
     <Compile Include="Json\JsonWriterTokens.cs" />
     <Compile Include="Json\KnownJsonTokens.cs" />
     <Compile Include="Json\SingleBufferJsonReader.cs" />

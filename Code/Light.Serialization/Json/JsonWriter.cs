@@ -21,25 +21,25 @@ namespace Light.Serialization.Json
             _tokens = tokens;
         }
 
-        public void BeginCollection()
+        public void BeginArray()
         {
             _textWriter.Write(_tokens.BeginCollectionToken);
             _formatter.NewlineAndIncreaseIndent(this);
         }
 
-        public void EndCollection()
+        public void EndArray()
         {
             _formatter.NewlineAndDecreaseIndent(this);
             _textWriter.Write(_tokens.EndCollectionToken);
         }
 
-        public void BeginComplexObject()
+        public void BeginObject()
         {
             _textWriter.Write(_tokens.BeginComplexObjectToken);
             _formatter.NewlineAndIncreaseIndent(this);
         }
 
-        public void EndComplexObject()
+        public void EndObject()
         {
             _formatter.NewlineAndDecreaseIndent(this);
             _textWriter.Write(_tokens.EndComplexObjectToken);
@@ -61,7 +61,7 @@ namespace Light.Serialization.Json
             _formatter.Newline(this);
         }
 
-        public void WriteRaw(string @string)
+        public void WritePrimitiveValue(string @string)
         {
             _textWriter.Write(@string);
         }

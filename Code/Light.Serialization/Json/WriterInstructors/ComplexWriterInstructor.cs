@@ -46,7 +46,7 @@ namespace Light.Serialization.Json.WriterInstructors
                 throw new NotImplementedException("What should happen if an object has no members to serialize? I would recommend to not serialize it by default");
 
             var writer = serializationContext.Writer;
-            writer.BeginComplexObject();
+            writer.BeginObject();
 
             for (var i = 0; i < valueProviders.Count; i++)
             {
@@ -69,7 +69,7 @@ namespace Light.Serialization.Json.WriterInstructors
                     writer.WriteDelimiter();
             }
 
-            writer.EndComplexObject();
+            writer.EndObject();
         }
     }
 }

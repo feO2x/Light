@@ -12,7 +12,7 @@ namespace Light.Serialization.Json.WriterInstructors
 
         public void Serialize(JsonSerializationContext serializationContext)
         {
-            serializationContext.Writer.WriteRaw(serializationContext.ObjectToBeSerialized.ToString().SurroundWithQuotationMarks());
+            serializationContext.Writer.WritePrimitiveValue(serializationContext.ObjectToBeSerialized.ToString().SurroundWithQuotationMarks());
         }
     }
 }
