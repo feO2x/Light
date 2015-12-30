@@ -146,7 +146,7 @@ namespace Light.Serialization.Json
 
             // Here we definitely have a decimal point
             // If the token ends now, this is an error
-            if (IsEndOfToken())
+            if (IsEndOfToken()) //TODO: this part is not necessary because it was checked when we come from IsNumberFinishedOrNumberWithDecimalPart; I think we should increment the current index before me make this check; IsEndOfToken does not forward the current index
                 return false;
 
             // Also the next character must be a digit, no exponential token is allowed
