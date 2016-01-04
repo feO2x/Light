@@ -2,7 +2,6 @@ namespace Light.Serialization.Json
 {
     public interface IJsonReader
     {
-        JsonCharacterBuffer ReadNextValue();
-        bool CheckEndOfCollection();
+        JsonToken ReadNextToken();
     }
 }

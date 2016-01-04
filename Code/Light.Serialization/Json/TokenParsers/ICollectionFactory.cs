@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Light.Serialization.Json.JsonValueParsers
+namespace Light.Serialization.Json.TokenParsers
 {
     public interface ICollectionFactory
     {

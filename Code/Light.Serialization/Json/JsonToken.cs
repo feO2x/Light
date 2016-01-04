@@ -2,15 +2,15 @@ using System;
 
 namespace Light.Serialization.Json
 {
-    public struct JsonCharacterBuffer
+    public struct JsonToken
     {
         private readonly char[] _buffer;
         private readonly int _startIndex;
-        public readonly int Count;
-        public readonly JsonType JsonType;
+        public readonly int Length;
+        public readonly JsonTokenType JsonType;
         private readonly bool _isCrossingBufferBoundary;
 
-        public JsonCharacterBuffer(char[] buffer, int startIndex, int count, JsonType jsonType)
+        public JsonToken(char[] buffer, int startIndex, int length, JsonTokenType jsonType)
         {
             if (buffer == null) throw new ArgumentNullException(nameof(buffer));
             if (startIndex < 0)
@@ -19,26 +19,25 @@ namespace Light.Serialization.Json
             if (startIndex >= buffer.Length)
                 throw new ArgumentOutOfRangeException(nameof(startIndex),
                                                       $"startIndex must not be greater or equal to buffer.Length, but you specified {startIndex}.");
-            if (count < 0)
-                throw new ArgumentOutOfRangeException(nameof(count), 
-                                                      $"count must not be less than 0, but you specified {count}.");
-            if (count > buffer.Length)
-                throw new ArgumentOutOfRangeException(nameof(count),
-                                                      $"count must not be greater than buffer.Length, but you specified {count}.");
-
+            if (length < 0)
+                throw new ArgumentOutOfRangeException(nameof(length), 
+                                                      $"count must not be less than 0, but you specified {length}.");
+            if (length > buffer.Length)
+                throw new ArgumentOutOfRangeException(nameof(length),
+                                                      $"count must not be greater than buffer.Length, but you specified {length}.");
 
             _buffer = buffer;
             _startIndex = startIndex;
-            Count = count;
+            Length = length;
             JsonType = jsonType;
-            _isCrossingBufferBoundary = startIndex + count > buffer.Length;
+            _isCrossingBufferBoundary = startIndex + length > buffer.Length;
         }
 
         public char this[int index]
         {
             get
             {
-                if (index >= Count) throw new IndexOutOfRangeException($"index must not be larger than Count ({Count}), but you specified {index}.");
+                if (index >= Length) throw new IndexOutOfRangeException($"index must not be larger than Count ({Length}), but you specified {index}.");
                 if (index < 0) throw new IndexOutOfRangeException($"index must not be less than zero, but you specified {index}.");
 
                 return _buffer[(_startIndex + index) % _buffer.Length];
@@ -48,10 +47,10 @@ namespace Light.Serialization.Json
         public override string ToString()
         {
             if (_isCrossingBufferBoundary == false)
-                return new string(_buffer, _startIndex, Count);
+                return new string(_buffer, _startIndex, Length);
 
-            var characterArray = new char[Count];
-            for (var i = 0; i < Count; i++)
+            var characterArray = new char[Length];
+            for (var i = 0; i < Length; i++)
             {
                 characterArray[i] = this[i];
             }
@@ -64,7 +63,7 @@ namespace Light.Serialization.Json
                 throw new ArgumentOutOfRangeException(nameof(startIndex), $"startIndex must not be less than zero, but you specified {startIndex}.");
             if (numberOfCharacters < 1)
                 throw new ArgumentOutOfRangeException(nameof(numberOfCharacters), $"numberOfCharacters must not be less than one, but you specified {numberOfCharacters}.");
-            var numberOfCharactersLeft = Count - startIndex;
+            var numberOfCharactersLeft = Length - startIndex;
             if (numberOfCharacters > numberOfCharactersLeft)
                 throw new ArgumentOutOfRangeException($"You specified that {numberOfCharacters} characters should be inserted into the string, but only {numberOfCharactersLeft} characters are left from your starting position ({startIndex})." );
 

@@ -6,264 +6,253 @@ namespace Light.Serialization.Json
     public sealed class SingleBufferJsonReader : IJsonReader
     {
         private readonly char[] _buffer;
-        private readonly KnownJsonTokens _knownJsonTokens;
+        private readonly JsonReaderSymbols _jsonReaderSymbols;
         private int _currentIndex;
 
-        public SingleBufferJsonReader(char[] buffer)
-            : this(buffer, new KnownJsonTokens())
-        {
-            
-        }
-
-        public SingleBufferJsonReader(char[] buffer, KnownJsonTokens knownJsonTokens)
+        public SingleBufferJsonReader(char[] buffer, JsonReaderSymbols jsonReaderSymbols)
         {
             if (buffer == null) throw new ArgumentNullException(nameof(buffer));
-            if (knownJsonTokens == null) throw new ArgumentNullException(nameof(knownJsonTokens));
+            if (jsonReaderSymbols == null) throw new ArgumentNullException(nameof(jsonReaderSymbols));
 
             _buffer = buffer;
-            _knownJsonTokens = knownJsonTokens;
+            _jsonReaderSymbols = jsonReaderSymbols;
         }
 
-        public JsonCharacterBuffer ReadNextValue()
+        public JsonToken ReadNextToken()
         {
-            IgnoreWhitespace();
+            var wasEndOfJsonDocumentReached = IgnoreWhiteSpace();
 
-            var firstCharacter = _buffer[_currentIndex++];
+            if (wasEndOfJsonDocumentReached)
+                return CreateToken(_currentIndex, JsonTokenType.EndOfDocument);
+
+            var firstCharacter = _buffer[_currentIndex];
+
             if (char.IsDigit(firstCharacter))
                 return ReadPositiveNumber(firstCharacter);
-            if (firstCharacter == _knownJsonTokens.NegativeSign)
+            if (firstCharacter == _jsonReaderSymbols.NegativeSign)
                 return ReadNegativeNumber();
-            if (firstCharacter == _knownJsonTokens.StringDelimiter)
+            if (firstCharacter == _jsonReaderSymbols.StringDelimiter)
                 return ReadString();
-            if (firstCharacter == _knownJsonTokens.FalseToken[0])
-                return ReadConstantToken(_knownJsonTokens.FalseToken, JsonType.False);
-            if (firstCharacter == _knownJsonTokens.TrueToken[0])
-                return ReadConstantToken(_knownJsonTokens.TrueToken, JsonType.True);
-            if (firstCharacter == _knownJsonTokens.NullToken[0])
-                return ReadConstantToken(_knownJsonTokens.NullToken, JsonType.Null);
-            if (firstCharacter == _knownJsonTokens.StartOfCollectionCharacter)
-                return CreateBuffer(_currentIndex - 1, JsonType.Array);
+            if (firstCharacter == _jsonReaderSymbols.False[0])
+                return ReadConstantToken(_jsonReaderSymbols.False, JsonTokenType.False);
+            if (firstCharacter == _jsonReaderSymbols.True[0])
+                return ReadConstantToken(_jsonReaderSymbols.True, JsonTokenType.True);
+            if (firstCharacter == _jsonReaderSymbols.Null[0])
+                return ReadConstantToken(_jsonReaderSymbols.Null, JsonTokenType.Null);
+            if (firstCharacter == _jsonReaderSymbols.BeginOfArray)
+                return ReadSingleCharacterAndCreateToken(JsonTokenType.BeginOfArray);
+            if (firstCharacter == _jsonReaderSymbols.EndOfArray)
+                return ReadSingleCharacterAndCreateToken(JsonTokenType.EndOfArray);
+            if (firstCharacter == _jsonReaderSymbols.BeginOfObject)
+                return ReadSingleCharacterAndCreateToken(JsonTokenType.BeginOfObject);
+            if (firstCharacter == _jsonReaderSymbols.EndOfObject)
+                return ReadSingleCharacterAndCreateToken(JsonTokenType.EndOfObject);
+            if (firstCharacter == _jsonReaderSymbols.PairDelimiter)
+                return ReadSingleCharacterAndCreateToken(JsonTokenType.PairDelimiter);
+            if (firstCharacter == _jsonReaderSymbols.ValueDelimiter)
+                return ReadSingleCharacterAndCreateToken(JsonTokenType.ValueDelimiter);
 
-            throw new NotImplementedException();
+            var startIndex = _currentIndex;
+            ReadToEndOfToken();
+            var token = CreateToken(startIndex, JsonTokenType.Error);
+            throw new TokenNotSupportedException($"The Json Reader cannot recognize the sequence {token} and therefore cannot tranlate it to a valid JsonToken", token);
         }
 
-        public bool CheckEndOfCollection()
+        private bool IgnoreWhiteSpace()
         {
-            IgnoreWhitespace();
-            var currentCharacter = _buffer[_currentIndex];
-            if (currentCharacter == _knownJsonTokens.EndOfCollectionCharacter)
-            {
-                _currentIndex++;
-                return true;
-            }
-            if (currentCharacter == _knownJsonTokens.ValueSeperator)
-            {
-                _currentIndex++;
-                return false;
-            }
-            return false;
-        }
-
-        private void IgnoreWhitespace()
-        {
-            while (char.IsWhiteSpace(_buffer[_currentIndex]))
-                _currentIndex++;
-        }
-
-        private JsonCharacterBuffer ReadPositiveNumber(char firstCharacter)
-        {
-            var startIndex = _currentIndex - 1;
-            // The first character is definitely a digit, otherwise this method would not have been called
-            // Check if it is zero
-            if (firstCharacter == '0')
-            {
-                // If yes, then there must follow a decimal point, an exponent, or the number must end
-                if (IsNumberFinishedOrNumberWithDecimalPart())
-                    return CreateBuffer(startIndex, JsonType.Number);
-
-                ReadUntilEndOfToken();
-                throw CreateDeserializationException(startIndex, JsonType.Number);
-            }
-            // Read all digits until we hit the end or a decimal point
             while (true)
             {
-                if (IsEndOfToken())
-                    return CreateBuffer(startIndex, JsonType.Number);
-
-                var currentCharacter = _buffer[_currentIndex++];
-                if (char.IsDigit(currentCharacter))
-                    continue;
-
-                if (CheckDecimalPartOfNumber(currentCharacter))
-                    return CreateBuffer(startIndex, JsonType.Number);
-
-                ReadUntilEndOfToken();
-                throw CreateDeserializationException(startIndex, JsonType.Number);
-            }
-        }
-
-        private JsonCharacterBuffer ReadNegativeNumber()
-        {
-            var startIndex = _currentIndex - 1;
-            // The first character is definitely a negative sign, otherwise this method would not have been called
-            // There must be at least one digit
-            if (IsEndOfToken())
-                throw CreateDeserializationException(startIndex, JsonType.Number);
-            
-            var currentCharacter = _buffer[_currentIndex++];
-            // Check if it is zero
-            if (currentCharacter == '0')
-            {
-                // If yes, then there must follow a decimal point, an exponent, or the number must end
-                if (IsNumberFinishedOrNumberWithDecimalPart())
-                    return CreateBuffer(startIndex, JsonType.Number);
-
-                ReadUntilEndOfToken();
-                throw CreateDeserializationException(startIndex, JsonType.Number);
-            }
-
-            // Read all digits until we hit the end or a decimal point
-            while (true)
-            {
-                if (IsEndOfToken())
-                    return CreateBuffer(startIndex, JsonType.Number);
-
-                currentCharacter = _buffer[_currentIndex++];
-                if (char.IsDigit(currentCharacter))
-                    continue;
-
-                if (CheckDecimalPartOfNumber(currentCharacter))
-                    return CreateBuffer(startIndex, JsonType.Number);
-
-                throw CreateDeserializationException(startIndex, JsonType.Number);
-            }
-        }
-
-        private bool CheckDecimalPartOfNumber(char currentCharacter)
-        {
-            if (currentCharacter != _knownJsonTokens.DecimalPoint)
-                return CheckExponentOfNumber(currentCharacter);
-
-            // Here we definitely have a decimal point
-            // If the token ends now, this is an error
-            if (IsEndOfToken()) //TODO: this part is not necessary because it was checked when we come from IsNumberFinishedOrNumberWithDecimalPart; I think we should increment the current index before me make this check; IsEndOfToken does not forward the current index
-                return false;
-
-            // Also the next character must be a digit, no exponential token is allowed
-            currentCharacter = _buffer[_currentIndex++];
-            if (char.IsDigit(currentCharacter) == false)
-                return false;
-
-            // Else check the rest of the digits after the decimal point
-            while (true)
-            {
-                if (IsEndOfToken())
+                if (_currentIndex == _buffer.Length)
                     return true;
 
-                currentCharacter = _buffer[_currentIndex++];
-                if (char.IsDigit(currentCharacter))
-                    continue;
+                if (char.IsWhiteSpace(_buffer[_currentIndex]) == false)
+                    return false;
 
-                if (_knownJsonTokens.ExponentialTokens.Contains(currentCharacter))
-                    return CheckExponentOfNumber(currentCharacter);
-
-                return false;
+                _currentIndex++;
             }
         }
 
-        private bool IsNumberFinishedOrNumberWithDecimalPart()
+        private JsonToken ReadPositiveNumber(char firstCharacter)
         {
-            // Check if the end of the buffer is reached.
-            return IsEndOfToken() || CheckDecimalPartOfNumber(_buffer[_currentIndex++]);
+            var startIndex = _currentIndex;
+            var tokenType = CheckNumber(firstCharacter);
+            if (tokenType == JsonTokenType.Error)
+                throw ReadToEndOfTokenAndCreateJsonDocumentException(startIndex, DefaultJsonSymbols.Number);
+
+            return CreateToken(startIndex, tokenType);
         }
 
-        private bool CheckExponentOfNumber(char currentCharacter)
+        private JsonToken ReadNegativeNumber()
         {
-            // Check if the e or E sign is present
-            if (_knownJsonTokens.ExponentialTokens.Contains(currentCharacter) == false)
-                return false;
+            // The first character is definitely a negative sign, otherwise this method would not have been called
+            var startIndex = _currentIndex;
 
+            // Advance the current index and check if it is a digit
             _currentIndex++;
             if (IsEndOfToken())
-                return false;
+                throw CreateJsonDocumentException(startIndex, DefaultJsonSymbols.Number);
 
-            // Check if possible + or - sign is present
-            currentCharacter = _buffer[_currentIndex];
-            if (currentCharacter == _knownJsonTokens.NegativeSign || currentCharacter == _knownJsonTokens.PositiveSign)
+            var currentCharacter = _buffer[_currentIndex];
+            // If there is no number, then the document is not formatted properly
+            if (char.IsDigit(currentCharacter) == false)
+                throw ReadToEndOfTokenAndCreateJsonDocumentException(startIndex, DefaultJsonSymbols.Number);
+
+            var tokenType = CheckNumber(currentCharacter);
+            if (tokenType == JsonTokenType.Error)
+                throw ReadToEndOfTokenAndCreateJsonDocumentException(startIndex, DefaultJsonSymbols.Number);
+
+            return CreateToken(startIndex, tokenType);
+        }
+
+        private JsonTokenType CheckNumber(char firstCharacter)
+        {
+            // Check if the first character is zero
+            if (firstCharacter == '0')
             {
+                // If the number ends after the zero, then return an integer type
                 _currentIndex++;
                 if (IsEndOfToken())
-                    return false;
+                    return JsonTokenType.IntegerNumber;
+
+                // Else check if there's a decimal part
+                var currentCharacter = _buffer[_currentIndex];
+                return CheckDecimalPart(currentCharacter);
             }
 
-            // Read all digits of the exponent
-            // There must be at least one digit
-            currentCharacter = _buffer[_currentIndex++];
-            if (char.IsDigit(currentCharacter) == false)
-                return false;
-
+            // Else the number starts with a digit other than zero
             while (true)
             {
+                _currentIndex++;
+                // If the number ends now, it's definitely an integer number
                 if (IsEndOfToken())
-                    return true;
+                    return JsonTokenType.IntegerNumber;
 
-                currentCharacter = _buffer[_currentIndex++];
-                if (char.IsDigit(currentCharacter) == false)
-                    return false;
+                var currentCharacter = _buffer[_currentIndex];
+                // If the current character is a digit, then continue the loop to check the next character
+                if (char.IsDigit(currentCharacter))
+                    continue;
+
+                return CheckDecimalPart(currentCharacter);
             }
         }
 
-        private JsonCharacterBuffer ReadString()
+        private JsonTokenType CheckDecimalPart(char currentCharacter)
+        {
+            // Check if there's a decimal point
+            if (currentCharacter != _jsonReaderSymbols.DecimalPoint)
+                return CheckExponentialPart(currentCharacter);
+
+            // If yes then there must be at least one digit
+            _currentIndex++;
+            if (IsEndOfToken() || char.IsDigit(_buffer[_currentIndex]) == false)
+                return JsonTokenType.Error;
+
+            // Else read in as much digits as possible
+            while (true)
+            {
+                _currentIndex++;
+
+                // If the token ends now, then the number is a correct floating point number
+                if (IsEndOfToken())
+                    return JsonTokenType.FloatingPointNumber;
+
+                currentCharacter = _buffer[_currentIndex];
+                // If the current character is a digit, then continue this loop to check the next character
+                if (char.IsDigit(currentCharacter))
+                    continue;
+
+                // Otherwise check the exponential part of the number
+                return CheckExponentialPart(currentCharacter);
+            }
+        }
+
+        private JsonTokenType CheckExponentialPart(char currentCharacter)
+        {
+            // The exponential part has to begin with an appropriate sign
+            if (_jsonReaderSymbols.ExponentialSymbols.Contains(currentCharacter) == false)
+                return JsonTokenType.Error;
+
+            // If it is an appropriate exponential sign, check if the next character is a possible plus or minus sign
+            _currentIndex++;
+            if (IsEndOfToken())
+                return JsonTokenType.Error;
+
+            currentCharacter = _buffer[_currentIndex];
+            if (currentCharacter == _jsonReaderSymbols.PositiveSign || currentCharacter == _jsonReaderSymbols.NegativeSign)
+            {
+                _currentIndex++;
+                if (IsEndOfToken())
+                    return JsonTokenType.Error;
+
+                currentCharacter = _buffer[_currentIndex];
+            }
+
+            // There must be at least one digit after the exponential symbol (or sign symbol)
+            if (char.IsDigit(currentCharacter) == false)
+                return JsonTokenType.Error;
+
+            // Read in as much digits as possible
+            while (true)
+            {
+                _currentIndex++;
+
+                if (IsEndOfToken())
+                    return JsonTokenType.FloatingPointNumber;
+
+                currentCharacter = _buffer[_currentIndex];
+                if (char.IsDigit(currentCharacter))
+                    continue;
+
+                return JsonTokenType.Error;
+            }
+        }
+
+        private JsonToken ReadString()
         {
             // The first digit is a string delimiter, otherwise this method would not have been called
-            var startIndex = _currentIndex - 1;
-            
+            var startIndex = _currentIndex;
+
             // Read in all following characters until we get a valid string delimiter that ends the JSON string
             var isPreviousCharacterEscapeCharacter = false;
             while (true)
             {
-                var currentCharacter = _buffer[_currentIndex++];
+                CheckNextCharacter:
+                _currentIndex++;
+                // A string must end with a string delimiter, if the buffer ends now, then the string is erroneous
+                if (IsEndOfBuffer())
+                    throw CreateJsonDocumentException(startIndex, DefaultJsonSymbols.String);
+
+                var currentCharacter = _buffer[_currentIndex];
 
                 // Check if the previous character was an escape character
                 if (isPreviousCharacterEscapeCharacter)
                 {
                     // If yes then check if the current character is a specially escaped character that only has one letter
-                    foreach (var singleEscapedCharacter in _knownJsonTokens.SingleEscapedCharacters)
+                    foreach (var singleEscapedCharacter in _jsonReaderSymbols.SingleEscapedCharacters)
                     {
                         if (singleEscapedCharacter.ValueAfterEscapeCharacter != currentCharacter) continue;
 
                         isPreviousCharacterEscapeCharacter = false;
-                        goto CheckEndOfBuffer;
+                        goto CheckNextCharacter;
                     }
 
                     // Otherwise check if this is an escape sequence of four hexadecimal digits
-                    if (currentCharacter == _knownJsonTokens.HexadecimalEscapeIndicator)
+                    if (currentCharacter == _jsonReaderSymbols.HexadecimalEscapeIndicator)
                     {
                         if (CheckFourHexadecimalDigitsOfJsonEscapeSequence() == false)
-                            goto ThrowException;
+                            throw ReadToEndOfStringTokenAndCreateJsonDocumentException(startIndex);
 
                         isPreviousCharacterEscapeCharacter = false;
-                        goto CheckEndOfBuffer;
                     }
-                    // When non of the above conditions fit, then the string is not a valid Json string
-                    ThrowException:
-                    ReadUntilEndOfToken();
-                    throw CreateDeserializationException(startIndex, JsonType.String);
                 }
 
                 // If not, then treat this character as a normal one
-                if (currentCharacter == _knownJsonTokens.StringDelimiter)
-                    return CreateBuffer(startIndex, JsonType.String);
+                else if (currentCharacter == _jsonReaderSymbols.StringDelimiter)
+                    return ReadSingleCharacterAndCreateToken(startIndex, JsonTokenType.String);
 
                 // Set the boolean value indicating that the next character is part of an escape sequence
-                if (currentCharacter == _knownJsonTokens.StringEscapeCharacter)
+                else if (currentCharacter == _jsonReaderSymbols.StringEscapeCharacter)
                     isPreviousCharacterEscapeCharacter = true;
-
-                // If the end of the buffer is reached for the next index, then throw an exception
-                // because this string is not a valid JSON string
-                CheckEndOfBuffer:
-                if (IsEndOfBuffer())
-                    throw CreateDeserializationException(startIndex, JsonType.String);
             }
         }
 
@@ -272,10 +261,12 @@ namespace Light.Serialization.Json
             // There must be exactly 4 digits after the u
             for (var i = 0; i < 4; i++)
             {
+                _currentIndex++;
+
                 if (IsEndOfToken())
                     return false;
 
-                if (_buffer[_currentIndex++].IsHexadecimal() == false)
+                if (_buffer[_currentIndex].IsHexadecimal() == false)
                     return false;
             }
 
@@ -288,8 +279,10 @@ namespace Light.Serialization.Json
                 return true;
             var currentCharacter = _buffer[_currentIndex];
             return char.IsWhiteSpace(currentCharacter) ||
-                   currentCharacter == _knownJsonTokens.ValueSeperator ||
-                   currentCharacter == _knownJsonTokens.EndOfCollectionCharacter;
+                   currentCharacter == _jsonReaderSymbols.ValueDelimiter ||
+                   currentCharacter == _jsonReaderSymbols.EndOfArray ||
+                   currentCharacter == _jsonReaderSymbols.EndOfObject ||
+                   currentCharacter == _jsonReaderSymbols.PairDelimiter;
         }
 
         private bool IsEndOfBuffer()
@@ -297,43 +290,77 @@ namespace Light.Serialization.Json
             return _currentIndex == _buffer.Length;
         }
 
-        private JsonCharacterBuffer ReadConstantToken(string expectedToken, JsonType type)
+        private JsonToken ReadConstantToken(string expectedToken, JsonTokenType tokenType)
         {
-            var startIndex = _currentIndex - 1;
+            var startIndex = _currentIndex;
             for (var i = 1; i < expectedToken.Length; i++)
             {
+                _currentIndex++;
                 if (_currentIndex == _buffer.Length)
-                    throw CreateDeserializationException(startIndex, type);
+                    throw CreateJsonDocumentException(startIndex, expectedToken);
 
-                if (_buffer[_currentIndex++] == expectedToken[i])
+                if (_buffer[_currentIndex] == expectedToken[i])
                     continue;
 
-                ReadUntilEndOfToken();
-                throw CreateDeserializationException(startIndex, type);
+                throw ReadToEndOfTokenAndCreateJsonDocumentException(startIndex, expectedToken);
             }
 
-            return CreateBuffer(startIndex, type);
+            return ReadSingleCharacterAndCreateToken(startIndex, tokenType);
         }
 
-        private void ReadUntilEndOfToken()
+        private void ReadToEndOfToken()
         {
             while (true)
             {
                 if (IsEndOfToken())
-                    break;
+                    return;
                 _currentIndex++;
             }
         }
 
-        private JsonCharacterBuffer CreateBuffer(int startIndex, JsonType type)
+        private JsonToken ReadSingleCharacterAndCreateToken(JsonTokenType tokenType)
         {
-            return new JsonCharacterBuffer(_buffer, startIndex, _currentIndex - startIndex, type);
+            return CreateToken(_currentIndex++, tokenType);
         }
 
-        private DeserializationException CreateDeserializationException(int startIndex, JsonType type)
+        private JsonToken ReadSingleCharacterAndCreateToken(int tokenStartIndex, JsonTokenType tokenType)
         {
-            var buffer = CreateBuffer(startIndex, type);
-            return new DeserializationException($"Cannot deserialize value {buffer} to {type}.");
+            _currentIndex++;
+            return CreateToken(tokenStartIndex, tokenType);
+        }
+
+        private JsonToken CreateToken(int startIndex, JsonTokenType tokenType)
+        {
+            return new JsonToken(_buffer, startIndex, _currentIndex - startIndex, tokenType);
+        }
+
+        private JsonDocumentException CreateJsonDocumentException(int tokenStartIndex, string expectedJsonType)
+        {
+            var token = CreateToken(tokenStartIndex, JsonTokenType.Error);
+            return new JsonDocumentException($"Cannot deserialize value {token} to {expectedJsonType}.", token);
+        }
+
+        private JsonDocumentException ReadToEndOfTokenAndCreateJsonDocumentException(int tokenStartIndex, string expectedJsonType)
+        {
+            ReadToEndOfToken();
+            return CreateJsonDocumentException(tokenStartIndex, expectedJsonType);
+        }
+
+        private JsonDocumentException ReadToEndOfStringTokenAndCreateJsonDocumentException(int tokenStartIndex)
+        {
+            while (true)
+            {
+                _currentIndex++;
+                if (IsEndOfBuffer())
+                    break;
+                if (_buffer[_currentIndex] != _jsonReaderSymbols.StringDelimiter)
+                    continue;
+
+                _currentIndex++;
+                break;
+            }
+
+            return CreateJsonDocumentException(tokenStartIndex, DefaultJsonSymbols.String);
         }
     }
 }

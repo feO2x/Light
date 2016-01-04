@@ -3,63 +3,63 @@ using System.Collections.Generic;
 
 namespace Light.Serialization.Json
 {
-    public sealed class KnownJsonTokens
+    public sealed class JsonReaderSymbols
     {
-        private string _trueToken = "true";
+        private string _true = DefaultJsonSymbols.True;
 
-        public string TrueToken
+        public string True
         {
-            get { return _trueToken; }
+            get { return _true; }
             set
             {
                 if (value == null) throw new ArgumentNullException(nameof(value));
-                _trueToken = value;
+                _true = value;
             }
         }
 
-        private string _falseToken = "false";
+        private string _false = DefaultJsonSymbols.False;
 
-        public string FalseToken
+        public string False
         {
-            get { return _falseToken; }
+            get { return _false; }
             set
             {
                 if (value == null) throw new ArgumentNullException(nameof(value));
-                _falseToken = value;
+                _false = value;
             }
         }
 
-        private string _nullToken = "null";
+        private string _null = DefaultJsonSymbols.Null;
 
-        public string NullToken
+        public string Null
         {
-            get { return _nullToken; }
+            get { return _null; }
             set
             {
                 if (value == null) throw new ArgumentNullException(nameof(value));
-                _nullToken = value;
+                _null = value;
             }
         }
 
-        public char StringDelimiter = '"';
-        public char DecimalPoint = '.';
+        public char StringDelimiter = DefaultJsonSymbols.StringDelimiter;
+        public char DecimalPoint = DefaultJsonSymbols.DecimalPoint;
 
 
-        private IList<char> _exponentialTokens = new[] { 'e', 'E' };
+        private IList<char> _exponentialSymbols = new[] { DefaultJsonSymbols.LowercaseExponential, DefaultJsonSymbols.UppercaseExponential };
 
-        public IList<char> ExponentialTokens
+        public IList<char> ExponentialSymbols
         {
-            get { return _exponentialTokens; }
+            get { return _exponentialSymbols; }
             set
             {
                 if (value == null) throw new ArgumentNullException(nameof(value));
-                _exponentialTokens = value;
+                _exponentialSymbols = value;
             }
         }
 
-        public char PositiveSign = '+';
-        public char NegativeSign = '-';
-        public char StringEscapeCharacter = '\\';
+        public char PositiveSign = DefaultJsonSymbols.Positive;
+        public char NegativeSign = DefaultJsonSymbols.Negative;
+        public char StringEscapeCharacter = DefaultJsonSymbols.StringEscapeCharacter;
 
 
         private IList<SingleEscapedCharacter> _singleEscapedCharacters = new[]
@@ -85,9 +85,11 @@ namespace Light.Serialization.Json
         }
 
         public char HexadecimalEscapeIndicator = 'u';
-        public char StartOfCollectionCharacter = '[';
-        public char EndOfCollectionCharacter = ']';
-        public char ValueSeperator = ',';
-        public char NameValueSeparator = ':';
+        public char BeginOfArray = DefaultJsonSymbols.BeginOfArray;
+        public char EndOfArray = DefaultJsonSymbols.EndOfArray;
+        public char ValueDelimiter = DefaultJsonSymbols.ValueDelimiter;
+        public char PairDelimiter = DefaultJsonSymbols.PairDelimiter;
+        public char BeginOfObject = DefaultJsonSymbols.BeginOfObject;
+        public char EndOfObject = DefaultJsonSymbols.EndOfObject;
     }
 }

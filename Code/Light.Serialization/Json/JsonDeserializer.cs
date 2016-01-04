@@ -7,28 +7,30 @@ namespace Light.Serialization.Json
     public sealed class JsonDeserializer
     {
         private readonly IJsonReaderFactory _jsonReaderFactory;
-        private readonly IList<IJsonValueParser> _valueAnalyzers;
+        private readonly IList<IJsonTokenParser> _tokenParsers;
+        private IJsonReader _jsonReader;
 
-        public JsonDeserializer(IJsonReaderFactory jsonReaderFactory, IList<IJsonValueParser> valueAnalyzers)
+        public JsonDeserializer(IJsonReaderFactory jsonReaderFactory, IList<IJsonTokenParser> tokenParsers)
         {
             if (jsonReaderFactory == null) throw new ArgumentNullException(nameof(jsonReaderFactory));
-            if (valueAnalyzers == null) throw new ArgumentNullException(nameof(valueAnalyzers));
+            if (tokenParsers == null) throw new ArgumentNullException(nameof(tokenParsers));
 
             _jsonReaderFactory = jsonReaderFactory;
-            _valueAnalyzers = valueAnalyzers;
+            _tokenParsers = tokenParsers;
         }
 
 
         public T Deserialize<T>(string json)
         {
-            var jsonReader = _jsonReaderFactory.CreateFromString(json);
-            return (T) DeserializeValue(jsonReader, typeof(T));
+            return (T) Deserialize(json, typeof (T));
         }
 
         public object Deserialize(string json, Type requestedType)
         {
-            var jsonReader = _jsonReaderFactory.CreateFromString(json);
-            return DeserializeValue(jsonReader, requestedType);
+            _jsonReader = _jsonReaderFactory.CreateFromString(json);
+            var returnValue = DeserializeDocument(requestedType);
+            _jsonReader = null;
+            return returnValue;
         }
 
         public T Deserialize<T>(Stream jsonStream)
@@ -36,16 +38,21 @@ namespace Light.Serialization.Json
             throw new NotImplementedException();
         }
 
-        private object DeserializeValue(IJsonReader jsonReader, Type requestedType)
+        private object DeserializeDocument(Type requestedType)
         {
-            var value = jsonReader.ReadNextValue();
-            foreach (var analyzer in _valueAnalyzers)
+            var token = _jsonReader.ReadNextToken();
+            return DeserializeJsonToken(token, requestedType);
+        }
+
+        private object DeserializeJsonToken(JsonToken token, Type requestedType)
+        {
+            foreach (var parser in _tokenParsers)
             {
-                if (analyzer.IsSuitableFor(value, requestedType))
-                    return analyzer.ParseValue(new JsonDeserializationContext(value, requestedType, jsonReader, DeserializeValue));
+                if (parser.IsSuitableFor(token, requestedType))
+                    return parser.ParseValue(new JsonDeserializationContext(token, requestedType, _jsonReader, DeserializeJsonToken));
             }
 
-            throw new DeserializationException($"Cannot deserialize value {value} with requested type {requestedType.FullName} because there is no parser that is suitable for this context.");
+            throw new DeserializationException($"Cannot deserialize value {token} with requested type {requestedType.FullName} because there is no parser that is suitable for this context.");
         }
     }
 }

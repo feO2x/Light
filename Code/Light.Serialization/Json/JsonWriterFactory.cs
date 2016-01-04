@@ -8,7 +8,7 @@ namespace Light.Serialization.Json
     {
         private StringBuilder _stringBuilder;
         private IJsonFormatter _jsonFormatter = new JsonFormatterNullObject();
-        private JsonWriterTokens _jsonWriterTokens = new JsonWriterTokens();
+        private JsonWriterSymbols _jsonWriterSymbols = new JsonWriterSymbols();
         private StringWriter _stringWriter;
 
         public IJsonFormatter JsonFormatter
@@ -21,13 +21,13 @@ namespace Light.Serialization.Json
             }
         }
 
-        public JsonWriterTokens JsonWriterTokens
+        public JsonWriterSymbols JsonWriterSymbols
         {
-            get { return _jsonWriterTokens; }
+            get { return _jsonWriterSymbols; }
             set
             {
                 if(value == null) throw new ArgumentNullException(nameof(value));
-                _jsonWriterTokens = value;
+                _jsonWriterSymbols = value;
             }
         }
 
@@ -35,7 +35,7 @@ namespace Light.Serialization.Json
         {
             _stringBuilder = new StringBuilder();
             _stringWriter = new StringWriter(_stringBuilder);
-            return new JsonWriter(_stringWriter, _jsonFormatter, _jsonWriterTokens);
+            return new JsonWriter(_stringWriter, _jsonFormatter, _jsonWriterSymbols);
         }
 
         public string FinishWriteProcessAndReleaseResources()

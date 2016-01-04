@@ -4,24 +4,24 @@ namespace Light.Serialization.Json
 {
     public struct JsonDeserializationContext
     {
-        public readonly JsonCharacterBuffer Buffer;
+        public readonly JsonToken Token;
         public readonly Type RequestedType;
         public readonly IJsonReader JsonReader;
-        public readonly Func<IJsonReader, Type, object> DeserializeChildValue;
+        public readonly Func<JsonToken, Type, object> DeserializeToken;
 
-        public JsonDeserializationContext(JsonCharacterBuffer buffer,
+        public JsonDeserializationContext(JsonToken token,
                                           Type requestedType,
                                           IJsonReader jsonReader,
-                                          Func<IJsonReader, Type, object> deserializeChildValue)
+                                          Func<JsonToken, Type, object> deserializeToken)
         {
             if (requestedType == null) throw new ArgumentNullException(nameof(requestedType));
             if (jsonReader == null) throw new ArgumentNullException(nameof(jsonReader));
-            if (deserializeChildValue == null) throw new ArgumentNullException(nameof(deserializeChildValue));
+            if (deserializeToken == null) throw new ArgumentNullException(nameof(deserializeToken));
 
-            Buffer = buffer;
+            Token = token;
             RequestedType = requestedType;
             JsonReader = jsonReader;
-            DeserializeChildValue = deserializeChildValue;
+            DeserializeToken = deserializeToken;
         }
     }
 }

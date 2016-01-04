@@ -1,5 +1,5 @@
-using Light.Serialization.Json.JsonValueParsers;
 using System.Collections.Generic;
+using Light.Serialization.Json.TokenParsers;
 
 namespace Light.Serialization.Json
 {
@@ -7,7 +7,7 @@ namespace Light.Serialization.Json
     {
         private readonly IJsonReaderFactory _jsonReaderFactory = new JsonReaderFactory();
 
-        private readonly IList<IJsonValueParser> _jsonValueDeserializers = new IJsonValueParser[]
+        private readonly IList<IJsonTokenParser> _jsonValueDeserializers = new IJsonTokenParser[]
                                                                            {
                                                                                new IntParser(),
                                                                                new StringParser(),

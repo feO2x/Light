@@ -1,8 +1,8 @@
 using System;
 
-namespace Light.Serialization.Json.JsonValueParsers
+namespace Light.Serialization.Json.TokenParsers
 {
-    public sealed class IntParser : IJsonValueParser
+    public sealed class IntParser : IJsonTokenParser
     {
         private readonly Type _intType = typeof (int);
 
@@ -12,21 +12,21 @@ namespace Light.Serialization.Json.JsonValueParsers
         public const string MaxIntAsString = "2147483647";
         public const string MinIntAsString = "-2147483648";
 
-        public bool IsSuitableFor(JsonCharacterBuffer buffer, Type requestedType)
+        public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
-            return buffer.JsonType == JsonType.Number && requestedType == _intType;
+            return (token.JsonType == JsonTokenType.IntegerNumber || token.JsonType == JsonTokenType.FloatingPointNumber) && requestedType == _intType;
         }
 
         public object ParseValue(JsonDeserializationContext context)
         {
-            var buffer = context.Buffer;
-            var decimalPointInfo = GetIndexOfDecimalPoint(buffer);
-            var positionsBeforeDecimalPoint = buffer.Count;
+            var token = context.Token;
+            var decimalPointInfo = GetIndexOfDecimalPoint(token);
+            var positionsBeforeDecimalPoint = token.Length;
 
             if (decimalPointInfo.IndexOfDecimalPoint != null)
             {
                 if (decimalPointInfo.AreTrailingDigitsOnlyZeros == false)
-                    throw new DeserializationException($"Could not deserialize value {buffer} because it is no integer, but a real number");
+                    throw new DeserializationException($"Could not deserialize value {token} because it is no integer, but a real number");
 
                 positionsBeforeDecimalPoint = decimalPointInfo.IndexOfDecimalPoint.Value;
             }
@@ -34,30 +34,30 @@ namespace Light.Serialization.Json.JsonValueParsers
             var currentIndex = 0;
             var isResultNegative = false;
             string overflowCompareString = null;
-            if (buffer[0] == NegativeSign)
+            if (token[0] == NegativeSign)
             {
-                if (buffer.Count > MinIntAsString.Length)
-                    throw new DeserializationException($"Could not deserialize value {buffer} because it produces an overflow for type int.");
-                if (buffer.Count == MinIntAsString.Length)
+                if (token.Length > MinIntAsString.Length)
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                if (token.Length == MinIntAsString.Length)
                     overflowCompareString = MinIntAsString;
                 isResultNegative = true;
 
                 positionsBeforeDecimalPoint--;
                 currentIndex++;
             }
-            else if (buffer.Count > MaxIntAsString.Length)
-                throw new DeserializationException($"Could not deserialize value {buffer} because it produces an overflow for type int.");
-            else if (buffer.Count == MaxIntAsString.Length)
+            else if (token.Length > MaxIntAsString.Length)
+                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+            else if (token.Length == MaxIntAsString.Length)
                 overflowCompareString = MaxIntAsString;
 
             var result = 0;
             var currentPositionBeforeDecimalPoint = positionsBeforeDecimalPoint;
             while (currentPositionBeforeDecimalPoint > 0)
             {
-                var digit = buffer[currentIndex] - '0';
+                var digit = token[currentIndex] - '0';
 
                 if (digit > overflowCompareString?[currentIndex] - '0')
-                    throw new DeserializationException($"Could not deserialize value {buffer} because it produces an overflow for type int.");
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
 
                 result += digit * CalculateBase(currentPositionBeforeDecimalPoint);
 
@@ -84,13 +84,13 @@ namespace Light.Serialization.Json.JsonValueParsers
             return result;
         }
 
-        private static DecimalPointInfo GetIndexOfDecimalPoint(JsonCharacterBuffer buffer)
+        private static DecimalPointInfo GetIndexOfDecimalPoint(JsonToken buffer)
         {
             var areTrailingDigitsOnlyZeros = true;
             int? indexOfDecimalPoint = null;
             int i;
 
-            for (i = 0; i < buffer.Count; i++)
+            for (i = 0; i < buffer.Length; i++)
             {
                 if (buffer[i] != DecimalPointCharacter) continue;
 
@@ -98,7 +98,7 @@ namespace Light.Serialization.Json.JsonValueParsers
                 break;
             }
 
-            for (i++; i < buffer.Count; i++)
+            for (i++; i < buffer.Length; i++)
             {
                 if (buffer[i] == '0') continue;
                 areTrailingDigitsOnlyZeros = false;

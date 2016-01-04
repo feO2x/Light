@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Reflection;
 using Light.Serialization.FrameworkExtensions;
 
-namespace Light.Serialization.Json.JsonValueParsers
+namespace Light.Serialization.Json.TokenParsers
 {
-    public sealed class ArrayToGenericCollectionParser : IJsonValueParser
+    public sealed class ArrayToGenericCollectionParser : IJsonTokenParser
     {
         private readonly Type _iEnumerableType = typeof (IEnumerable<>);
         private readonly ICollectionFactory _collectionFactory;
         private readonly MethodInfo _populateGenericCollectionMethodInfo;
-        private readonly object[] _populateGenericCollectionParameters = new object[2];
+        private readonly object[] _populateGenericCollectionParameters = new object[3];
 
         public ArrayToGenericCollectionParser(ICollectionFactory collectionFactory)
         {
@@ -20,9 +20,9 @@ namespace Light.Serialization.Json.JsonValueParsers
             _populateGenericCollectionMethodInfo = GetType().GetMethod(nameof(PopulateGenericCollection), BindingFlags.Static | BindingFlags.NonPublic);
         }
 
-        public bool IsSuitableFor(JsonCharacterBuffer buffer, Type requestedType)
+        public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
-            return buffer.JsonType == JsonType.Array &&
+            return token.JsonType == JsonTokenType.BeginOfArray &&
                    requestedType.ImplementsGenericInterface(_iEnumerableType);
         }
 
@@ -30,27 +30,43 @@ namespace Light.Serialization.Json.JsonValueParsers
         {
             var collection = _collectionFactory.CreateCollection(context.RequestedType);
 
-            if (context.JsonReader.CheckEndOfCollection())
+            var firstCollectionToken = context.JsonReader.ReadNextToken();
+
+            if (firstCollectionToken.JsonType == JsonTokenType.EndOfArray)
                 return collection;
 
             var specificEnumerableType = context.RequestedType.GetSpecificTypeThatCorrespondsToGenericInterface(_iEnumerableType);
             var specificPopulateGenericCollectionMethod = _populateGenericCollectionMethodInfo.MakeGenericMethod(specificEnumerableType.GetGenericArguments());
 
-            _populateGenericCollectionParameters[0] = collection;
-            _populateGenericCollectionParameters[1] = context;
+            _populateGenericCollectionParameters[0] = firstCollectionToken;
+            _populateGenericCollectionParameters[1] = collection;
+            _populateGenericCollectionParameters[2] = context;
 
             specificPopulateGenericCollectionMethod.Invoke(null, _populateGenericCollectionParameters);
             return collection;
         }
 
-        private static void PopulateGenericCollection<T>(ICollection<T> collection, JsonDeserializationContext context)
+        private static void PopulateGenericCollection<T>(JsonToken nextToken, ICollection<T> collection, JsonDeserializationContext context)
         {
             var itemType = typeof (T);
-            do
+
+            while (true)
             {
-                var nextValue = (T) context.DeserializeChildValue(context.JsonReader, itemType);
+                var nextValue = (T) context.DeserializeToken(nextToken, itemType);
                 collection.Add(nextValue);
-            } while (context.JsonReader.CheckEndOfCollection() == false);
+
+                nextToken = context.JsonReader.ReadNextToken();
+                switch (nextToken.JsonType)
+                {
+                    case JsonTokenType.ValueDelimiter:
+                        nextToken = context.JsonReader.ReadNextToken();
+                        continue;
+                    case JsonTokenType.EndOfArray:
+                        return;
+                    default:
+                        throw new JsonDocumentException($"Expected value delimiter or end of array in JSON document, but found {nextToken}", nextToken);
+                }
+            }
         }
     }
 }

@@ -2,9 +2,9 @@ using System;
 
 namespace Light.Serialization.Json
 {
-    public interface IJsonValueParser
+    public interface IJsonTokenParser
     {
-        bool IsSuitableFor(JsonCharacterBuffer buffer, Type requestedType);
+        bool IsSuitableFor(JsonToken token, Type requestedType);
 
         object ParseValue(JsonDeserializationContext context);
     }
