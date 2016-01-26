@@ -49,6 +49,7 @@
     <Compile Include="Json\TokenParsers\ArrayToGenericCollectionParser.cs" />
     <Compile Include="Json\TokenParsers\BooleanParser.cs" />
     <Compile Include="Json\TokenParsers\CharacterParser.cs" />
+    <Compile Include="Json\TokenParsers\ComplexObjectParser.cs" />
     <Compile Include="Json\TokenParsers\DefaultGenericCollectionFactory.cs" />
     <Compile Include="Json\TokenParsers\DoubleParser.cs" />
     <Compile Include="Json\TokenParsers\ICollectionFactory.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="Json\JsonDeserializerBuilder.cs" />
     <Compile Include="Json\JsonReaderFactory.cs" />
     <Compile Include="Json\JsonTokenType.cs" />
+    <Compile Include="Json\TokenParsers\IObjectFactory.cs" />
     <Compile Include="Json\TokenParsers\NullParser.cs" />
     <Compile Include="Json\TokenParsers\StringParser.cs" />
     <Compile Include="Json\JsonWriterSymbols.cs" />

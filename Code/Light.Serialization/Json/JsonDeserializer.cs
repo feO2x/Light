@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Light.Serialization.Json
 {
@@ -31,11 +30,6 @@ namespace Light.Serialization.Json
             var returnValue = DeserializeDocument(requestedType);
             _jsonReader = null;
             return returnValue;
-        }
-
-        public T Deserialize<T>(Stream jsonStream)
-        {
-            throw new NotImplementedException();
         }
 
         private object DeserializeDocument(Type requestedType)
