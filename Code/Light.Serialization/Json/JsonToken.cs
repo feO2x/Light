@@ -77,5 +77,13 @@ namespace Light.Serialization.Json
             }
             return new string(characterArray);
         }
+
+        public string ToStringWithoutQuotationMarks()
+        {
+            if (JsonType != JsonTokenType.String)
+                throw new InvalidOperationException($"This method should only be called when the JsonType of this token is String, but it is actually {JsonType}.");
+
+            return ToString(1, Length - 2);
+        }
     }
 }

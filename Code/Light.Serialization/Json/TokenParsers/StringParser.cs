@@ -43,13 +43,13 @@ namespace Light.Serialization.Json.TokenParsers
                     return ConvertEscapeSequencesInBuffer(buffer, i + 1);
             }
             // If none could be found, then return the inner characters without the surrounding quotation marks
-            return buffer.ToString(1, buffer.Length - 2);
+            return buffer.ToStringWithoutQuotationMarks();
         }
 
         private string ConvertEscapeSequencesInBuffer(JsonToken buffer, int currentBufferIndex)
         {
             // Calculate how many characters we need for the new char array
-            // This means that we have to run one through the whole token
+            // This means that we have to run through the whole token
             // and check how many single escape sequences and hexadecimal
             // escape sequences can be found
             var numberOfSingleEscapeSequences = 0;

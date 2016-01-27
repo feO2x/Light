@@ -4,11 +4,9 @@ namespace Light.Serialization.Json.TokenParsers
 {
     public sealed class BooleanParser : IJsonTokenParser
     {
-        private readonly Type _booleanType = typeof (bool);
-
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
-            return (token.JsonType == JsonTokenType.True || token.JsonType == JsonTokenType.False) && requestedType == _booleanType;
+            return token.JsonType == JsonTokenType.True || token.JsonType == JsonTokenType.False;
         }
 
         public object ParseValue(JsonDeserializationContext context)

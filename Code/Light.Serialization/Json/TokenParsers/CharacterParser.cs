@@ -43,16 +43,16 @@ namespace Light.Serialization.Json.TokenParsers
             return currentCharacter;
         }
 
-        private char ReadEscapeSequence(JsonToken buffer)
+        private char ReadEscapeSequence(JsonToken token)
         {
-            var currentCharacter = buffer[2];
+            var currentCharacter = token[2];
             // Check if the current character indicates a hexadecimal escape sequence
             if (currentCharacter == _jsonReaderSymbols.HexadecimalEscapeIndicator)
-                return ReadHexadimalEscapeSequence(buffer);
+                return ReadHexadimalEscapeSequence(token);
 
             // If it is not hexadecimal, then it must be a special escape sequence with only a single character
-            if (buffer.Length != 4)
-                throw CreateException(buffer);
+            if (token.Length != 4)
+                throw CreateException(token);
 
             foreach (var singleEscapedCharacter in _jsonReaderSymbols.SingleEscapedCharacters)
             {
@@ -60,21 +60,21 @@ namespace Light.Serialization.Json.TokenParsers
                     return singleEscapedCharacter.EscapedCharacter;
             }
             // If no single escape character could be found, throw an exception because the escaped character cannot be read
-            throw CreateException(buffer);
+            throw CreateException(token);
         }
 
-        private static char ReadHexadimalEscapeSequence(JsonToken buffer)
+        private static char ReadHexadimalEscapeSequence(JsonToken token)
         {
-            if (buffer.Length != 8)
-                throw CreateException(buffer);
+            if (token.Length != 8)
+                throw CreateException(token);
 
-            var hexadecimalDigitsAsString = buffer.ToString(3, 4);
+            var hexadecimalDigitsAsString = token.ToString(3, 4);
             return Convert.ToChar(int.Parse(hexadecimalDigitsAsString, NumberStyles.HexNumber, NumberFormatInfo.InvariantInfo));
         }
 
-        private static DeserializationException CreateException(JsonToken buffer)
+        private static DeserializationException CreateException(JsonToken token)
         {
-            return new DeserializationException($"Cannot deserialize value {buffer} to a character.");
+            return new DeserializationException($"Cannot deserialize value {token} to a character.");
         }
     }
 }

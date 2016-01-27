@@ -50,9 +50,14 @@
     <Compile Include="Json\TokenParsers\BooleanParser.cs" />
     <Compile Include="Json\TokenParsers\CharacterParser.cs" />
     <Compile Include="Json\TokenParsers\ComplexObjectParser.cs" />
+    <Compile Include="Json\TokenParsers\ConstructorWithLongestParameterListSelector.cs" />
     <Compile Include="Json\TokenParsers\DefaultGenericCollectionFactory.cs" />
     <Compile Include="Json\TokenParsers\DoubleParser.cs" />
     <Compile Include="Json\TokenParsers\ICollectionFactory.cs" />
+    <Compile Include="Json\TokenParsers\IConstructorSelector.cs" />
+    <Compile Include="Json\TokenParsers\INameToTypeMapping.cs" />
+    <Compile Include="Json\TokenParsers\InjectableValueInfo.cs" />
+    <Compile Include="Json\TokenParsers\InjectableValueKind.cs" />
     <Compile Include="Json\TokenParsers\IntParser.cs" />
     <Compile Include="Json\JsonToken.cs" />
     <Compile Include="ISerializer.cs" />
@@ -61,6 +66,7 @@
     <Compile Include="Json\JsonReaderFactory.cs" />
     <Compile Include="Json\JsonTokenType.cs" />
     <Compile Include="Json\TokenParsers\IObjectFactory.cs" />
+    <Compile Include="Json\TokenParsers\ITypeCreationInfoAnalyzer.cs" />
     <Compile Include="Json\TokenParsers\NullParser.cs" />
     <Compile Include="Json\TokenParsers\StringParser.cs" />
     <Compile Include="Json\JsonWriterSymbols.cs" />
@@ -94,6 +100,8 @@
     <Compile Include="Json\ComplexTypeDecomposition\IReadableValuesTypeAnalyzer.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\IValueProvider.cs" />
     <Compile Include="Json\SingleEscapedCharacter.cs" />
+    <Compile Include="Json\TokenParsers\TypeConstructionInfo.cs" />
+    <Compile Include="Json\TokenParsers\DefaultTypeCreationInfoAnalyzer.cs" />
     <Compile Include="Json\WriterInstructors\CollectionInstructor.cs" />
     <Compile Include="Json\WriterInstructors\ComplexWriterInstructor.cs" />
     <Compile Include="Json\WriterInstructors\DictionaryInstructor.cs" />

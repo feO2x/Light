@@ -5,6 +5,6 @@ namespace Light.Serialization.Json.TokenParsers
 {
     public interface IObjectFactory
     {
-        object Create(Type requestedType, Dictionary<string, object> deserializedChildValues);
+        object Create(Type requestedType, Dictionary<InjectableValueInfo, object> deserializedChildValues);
     }
 }
