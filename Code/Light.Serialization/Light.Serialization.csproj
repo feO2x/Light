@@ -104,6 +104,7 @@
     <Compile Include="Json\TokenParsers\ToLowerStringNormalizer.cs" />
     <Compile Include="Json\TokenParsers\TypeConstructionInfo.cs" />
     <Compile Include="Json\TokenParsers\DefaultTypeCreationInfoAnalyzer.cs" />
+    <Compile Include="Json\TokenParsers\AnalyzerCacheDecorator.cs" />
     <Compile Include="Json\WriterInstructors\CollectionInstructor.cs" />
     <Compile Include="Json\WriterInstructors\ComplexWriterInstructor.cs" />
     <Compile Include="Json\WriterInstructors\DictionaryInstructor.cs" />
