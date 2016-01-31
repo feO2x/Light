@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Light.Serialization.Json.TokenParsers
 {
-    public struct TypeConstructionInfo
+    public sealed class TypeConstructionInfo : IEquatable<TypeConstructionInfo>
     {
         public readonly Type TargetType;
         public readonly ConstructorInfo TargetConstructor;
@@ -30,6 +30,24 @@ namespace Light.Serialization.Json.TokenParsers
                     return injectableValueInfo;
             }
             return null;
+        }
+
+        public bool Equals(TypeConstructionInfo other)
+        {
+            if (other == null)
+                return false;
+
+            return TargetType == other.TargetType;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as TypeConstructionInfo);
+        }
+
+        public override int GetHashCode()
+        {
+            return TargetType.GetHashCode();
         }
     }
 }
