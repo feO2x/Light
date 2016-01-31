@@ -55,6 +55,7 @@
     <Compile Include="Json\TokenParsers\DoubleParser.cs" />
     <Compile Include="Json\TokenParsers\ICollectionFactory.cs" />
     <Compile Include="Json\TokenParsers\IConstructorSelector.cs" />
+    <Compile Include="Json\TokenParsers\IInjectableValueNameNormalizer.cs" />
     <Compile Include="Json\TokenParsers\INameToTypeMapping.cs" />
     <Compile Include="Json\TokenParsers\InjectableValueInfo.cs" />
     <Compile Include="Json\TokenParsers\InjectableValueKind.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Json\ComplexTypeDecomposition\IReadableValuesTypeAnalyzer.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\IValueProvider.cs" />
     <Compile Include="Json\SingleEscapedCharacter.cs" />
+    <Compile Include="Json\TokenParsers\ToLowerStringNormalizer.cs" />
     <Compile Include="Json\TokenParsers\TypeConstructionInfo.cs" />
     <Compile Include="Json\TokenParsers\DefaultTypeCreationInfoAnalyzer.cs" />
     <Compile Include="Json\WriterInstructors\CollectionInstructor.cs" />

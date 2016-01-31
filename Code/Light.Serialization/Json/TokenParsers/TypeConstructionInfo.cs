@@ -1,16 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Light.Serialization.Json.TokenParsers
 {
     public struct TypeConstructionInfo
     {
+        public readonly Type TargetType;
+        public readonly ConstructorInfo TargetConstructor;
         public readonly List<InjectableValueInfo> InjectableValueInfos;
 
-        public TypeConstructionInfo(List<InjectableValueInfo> injectableValueInfos)
+        public TypeConstructionInfo(Type targetType, ConstructorInfo targetConstructor, List<InjectableValueInfo> injectableValueInfos)
         {
+            if (targetType == null) throw new ArgumentNullException(nameof(targetType));
+            if (targetConstructor == null) throw new ArgumentNullException(nameof(targetConstructor));
             if (injectableValueInfos == null) throw new ArgumentNullException(nameof(injectableValueInfos));
 
+            TargetType = targetType;
+            TargetConstructor = targetConstructor;
             InjectableValueInfos = injectableValueInfos;
         }
 
@@ -19,7 +26,7 @@ namespace Light.Serialization.Json.TokenParsers
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var injectableValueInfo in InjectableValueInfos)
             {
-                if (injectableValueInfo.ValueName == name)
+                if (injectableValueInfo.NormalizedName == name)
                     return injectableValueInfo;
             }
             return null;

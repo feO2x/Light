@@ -4,16 +4,19 @@ namespace Light.Serialization.Json.TokenParsers
 {
     public sealed class InjectableValueInfo : IEquatable<InjectableValueInfo>
     {
-        public readonly string ValueName;
+        public readonly string NormalizedName;
+        public readonly string ActualName;
         public readonly Type Type;
         public readonly InjectableValueKind Kind;
 
-        public InjectableValueInfo(string valueName, Type type, InjectableValueKind kind)
+        public InjectableValueInfo(string normalizedName, string actualName, Type type, InjectableValueKind kind)
         {
-            if (valueName == null) throw new ArgumentNullException(nameof(valueName));
+            if (string.IsNullOrEmpty(normalizedName)) throw new ArgumentNullException(nameof(normalizedName));
+            if (string.IsNullOrEmpty(actualName)) throw new ArgumentNullException(nameof(actualName));
             if (type == null) throw new ArgumentNullException(nameof(type));
 
-            ValueName = valueName;
+            NormalizedName = normalizedName;
+            ActualName = actualName;
             Type = type;
             Kind = kind;
         }
@@ -23,7 +26,7 @@ namespace Light.Serialization.Json.TokenParsers
             if (other == null)
                 return false;
 
-            return ValueName == other.ValueName;
+            return NormalizedName == other.NormalizedName;
         }
 
         public override bool Equals(object obj)
@@ -33,7 +36,7 @@ namespace Light.Serialization.Json.TokenParsers
 
         public override int GetHashCode()
         {
-            return ValueName.GetHashCode();
+            return NormalizedName.GetHashCode();
         }
     }
 }

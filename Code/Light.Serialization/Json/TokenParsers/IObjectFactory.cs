@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Light.Serialization.Json.TokenParsers
 {
     public interface IObjectFactory
     {
-        object Create(Type requestedType, Dictionary<InjectableValueInfo, object> deserializedChildValues);
+        object Create(TypeConstructionInfo typeConstructionInfo, Dictionary<InjectableValueInfo, object> deserializedChildValues);
     }
 }

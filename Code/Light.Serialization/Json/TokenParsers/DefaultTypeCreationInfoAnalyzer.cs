@@ -6,13 +6,16 @@ namespace Light.Serialization.Json.TokenParsers
 {
     public sealed class DefaultTypeCreationInfoAnalyzer : ITypeCreationInfoAnalyzer
     {
-        private readonly IConstructorSelector _constructorsSelector;
+        private readonly IConstructorSelector _constructorSelector;
+        private readonly IInjectableValueNameNormalizer _injectableValueNameNormalizer;
 
-        public DefaultTypeCreationInfoAnalyzer(IConstructorSelector constructorsSelector)
+        public DefaultTypeCreationInfoAnalyzer(IConstructorSelector constructorSelector, IInjectableValueNameNormalizer injectableValueNameNormalizer)
         {
-            if (constructorsSelector == null) throw new ArgumentNullException(nameof(constructorsSelector));
+            if (constructorSelector == null) throw new ArgumentNullException(nameof(constructorSelector));
+            if (injectableValueNameNormalizer == null) throw new ArgumentNullException(nameof(injectableValueNameNormalizer));
 
-            _constructorsSelector = constructorsSelector;
+            _constructorSelector = constructorSelector;
+            _injectableValueNameNormalizer = injectableValueNameNormalizer;
         }
 
         public TypeConstructionInfo CreateInfo(Type typeToAnalyze)
@@ -25,23 +28,37 @@ namespace Light.Serialization.Json.TokenParsers
             var constructors = typeToAnalyze.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
             if (constructors.Length == 0)
                 throw new ArgumentException($"The specified type {typeToAnalyze.FullName} does not have public constructors", nameof(typeToAnalyze));
-            var targetContructor = constructors.Length == 1 ? constructors[0] : _constructorsSelector.SelectConstructor(constructors, typeToAnalyze);
+            var targetContructor = constructors.Length == 1 ? constructors[0] : _constructorSelector.SelectConstructor(constructors, typeToAnalyze);
 
             var injectableValueInfos = new List<InjectableValueInfo>();
+
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var parameterInfo in targetContructor.GetParameters())
             {
-                injectableValueInfos.Add(new InjectableValueInfo(parameterInfo.Name, parameterInfo.ParameterType, InjectableValueKind.ConstructorParameter));
+                var normalizedParameterName = _injectableValueNameNormalizer.Normalize(parameterInfo.Name);
+                injectableValueInfos.Add(new InjectableValueInfo(normalizedParameterName,
+                                                                 parameterInfo.Name,
+                                                                 parameterInfo.ParameterType,
+                                                                 InjectableValueKind.ConstructorParameter));
             }
 
+            // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var propertyInfo in typeToAnalyze.GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
                 var setMethodInfo = propertyInfo.GetSetMethod();
-                if (setMethodInfo != null)
-                    injectableValueInfos.Add(new InjectableValueInfo(propertyInfo.Name, propertyInfo.PropertyType, InjectableValueKind.PropertySetter));
+                if (setMethodInfo == null)
+                    continue;
+
+                var normalizedPropertyName = _injectableValueNameNormalizer.Normalize(propertyInfo.Name);
+                var injectableValuesInfo = new InjectableValueInfo(normalizedPropertyName,
+                                                                   propertyInfo.Name,
+                                                                   propertyInfo.PropertyType,
+                                                                   InjectableValueKind.PropertySetter);
+                if (injectableValueInfos.Contains(injectableValuesInfo) == false)
+                    injectableValueInfos.Add(injectableValuesInfo);
             }
 
-            return new TypeConstructionInfo(injectableValueInfos);
+            return new TypeConstructionInfo(typeToAnalyze, targetContructor, injectableValueInfos);
         }
     }
 }
