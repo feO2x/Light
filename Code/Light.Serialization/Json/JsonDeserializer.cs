@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Light.Serialization.Json
 {
-    public sealed class JsonDeserializer
+    public sealed class JsonDeserializer : IDeserializer
     {
         private readonly IJsonReaderFactory _jsonReaderFactory;
         private readonly IList<IJsonTokenParser> _tokenParsers;

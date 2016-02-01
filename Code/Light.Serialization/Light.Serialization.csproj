@@ -38,6 +38,7 @@
     <Compile Include="FrameworkExtensions\CharExtensions.cs" />
     <Compile Include="FrameworkExtensions\ReflectionExtensions.cs" />
     <Compile Include="FrameworkExtensions\StringExtensions.cs" />
+    <Compile Include="IDeserializer.cs" />
     <Compile Include="Json\IJsonReader.cs" />
     <Compile Include="Json\IJsonReaderFactory.cs" />
     <Compile Include="Json\IJsonTokenParser.cs" />
