@@ -1,11 +1,13 @@
 using System.Collections.Generic;
+using Light.Serialization.Json.ObjectConstruction;
+using Light.Serialization.Json.Reading;
 using Light.Serialization.Json.TokenParsers;
 
 namespace Light.Serialization.Json
 {
     public class JsonDeserializerBuilder
     {
-        private readonly IJsonReaderFactory _jsonReaderFactory = new JsonReaderFactory();
+        private readonly IJsonReaderFactory _jsonReaderFactory = new SingleBufferJsonReaderFactory();
 
         private readonly IList<IJsonTokenParser> _jsonValueDeserializers = new IJsonTokenParser[]
                                                                            {

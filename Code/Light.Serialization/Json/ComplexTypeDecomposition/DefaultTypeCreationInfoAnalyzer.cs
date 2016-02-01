@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Light.Serialization.Json.TokenParsers;
 
-namespace Light.Serialization.Json.TokenParsers
+namespace Light.Serialization.Json.ComplexTypeDecomposition
 {
     public sealed class DefaultTypeCreationInfoAnalyzer : ITypeCreationInfoAnalyzer
     {

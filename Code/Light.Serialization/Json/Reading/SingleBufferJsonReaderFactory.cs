@@ -1,8 +1,8 @@
 using System;
 
-namespace Light.Serialization.Json
+namespace Light.Serialization.Json.Reading
 {
-    public sealed class JsonReaderFactory : IJsonReaderFactory
+    public sealed class SingleBufferJsonReaderFactory : IJsonReaderFactory
     {
         private JsonReaderSymbols _readerSymbols = new JsonReaderSymbols();
 

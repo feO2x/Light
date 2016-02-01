@@ -1,4 +1,4 @@
-namespace Light.Serialization.Json
+namespace Light.Serialization.Json.Reading
 {
     public class TokenNotSupportedException : DeserializationException
     {

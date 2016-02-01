@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Light.Serialization.Json
+namespace Light.Serialization.Json.Reading
 {
     public sealed class JsonReaderSymbols
     {

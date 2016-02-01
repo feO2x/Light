@@ -1,6 +1,6 @@
 using System;
 
-namespace Light.Serialization.Json
+namespace Light.Serialization.Json.Writing
 {
     public class JsonWriterSymbols
     {

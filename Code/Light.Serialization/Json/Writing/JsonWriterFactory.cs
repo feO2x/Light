@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace Light.Serialization.Json
+namespace Light.Serialization.Json.Writing
 {
     public sealed class JsonWriterFactory : IJsonWriterFactory
     {

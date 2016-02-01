@@ -1,7 +1,7 @@
 ﻿using System;
 using Light.Serialization.FrameworkExtensions;
 
-namespace Light.Serialization.Json
+namespace Light.Serialization.Json.Reading
 {
     public sealed class SingleBufferJsonReader : IJsonReader
     {

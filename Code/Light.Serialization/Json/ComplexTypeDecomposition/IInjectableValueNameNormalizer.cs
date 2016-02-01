@@ -1,4 +1,4 @@
-namespace Light.Serialization.Json.TokenParsers
+namespace Light.Serialization.Json.ComplexTypeDecomposition
 {
     public interface IInjectableValueNameNormalizer
     {
