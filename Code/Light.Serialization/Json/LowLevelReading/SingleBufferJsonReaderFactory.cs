@@ -1,6 +1,6 @@
 using System;
 
-namespace Light.Serialization.Json.Reading
+namespace Light.Serialization.Json.LowLevelReading
 {
     public sealed class SingleBufferJsonReaderFactory : IJsonReaderFactory
     {

@@ -1,5 +1,5 @@
 ﻿
-namespace Light.Serialization.Json.Writing
+namespace Light.Serialization.Json.LowLevelWriting
 {
     public sealed class JsonFormatterNullObject : IJsonFormatter
     {

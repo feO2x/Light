@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using Light.Serialization.Json.Reading;
+using Light.Serialization.Json.LowLevelReading;
 
 namespace Light.Serialization.Json.TokenParsers
 {
