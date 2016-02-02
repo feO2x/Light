@@ -25,5 +25,10 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
         {
             return _lambda(@object);
         }
+
+        public override string ToString()
+        {
+            return $"ValueProviderUsingLambda for {ReferenceType.FullName}.{Name}";
+        }
     }
 }
