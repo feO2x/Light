@@ -15,6 +15,7 @@ namespace Light.Serialization.Json
             targetList.Add(new ToStringPrimitiveTypeFormatter<int>());
             targetList.Add(new StringFormatter(characterEscaper));
             targetList.Add(new DoubleFormatter());
+            targetList.Add(new DateTimeFormatter());
             targetList.Add(new ToStringWithQuotationMarksFormatter<Guid>());
             targetList.Add(new BooleanFormatter());
             targetList.Add(new DecimalFormatter());

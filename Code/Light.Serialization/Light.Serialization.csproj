@@ -47,6 +47,7 @@
     <Compile Include="Json\JsonSerializerBuildExtensions.cs" />
     <Compile Include="Json\DefaultJsonSymbols.cs" />
     <Compile Include="Json\LowLevelReading\TokenNotSupportedException.cs" />
+    <Compile Include="Json\PrimitiveTypeFormatters\DateTimeFormatter.cs" />
     <Compile Include="Json\TokenParsers\ArrayToGenericCollectionParser.cs" />
     <Compile Include="Json\TokenParsers\BooleanParser.cs" />
     <Compile Include="Json\TokenParsers\CharacterParser.cs" />
