@@ -40,7 +40,7 @@ namespace Light.GuardClauses
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void NotGreaterThanOrEqualTo<T>(T boundary, T parameter, string parameterName) where T : IComparable<T>
+        public static void MustNotBeGreaterThanOrEqualTo<T>(this T parameter, T boundary, string parameterName) where T : IComparable<T>
         {
             if (parameter.CompareTo(boundary) >= 0)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be greater than or equal to {boundary}, but you specified {parameter}.");
