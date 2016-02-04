@@ -47,19 +47,12 @@ namespace Light.GuardClauses
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void NotLessOrEqualTo(int boundary, int parameter, string paramterName)
-        {
-            if (parameter <= boundary)
-                throw new ArgumentOutOfRangeException(paramterName, parameter, $"{paramterName} must not be less or equal to ");
-        }
-
-        [Conditional(PreconditionSymbol)]
-        public static void In<T>(Range<T> range, T parameter, string parameterName) where T : IComparable<T>
+        public static void MustBeIn<T>(this T parameter, Range<T> range, string parameterName) where T : IComparable<T>
         {
             var fromBoundaryKind = range.IsFromInclusive ? "inclusive" : "exclusive";
             var toBoundaryKind = range.IsToInclusive ? "inclusive" : "exclusive";
 
-            if (range.CheckValue(parameter))
+            if (range.CheckValue(parameter) == false)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} shout be between {range.From} ({fromBoundaryKind}) and {range.To} ({toBoundaryKind}), but you specified {parameter}.");
         }
     }
