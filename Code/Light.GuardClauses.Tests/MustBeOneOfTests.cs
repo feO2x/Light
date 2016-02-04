@@ -25,7 +25,7 @@ namespace Light.GuardClauses.Tests
                 new object[] { "f", new[] { "ak", "k" }, "ak, k" }
             };
 
-        [Theory(DisplayName = "MustBeOneOf must not throw an exception when the specified value is on the given items.")]
+        [Theory(DisplayName = "MustBeOneOf must not throw an exception when the specified value is one of the given items.")]
         [MemberData(nameof(InItemsTestData))]
         public void InItems<T>(T value, T[] items)
         {

@@ -81,6 +81,16 @@ namespace Light.GuardClauses
         }
 
         [Conditional(PreconditionSymbol)]
+        public static void MustNotBeOneOf<T>(this T parameter, IReadOnlyList<T> items, string parameterName)
+        {
+            if (items.Contains(parameter) == false)
+                return;
+
+            var stringBuilder = new StringBuilder().AppendItems(items);
+            throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must be none of the items ({stringBuilder}), but you specified {parameter}.");
+        }
+
+        [Conditional(PreconditionSymbol)]
         public static void MustNotBeNullOrEmpty<T>(this IReadOnlyCollection<T> collection, string parameterName)
         {
             if (collection == null)
