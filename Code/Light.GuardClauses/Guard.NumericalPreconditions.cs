@@ -10,84 +10,84 @@ namespace Light.GuardClauses
     public partial class Guard
     {
         [Conditional(PreconditionSymbol)]
-        public static void NotLessThan(int boundary, int parameter, string parameterName)
+        public static void IsNotLessThan(this int parameter, int boundary, string parameterName)
         {
             if (parameter < boundary)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be less than {boundary}, but you specified {parameter}.");
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void NotLessThan(long boundary, long parameter, string parameterName)
+        public static void IsNotLessThan(this long parameter, long boundary, string parameterName)
         {
             if (parameter < boundary)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be less than {boundary}, but you specified {parameter}.");
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void NotLessThan(short boundary, short parameter, string parameterName)
+        public static void IsNotLessThan(this short parameter, short boundary, string parameterName)
         {
             if (parameter < boundary)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be less than {boundary}, but you specified {parameter}.");
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void NotLessThan(uint boundary, uint parameter, string parameterName)
+        public static void IsNotLessThan(this uint parameter, uint boundary, string parameterName)
         {
             if (parameter < boundary)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be less than {boundary}, but you specified {parameter}.");
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void NotLessThan(ulong boundary, ulong parameter, string parameterName)
+        public static void IsNotLessThan(this ulong parameter, ulong boundary, string parameterName)
         {
             if (parameter < boundary)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be less than {boundary}, but you specified {parameter}.");
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void NotLessThan(ushort boundary, ushort parameter, string parameterName)
+        public static void IsNotLessThan(this ushort parameter, ushort boundary, string parameterName)
         {
             if (parameter < boundary)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be less than {boundary}, but you specified {parameter}.");
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void NotLessThan(byte boundary, byte parameter, string parameterName)
+        public static void IsNotLessThan(this byte parameter, byte boundary, string parameterName)
         {
             if (parameter < boundary)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be less than {boundary}, but you specified {parameter}.");
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void NotLessThan(sbyte boundary, sbyte parameter, string parameterName)
+        public static void IsNotLessThan(this sbyte parameter, sbyte boundary, string parameterName)
         {
             if (parameter < boundary)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be less than {boundary}, but you specified {parameter}.");
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void NotLessThan(decimal boundary, decimal parameter, string parameterName)
+        public static void IsNotLessThan(this decimal parameter, decimal boundary, string parameterName)
         {
             if (parameter < boundary)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be less than {boundary}, but you specified {parameter}.");
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void NotLessThan(char boundary, char parameter, string parameterName)
+        public static void IsNotLessThan(this char parameter, char boundary, string parameterName)
         {
             if (parameter < boundary)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be less than {boundary}, but you specified {parameter}.");
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void NotLessThan(double boundary, double parameter, string parameterName)
+        public static void IsNotLessThan(this double parameter, double boundary, string parameterName)
         {
             if (parameter < boundary)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be less than {boundary}, but you specified {parameter}.");
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void NotLessThan(float boundary, float parameter, string parameterName)
+        public static void IsNotLessThan(this float parameter, float boundary, string parameterName)
         {
             if (parameter < boundary)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be less than {boundary}, but you specified {parameter}.");
