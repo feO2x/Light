@@ -1,0 +1,96 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ output extension=".cs" #>
+<#@ include file="GuardClassGeneration.tt" #>
+// This file is auto-generated from Guard.NumericalPreconditions.tt
+// Do not change its content.
+
+<# InsertNamespaces("System", "System.Diagnostics");
+
+    StartNamespace();
+    StartPartialGuardClass();
+
+
+    var numericalTypesWithoutEqualityIssues = new[]
+                                              {
+                                                  "int",
+                                                  "long",
+                                                  "short",
+                                                  "uint",
+                                                  "ulong",
+                                                  "ushort",
+                                                  "byte",
+                                                  "sbyte",
+                                                  "decimal",
+                                                  "char"
+                                              };
+    var allnumericalTypes = numericalTypesWithoutEqualityIssues.Concat(new[] { "double", "float" })
+                                                               .ToArray();
+
+    WriteNotLessThan(allnumericalTypes);
+    WriteNotGreaterThan(allnumericalTypes);
+	WriteNotLessThanOrEqualTo(numericalTypesWithoutEqualityIssues);
+	WriteNotGreaterThanOrEqualTo(numericalTypesWithoutEqualityIssues);
+    EndPartialGuardClass();
+    EndNamespace();
+#>
+
+<#+
+
+    private void WriteNotLessThan(params string[] typeNames)
+    {
+        foreach (var typeName in typeNames)
+        {
+            StartMethod("public static void NotLessThan({0} boundary, {0} parameter, string parameterName)", typeName);
+            WriteLine("if (parameter < boundary)");
+            PushIndent();
+            WriteLine("throw new ArgumentOutOfRangeException(parameterName, parameter, $\"{parameterName} must not be less than {boundary}, but you specified {parameter}.\");");
+            PopIndent();
+            EndMethod();
+            WriteLine(string.Empty);
+        }
+    }
+
+    private void WriteNotGreaterThan(params string[] typeNames)
+    {
+        foreach (var typeName in typeNames)
+        {
+            StartMethod("public static void NotGreaterThan({0} boundary, {0} parameter, string parameterName)", typeName);
+            WriteLine("if (parameter > boundary)");
+            PushIndent();
+            WriteLine("throw new ArgumentOutOfRangeException(parameterName, parameter, $\"{parameterName} must not be greater than {boundary}, but you specified {parameter}.\");");
+            PopIndent();
+            EndMethod();
+            WriteLine(string.Empty);
+        }
+    }
+
+	private void WriteNotLessThanOrEqualTo(params string[] typeNames)
+    {
+        foreach (var typeName in typeNames)
+        {
+            StartMethod("public static void NotLessThanOrEqualTo({0} boundary, {0} parameter, string parameterName)", typeName);
+            WriteLine("if (parameter <= boundary)");
+            PushIndent();
+            WriteLine("throw new ArgumentOutOfRangeException(parameterName, parameter, $\"{parameterName} must not be less than or equal to {boundary}, but you specified {parameter}.\");");
+            PopIndent();
+            EndMethod();
+            WriteLine(string.Empty);
+        }
+    }
+
+	private void WriteNotGreaterThanOrEqualTo(params string[] typeNames)
+    {
+        foreach (var typeName in typeNames)
+        {
+            StartMethod("public static void NotGreaterThanOrEqualTo({0} boundary, {0} parameter, string parameterName)", typeName);
+            WriteLine("if (parameter >= boundary)");
+            PushIndent();
+            WriteLine("throw new ArgumentOutOfRangeException(parameterName, parameter, $\"{parameterName} must not be greater than or equal to {boundary}, but you specified {parameter}.\");");
+            PopIndent();
+            EndMethod();
+            WriteLine(string.Empty);
+        }
+    }
+#>

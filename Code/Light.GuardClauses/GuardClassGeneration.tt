@@ -1,0 +1,62 @@
+﻿<#@ assembly name="System.Core" #>
+<#+ private const string IndentCharacters = "    ";
+
+    private void StartNamespace(string @namespace = "Light.GuardClauses")
+    {
+        WriteLine("namespace {0}", @namespace);
+		WriteLine("{");
+		PushIndent();
+    }
+
+    private void EndNamespace()
+    {
+        PopIndent();
+		WriteLine("}");
+    }
+
+    private void StartPartialGuardClass()
+    {
+        WriteLine("public partial class Guard");
+		WriteLine("{");
+		PushIndent();
+    }
+
+    private void EndPartialGuardClass()
+    {
+        PopIndent();
+		WriteLine("}");
+    }
+
+    private void PushIndent()
+    {
+        PushIndent(IndentCharacters);
+    }
+
+    private void WriteConditionalAttribute()
+    {
+        WriteLine("[Conditional(PreconditionSymbol)]");
+    }
+
+    private void StartMethod(string format, params object[] arguments)
+    {
+		WriteConditionalAttribute();
+        WriteLine(format, arguments);
+		WriteLine("{");
+		PushIndent();
+    }
+
+    private void EndMethod()
+    {
+        PopIndent();
+		WriteLine("}");
+    }
+
+    private void InsertNamespaces(params string[] namespaces)
+    {
+        foreach (var @namespace in namespaces)
+        {
+            WriteLine("using {0};", @namespace);
+        }
+        WriteLine(string.Empty);
+    }
+#>
