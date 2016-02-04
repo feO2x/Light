@@ -116,5 +116,14 @@ namespace Light.GuardClauses
             if (@string == string.Empty)
                 throw new EmptyStringException(parameterName);
         }
+
+        public static TOut MustBeType<TOut>(this object @object, string parameterName) where TOut : class
+        {
+            var castedValue = @object as TOut;
+            if (castedValue == null)
+                throw new TypeMismatchException(parameterName, $"{parameterName} is of type {@object.GetType().FullName} and cannot be downcasted to {typeof(TOut).FullName}.");
+
+            return castedValue;
+        }
     }
 }
