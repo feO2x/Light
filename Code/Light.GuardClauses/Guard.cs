@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Light.GuardClauses
 {
-    public partial class Guard
+    public static partial class Guard
     {
         /// <summary>
         /// The compiler symbol that must be added so that calls to this class are compiled into the assembly.
@@ -12,7 +12,7 @@ namespace Light.GuardClauses
         public const string PreconditionSymbol = "COMPILE_PRECONDITIONS";
 
         [Conditional(PreconditionSymbol)]
-        public static void NotNull<T>(T parameter, string parameterName) where T : class
+        public static void IsNotNull<T>(this T parameter, string parameterName) where T : class
         {
             if (parameter == null)
                 throw new ArgumentNullException(parameterName);
