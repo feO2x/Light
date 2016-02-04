@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Light.GuardClauses
 {
-    public static partial class Guard
+    public static class Guard
     {
         /// <summary>
         /// The compiler symbol that must be added so that calls to this class are compiled into the assembly.
@@ -33,7 +33,7 @@ namespace Light.GuardClauses
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void NotGreaterThan<T>(T boundary, T parameter, string parameterName) where T : IComparable<T>
+        public static void IsNotGreaterThan<T>(this T parameter, T boundary, string parameterName) where T : IComparable<T>
         {
             if (parameter.CompareTo(boundary) > 0)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be greater than {boundary}, but you specified {parameter}.");

@@ -1,0 +1,39 @@
+﻿using FluentAssertions;
+using System;
+using Xunit;
+
+namespace Light.GuardClauses.Tests
+{
+    public sealed class IsNotGreaterThanTests
+    {
+        [Theory(DisplayName = "IsNotGreaterThan must throw an exception when the specified value is above the given boundary.")]
+        [InlineData(1, 0)]
+        [InlineData(1, -1)]
+        [InlineData(-88, -100)]
+        [InlineData("c", "b")]
+        [InlineData("Z", "Y")]
+        [InlineData("A", "a")]
+        public void ParamterAboveBoundary<T>(T value, T boundary) where T : IComparable<T>
+        {
+            Action act = () => value.IsNotGreaterThan(boundary, nameof(value));
+
+            act.ShouldThrow<ArgumentOutOfRangeException>()
+               .And.Message.Should().Contain($"{nameof(value)} must not be greater than {boundary}, but you specified {value}.");
+        }
+
+        [Theory(DisplayName = "IsNotGreaterThan must not throw an exception when the specified value is equal or lower than the given boundary.")]
+        [InlineData(0, 0)]
+        [InlineData(-1, 0)]
+        [InlineData(-88, 0)]
+        [InlineData("a", "b")]
+        [InlineData("b", "b")]
+        [InlineData("X", "Y")]
+        [InlineData("y", "Y")]
+        public void ParameterAtOrBelowBoundary<T>(T value, T boundary) where T : IComparable<T>
+        {
+            Action act = () => value.IsNotGreaterThan(boundary, nameof(value));
+
+            act.ShouldNotThrow();
+        }
+    }
+}
