@@ -11,7 +11,7 @@ namespace Light.GuardClauses
 
         public Range(T from, T to, bool isFromInclusive, bool isToInclusive)
         {
-            Guard.NotLessThan(from, to, nameof(to));
+            to.IsNotLessThan(from, nameof(to));
 
             From = from;
             To = to;
