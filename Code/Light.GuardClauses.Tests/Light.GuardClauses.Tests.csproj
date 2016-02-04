@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MustBeInTests.cs" />
+    <Compile Include="MustBeOneOfTests.cs" />
     <Compile Include="MustNotBeGreaterThanOrEqualToTests.cs" />
     <Compile Include="MustNotBeGreaterThanTests.cs" />
     <Compile Include="MustNotBeInTests.cs" />

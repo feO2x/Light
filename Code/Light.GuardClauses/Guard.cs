@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
 
 namespace Light.GuardClauses
 {
@@ -64,6 +67,22 @@ namespace Light.GuardClauses
 
             if (range.IsValueWithinRange(parameter))
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be between {range.From} ({fromBoundaryKind}) and {range.To} ({toBoundaryKind}), but you specified {parameter}.");
+        }
+
+        [Conditional(PreconditionSymbol)]
+        public static void MustBeOneOf<T>(this T parameter, IReadOnlyList<T> items, string parameterName)
+        {
+            if (items.Contains(parameter))
+                return;
+
+            var stringBuilder = new StringBuilder();
+            for (var i = 0; i < items.Count; i++)
+            {
+                stringBuilder.Append(items[i]);
+                if (i < items.Count - 1)
+                    stringBuilder.Append(", ");
+            }
+            throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must be one of the items ({stringBuilder}), but you specified {parameter}.");
         }
     }
 }
