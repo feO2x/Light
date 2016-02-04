@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MustNotBeGreaterThanTests.cs" />
+    <Compile Include="MustNotBeLessThanOrEqualToTests.cs" />
     <Compile Include="MustNotBeLessThanTests.cs" />
     <Compile Include="MustNotBeNullTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
