@@ -6,7 +6,7 @@ namespace Light.GuardClauses.Tests
 {
     public sealed class RangeTests
     {
-        [Theory(DisplayName = "CheckValue must return true when the given value is between the specified range.")]
+        [Theory(DisplayName = "IsValueWithinRange must return true when the given value is between the specified range.")]
         [InlineData(0, 5, 0, true, true)]
         [InlineData(0, 5, 5, false, true)]
         [InlineData(0, 5, 4, false, false)]
@@ -18,12 +18,12 @@ namespace Light.GuardClauses.Tests
         {
             var testTarget = new Range<T>(from, to, isFromInclusive, isToInclusive);
 
-            var result = testTarget.CheckValue(value);
+            var result = testTarget.IsValueWithinRange(value);
 
             result.Should().BeTrue();
         }
 
-        [Theory(DisplayName = "CheckValue must return false when the given value is out of the specified range.")]
+        [Theory(DisplayName = "IsValueWithinRange must return false when the given value is out of the specified range.")]
         [InlineData(0, 5, -1, true, true)]
         [InlineData(0, 5, 6, false, true)]
         [InlineData(0, 5, 5, false, false)]
@@ -35,7 +35,7 @@ namespace Light.GuardClauses.Tests
         {
             var testTarget = new Range<T>(from, to, isFromInclusive, isToInclusive);
 
-            var result = testTarget.CheckValue(value);
+            var result = testTarget.IsValueWithinRange(value);
 
             result.Should().BeFalse();
         }

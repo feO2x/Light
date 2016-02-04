@@ -52,8 +52,18 @@ namespace Light.GuardClauses
             var fromBoundaryKind = range.IsFromInclusive ? "inclusive" : "exclusive";
             var toBoundaryKind = range.IsToInclusive ? "inclusive" : "exclusive";
 
-            if (range.CheckValue(parameter) == false)
-                throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} shout be between {range.From} ({fromBoundaryKind}) and {range.To} ({toBoundaryKind}), but you specified {parameter}.");
+            if (range.IsValueWithinRange(parameter) == false)
+                throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must be between {range.From} ({fromBoundaryKind}) and {range.To} ({toBoundaryKind}), but you specified {parameter}.");
+        }
+
+        [Conditional(PreconditionSymbol)]
+        public static void MustNotBeIn<T>(this T parameter, Range<T> range, string parameterName) where T : IComparable<T>
+        {
+            var fromBoundaryKind = range.IsFromInclusive ? "inclusive" : "exclusive";
+            var toBoundaryKind = range.IsToInclusive ? "inclusive" : "exclusive";
+
+            if (range.IsValueWithinRange(parameter))
+                throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be between {range.From} ({fromBoundaryKind}) and {range.To} ({toBoundaryKind}), but you specified {parameter}.");
         }
     }
 }

@@ -63,6 +63,7 @@
     <Compile Include="MustBeInTests.cs" />
     <Compile Include="MustNotBeGreaterThanOrEqualToTests.cs" />
     <Compile Include="MustNotBeGreaterThanTests.cs" />
+    <Compile Include="MustNotBeInTests.cs" />
     <Compile Include="MustNotBeLessThanOrEqualToTests.cs" />
     <Compile Include="MustNotBeLessThanTests.cs" />
     <Compile Include="MustNotBeNullTests.cs" />

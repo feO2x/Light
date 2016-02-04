@@ -18,7 +18,7 @@ namespace Light.GuardClauses.Tests
             Action act = () => value.MustBeIn(Range<T>.FromInclusive(lowerBoundary).ToExclusive(upperBoundary), nameof(value));
 
             act.ShouldThrow<ArgumentOutOfRangeException>()
-               .And.Message.Should().Contain($"{nameof(value)} shout be between {lowerBoundary} (inclusive) and {upperBoundary} (exclusive), but you specified {value}.");
+               .And.Message.Should().Contain($"{nameof(value)} must be between {lowerBoundary} (inclusive) and {upperBoundary} (exclusive), but you specified {value}.");
         }
 
         [Theory(DisplayName = "MustBeIn must throw an exception when the specified value is outside of range (with exclusive lower boundary and inclusive upper boundary).")]
@@ -33,7 +33,7 @@ namespace Light.GuardClauses.Tests
             Action act = () => value.MustBeIn(Range<T>.FromExclusive(lowerBoundary).ToInclusive(upperBoundary), nameof(value));
 
             act.ShouldThrow<ArgumentOutOfRangeException>()
-               .And.Message.Should().Contain($"{nameof(value)} shout be between {lowerBoundary} (exclusive) and {upperBoundary} (inclusive), but you specified {value}.");
+               .And.Message.Should().Contain($"{nameof(value)} must be between {lowerBoundary} (exclusive) and {upperBoundary} (inclusive), but you specified {value}.");
         }
 
         [Theory(DisplayName = "MustBeIn must not throw an exception when the specified value is inside the range.")]

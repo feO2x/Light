@@ -19,7 +19,7 @@ namespace Light.GuardClauses
             IsToInclusive = isToInclusive;
         }
 
-        public bool CheckValue(T value)
+        public bool IsValueWithinRange(T value)
         {
             var expectedLowerBoundaryResult = IsFromInclusive ? 0 : 1;
             var expectedUpperBoundaryResult = IsToInclusive ? 0 : -1;
