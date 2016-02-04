@@ -16,6 +16,13 @@ namespace Light.GuardClauses
         public const string PreconditionSymbol = "COMPILE_PRECONDITIONS";
 
         [Conditional(PreconditionSymbol)]
+        public static void Against(bool preconditionResult, Func<Exception> createException)
+        {
+            if (preconditionResult)
+                throw createException();
+        }
+
+        [Conditional(PreconditionSymbol)]
         public static void MustNotBeNull<T>(this T parameter, string parameterName) where T : class
         {
             if (parameter == null)

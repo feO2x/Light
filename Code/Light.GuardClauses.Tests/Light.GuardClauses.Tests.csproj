@@ -60,6 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgainstTests.cs" />
     <Compile Include="MustBeInTests.cs" />
     <Compile Include="MustBeOneOfTests.cs" />
     <Compile Include="MustNotBeGreaterThanOrEqualToTests.cs" />
