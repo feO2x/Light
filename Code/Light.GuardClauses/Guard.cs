@@ -89,5 +89,15 @@ namespace Light.GuardClauses
             if (collection.Count == 0)
                 throw new EmptyCollectionException(parameterName);
         }
+
+        [Conditional(PreconditionSymbol)]
+        public static void MustNotBeNullOrEmpty(this string @string, string parameterName)
+        {
+            if (@string == null)
+                throw new ArgumentNullException(parameterName);
+
+            if (@string == string.Empty)
+                throw new EmptyStringException(parameterName);
+        }
     }
 }

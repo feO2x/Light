@@ -8,7 +8,7 @@ namespace Light.GuardClauses.Tests
 {
     public sealed class MustNotBeNullOrEmptyTests
     {
-        [Fact(DisplayName = "MustNotBeNullOrEmpty must throw an ArgumentNullException when the parameter is null.")]
+        [Fact(DisplayName = "MustNotBeNullOrEmpty must throw an ArgumentNullException when the collection is null.")]
         public void ListNull()
         {
             List<string> list = null;
@@ -47,5 +47,38 @@ namespace Light.GuardClauses.Tests
                 new object[] { new List<int> {1, 2, 3} },
                 new object[] { new List<int> {10, -11, 187, 22557} }
             };
+
+        [Fact(DisplayName = "MustNotBeNullOrEmpty must throw an ArgumentNullException when a string is null.")]
+        public void StringNull()
+        {
+            string @string = null;
+
+            // ReSharper disable once ExpressionIsAlwaysNull
+            Action act = () => @string.MustNotBeNullOrEmpty(nameof(@string));
+
+            act.ShouldThrow<ArgumentNullException>()
+               .And.ParamName.Should().Be(nameof(@string));
+        }
+
+        [Fact(DisplayName = "MustNotBeNullOrEmpty must throw an EmptyStringException when the parameter is empty.")]
+        public void EmptyString()
+        {
+            var @string = string.Empty;
+
+            Action act = () => @string.MustNotBeNullOrEmpty(nameof(@string));
+
+            act.ShouldThrow<EmptyStringException>()
+               .And.ParamName.Should().Be(nameof(@string));
+        }
+
+        [Theory(DisplayName = "MustNotBeNullOrEmpty must not throw an excpetion when a proper string reference is handled.")]
+        [InlineData("abc")]
+        [InlineData("Hello World")]
+        public void ProperString(string @string)
+        {
+            Action act = () => @string.MustNotBeNullOrEmpty(nameof(@string));
+
+            act.ShouldNotThrow();
+        }
     }
 }
