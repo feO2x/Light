@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Light.GuardClauses.FrameworkExtensions;
 
 namespace Light.GuardClauses
 {
@@ -75,14 +76,18 @@ namespace Light.GuardClauses
             if (items.Contains(parameter))
                 return;
 
-            var stringBuilder = new StringBuilder();
-            for (var i = 0; i < items.Count; i++)
-            {
-                stringBuilder.Append(items[i]);
-                if (i < items.Count - 1)
-                    stringBuilder.Append(", ");
-            }
+            var stringBuilder = new StringBuilder().AppendItems(items);
             throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must be one of the items ({stringBuilder}), but you specified {parameter}.");
+        }
+
+        [Conditional(PreconditionSymbol)]
+        public static void MustNotBeNullOrEmpty<T>(this IReadOnlyCollection<T> collection, string parameterName)
+        {
+            if (collection == null)
+                throw new ArgumentNullException(parameterName);
+
+            if (collection.Count == 0)
+                throw new EmptyCollectionException(parameterName);
         }
     }
 }

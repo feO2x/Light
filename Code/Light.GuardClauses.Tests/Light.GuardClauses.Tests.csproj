@@ -67,6 +67,7 @@
     <Compile Include="MustNotBeInTests.cs" />
     <Compile Include="MustNotBeLessThanOrEqualToTests.cs" />
     <Compile Include="MustNotBeLessThanTests.cs" />
+    <Compile Include="MustNotBeNullOrEmptyTests.cs" />
     <Compile Include="MustNotBeNullTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RangeTests.cs" />
