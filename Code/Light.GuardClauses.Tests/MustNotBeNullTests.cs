@@ -5,9 +5,9 @@ using TestData = System.Collections.Generic.IEnumerable<object[]>;
 
 namespace Light.GuardClauses.Tests
 {
-    public sealed class IsNotNullTests
+    public sealed class MustNotBeNullTests
     {
-        [Fact(DisplayName = "IsNotNull must throw an exception when null is provided.")]
+        [Fact(DisplayName = "MustNotBeNull must throw an exception when null is provided.")]
         public void NullIsGiven()
         {
             Action act = () => DummyMethod<string>(null);
@@ -16,7 +16,7 @@ namespace Light.GuardClauses.Tests
                .And.ParamName.Should().Be("someObject");
         }
 
-        [Theory(DisplayName = "IsNotNull must throw no exception when the specified reference is not null.")]
+        [Theory(DisplayName = "MustNotBeNull must not throw an exception when the specified reference is not null.")]
         [MemberData(nameof(ObjectReferenceTestData))]
         public void ValidObjectReferenceIsGiven<T>(T value) where T : class
         {
@@ -34,7 +34,7 @@ namespace Light.GuardClauses.Tests
 
         private static void DummyMethod<T>(T someObject) where T : class
         {
-            someObject.IsNotNull(nameof(someObject));
+            someObject.MustNotBeNull(nameof(someObject));
         }
     }
 }

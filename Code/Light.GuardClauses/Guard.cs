@@ -12,14 +12,14 @@ namespace Light.GuardClauses
         public const string PreconditionSymbol = "COMPILE_PRECONDITIONS";
 
         [Conditional(PreconditionSymbol)]
-        public static void IsNotNull<T>(this T parameter, string parameterName) where T : class
+        public static void MustNotBeNull<T>(this T parameter, string parameterName) where T : class
         {
             if (parameter == null)
                 throw new ArgumentNullException(parameterName);
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void IsNotLessThan<T>(this T parameter, T boundary, string parameterName) where T : IComparable<T>
+        public static void MustNotBeLessThan<T>(this T parameter, T boundary, string parameterName) where T : IComparable<T>
         {
             if (parameter.CompareTo(boundary) < 0)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be less than {boundary}, but you specified {parameter}.");
@@ -33,7 +33,7 @@ namespace Light.GuardClauses
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void IsNotGreaterThan<T>(this T parameter, T boundary, string parameterName) where T : IComparable<T>
+        public static void MustNotBeGreaterThan<T>(this T parameter, T boundary, string parameterName) where T : IComparable<T>
         {
             if (parameter.CompareTo(boundary) > 0)
                 throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be greater than {boundary}, but you specified {parameter}.");

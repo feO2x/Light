@@ -4,9 +4,9 @@ using Xunit;
 
 namespace Light.GuardClauses.Tests
 {
-    public sealed class IsNotGreaterThanTests
+    public sealed class MustNotBeGreaterThanTests
     {
-        [Theory(DisplayName = "IsNotGreaterThan must throw an exception when the specified value is above the given boundary.")]
+        [Theory(DisplayName = "MustNotBeGreaterThan must throw an exception when the specified value is above the given boundary.")]
         [InlineData(1, 0)]
         [InlineData(1, -1)]
         [InlineData(-88, -100)]
@@ -15,13 +15,13 @@ namespace Light.GuardClauses.Tests
         [InlineData("A", "a")]
         public void ParamterAboveBoundary<T>(T value, T boundary) where T : IComparable<T>
         {
-            Action act = () => value.IsNotGreaterThan(boundary, nameof(value));
+            Action act = () => value.MustNotBeGreaterThan(boundary, nameof(value));
 
             act.ShouldThrow<ArgumentOutOfRangeException>()
                .And.Message.Should().Contain($"{nameof(value)} must not be greater than {boundary}, but you specified {value}.");
         }
 
-        [Theory(DisplayName = "IsNotGreaterThan must not throw an exception when the specified value is equal or lower than the given boundary.")]
+        [Theory(DisplayName = "MustNotBeGreaterThan must not throw an exception when the specified value is equal or lower than the given boundary.")]
         [InlineData(0, 0)]
         [InlineData(-1, 0)]
         [InlineData(-88, 0)]
@@ -31,7 +31,7 @@ namespace Light.GuardClauses.Tests
         [InlineData("y", "Y")]
         public void ParameterAtOrBelowBoundary<T>(T value, T boundary) where T : IComparable<T>
         {
-            Action act = () => value.IsNotGreaterThan(boundary, nameof(value));
+            Action act = () => value.MustNotBeGreaterThan(boundary, nameof(value));
 
             act.ShouldNotThrow();
         }
