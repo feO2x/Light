@@ -192,5 +192,12 @@ namespace Light.GuardClauses
             if (parameter.Contains(containedText) == false)
                 throw new StringException($"{parameterName} must contain the text \"{containedText}\", but you specified \"{parameter}\".", parameterName);
         }
+
+        [Conditional(PreconditionSymbol)]
+        public static void MustNotContain(this string parameter, string textToCompare, string parameterName)
+        {
+            if (parameter.Contains(textToCompare))
+                throw new StringException($"{parameterName} must not contain the text \"{textToCompare}\", but you specified \"{parameter}\".", parameterName);
+        }
     }
 }

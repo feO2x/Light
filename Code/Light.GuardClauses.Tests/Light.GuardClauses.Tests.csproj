@@ -79,6 +79,7 @@
     <Compile Include="MustNotBeNullOrWhiteSpaceTests.cs" />
     <Compile Include="MustNotBeNullTests.cs" />
     <Compile Include="MustNotBeOneOfTests.cs" />
+    <Compile Include="MustNotContainTests.cs" />
     <Compile Include="MustNotHaveValueTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RangeTests.cs" />
