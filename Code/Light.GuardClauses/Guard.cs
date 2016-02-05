@@ -132,5 +132,12 @@ namespace Light.GuardClauses
 
             return castedValue;
         }
+
+        [Conditional(PreconditionSymbol)]
+        public static void MustHaveValue<T>(this T? parameter, string parameterName) where T : struct
+        {
+            if (parameter.HasValue == false)
+                throw new NullableHasNoValueException(parameterName);
+        }
     }
 }
