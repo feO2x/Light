@@ -185,5 +185,12 @@ namespace Light.GuardClauses
             }
             throw new StringIsOnlyWhiteSpaceException(parameterName, parameter);
         }
+
+        [Conditional(PreconditionSymbol)]
+        public static void MustContain(this string parameter, string containedText, string parameterName)
+        {
+            if (parameter.Contains(containedText) == false)
+                throw new StringException($"{parameterName} must contain the text \"{containedText}\", but you specified \"{parameter}\".", parameterName);
+        }
     }
 }

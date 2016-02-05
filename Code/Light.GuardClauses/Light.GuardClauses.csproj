@@ -40,6 +40,7 @@
     <Compile Include="Exceptions\EmptyStringException.cs" />
     <Compile Include="Exceptions\EnumValueNotDefinedException.cs" />
     <Compile Include="Exceptions\StringDoesNotMatchException.cs" />
+    <Compile Include="Exceptions\StringException.cs" />
     <Compile Include="Exceptions\StringIsOnlyWhiteSpaceException.cs" />
     <Compile Include="FrameworkExtensions\StringBuilderExtensions.cs" />
     <Compile Include="Guard.cs" />
