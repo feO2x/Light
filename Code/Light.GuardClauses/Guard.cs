@@ -163,5 +163,13 @@ namespace Light.GuardClauses
             if (parameter == Guid.Empty)
                 throw new EmptyGuidException(parameterName);
         }
+
+        [Conditional(PreconditionSymbol)]
+        public static void MustBeValidEnumValue<T>(this T parameter, string parameterName)
+        {
+            var enumType = typeof (T);
+            if (Enum.IsDefined(enumType, parameter) == false)
+                throw new EnumValueNotDefinedException(parameterName, parameter, enumType);
+        }
     }
 }

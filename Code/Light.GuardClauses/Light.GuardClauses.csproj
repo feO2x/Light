@@ -38,6 +38,7 @@
     <Compile Include="Exceptions\EmptyCollectionException.cs" />
     <Compile Include="Exceptions\EmptyGuidException.cs" />
     <Compile Include="Exceptions\EmptyStringException.cs" />
+    <Compile Include="Exceptions\EnumValueNotDefinedException.cs" />
     <Compile Include="Exceptions\StringDoesNotMatchException.cs" />
     <Compile Include="FrameworkExtensions\StringBuilderExtensions.cs" />
     <Compile Include="Guard.cs" />
