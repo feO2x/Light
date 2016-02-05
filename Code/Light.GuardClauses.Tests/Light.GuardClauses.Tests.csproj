@@ -75,6 +75,7 @@
     <Compile Include="MustNotBeLessThanOrEqualToTests.cs" />
     <Compile Include="MustNotBeLessThanTests.cs" />
     <Compile Include="MustNotBeNullOrEmptyTests.cs" />
+    <Compile Include="MustNotBeNullOrWhiteSpaceTests.cs" />
     <Compile Include="MustNotBeNullTests.cs" />
     <Compile Include="MustNotBeOneOfTests.cs" />
     <Compile Include="MustNotHaveValueTests.cs" />

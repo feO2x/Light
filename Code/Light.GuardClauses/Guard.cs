@@ -171,5 +171,19 @@ namespace Light.GuardClauses
             if (Enum.IsDefined(enumType, parameter) == false)
                 throw new EnumValueNotDefinedException(parameterName, parameter, enumType);
         }
+
+        [Conditional(PreconditionSymbol)]
+        public static void MustNotBeNullOrWhiteSpace(this string parameter, string parameterName)
+        {
+            parameter.MustNotBeNullOrEmpty(parameterName);
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var character in parameter)
+            {
+                if (char.IsWhiteSpace(character) == false)
+                    return;
+            }
+            throw new StringIsOnlyWhiteSpaceException(parameterName, parameter);
+        }
     }
 }
