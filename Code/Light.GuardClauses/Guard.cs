@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Light.GuardClauses
 {
@@ -146,6 +147,14 @@ namespace Light.GuardClauses
         {
             if (parameter.HasValue)
                 throw new NullableHasValueException(parameterName, parameter.Value);
+        }
+
+        [Conditional(PreconditionSymbol)]
+        public static void MustMatch(this string parameter, Regex pattern, string parameterName)
+        {
+            var match = pattern.Match(parameter);
+            if (match.Success == false)
+                throw new StringDoesNotMatchException(parameterName, parameter, pattern);
         }
     }
 }

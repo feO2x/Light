@@ -66,6 +66,7 @@
     <Compile Include="MustBeOneOfTests.cs" />
     <Compile Include="MustBeTypeTests.cs" />
     <Compile Include="MustHaveValueTests.cs" />
+    <Compile Include="MustMatchTests.cs" />
     <Compile Include="MustNotBeGreaterThanOrEqualToTests.cs" />
     <Compile Include="MustNotBeGreaterThanTests.cs" />
     <Compile Include="MustNotBeInTests.cs" />
