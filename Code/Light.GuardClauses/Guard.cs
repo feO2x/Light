@@ -11,7 +11,7 @@ namespace Light.GuardClauses
     {
         /// <summary>
         /// The compiler symbol that must be added so that calls to this class are compiled into the assembly.
-        /// This value is "COMPILE_PRECONDITIONS".
+        /// This value is "COMPILE_PRECONDITIONS" (without quotation marks).
         /// </summary>
         public const string PreconditionSymbol = "COMPILE_PRECONDITIONS";
 
@@ -23,10 +23,17 @@ namespace Light.GuardClauses
         }
 
         [Conditional(PreconditionSymbol)]
-        public static void MustNotBeNull<T>(this T parameter, string parameterName) where T : class
+        public static void MustNotBeNull(this object parameter, string parameterName)
         {
             if (parameter == null)
                 throw new ArgumentNullException(parameterName);
+        }
+
+        [Conditional(PreconditionSymbol)]
+        public static void MustBeNull(this object parameter, string parameterName)
+        {
+            if (parameter != null)
+                throw new ArgumentNotNullException(parameterName, parameter);
         }
 
         [Conditional(PreconditionSymbol)]
