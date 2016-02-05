@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Light.GuardClauses.FrameworkExtensions;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using Light.GuardClauses.FrameworkExtensions;
 
 namespace Light.GuardClauses
 {
@@ -138,6 +138,13 @@ namespace Light.GuardClauses
         {
             if (parameter.HasValue == false)
                 throw new NullableHasNoValueException(parameterName);
+        }
+
+        [Conditional(PreconditionSymbol)]
+        public static void MustNotHaveValue<T>(this T? parameter, string parameterName) where T : struct
+        {
+            if (parameter.HasValue)
+                throw new NullableHasValueException(parameterName, parameter.Value);
         }
     }
 }
