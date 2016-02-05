@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using System;
 using System.Collections.Generic;
+using Light.GuardClauses.Exceptions;
 using Xunit;
 using TestData = System.Collections.Generic.IEnumerable<object[]>;
 

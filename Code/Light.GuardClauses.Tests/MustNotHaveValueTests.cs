@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using System;
+using Light.GuardClauses.Exceptions;
 using Xunit;
 
 namespace Light.GuardClauses.Tests

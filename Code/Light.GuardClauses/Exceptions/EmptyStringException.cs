@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Light.GuardClauses
+namespace Light.GuardClauses.Exceptions
 {
     public class EmptyStringException : ArgumentException
     {
