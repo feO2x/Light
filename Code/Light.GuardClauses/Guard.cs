@@ -156,5 +156,12 @@ namespace Light.GuardClauses
             if (match.Success == false)
                 throw new StringDoesNotMatchException(parameterName, parameter, pattern);
         }
+
+        [Conditional(PreconditionSymbol)]
+        public static void MustNotBeEmpty(this Guid parameter, string parameterName)
+        {
+            if (parameter == Guid.Empty)
+                throw new EmptyGuidException(parameterName);
+        }
     }
 }
