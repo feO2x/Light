@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Exceptions\ArgumentNotNullException.cs" />
+    <Compile Include="Exceptions\CollectionException.cs" />
     <Compile Include="Exceptions\EmptyCollectionException.cs" />
     <Compile Include="Exceptions\EmptyGuidException.cs" />
     <Compile Include="Exceptions\EmptyStringException.cs" />
@@ -42,6 +43,7 @@
     <Compile Include="Exceptions\StringDoesNotMatchException.cs" />
     <Compile Include="Exceptions\StringException.cs" />
     <Compile Include="Exceptions\StringIsOnlyWhiteSpaceException.cs" />
+    <Compile Include="FrameworkExtensions\EqualityExtensions.cs" />
     <Compile Include="FrameworkExtensions\StringBuilderExtensions.cs" />
     <Compile Include="Guard.cs" />
     <Compile Include="Exceptions\NullableHasNoValueException.cs" />

@@ -199,5 +199,22 @@ namespace Light.GuardClauses
             if (parameter.Contains(textToCompare))
                 throw new StringException($"{parameterName} must not contain the text \"{textToCompare}\", but you specified \"{parameter}\".", parameterName);
         }
+
+        [Conditional(PreconditionSymbol)]
+        public static void MustHaveUniqueItems<T>(this IReadOnlyList<T> parameter, string parameterName)
+        {
+            for (var i = 0; i < parameter.Count; i++)
+            {
+                var itemToCompare = parameter[i];
+                for (var j = i + 1; j < parameter.Count; j++)
+                {
+                    if (!itemToCompare.EqualsWithHashCode(parameter[j]))
+                        continue;
+
+                    var stringBuilder = new StringBuilder().AppendItems(parameter);
+                    throw new CollectionException($"{parameterName} must be a collection with unique items, but you specified {stringBuilder}.", parameterName);
+                }
+            }
+        }
     }
 }
