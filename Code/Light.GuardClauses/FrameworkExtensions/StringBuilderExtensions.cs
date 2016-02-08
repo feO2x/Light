@@ -12,7 +12,8 @@ namespace Light.GuardClauses.FrameworkExtensions
 
             for (var i = 0; i < items.Count; i++)
             {
-                stringBuilder.Append(items[i]);
+                var itemToAppend = items[i];
+                stringBuilder.Append(itemToAppend != null ? itemToAppend.ToString() : "null");
                 if (i < items.Count - 1)
                     stringBuilder.Append(", ");
             }

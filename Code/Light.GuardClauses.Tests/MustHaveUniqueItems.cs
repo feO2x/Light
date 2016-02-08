@@ -23,7 +23,7 @@ namespace Light.GuardClauses.Tests
             {
                 new object[] { new[] { "1", "2", "3", "1" }, "1, 2, 3, 1" },
                 new object[] { new object[] { 1, 42, 42, 87 }, "1, 42, 42, 87" },
-                new object[] { new[] { "1", null, "1" }, "1, , 1" } // TODO: null should be printed out by StringBuilder extension method
+                new object[] { new[] { "1", null, "1" }, "1, null, 1" }
             };
 
         [Theory(DisplayName = "MustHaveUniqueItems must not throw an exception when the items are unique.")]
