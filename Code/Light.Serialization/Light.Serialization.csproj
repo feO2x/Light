@@ -36,9 +36,13 @@
   <ItemGroup>
     <Compile Include="DeserializationException.cs" />
     <Compile Include="FrameworkExtensions\CharExtensions.cs" />
+    <Compile Include="FrameworkExtensions\ExpressionExtensions.cs" />
     <Compile Include="FrameworkExtensions\ReflectionExtensions.cs" />
     <Compile Include="FrameworkExtensions\StringExtensions.cs" />
     <Compile Include="IDeserializer.cs" />
+    <Compile Include="Json\SerializationRules\IAndBlackListRule.cs" />
+    <Compile Include="Json\SerializationRules\IAndWhiteListRule.cs" />
+    <Compile Include="Json\SerializationRules\IButWhiteListRule.cs" />
     <Compile Include="Json\IJsonReader.cs" />
     <Compile Include="Json\IJsonReaderFactory.cs" />
     <Compile Include="Json\IJsonTokenParser.cs" />
@@ -48,6 +52,7 @@
     <Compile Include="Json\DefaultJsonSymbols.cs" />
     <Compile Include="Json\LowLevelReading\TokenNotSupportedException.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\DateTimeFormatter.cs" />
+    <Compile Include="Json\SerializationRules\Rule.cs" />
     <Compile Include="Json\TokenParsers\ArrayToGenericCollectionParser.cs" />
     <Compile Include="Json\TokenParsers\BooleanParser.cs" />
     <Compile Include="Json\TokenParsers\CharacterParser.cs" />
@@ -108,7 +113,8 @@
     <Compile Include="Json\ComplexTypeDecomposition\DefaultTypeCreationInfoAnalyzer.cs" />
     <Compile Include="Json\TokenParsers\AnalyzerCacheDecorator.cs" />
     <Compile Include="Json\WriterInstructors\CollectionInstructor.cs" />
-    <Compile Include="Json\WriterInstructors\ComplexWriterInstructor.cs" />
+    <Compile Include="Json\WriterInstructors\ComplexObjectInstructor.cs" />
+    <Compile Include="Json\WriterInstructors\CustomRuleInstructor.cs" />
     <Compile Include="Json\WriterInstructors\DictionaryInstructor.cs" />
     <Compile Include="Json\WriterInstructors\EnumerationToStringInstructor.cs" />
     <Compile Include="Json\WriterInstructors\PrimitiveWriterInstructor.cs" />

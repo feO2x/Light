@@ -42,7 +42,7 @@ namespace Light.Serialization.Json
             targetList.Add(new EnumerationToStringInstructor());
             targetList.Add(new DictionaryInstructor(primitiveTypeToFormattersMapping));
             targetList.Add(new CollectionInstructor());
-            targetList.Add(new ComplexWriterInstructor(readableValuesTypeAnalyzer));
+            targetList.Add(new ComplexObjectInstructor(readableValuesTypeAnalyzer));
 
             return targetList;
         }

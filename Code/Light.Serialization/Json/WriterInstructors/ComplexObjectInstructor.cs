@@ -4,19 +4,19 @@ using Light.Serialization.Json.ComplexTypeDecomposition;
 
 namespace Light.Serialization.Json.WriterInstructors
 {
-    public sealed class ComplexWriterInstructor : IJsonWriterInstructor
+    public sealed class ComplexObjectInstructor : IJsonWriterInstructor
     {
         private readonly IDictionary<Type, IList<IValueProvider>> _typeToValueProvidersMapping;
         private readonly IReadableValuesTypeAnalyzer _typeAnalyzer;
 
-        public ComplexWriterInstructor(IReadableValuesTypeAnalyzer typeAnalyzer)
+        public ComplexObjectInstructor(IReadableValuesTypeAnalyzer typeAnalyzer)
             : this(typeAnalyzer, new Dictionary<Type, IList<IValueProvider>>())
         {
             
         }
 
-        public ComplexWriterInstructor(IReadableValuesTypeAnalyzer typeAnalyzer,
-                                         IDictionary<Type, IList<IValueProvider>> typeToValueProvidersMapping)
+        public ComplexObjectInstructor(IReadableValuesTypeAnalyzer typeAnalyzer,
+                                       IDictionary<Type, IList<IValueProvider>> typeToValueProvidersMapping)
         {
             if (typeAnalyzer == null) throw new ArgumentNullException(nameof(typeAnalyzer));
             if (typeToValueProvidersMapping == null) throw new ArgumentNullException(nameof(typeToValueProvidersMapping));
