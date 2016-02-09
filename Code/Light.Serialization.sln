@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Light.Serialization", "Ligh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Light.Serialization.Tests", "Light.Serialization.Tests\Light.Serialization.Tests.csproj", "{C5B65A88-58C1-474A-80D2-3DC86E94C455}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{C7C1D53C-98BD-498D-B91D-1FDCB6B528AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Light.GuardClauses", "Light.GuardClauses\Light.GuardClauses.csproj", "{65BB1768-E9A0-46ED-B698-B92DE2BB8504}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Light.GuardClauses.Tests", "Light.GuardClauses.Tests\Light.GuardClauses.Tests.csproj", "{3769AE6C-5DA1-4653-BAC2-962D933A8460}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +27,20 @@ Global
 		{C5B65A88-58C1-474A-80D2-3DC86E94C455}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5B65A88-58C1-474A-80D2-3DC86E94C455}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5B65A88-58C1-474A-80D2-3DC86E94C455}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65BB1768-E9A0-46ED-B698-B92DE2BB8504}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65BB1768-E9A0-46ED-B698-B92DE2BB8504}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65BB1768-E9A0-46ED-B698-B92DE2BB8504}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65BB1768-E9A0-46ED-B698-B92DE2BB8504}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3769AE6C-5DA1-4653-BAC2-962D933A8460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3769AE6C-5DA1-4653-BAC2-962D933A8460}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3769AE6C-5DA1-4653-BAC2-962D933A8460}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3769AE6C-5DA1-4653-BAC2-962D933A8460}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{65BB1768-E9A0-46ED-B698-B92DE2BB8504} = {C7C1D53C-98BD-498D-B91D-1FDCB6B528AA}
+		{3769AE6C-5DA1-4653-BAC2-962D933A8460} = {C7C1D53C-98BD-498D-B91D-1FDCB6B528AA}
 	EndGlobalSection
 EndGlobal
