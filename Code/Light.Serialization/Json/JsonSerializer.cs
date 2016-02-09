@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Light.GuardClauses;
 
 namespace Light.Serialization.Json
 {
@@ -12,15 +13,15 @@ namespace Light.Serialization.Json
 
         public JsonSerializer(IList<IJsonWriterInstructor> writerInstructors,
                               IJsonWriterFactory writerFactory,
-                              IDictionary<Type, IJsonWriterInstructor> intructorCache)
+                              IDictionary<Type, IJsonWriterInstructor> instructorCache)
         {
-            if (writerInstructors == null) throw new ArgumentNullException(nameof(writerInstructors));
-            if (writerFactory == null) throw new ArgumentNullException(nameof(writerFactory));
-            if (intructorCache == null) throw new ArgumentNullException(nameof(intructorCache));
+            writerInstructors.MustNotBeNull(nameof(writerInstructors));
+            writerFactory.MustNotBeNull(nameof(writerFactory));
+            instructorCache.MustNotBeNull(nameof(instructorCache));
 
             _writerInstructors = writerInstructors;
             _writerFactory = writerFactory;
-            _instructorCache = intructorCache;
+            _instructorCache = instructorCache;
         }
 
         public string Serialize<T>(T objectGraphRoot)
@@ -30,10 +31,8 @@ namespace Light.Serialization.Json
 
         public string Serialize(object objectGraphRoot, Type referencedType)
         {
-            if (objectGraphRoot == null)
-                throw new ArgumentNullException(nameof(objectGraphRoot));
-            if (referencedType == null)
-                throw new ArgumentNullException(nameof(referencedType));
+            objectGraphRoot.MustNotBeNull(nameof(objectGraphRoot));
+            referencedType.MustNotBeNull(nameof(referencedType));
 
             _jsonWriter = _writerFactory.Create();
             SerializeObject(objectGraphRoot, objectGraphRoot.GetType(), referencedType);

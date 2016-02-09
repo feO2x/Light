@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Guard Clause - Must Not Be Null</Title>
+      <Author>Kenny Pflug and Markus Webert</Author>
+      <Description>Creates a new MustNotBeNull Guard Clause.</Description>
+      <Shortcut>GuardMustNotBeNull</Shortcut>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Declarations>
+        <Literal>
+          <ID>parameter</ID>
+          <Default>parameter</Default>
+          <ToolTip>Enter name of the parameter here.</ToolTip>
+        </Literal>
+      </Declarations>
+      <Code Language="CSharp"><![CDATA[$parameter$.MustNotBeNull(nameof($parameter$));]]></Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

@@ -1,4 +1,5 @@
 using System;
+using Light.GuardClauses;
 
 namespace Light.Serialization.Json
 {
@@ -17,12 +18,12 @@ namespace Light.Serialization.Json
                                         Action<object, Type, Type> serializeChildObject,
                                         IJsonWriter writer)
         {
-            if (objectToBeSerialized == null) throw new ArgumentNullException(nameof(objectToBeSerialized));
-            if (actualType == null) throw new ArgumentNullException(nameof(actualType));
-            if (referencedType == null) throw new ArgumentNullException(nameof(referencedType));
-            if (serializeChildObject == null) throw new ArgumentNullException(nameof(serializeChildObject));
-            if (writer == null) throw new ArgumentNullException(nameof(writer));
-
+            objectToBeSerialized.MustNotBeNull(nameof(objectToBeSerialized));
+            actualType.MustNotBeNull(nameof(actualType));
+            referencedType.MustNotBeNull(nameof(referencedType));
+            serializeChildObject.MustNotBeNull(nameof(serializeChildObject));
+            writer.MustNotBeNull(nameof(writer));
+            
             ObjectToBeSerialized = objectToBeSerialized;
             ActualType = actualType;
             ReferencedType = referencedType;

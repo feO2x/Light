@@ -1,3 +1,4 @@
+using Light.GuardClauses;
 using System;
 using System.Collections.Generic;
 
@@ -11,8 +12,8 @@ namespace Light.Serialization.Json
 
         public JsonDeserializer(IJsonReaderFactory jsonReaderFactory, IList<IJsonTokenParser> tokenParsers)
         {
-            if (jsonReaderFactory == null) throw new ArgumentNullException(nameof(jsonReaderFactory));
-            if (tokenParsers == null) throw new ArgumentNullException(nameof(tokenParsers));
+            jsonReaderFactory.MustNotBeNull(nameof(jsonReaderFactory));
+            tokenParsers.MustNotBeNull(nameof(tokenParsers));
 
             _jsonReaderFactory = jsonReaderFactory;
             _tokenParsers = tokenParsers;
