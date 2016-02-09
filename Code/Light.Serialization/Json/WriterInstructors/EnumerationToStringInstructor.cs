@@ -1,5 +1,6 @@
-﻿using System;
-using Light.Serialization.FrameworkExtensions;
+﻿using Light.Serialization.FrameworkExtensions;
+using System;
+using System.Reflection;
 
 namespace Light.Serialization.Json.WriterInstructors
 {
@@ -7,7 +8,7 @@ namespace Light.Serialization.Json.WriterInstructors
     {
         public bool AppliesToObject(object @object, Type actualType, Type referencedType)
         {
-            return actualType.IsEnum;
+            return actualType.GetTypeInfo().IsEnum;
         }
 
         public void Serialize(JsonSerializationContext serializationContext)

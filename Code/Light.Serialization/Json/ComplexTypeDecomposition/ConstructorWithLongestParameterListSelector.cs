@@ -5,7 +5,7 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
 {
     public sealed class ConstructorWithLongestParameterListSelector : IConstructorSelector
     {
-        public ConstructorInfo SelectConstructor(ConstructorInfo[] constructorInfos, Type typeToAnalyze)
+        public ConstructorInfo SelectConstructor(ConstructorInfo[] constructorInfos, TypeInfo typeToAnalyze)
         {
             if (constructorInfos == null) throw new ArgumentNullException(nameof(constructorInfos));
             if (typeToAnalyze == null) throw new ArgumentNullException(nameof(typeToAnalyze));

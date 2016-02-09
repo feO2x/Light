@@ -7,7 +7,7 @@ namespace Light.Serialization.Json.TokenParsers
 {
     public sealed class ArrayToGenericCollectionParser : IJsonTokenParser
     {
-        private readonly Type _iEnumerableType = typeof (IEnumerable<>);
+        private readonly TypeInfo _iEnumerableTypeInfo = typeof (IEnumerable<>).GetTypeInfo();
         private readonly ICollectionFactory _collectionFactory;
         private readonly MethodInfo _populateGenericCollectionMethodInfo;
         private readonly object[] _populateGenericCollectionParameters = new object[3];
@@ -17,13 +17,13 @@ namespace Light.Serialization.Json.TokenParsers
             if (collectionFactory == null) throw new ArgumentNullException(nameof(collectionFactory));
 
             _collectionFactory = collectionFactory;
-            _populateGenericCollectionMethodInfo = GetType().GetMethod(nameof(PopulateGenericCollection), BindingFlags.Static | BindingFlags.NonPublic);
+            _populateGenericCollectionMethodInfo = GetType().GetTypeInfo().GetDeclaredMethod(nameof(PopulateGenericCollection));
         }
 
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
             return token.JsonType == JsonTokenType.BeginOfArray &&
-                   requestedType.ImplementsGenericInterface(_iEnumerableType);
+                   requestedType.GetTypeInfo().ImplementsGenericInterface(_iEnumerableTypeInfo);
         }
 
         public object ParseValue(JsonDeserializationContext context)
@@ -35,8 +35,8 @@ namespace Light.Serialization.Json.TokenParsers
             if (firstCollectionToken.JsonType == JsonTokenType.EndOfArray)
                 return collection;
 
-            var specificEnumerableType = context.RequestedType.GetSpecificTypeThatCorrespondsToGenericInterface(_iEnumerableType);
-            var specificPopulateGenericCollectionMethod = _populateGenericCollectionMethodInfo.MakeGenericMethod(specificEnumerableType.GetGenericArguments());
+            var specificEnumerableType = context.RequestedType.GetTypeInfo().GetSpecificTypeInfoThatCorrespondsToGenericInterface(_iEnumerableTypeInfo);
+            var specificPopulateGenericCollectionMethod = _populateGenericCollectionMethodInfo.MakeGenericMethod(specificEnumerableType.GenericTypeArguments);
 
             _populateGenericCollectionParameters[0] = firstCollectionToken;
             _populateGenericCollectionParameters[1] = collection;

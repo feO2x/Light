@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Light.Serialization.FrameworkExtensions
 {
     public static class ReflectionExtensions
     {
-        public static IList<Type> GetAllInterfacesOfInheritanceHierarchy(this Type type)
+        public static IList<Type> GetAllInterfacesOfInheritanceHierarchy(this TypeInfo type)
         {
             var interfaceTypes = new List<Type>();
             return GetAllInterfacesOfInheritanceHierarchy(type, interfaceTypes);
         }
 
-        public static IList<Type> GetAllInterfacesOfInheritanceHierarchy(this Type type, IList<Type> interfaceTypes)
+        public static IList<Type> GetAllInterfacesOfInheritanceHierarchy(this TypeInfo type, IList<Type> interfaceTypes)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             if (interfaceTypes == null) throw new ArgumentNullException(nameof(interfaceTypes));
@@ -20,28 +21,28 @@ namespace Light.Serialization.FrameworkExtensions
             return interfaceTypes;
         }
 
-        private static void PopulateInterfacesTypes(Type type, ICollection<Type> interfaceTypes)
+        private static void PopulateInterfacesTypes(TypeInfo type, ICollection<Type> interfaceTypes)
         {
             while (true)
             {
-                var interfaces = type.GetInterfaces();
+                var interfaces = type.ImplementedInterfaces;
                 foreach (var @interface in interfaces)
                 {
                     interfaceTypes.Add(@interface);
-                    PopulateInterfacesTypes(@interface, interfaceTypes);
+                    PopulateInterfacesTypes(@interface.GetTypeInfo(), interfaceTypes);
                 }
 
                 var baseClass = type.BaseType;
                 if (baseClass != null)
                 {
-                    type = baseClass;
+                    type = baseClass.GetTypeInfo();
                     continue;
                 }
                 break;
             }
         }
 
-        public static bool ImplementsGenericInterface(this Type type, Type genericInterface)
+        public static bool ImplementsGenericInterface(this TypeInfo type, TypeInfo genericInterface)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             if (genericInterface == null) throw new ArgumentNullException(nameof(genericInterface));
@@ -52,18 +53,18 @@ namespace Light.Serialization.FrameworkExtensions
             // ReSharper disable once ForCanBeConvertedToForeach
             for (var i = 0; i < allInterfaces.Count; i++)
             {
-                var @interface = allInterfaces[i];
+                var @interface = allInterfaces[i].GetTypeInfo();
                 if (@interface.IsGenericType == false)
                     continue;
                 if (@interface.IsGenericTypeDefinition == false)
-                    @interface = @interface.GetGenericTypeDefinition();
-                if (@interface == genericInterface)
+                    @interface = @interface.GetGenericTypeDefinition().GetTypeInfo();
+                if (@interface.Equals(genericInterface)) // TODO: I should include a comparison with GetHashCode first, this can be done after integrating Guard Clauses
                     return true;
             }
             return false;
         }
 
-        public static Type GetSpecificTypeThatCorrespondsToGenericInterface(this Type sourceType, Type genericTypeDefinition)
+        public static TypeInfo GetSpecificTypeInfoThatCorrespondsToGenericInterface(this TypeInfo sourceType, TypeInfo genericTypeDefinition)
         {
             if (sourceType == null) throw new ArgumentNullException(nameof(sourceType));
             if (genericTypeDefinition == null) throw new ArgumentNullException(nameof(genericTypeDefinition));
@@ -73,11 +74,11 @@ namespace Light.Serialization.FrameworkExtensions
             // ReSharper disable once LoopCanBeConvertedToQuery
             for (var i = 0; i < allInterfaces.Count; i++)
             {
-                var @interface = allInterfaces[i];
+                var @interface = allInterfaces[i].GetTypeInfo();
                 if (@interface.IsGenericType == false)
                     continue;
                 if (@interface.IsGenericTypeDefinition == false &&
-                    @interface.GetGenericTypeDefinition() == genericTypeDefinition)
+                    @interface.GetGenericTypeDefinition().GetTypeInfo().Equals(genericTypeDefinition)) // TODO: same here
                     return @interface;
             }
             return null;

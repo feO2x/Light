@@ -1,5 +1,7 @@
-﻿using System;
-using Light.Serialization.Json.TokenParsers;
+﻿using Light.Serialization.Json.TokenParsers;
+using System;
+using System.Linq;
+using System.Reflection;
 
 namespace Light.Serialization.Json.ObjectConstruction
 {
@@ -9,12 +11,13 @@ namespace Light.Serialization.Json.ObjectConstruction
 
         public object CreateCollection(Type requestedCollectionType)
         {
-            if (requestedCollectionType.IsClass &&
-                requestedCollectionType.IsAbstract == false)
+            var typeInfo = requestedCollectionType.GetTypeInfo();
+
+            if (typeInfo.IsClass &&
+                typeInfo.IsAbstract == false)
             {
-                var defaultConstructor = requestedCollectionType.GetConstructor(_emptyTypeArray);
-                if (defaultConstructor != null)
-                    return defaultConstructor.Invoke(null);
+                var defaultConstructor = typeInfo.DeclaredConstructors.First(c => c.GetParameters().Length == 0);
+                return defaultConstructor.Invoke(null); // TODO: I have to throw a proper exception here if the call to First fails
             }
             throw new NotImplementedException();
         }

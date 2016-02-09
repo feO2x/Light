@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Light.Serialization.Json.TokenParsers;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
-using Light.Serialization.Json.TokenParsers;
 
 namespace Light.Serialization.Json.ComplexTypeDecomposition
 {
@@ -23,13 +24,17 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
         {
             if (typeToAnalyze == null) throw new ArgumentNullException(nameof(typeToAnalyze));
 
-            if (typeToAnalyze.IsAbstract || typeToAnalyze.IsInterface)
+            var typeInfo = typeToAnalyze.GetTypeInfo();
+
+            if (typeInfo.IsAbstract || typeInfo.IsInterface)
                 throw new ArgumentException($"The specified type {typeToAnalyze.FullName} is abstract and cannot be deserialized", nameof(typeToAnalyze));
 
-            var constructors = typeToAnalyze.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
+            var constructors = typeInfo.DeclaredConstructors
+                                       .Where(c => c.IsStatic == false && c.IsPublic)
+                                       .ToArray();
             if (constructors.Length == 0)
                 throw new ArgumentException($"The specified type {typeToAnalyze.FullName} does not have public constructors", nameof(typeToAnalyze));
-            var targetContructor = constructors.Length == 1 ? constructors[0] : _constructorSelector.SelectConstructor(constructors, typeToAnalyze);
+            var targetContructor = constructors.Length == 1 ? constructors[0] : _constructorSelector.SelectConstructor(constructors, typeInfo);
 
             var injectableValueInfos = new List<InjectableValueInfo>();
 
@@ -44,10 +49,10 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
             }
 
             // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var propertyInfo in typeToAnalyze.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            foreach (var propertyInfo in typeToAnalyze.GetRuntimeProperties())
             {
-                var setMethodInfo = propertyInfo.GetSetMethod();
-                if (setMethodInfo == null)
+                var setMethodInfo = propertyInfo.SetMethod;
+                if (setMethodInfo == null || setMethodInfo.IsPublic == false || setMethodInfo.IsStatic)
                     continue;
 
                 var normalizedPropertyName = _injectableValueNameNormalizer.Normalize(propertyInfo.Name);

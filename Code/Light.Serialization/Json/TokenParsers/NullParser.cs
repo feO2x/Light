@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace Light.Serialization.Json.TokenParsers
 {
@@ -6,7 +7,8 @@ namespace Light.Serialization.Json.TokenParsers
     {
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
-            return token.JsonType == JsonTokenType.Null && (requestedType.IsClass || requestedType.IsInterface);
+            var typeInfo = requestedType.GetTypeInfo();
+            return token.JsonType == JsonTokenType.Null && (typeInfo.IsClass || typeInfo.IsInterface);
         }
 
         public object ParseValue(JsonDeserializationContext context)

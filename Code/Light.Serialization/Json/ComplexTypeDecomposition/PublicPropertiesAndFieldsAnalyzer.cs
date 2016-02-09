@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Light.Serialization.Json.ComplexTypeDecomposition
 {
@@ -22,17 +23,17 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
             var valueProviders = new List<IValueProvider>();
 
             // ReSharper disable LoopCanBeConvertedToQuery
-            foreach (var propertyInfo in type.GetProperties())
+            foreach (var propertyInfo in type.GetRuntimeProperties())
             {
                 if (propertyInfo.CanRead == false)
                     continue;
 
-                var getMethod = propertyInfo.GetGetMethod();
+                var getMethod = propertyInfo.GetMethod;
                 if (getMethod.IsPublic && getMethod.IsStatic == false)
                     valueProviders.Add(_valueProviderFactory.Create(type, propertyInfo));
             }
 
-            foreach (var fieldInfo in type.GetFields())
+            foreach (var fieldInfo in type.GetRuntimeFields())
             {
                 if (fieldInfo.IsPublic && fieldInfo.IsStatic == false)
                     valueProviders.Add(_valueProviderFactory.Create(type, fieldInfo));

@@ -14,7 +14,7 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
 
             Expression bodyExpression = Expression.Property(Expression.ConvertChecked(parameterExpression, targetType), propertyInfo);
 
-            bodyExpression = CheckForPossiblyNeededValueTypeConversion(bodyExpression, propertyInfo.PropertyType);
+            bodyExpression = CheckForPossiblyNeededValueTypeConversion(bodyExpression, propertyInfo.PropertyType.GetTypeInfo());
 
             var lambda = Expression.Lambda<Func<object, object>>(bodyExpression, parameterExpression).Compile();
 
@@ -27,14 +27,14 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
 
             Expression bodyExpression = Expression.Field(Expression.ConvertChecked(parameterExpression, targetType), fieldInfo);
 
-            bodyExpression = CheckForPossiblyNeededValueTypeConversion(bodyExpression, fieldInfo.FieldType);
+            bodyExpression = CheckForPossiblyNeededValueTypeConversion(bodyExpression, fieldInfo.FieldType.GetTypeInfo());
 
             var lambda = Expression.Lambda<Func<object, object>>(bodyExpression, parameterExpression).Compile();
 
             return new ValueProviderUsingLambda(fieldInfo.Name, lambda, fieldInfo.FieldType);
         }
 
-        private static Expression CheckForPossiblyNeededValueTypeConversion(Expression bodyExpression, Type returnedSubType)
+        private static Expression CheckForPossiblyNeededValueTypeConversion(Expression bodyExpression, TypeInfo returnedSubType)
         {
             return returnedSubType.IsValueType ? Expression.Convert(bodyExpression, TypeOfObject) : bodyExpression;
         }
