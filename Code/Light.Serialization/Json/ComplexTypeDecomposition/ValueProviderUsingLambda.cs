@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Light.GuardClauses;
+using System;
 
 namespace Light.Serialization.Json.ComplexTypeDecomposition
 {
@@ -8,9 +9,9 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
 
         public ValueProviderUsingLambda(string name, Func<object, object> lambda, Type referenceType)
         {
-            if (name == null) throw new ArgumentNullException(nameof(name));
-            if (lambda == null) throw new ArgumentNullException(nameof(lambda));
-            if (referenceType == null) throw new ArgumentNullException(nameof(referenceType));
+            name.MustNotBeNullOrEmpty(nameof(name));
+            lambda.MustNotBeNull(nameof(lambda));
+            referenceType.MustNotBeNull(nameof(referenceType));
 
             Name = name;
             _lambda = lambda;
