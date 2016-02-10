@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDefaultJsonSerializerTest.cs" />
+    <Compile Include="BaseNormalizedJsonKeysSerializerTest.cs" />
     <Compile Include="ClassWithPublicFieldAndPublicAndPrivateProperties.cs" />
     <Compile Include="ClassWithPublicPropertiesAndPrivateFields.cs" />
     <Compile Include="BaseDefaultJsonDeserializationTest.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="JsonDictionarySerializationTests.cs" />
     <Compile Include="JsonDoubleDeserializationTests.cs" />
     <Compile Include="JsonIntDeserializationTests.cs" />
+    <Compile Include="JsonNormalizedKeysTests.cs" />
     <Compile Include="JsonNullDeserializationTests.cs" />
     <Compile Include="JsonPrimitiveTypesSerializationTests.cs" />
     <Compile Include="JsonStringDeserializationTests.cs" />
