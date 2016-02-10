@@ -1,3 +1,4 @@
+using Light.GuardClauses;
 using System;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -10,6 +11,9 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
 
         public IValueProvider Create(Type targetType, PropertyInfo propertyInfo)
         {
+            targetType.MustBeNull(nameof(targetType));
+            propertyInfo.MustNotBeNull(nameof(propertyInfo));
+
             var parameterExpression = Expression.Parameter(TypeOfObject);
 
             Expression bodyExpression = Expression.Property(Expression.ConvertChecked(parameterExpression, targetType), propertyInfo);
@@ -23,6 +27,9 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
 
         public IValueProvider Create(Type targetType, FieldInfo fieldInfo)
         {
+            targetType.MustNotBeNull(nameof(targetType));
+            fieldInfo.MustNotBeNull(nameof(fieldInfo));
+
             var parameterExpression = Expression.Parameter(TypeOfObject);
 
             Expression bodyExpression = Expression.Field(Expression.ConvertChecked(parameterExpression, targetType), fieldInfo);
