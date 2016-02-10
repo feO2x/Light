@@ -1,6 +1,6 @@
-﻿using System;
-using System.Text;
+﻿using Light.GuardClauses;
 using Light.Serialization.FrameworkExtensions;
+using System.Text;
 
 namespace Light.Serialization.Json.PrimitiveTypeFormatters
 {
@@ -10,7 +10,7 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
 
         public StringFormatter(ICharacterEscaper characterEscaper)
         {
-            if (characterEscaper == null) throw new ArgumentNullException(nameof(characterEscaper));
+            characterEscaper.MustNotBeNull(nameof(characterEscaper));
 
             _characterEscaper = characterEscaper;
         }
