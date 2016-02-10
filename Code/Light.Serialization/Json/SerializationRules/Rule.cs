@@ -1,11 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Reflection;
 using Light.GuardClauses;
 using Light.Serialization.FrameworkExtensions;
 using Light.Serialization.Json.ComplexTypeDecomposition;
 using Light.Serialization.Json.WriterInstructors;
+using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace Light.Serialization.Json.SerializationRules
 {
@@ -156,7 +156,6 @@ namespace Light.Serialization.Json.SerializationRules
             }
 
             return new CustomRuleInstructor(TargetType, valueProviders);
-            ;
         }
     }
 }
