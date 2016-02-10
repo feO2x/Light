@@ -11,7 +11,7 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
 
         public IValueProvider Create(Type targetType, PropertyInfo propertyInfo)
         {
-            targetType.MustBeNull(nameof(targetType));
+            targetType.MustNotBeNull(nameof(targetType));
             propertyInfo.MustNotBeNull(nameof(propertyInfo));
 
             var parameterExpression = Expression.Parameter(TypeOfObject);

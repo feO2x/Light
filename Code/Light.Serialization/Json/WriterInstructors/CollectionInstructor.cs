@@ -14,11 +14,15 @@ namespace Light.Serialization.Json.WriterInstructors
         {
             var enumerable = (IEnumerable)serializationContext.@ObjectToBeSerialized;
 
+            var writer = serializationContext.Writer;
             var enumerator = enumerable.GetEnumerator();
             if (enumerator.MoveNext() == false)
-                throw new NotImplementedException("What should happen if the collection is empty?");
+            {
+                writer.BeginArray();
+                writer.EndArray();
+                return;
+            }
 
-            var writer = serializationContext.Writer;
             writer.BeginArray();
             while (true)
             {
