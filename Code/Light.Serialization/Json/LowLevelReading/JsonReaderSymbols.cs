@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Light.GuardClauses;
 using System.Collections.Generic;
 
 namespace Light.Serialization.Json.LowLevelReading
@@ -12,7 +12,7 @@ namespace Light.Serialization.Json.LowLevelReading
             get { return _true; }
             set
             {
-                if (value == null) throw new ArgumentNullException(nameof(value));
+                value.MustNotBeNull(nameof(value));
                 _true = value;
             }
         }
@@ -24,7 +24,7 @@ namespace Light.Serialization.Json.LowLevelReading
             get { return _false; }
             set
             {
-                if (value == null) throw new ArgumentNullException(nameof(value));
+                value.MustNotBeNull(nameof(value));
                 _false = value;
             }
         }
@@ -36,7 +36,7 @@ namespace Light.Serialization.Json.LowLevelReading
             get { return _null; }
             set
             {
-                if (value == null) throw new ArgumentNullException(nameof(value));
+                value.MustNotBeNull(nameof(value));
                 _null = value;
             }
         }
@@ -52,7 +52,7 @@ namespace Light.Serialization.Json.LowLevelReading
             get { return _exponentialSymbols; }
             set
             {
-                if (value == null) throw new ArgumentNullException(nameof(value));
+                value.MustNotBeNull(nameof(value));
                 _exponentialSymbols = value;
             }
         }
@@ -79,7 +79,7 @@ namespace Light.Serialization.Json.LowLevelReading
             get { return _singleEscapedCharacters; }
             set
             {
-                if (value == null) throw new ArgumentNullException(nameof(value));
+                value.MustNotBeNull(nameof(value));
                 _singleEscapedCharacters = value;
             }
         }
