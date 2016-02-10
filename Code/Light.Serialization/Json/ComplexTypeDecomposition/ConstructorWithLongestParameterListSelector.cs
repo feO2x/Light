@@ -1,4 +1,4 @@
-using System;
+using Light.GuardClauses;
 using System.Reflection;
 
 namespace Light.Serialization.Json.ComplexTypeDecomposition
@@ -7,10 +7,9 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
     {
         public ConstructorInfo SelectConstructor(ConstructorInfo[] constructorInfos, TypeInfo typeToAnalyze)
         {
-            if (constructorInfos == null) throw new ArgumentNullException(nameof(constructorInfos));
-            if (typeToAnalyze == null) throw new ArgumentNullException(nameof(typeToAnalyze));
-            if (constructorInfos.Length < 2)
-                throw new ArgumentException($"constructorInfos should have at least two items, but only has {constructorInfos.Length}.", nameof(constructorInfos));
+            constructorInfos.MustNotBeNull(nameof(constructorInfos));
+            constructorInfos.Length.MustNotBeLessThan(2, nameof(constructorInfos), $"constructorInfos should have at least two items, but only has {constructorInfos.Length}.");
+            typeToAnalyze.MustNotBeNull(nameof(typeToAnalyze));
 
             var numberOfParameters = -1;
             ConstructorInfo targetConstructor = null;

@@ -6,10 +6,13 @@ namespace Light.GuardClauses
     public static class ComparableGuardClauses
     {
         [Conditional(Guard.PreconditionSymbol)]
-        public static void MustNotBeLessThan<T>(this T parameter, T boundary, string parameterName) where T : IComparable<T>
+        public static void MustNotBeLessThan<T>(this T parameter, T boundary, string parameterName, string exceptionMessage = null) where T : IComparable<T>
         {
             if (parameter.CompareTo(boundary) < 0)
-                throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be less than {boundary}, but you specified {parameter}.");
+            {
+                exceptionMessage = exceptionMessage ?? $"{parameterName} must not be less than {boundary}, but you specified {parameter}.";
+                throw new ArgumentOutOfRangeException(parameterName, parameter, exceptionMessage);
+            }
         }
 
         [Conditional(Guard.PreconditionSymbol)]
