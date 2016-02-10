@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Light.GuardClauses;
+using System;
 
 namespace Light.Serialization.Json.TokenParsers
 {
@@ -11,9 +12,10 @@ namespace Light.Serialization.Json.TokenParsers
 
         public InjectableValueInfo(string normalizedName, string actualName, Type type, InjectableValueKind kind)
         {
-            if (string.IsNullOrEmpty(normalizedName)) throw new ArgumentNullException(nameof(normalizedName));
-            if (string.IsNullOrEmpty(actualName)) throw new ArgumentNullException(nameof(actualName));
-            if (type == null) throw new ArgumentNullException(nameof(type));
+            normalizedName.MustNotBeNullOrEmpty(nameof(normalizedName));
+            actualName.MustNotBeNullOrEmpty(nameof(actualName));
+            type.MustNotBeNull(nameof(type));
+            kind.MustBeValidEnumValue(nameof(kind));
 
             NormalizedName = normalizedName;
             ActualName = actualName;

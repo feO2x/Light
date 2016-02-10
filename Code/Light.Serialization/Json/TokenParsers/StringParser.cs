@@ -1,6 +1,7 @@
-﻿using System;
-using System.Globalization;
+﻿using Light.GuardClauses;
 using Light.Serialization.Json.LowLevelReading;
+using System;
+using System.Globalization;
 
 namespace Light.Serialization.Json.TokenParsers
 {
@@ -17,7 +18,7 @@ namespace Light.Serialization.Json.TokenParsers
 
         public StringParser(JsonReaderSymbols jsonReaderSymbols)
         {
-            if (jsonReaderSymbols == null) throw new ArgumentNullException(nameof(jsonReaderSymbols));
+            jsonReaderSymbols.MustNotBeNull(nameof(jsonReaderSymbols));
 
             _jsonReaderSymbols = jsonReaderSymbols;
         }
@@ -29,25 +30,25 @@ namespace Light.Serialization.Json.TokenParsers
 
         public object ParseValue(JsonDeserializationContext context)
         {
-            var buffer = context.Token;
+            var token = context.Token;
             // If the token has only two character, then it is an empty string.
-            if (buffer.Length == 2)
+            if (token.Length == 2)
                 return string.Empty;
 
             // The first and the last character in the token are the JSON string delimiters (").
-            // Thus the following loop runs from 1 to Count - 2
-            for (var i = 1; i < buffer.Length - 1; i++)
+            // Thus the following loop runs from 1 to Length - 2
+            for (var i = 1; i < token.Length - 1; i++)
             {
                 // Check if the token contains characters that need to be escaped
-                var currentCharacter = buffer[i];
+                var currentCharacter = token[i];
                 if (currentCharacter == _jsonReaderSymbols.StringEscapeCharacter)
-                    return ConvertEscapeSequencesInBuffer(buffer, i + 1);
+                    return ConvertEscapeSequencesInToken(token, i + 1);
             }
             // If none could be found, then return the inner characters without the surrounding quotation marks
-            return buffer.ToStringWithoutQuotationMarks();
+            return token.ToStringWithoutQuotationMarks();
         }
 
-        private string ConvertEscapeSequencesInBuffer(JsonToken buffer, int currentBufferIndex)
+        private string ConvertEscapeSequencesInToken(JsonToken token, int currentTokenIndex)
         {
             // Calculate how many characters we need for the new char array
             // This means that we have to run through the whole token
@@ -58,16 +59,16 @@ namespace Light.Serialization.Json.TokenParsers
             var isPreviousCharacterTheStringEscapeCharacter = true;
             char currentCharacter;
 
-            while (currentBufferIndex < buffer.Length - 1)
+            while (currentTokenIndex < token.Length - 1)
             {
-                currentCharacter = buffer[currentBufferIndex++];
+                currentCharacter = token[currentTokenIndex++];
                 // Check if the current character is part of an escape sequence
                 if (isPreviousCharacterTheStringEscapeCharacter)
                 {
                     // If it is a hexadecimal character then set the index after the escape sequence
                     if (currentCharacter == _jsonReaderSymbols.HexadecimalEscapeIndicator)
                     {
-                        currentBufferIndex += 4;
+                        currentTokenIndex += 4;
                         numberOfHexadecimalEscapeSequences++;
                     }
                     // else it can only be a single character escape sequence
@@ -84,17 +85,17 @@ namespace Light.Serialization.Json.TokenParsers
             }
 
             // Calculate the actual number of characters that we need for the string
-            var numberOfCharacters = buffer.Length - 2 - numberOfSingleEscapeSequences - (numberOfHexadecimalEscapeSequences * 5);
+            var numberOfCharacters = token.Length - 2 - numberOfSingleEscapeSequences - (numberOfHexadecimalEscapeSequences * 5);
             var characterArray = new char[numberOfCharacters];
-            currentBufferIndex = 1;  // Start copying from the first character after the initial JSON string delimiter
+            currentTokenIndex = 1;  // Start copying from the first character after the initial JSON string delimiter
 
             // Fill the character array, escape where necessary
             for (var i = 0; i < numberOfCharacters; i++)
             {
-                currentCharacter = buffer[currentBufferIndex++];
+                currentCharacter = token[currentTokenIndex++];
                 if (currentCharacter == _jsonReaderSymbols.StringEscapeCharacter)
                 {
-                    characterArray[i] = ReadEscapeSequence(buffer, ref currentBufferIndex);
+                    characterArray[i] = ReadEscapeSequence(token, ref currentTokenIndex);
                     continue;
                 }
                 characterArray[i] = currentCharacter;
@@ -120,7 +121,7 @@ namespace Light.Serialization.Json.TokenParsers
             throw new DeserializationException("This exception should never be thrown because the foreach loop above will find exactly one single escape character that fits. However, if you see this exception message nontheless, then please check if you accidently altered JsonReaderSymbols.SingleEscapedCharacters.");
         }
 
-        private char ReadHexadecimalEscapeSequence(JsonToken buffer, ref int currentBufferIndex)
+        private static char ReadHexadecimalEscapeSequence(JsonToken buffer, ref int currentBufferIndex)
         {
             var hexadecimalDigitsAsString = buffer.ToString(currentBufferIndex, 4);
             currentBufferIndex += 4;  // Increase token index to point to the first character after the hexadecimal escape sequence

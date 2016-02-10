@@ -1,6 +1,7 @@
-﻿using System;
-using System.Globalization;
+﻿using Light.GuardClauses;
 using Light.Serialization.Json.LowLevelReading;
+using System;
+using System.Globalization;
 
 namespace Light.Serialization.Json.TokenParsers
 {
@@ -16,7 +17,7 @@ namespace Light.Serialization.Json.TokenParsers
 
         public CharacterParser(JsonReaderSymbols jsonReaderSymbols)
         {
-            if (jsonReaderSymbols == null) throw new ArgumentNullException(nameof(jsonReaderSymbols));
+            jsonReaderSymbols.MustNotBeNull(nameof(jsonReaderSymbols));
 
             _jsonReaderSymbols = jsonReaderSymbols;
         }

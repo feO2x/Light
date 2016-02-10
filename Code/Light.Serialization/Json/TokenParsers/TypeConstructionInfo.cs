@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Light.GuardClauses;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -12,9 +13,9 @@ namespace Light.Serialization.Json.TokenParsers
 
         public TypeConstructionInfo(Type targetType, ConstructorInfo targetConstructor, List<InjectableValueInfo> injectableValueInfos)
         {
-            if (targetType == null) throw new ArgumentNullException(nameof(targetType));
-            if (targetConstructor == null) throw new ArgumentNullException(nameof(targetConstructor));
-            if (injectableValueInfos == null) throw new ArgumentNullException(nameof(injectableValueInfos));
+            targetType.MustNotBeNull(nameof(targetType));
+            targetConstructor.MustNotBeNull(nameof(targetConstructor));
+            injectableValueInfos.MustNotBeNullOrEmpty(nameof(injectableValueInfos));
 
             TargetType = targetType;
             TargetConstructor = targetConstructor;

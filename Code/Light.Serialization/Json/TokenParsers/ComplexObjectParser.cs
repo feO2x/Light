@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Light.GuardClauses;
+using System;
 using System.Collections.Generic;
 
 namespace Light.Serialization.Json.TokenParsers
@@ -16,9 +17,9 @@ namespace Light.Serialization.Json.TokenParsers
                                    INameToTypeMapping nameToTypeMapping,
                                    ITypeCreationInfoAnalyzer typeAnalyzer)
         {
-            if (objectFactory == null) throw new ArgumentNullException(nameof(objectFactory));
-            if (nameToTypeMapping == null) throw new ArgumentNullException(nameof(nameToTypeMapping));
-            if (typeAnalyzer == null) throw new ArgumentNullException(nameof(typeAnalyzer));
+            objectFactory.MustNotBeNull(nameof(objectFactory));
+            nameToTypeMapping.MustNotBeNull(nameof(nameToTypeMapping));
+            typeAnalyzer.MustNotBeNull(nameof(typeAnalyzer));
 
             _objectFactory = objectFactory;
             _nameToTypeMapping = nameToTypeMapping;
@@ -30,8 +31,7 @@ namespace Light.Serialization.Json.TokenParsers
             get { return _actualTypeSymbol; }
             set
             {
-                if (string.IsNullOrEmpty(value)) throw new ArgumentNullException(nameof(value));
-
+                value.MustNotBeNullOrEmpty(nameof(value));
                 _actualTypeSymbol = value;
             }
         }

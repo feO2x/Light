@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Light.GuardClauses;
 using Light.Serialization.FrameworkExtensions;
 
 namespace Light.Serialization.Json.TokenParsers
@@ -14,7 +15,7 @@ namespace Light.Serialization.Json.TokenParsers
 
         public ArrayToGenericCollectionParser(ICollectionFactory collectionFactory)
         {
-            if (collectionFactory == null) throw new ArgumentNullException(nameof(collectionFactory));
+            collectionFactory.MustNotBeNull(nameof(collectionFactory));
 
             _collectionFactory = collectionFactory;
             _populateGenericCollectionMethodInfo = GetType().GetTypeInfo().GetDeclaredMethod(nameof(PopulateGenericCollection));
