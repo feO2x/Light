@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Light.GuardClauses;
 
 namespace Light.Serialization.Json.WriterInstructors
 {
@@ -9,7 +10,7 @@ namespace Light.Serialization.Json.WriterInstructors
 
         public PrimitiveWriterInstructor(IDictionary<Type, IPrimitiveTypeFormatter> primitiveTypeToFormattersMapping)
         {
-            if (primitiveTypeToFormattersMapping == null) throw new ArgumentNullException(nameof(primitiveTypeToFormattersMapping));
+            primitiveTypeToFormattersMapping.MustNotBeNull(nameof(primitiveTypeToFormattersMapping));
 
             _primitiveTypeToFormattersMapping = primitiveTypeToFormattersMapping;
         }

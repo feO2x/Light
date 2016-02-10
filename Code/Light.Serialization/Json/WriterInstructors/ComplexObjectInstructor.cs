@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Light.GuardClauses;
 using Light.Serialization.Json.ComplexTypeDecomposition;
+using System;
+using System.Collections.Generic;
 
 namespace Light.Serialization.Json.WriterInstructors
 {
@@ -18,8 +19,8 @@ namespace Light.Serialization.Json.WriterInstructors
         public ComplexObjectInstructor(IReadableValuesTypeAnalyzer typeAnalyzer,
                                        IDictionary<Type, IList<IValueProvider>> typeToValueProvidersMapping)
         {
-            if (typeAnalyzer == null) throw new ArgumentNullException(nameof(typeAnalyzer));
-            if (typeToValueProvidersMapping == null) throw new ArgumentNullException(nameof(typeToValueProvidersMapping));
+            typeAnalyzer.MustNotBeNull(nameof(typeAnalyzer));
+            typeToValueProvidersMapping.MustNotBeNull(nameof(typeToValueProvidersMapping));
 
             _typeAnalyzer = typeAnalyzer;
             _typeToValueProvidersMapping = typeToValueProvidersMapping;
