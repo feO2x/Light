@@ -1,4 +1,4 @@
-using System;
+using Light.GuardClauses;
 
 namespace Light.Serialization.Json.LowLevelWriting
 {
@@ -17,7 +17,7 @@ namespace Light.Serialization.Json.LowLevelWriting
             get { return _null; }
             set
             {
-                if (value == null) throw new ArgumentNullException(nameof(value));
+                value.MustNotBeNull(nameof(value));
                 _null = value;
             }
         }
