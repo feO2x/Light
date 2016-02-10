@@ -1,6 +1,6 @@
-﻿using System;
-using System.IO;
+﻿using Light.GuardClauses;
 using Light.Serialization.FrameworkExtensions;
+using System.IO;
 
 namespace Light.Serialization.Json.LowLevelWriting
 {
@@ -12,9 +12,9 @@ namespace Light.Serialization.Json.LowLevelWriting
 
         public JsonWriter(TextWriter textWriter, IJsonFormatter formatter, JsonWriterSymbols symbols)
         {
-            if (textWriter == null) throw new ArgumentNullException(nameof(textWriter));
-            if (formatter == null) throw new ArgumentNullException(nameof(formatter));
-            if (symbols == null) throw new ArgumentNullException(nameof(symbols));
+            textWriter.MustNotBeNull(nameof(textWriter));
+            formatter.MustNotBeNull(nameof(formatter));
+            symbols.MustNotBeNull(nameof(symbols));
 
             _textWriter = textWriter;
             _formatter = formatter;
