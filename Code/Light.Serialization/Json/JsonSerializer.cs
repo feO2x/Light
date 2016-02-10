@@ -49,7 +49,7 @@ namespace Light.Serialization.Json
             {
                 targetWriterInstructor = FindTargetInstructor(@object, actualType, referencedType);
                 if (targetWriterInstructor == null)
-                    throw new SerializationException($"Type {actualType.FullName} cannot be serialized.");
+                    throw new SerializationException($"Type {actualType.FullName} cannot be serialized because there is no IJsonWriterInstructor registered that can cover this type.");
 
                 _instructorCache.Add(actualType, targetWriterInstructor);
             }
