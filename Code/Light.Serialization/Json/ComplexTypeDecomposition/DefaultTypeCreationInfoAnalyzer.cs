@@ -1,4 +1,5 @@
-﻿using Light.Serialization.Json.TokenParsers;
+﻿using Light.GuardClauses;
+using Light.Serialization.Json.TokenParsers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,8 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
 
         public DefaultTypeCreationInfoAnalyzer(IConstructorSelector constructorSelector, IInjectableValueNameNormalizer injectableValueNameNormalizer)
         {
-            if (constructorSelector == null) throw new ArgumentNullException(nameof(constructorSelector));
-            if (injectableValueNameNormalizer == null) throw new ArgumentNullException(nameof(injectableValueNameNormalizer));
+            constructorSelector.MustNotBeNull(nameof(constructorSelector));
+            injectableValueNameNormalizer.MustNotBeNull(nameof(injectableValueNameNormalizer));
 
             _constructorSelector = constructorSelector;
             _injectableValueNameNormalizer = injectableValueNameNormalizer;
@@ -22,7 +23,7 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
 
         public TypeConstructionInfo CreateInfo(Type typeToAnalyze)
         {
-            if (typeToAnalyze == null) throw new ArgumentNullException(nameof(typeToAnalyze));
+            typeToAnalyze.MustNotBeNull(nameof(typeToAnalyze));
 
             var typeInfo = typeToAnalyze.GetTypeInfo();
 
