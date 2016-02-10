@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Light.GuardClauses;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -13,13 +14,15 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
             get { return _valueProviderFactory; }
             set
             {
-                if (value == null) throw new ArgumentNullException(nameof(value));
+                value.MustNotBeNull(nameof(value));
                 _valueProviderFactory = value;
             }
         }
 
         public IList<IValueProvider> AnalyzeType(Type type)
         {
+            type.MustNotBeNull(nameof(type));
+
             var valueProviders = new List<IValueProvider>();
 
             // ReSharper disable LoopCanBeConvertedToQuery
