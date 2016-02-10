@@ -16,7 +16,8 @@ namespace Light.Serialization.Tests
 
             Action act = () => testTarget.Serialize(action);
 
-            act.ShouldThrow<SerializationException>().And.Message.Should().Be($"Type {action.GetType()} cannot be serialized.");
+            act.ShouldThrow<SerializationException>()
+               .And.Message.Should().Contain($"Type {action.GetType()} cannot be serialized because there is no IJsonWriterInstructor registered that can cover this type.");
         }
     }
 }
