@@ -40,6 +40,8 @@
     <Compile Include="FrameworkExtensions\ReflectionExtensions.cs" />
     <Compile Include="FrameworkExtensions\StringExtensions.cs" />
     <Compile Include="IDeserializer.cs" />
+    <Compile Include="Json\LowLevelWriting\JsonWriterNormalizedKeysDecorator.cs" />
+    <Compile Include="Json\LowLevelWriting\JsonWriterNormalizedKeysDecoratorFactory.cs" />
     <Compile Include="Json\SerializationRules\IAndBlackListRule.cs" />
     <Compile Include="Json\SerializationRules\IAndWhiteListRule.cs" />
     <Compile Include="Json\SerializationRules\IButWhiteListRule.cs" />

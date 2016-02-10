@@ -28,7 +28,7 @@ namespace Light.Serialization.Json
             _defaultWriterInstructors = new List<IJsonWriterInstructor>().AddDefaultWriterInstructors(primitiveTypeToFormattersMapping,
                                                                                                       _readableValuesTypeAnalyzer);
 
-            _writerFactory = new JsonWriterFactory();
+            _writerFactory = new JsonWriterNormalizedKeysDecoratorFactory();
 
             _instructorCache = new Dictionary<Type, IJsonWriterInstructor>();
         }

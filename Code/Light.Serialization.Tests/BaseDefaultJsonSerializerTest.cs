@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Light.Serialization.Json;
+using Light.Serialization.Json.LowLevelWriting;
 
 namespace Light.Serialization.Tests
 {
@@ -9,7 +10,8 @@ namespace Light.Serialization.Tests
 
         protected BaseDefaultJsonSerializerTest()
         {
-            JsonSerializer = new JsonSerializerBuilder().Build();
+            JsonSerializer = new JsonSerializerBuilder().WithWriterFactory(new JsonWriterFactory())
+                                                        .Build();
         }
 
         protected void CompareJsonToExpected<T>(T value, string expected)
