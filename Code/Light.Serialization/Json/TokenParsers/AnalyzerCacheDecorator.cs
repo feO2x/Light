@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Light.GuardClauses;
+using System;
 using System.Collections.Generic;
 
 namespace Light.Serialization.Json.TokenParsers
@@ -10,8 +11,8 @@ namespace Light.Serialization.Json.TokenParsers
 
         public AnalyzerCacheDecorator(ITypeCreationInfoAnalyzer analyzer, Dictionary<Type, TypeConstructionInfo> cache)
         {
-            if (analyzer == null) throw new ArgumentNullException(nameof(analyzer));
-            if (cache == null) throw new ArgumentNullException(nameof(cache));
+            analyzer.MustNotBeNull(nameof(analyzer));
+            cache.MustNotBeNull(nameof(cache));
 
             _analyzer = analyzer;
             _cache = cache;
@@ -19,6 +20,8 @@ namespace Light.Serialization.Json.TokenParsers
 
         public TypeConstructionInfo CreateInfo(Type typeToAnalyze)
         {
+            typeToAnalyze.MustNotBeNull(nameof(typeToAnalyze));
+
             TypeConstructionInfo typeConstructionInfo;
             if (_cache.TryGetValue(typeToAnalyze, out typeConstructionInfo))
                 return typeConstructionInfo;
