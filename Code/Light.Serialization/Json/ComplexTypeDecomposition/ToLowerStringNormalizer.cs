@@ -1,9 +1,13 @@
-﻿namespace Light.Serialization.Json.ComplexTypeDecomposition
+﻿using Light.GuardClauses;
+
+namespace Light.Serialization.Json.ComplexTypeDecomposition
 {
     public sealed class ToLowerStringNormalizer : IInjectableValueNameNormalizer
     {
         public string Normalize(string name)
         {
+            name.MustNotBeNull(nameof(name));
+
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var character in name)
             {
