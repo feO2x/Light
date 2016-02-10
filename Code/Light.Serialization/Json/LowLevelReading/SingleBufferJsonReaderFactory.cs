@@ -1,4 +1,4 @@
-using System;
+using Light.GuardClauses;
 
 namespace Light.Serialization.Json.LowLevelReading
 {
@@ -11,7 +11,7 @@ namespace Light.Serialization.Json.LowLevelReading
             get { return _readerSymbols; }
             set
             {
-                if (value == null) throw new ArgumentNullException(nameof(value));
+                value.MustNotBeNull(nameof(value));
                 _readerSymbols = value;
             }
         }
