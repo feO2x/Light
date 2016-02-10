@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Light.GuardClauses;
 using Light.Serialization.FrameworkExtensions;
 
 namespace Light.Serialization.Json.LowLevelReading
@@ -11,8 +11,8 @@ namespace Light.Serialization.Json.LowLevelReading
 
         public SingleBufferJsonReader(char[] buffer, JsonReaderSymbols jsonReaderSymbols)
         {
-            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
-            if (jsonReaderSymbols == null) throw new ArgumentNullException(nameof(jsonReaderSymbols));
+            buffer.MustNotBeNull(nameof(buffer));
+            jsonReaderSymbols.MustNotBeNull(nameof(jsonReaderSymbols));
 
             _buffer = buffer;
             _jsonReaderSymbols = jsonReaderSymbols;
