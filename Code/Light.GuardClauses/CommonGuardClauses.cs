@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using Light.GuardClauses.Exceptions;
+using Light.GuardClauses.FrameworkExtensions;
 
 namespace Light.GuardClauses
 {
@@ -18,6 +19,20 @@ namespace Light.GuardClauses
         {
             if (parameter != null)
                 throw new ArgumentNotNullException(parameterName, parameter);
+        }
+
+        [Conditional(Guard.PreconditionSymbol)]
+        public static void MustBe<T>(this T parameter, T other, string parameterName)
+        {
+            if (parameter.EqualsWithHashCode(other) == false)
+                throw new ArgumentException($"{parameterName} must be {other}, but you specified {parameter}.", parameterName);
+        }
+
+        [Conditional(Guard.PreconditionSymbol)]
+        public static void MustBe<T>(this T parameter, T other, Exception exception)
+        {
+            if (parameter.EqualsWithHashCode(other) == false)
+                throw exception;
         }
 
         public static TOut MustBeType<TOut>(this object @object, string parameterName) where TOut : class
