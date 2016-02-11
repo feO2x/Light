@@ -1,22 +1,23 @@
-﻿using Light.GuardClauses;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Light.GuardClauses;
+using Light.Serialization.Json.Caching;
 using Light.Serialization.Json.ComplexTypeDecomposition;
 using Light.Serialization.Json.LowLevelWriting;
 using Light.Serialization.Json.PrimitiveTypeFormatters;
 using Light.Serialization.Json.SerializationRules;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Light.Serialization.Json
 {
     public class JsonSerializerBuilder
     {
+        private readonly List<Rule> _rules = new List<Rule>();
         private Func<IList<IJsonWriterInstructor>> _createWriterInstructorList = CreateList;
         private IList<IJsonWriterInstructor> _defaultWriterInstructors;
         private IDictionary<Type, IJsonWriterInstructor> _instructorCache;
-        private readonly List<Rule> _rules = new List<Rule>();
-        private IJsonWriterFactory _writerFactory;
         private IReadableValuesTypeAnalyzer _readableValuesTypeAnalyzer;
+        private IJsonWriterFactory _writerFactory;
 
         public JsonSerializerBuilder()
         {
@@ -24,7 +25,7 @@ namespace Light.Serialization.Json
             var primitiveTypeToFormattersMapping = new List<IPrimitiveTypeFormatter>().AddDefaultPrimitiveTypeFormatters(characterEscaper)
                                                                                       .ToDictionary(f => f.TargetType);
 
-            _readableValuesTypeAnalyzer = new PublicPropertiesAndFieldsAnalyzer();
+            UseDefaultTypeAnalyzer();
             _defaultWriterInstructors = new List<IJsonWriterInstructor>().AddDefaultWriterInstructors(primitiveTypeToFormattersMapping,
                                                                                                       _readableValuesTypeAnalyzer);
 
@@ -66,9 +67,21 @@ namespace Light.Serialization.Json
             return this;
         }
 
-        public JsonSerializerBuilder WithTypeAnalyzerForRules(IReadableValuesTypeAnalyzer typeAnalyzer)
+        public JsonSerializerBuilder WithTypeAnalyzer(IReadableValuesTypeAnalyzer typeAnalyzer)
         {
             _readableValuesTypeAnalyzer = typeAnalyzer;
+            return this;
+        }
+
+        public JsonSerializerBuilder UseDefaultTypeAnalyzer()
+        {
+            return UseDefaultTypeAnalyzer(new Dictionary<Type, IList<IValueProvider>>());
+        }
+
+        public JsonSerializerBuilder UseDefaultTypeAnalyzer(IDictionary<Type, IList<IValueProvider>> valueProvidersCache)
+        {
+            _readableValuesTypeAnalyzer = new ValueProvidersCacheDecorator(new PublicPropertiesAndFieldsAnalyzer(),
+                                                                           valueProvidersCache);
             return this;
         }
 
