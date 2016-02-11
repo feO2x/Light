@@ -1,8 +1,9 @@
-﻿using Light.GuardClauses;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Light.GuardClauses;
+using Light.Serialization.Json.TokenParsers;
 
-namespace Light.Serialization.Json.TokenParsers
+namespace Light.Serialization.Json.Caching
 {
     public sealed class AnalyzerCacheDecorator : ITypeCreationInfoAnalyzer
     {
