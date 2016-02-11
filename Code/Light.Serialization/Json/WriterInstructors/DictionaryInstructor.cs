@@ -1,7 +1,7 @@
-﻿using Light.GuardClauses;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Light.GuardClauses;
 
 namespace Light.Serialization.Json.WriterInstructors
 {
@@ -25,27 +25,31 @@ namespace Light.Serialization.Json.WriterInstructors
         {
             var dictionary = (IDictionary) serializationContext.ObjectToBeSerialized;
 
-            if (dictionary.Count == 0)
-                throw new NotImplementedException("What should happen if a dictionary is empty?");
-
             var writer = serializationContext.Writer;
             writer.BeginObject();
 
+            if (dictionary.Count == 0)
+            {
+                writer.EndObject();
+                return;
+            }
+
             var dicitionaryEnumerator = dictionary.GetEnumerator();
             dicitionaryEnumerator.MoveNext();
-
             while (true)
             {
                 var key = dicitionaryEnumerator.Key;
                 if (key == null)
-                    throw new NotImplementedException("What should happen if a key is null?");
-
-                var keyType = key.GetType();
-                // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-                if (_primitiveTypeToFormattersMapping.ContainsKey(keyType))
-                    writer.WriteKey(_primitiveTypeToFormattersMapping[keyType].FormatPrimitiveType(key));
+                    writer.WriteKey(DefaultJsonSymbols.Null);
                 else
-                    writer.WriteKey(key.ToString());
+                {
+                    var keyType = key.GetType();
+                    // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+                    if (_primitiveTypeToFormattersMapping.ContainsKey(keyType))
+                        writer.WriteKey(_primitiveTypeToFormattersMapping[keyType].FormatPrimitiveType(key));
+                    else
+                        writer.WriteKey(key.ToString());
+                }
 
                 var value = dicitionaryEnumerator.Value;
                 if (value == null)
