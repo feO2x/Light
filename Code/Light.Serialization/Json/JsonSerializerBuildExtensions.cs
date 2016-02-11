@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Light.GuardClauses;
 using Light.Serialization.Json.ComplexTypeDecomposition;
 using Light.Serialization.Json.PrimitiveTypeFormatters;
 using Light.Serialization.Json.WriterInstructors;
@@ -10,7 +11,7 @@ namespace Light.Serialization.Json
     {
         public static IList<IPrimitiveTypeFormatter> AddDefaultPrimitiveTypeFormatters(this IList<IPrimitiveTypeFormatter> targetList, ICharacterEscaper characterEscaper)
         {
-            if (targetList == null) throw new ArgumentNullException(nameof(targetList));
+            targetList.MustNotBeNull(nameof(targetList));
 
             targetList.Add(new ToStringPrimitiveTypeFormatter<int>());
             targetList.Add(new StringFormatter(characterEscaper));
@@ -36,7 +37,7 @@ namespace Light.Serialization.Json
                                                                                IDictionary<Type, IPrimitiveTypeFormatter> primitiveTypeToFormattersMapping,
                                                                                IReadableValuesTypeAnalyzer readableValuesTypeAnalyzer)
         {
-            if (targetList == null) throw new ArgumentNullException(nameof(targetList));
+            targetList.MustNotBeNull(nameof(targetList));
 
             targetList.Add(new PrimitiveWriterInstructor(primitiveTypeToFormattersMapping));
             targetList.Add(new EnumerationToStringInstructor());

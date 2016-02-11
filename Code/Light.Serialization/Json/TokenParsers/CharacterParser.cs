@@ -10,11 +10,6 @@ namespace Light.Serialization.Json.TokenParsers
         private readonly JsonReaderSymbols _jsonReaderSymbols;
         private readonly Type _charType = typeof (char);
 
-        public CharacterParser()
-            : this(new JsonReaderSymbols())
-        {
-        }
-
         public CharacterParser(JsonReaderSymbols jsonReaderSymbols)
         {
             jsonReaderSymbols.MustNotBeNull(nameof(jsonReaderSymbols));
