@@ -57,9 +57,6 @@ namespace Light.Serialization.Json.LowLevelWriting
 
         private static string NormalizeJsonKey(string key)
         {
-            if (key.Length < 1) // TODO: Are empty strings allowed as a key value? I don't think so - Kenny
-                return key;
-
             return key.MakeFirstCharacterLowercase();
         }
     }
