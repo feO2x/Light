@@ -115,6 +115,7 @@
     <Compile Include="Json\Caching\AnalyzerCacheDecorator.cs" />
     <Compile Include="Json\WriterInstructors\CollectionInstructor.cs" />
     <Compile Include="Json\WriterInstructors\ComplexObjectInstructor.cs" />
+    <Compile Include="Json\WriterInstructors\ComplexObjectWriting.cs" />
     <Compile Include="Json\WriterInstructors\CustomRuleInstructor.cs" />
     <Compile Include="Json\WriterInstructors\DictionaryInstructor.cs" />
     <Compile Include="Json\WriterInstructors\EnumerationToStringInstructor.cs" />
