@@ -33,14 +33,12 @@ namespace Light.Serialization.Json
             _instructorCache = new Dictionary<Type, IJsonWriterInstructor>();
         }
 
-        public Func<IList<IJsonWriterInstructor>> CreateWriterInstructorList
+        public JsonSerializerBuilder WithCreateFunctionForInstructorList(Func<IList<IJsonWriterInstructor>> createList)
         {
-            get { return _createWriterInstructorList; }
-            set
-            {
-                value.MustNotBeNull(nameof(value));
-                _createWriterInstructorList = value;
-            }
+            createList.MustNotBeNull(nameof(createList));
+
+            _createWriterInstructorList = createList;
+            return this;
         }
 
         private static IList<IJsonWriterInstructor> CreateList()
@@ -106,7 +104,7 @@ namespace Light.Serialization.Json
 
         public ISerializer Build()
         {
-            var writerInstructors = CreateWriterInstructorList();
+            var writerInstructors = _createWriterInstructorList();
             foreach (var defaultWriterInstructor in _defaultWriterInstructors)
             {
                 writerInstructors.Add(defaultWriterInstructor);
