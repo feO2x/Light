@@ -50,5 +50,13 @@ namespace Light.Serialization.FrameworkExtensions
                 return false;
             return @string[0] == '"' && @string[@string.Length - 1] == '"';
         }
+
+        public static string MakeFirstCharacterLowercase(this string @string)
+        {
+            if (char.IsLower(@string[0]))
+                return @string;
+
+            return char.ToLowerInvariant(@string[0]) + @string.Substring(1);
+        }
     }
 }

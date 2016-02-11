@@ -19,12 +19,12 @@ namespace Light.Serialization.Tests
                 new object[]
                 {
                     new ClassWithPublicPropertiesAndPrivateFields(42, "Foo"),
-                    $"{{{"Int".SurroundWithQuotationMarks()}:42,{"String".SurroundWithQuotationMarks()}:\"Foo\"}}"
+                    $"{{{"int".SurroundWithQuotationMarks()}:42,{"string".SurroundWithQuotationMarks()}:\"Foo\"}}"
                 },
                 new object[]
                 {
                     new ClassWithPublicFieldAndPublicAndPrivateProperties("Foo", 42.7),
-                    $"{{{"Value".SurroundWithQuotationMarks()}:42.7,{"StringField".SurroundWithQuotationMarks()}:\"Foo\"}}"
+                    $"{{{"value".SurroundWithQuotationMarks()}:42.7,{"stringField".SurroundWithQuotationMarks()}:\"Foo\"}}"
                 }
             };
 
@@ -48,16 +48,16 @@ namespace Light.Serialization.Tests
 
         public class ClassWithPrivateFieldsOnly
         {
-            // ReSharper disable NotAccessedField.Local
-            private int _privateField1;
-            private string _privateField2;
-            // ReSharper restore NotAccessedField.Local
-
             public ClassWithPrivateFieldsOnly(int value1, string value2)
             {
                 _privateField1 = value1;
                 _privateField2 = value2;
             }
+
+            // ReSharper disable NotAccessedField.Local
+            private int _privateField1;
+            private string _privateField2;
+            // ReSharper restore NotAccessedField.Local
         }
     }
 }

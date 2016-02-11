@@ -1,14 +1,17 @@
-﻿using Light.GuardClauses;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Light.GuardClauses;
 
 namespace Light.Serialization.Json.LowLevelWriting
 {
     public sealed class JsonWriterFactory : IJsonWriterFactory
     {
-        private StringBuilder _stringBuilder;
+        private readonly List<Func<IJsonWriter, IJsonWriter>> _decorateFunctions = new List<Func<IJsonWriter, IJsonWriter>>();
         private IJsonFormatter _jsonFormatter = new JsonFormatterNullObject();
         private JsonWriterSymbols _jsonWriterSymbols = new JsonWriterSymbols();
+        private StringBuilder _stringBuilder;
         private StringWriter _stringWriter;
 
         public IJsonFormatter JsonFormatter
@@ -35,7 +38,13 @@ namespace Light.Serialization.Json.LowLevelWriting
         {
             _stringBuilder = new StringBuilder();
             _stringWriter = new StringWriter(_stringBuilder);
-            return new JsonWriter(_stringWriter, _jsonFormatter, _jsonWriterSymbols);
+            IJsonWriter returnValue = new JsonWriter(_stringWriter, _jsonFormatter, _jsonWriterSymbols);
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var decorateFunction in _decorateFunctions)
+            {
+                returnValue = decorateFunction(returnValue);
+            }
+            return returnValue;
         }
 
         public string FinishWriteProcessAndReleaseResources()
@@ -44,6 +53,14 @@ namespace Light.Serialization.Json.LowLevelWriting
             _stringWriter = null;
             _stringBuilder = null;
             return returnValue;
+        }
+
+        public JsonWriterFactory DecorateCreationWith(Func<IJsonWriter, IJsonWriter> decoratorFunction)
+        {
+            decoratorFunction.MustNotBeNull(nameof(decoratorFunction));
+
+            _decorateFunctions.Add(decoratorFunction);
+            return this;
         }
     }
 }

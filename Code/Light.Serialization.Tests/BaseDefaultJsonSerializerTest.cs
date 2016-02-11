@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Light.Serialization.Json;
+using Light.Serialization.Json.LowLevelWriting;
 
 namespace Light.Serialization.Tests
 {

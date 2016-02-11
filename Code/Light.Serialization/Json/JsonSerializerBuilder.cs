@@ -29,8 +29,7 @@ namespace Light.Serialization.Json
             _defaultWriterInstructors = new List<IJsonWriterInstructor>().AddDefaultWriterInstructors(primitiveTypeToFormattersMapping,
                                                                                                       _readableValuesTypeAnalyzer);
 
-            _writerFactory = new JsonWriterFactory();
-
+            UseDefaultWriterFactory();
             _instructorCache = new Dictionary<Type, IJsonWriterInstructor>();
         }
 
@@ -82,6 +81,12 @@ namespace Light.Serialization.Json
         {
             _readableValuesTypeAnalyzer = new ValueProvidersCacheDecorator(new PublicPropertiesAndFieldsAnalyzer(),
                                                                            valueProvidersCache);
+            return this;
+        }
+
+        public JsonSerializerBuilder UseDefaultWriterFactory()
+        {
+            _writerFactory = new JsonWriterFactory().DecorateCreationWith(w => new NormalizeKeysWriterDecorator(w));
             return this;
         }
 

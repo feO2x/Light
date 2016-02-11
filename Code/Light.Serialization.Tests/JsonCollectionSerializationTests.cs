@@ -12,7 +12,7 @@ namespace Light.Serialization.Tests
             {
                 new object[]
                 {
-                    new[] {1, 2, 3},
+                    new[] { 1, 2, 3 },
                     "[1,2,3]"
                 },
                 new object[]
@@ -27,10 +27,10 @@ namespace Light.Serialization.Tests
                 {
                     new ObservableCollection<DummyPerson>
                     {
-                        new DummyPerson {Name = "Walter White", Age = 52},
-                        new DummyPerson {Name = "Jesse Pinkman", Age = 27}
+                        new DummyPerson { Name = "Walter White", Age = 52 },
+                        new DummyPerson { Name = "Jesse Pinkman", Age = 27 }
                     },
-                    "[{\"Name\":\"Walter White\",\"Age\":52},{\"Name\":\"Jesse Pinkman\",\"Age\":27}]"
+                    "[{\"name\":\"Walter White\",\"age\":52},{\"name\":\"Jesse Pinkman\",\"age\":27}]"
                 }
             };
 

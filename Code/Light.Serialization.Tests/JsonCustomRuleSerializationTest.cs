@@ -16,7 +16,7 @@ namespace Light.Serialization.Tests
 
             var json = serializer.Serialize(dummyObject);
 
-            json.Should().Be("{\"PublicField\":42}");
+            json.Should().Be("{\"publicField\":42}");
         }
 
         [Fact(DisplayName = "Specific fields can be added to a blacklist so that the serializer must ignore them.")]
@@ -28,7 +28,7 @@ namespace Light.Serialization.Tests
 
             var json = serializer.Serialize(dummyObject);
 
-            json.Should().Be("{\"PublicProperty\":\"2016-02-09\"}");
+            json.Should().Be("{\"publicProperty\":\"2016-02-09\"}");
         }
 
         [Fact(DisplayName = "All public properties and fields can be ignored with an empty white list.")]
@@ -52,7 +52,7 @@ namespace Light.Serialization.Tests
 
             var json = serializer.Serialize(dummyObject);
 
-            json.Should().Be("{\"PublicProperty\":\"2016-02-09\"}");
+            json.Should().Be("{\"publicProperty\":\"2016-02-09\"}");
         }
 
         [Fact(DisplayName = "Specific fields can be added to a white list that gets serialized only.")]
@@ -64,7 +64,7 @@ namespace Light.Serialization.Tests
 
             var json = serializer.Serialize(dummyObject);
 
-            json.Should().Be("{\"PublicField\":42}");
+            json.Should().Be("{\"publicField\":42}");
         }
 
         [Fact(DisplayName = "Specific properties can be added to a blacklist so that the serializer must ignore them.")]
@@ -77,7 +77,7 @@ namespace Light.Serialization.Tests
 
             var json = serializer.Serialize(moreComplexDummyObject);
 
-            json.Should().Be("{\"PublicStringProperty\":\"works\",\"PublicField\":42}");
+            json.Should().Be("{\"publicStringProperty\":\"works\",\"publicField\":42}");
         }
 
         [Fact(DisplayName = "Specific properties can be added to a white so that the serializer must serialize them.")]
@@ -91,7 +91,7 @@ namespace Light.Serialization.Tests
 
             var json = serializer.Serialize(moreComplexDummyObject);
 
-            json.Should().Be("{\"PublicStringProperty\":\"works\",\"PublicField\":42}");
+            json.Should().Be("{\"publicStringProperty\":\"works\",\"publicField\":42}");
         }
 
         private static DummyClass CreateDummyObject()
