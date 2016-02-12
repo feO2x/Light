@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;COMPILE_PRECONDITIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -41,13 +41,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BayesianNetwork.cs" />
+    <Compile Include="CollectionFactory.cs" />
+    <Compile Include="CollectionFactoryExtensions.cs" />
     <Compile Include="EqualityHelper.cs" />
-    <Compile Include="IBayesianNetwork.cs" />
-    <Compile Include="INode.cs" />
-    <Compile Include="IOutcome.cs" />
+    <Compile Include="FrameworkExtensions\EntityWithName.cs" />
+    <Compile Include="FrameworkExtensions\GuidEntity.cs" />
+    <Compile Include="FrameworkExtensions\IEntity.cs" />
+    <Compile Include="RandomVariableNode.cs" />
+    <Compile Include="Outcome.cs" />
     <Compile Include="OutcomeCombination.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
