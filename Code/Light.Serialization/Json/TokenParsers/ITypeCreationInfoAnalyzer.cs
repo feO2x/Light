@@ -4,6 +4,6 @@ namespace Light.Serialization.Json.TokenParsers
 {
     public interface ITypeCreationInfoAnalyzer
     {
-        TypeConstructionInfo CreateInfo(Type typeToAnalyze);
+        TypeCreationInfo CreateInfo(Type typeToAnalyze);
     }
 }

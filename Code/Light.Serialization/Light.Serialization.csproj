@@ -40,6 +40,7 @@
     <Compile Include="FrameworkExtensions\ReflectionExtensions.cs" />
     <Compile Include="FrameworkExtensions\StringExtensions.cs" />
     <Compile Include="IDeserializer.cs" />
+    <Compile Include="Json\ComplexTypeDecomposition\DefaultObjectFactory.cs" />
     <Compile Include="Json\LowLevelWriting\NormalizeKeysWriterDecorator.cs" />
     <Compile Include="Json\Caching\ValueProvidersCache.cs" />
     <Compile Include="Json\JsonDeserializerBuilderExtensions.cs" />
@@ -59,7 +60,7 @@
     <Compile Include="Json\TokenParsers\ArrayToGenericCollectionParser.cs" />
     <Compile Include="Json\TokenParsers\BooleanParser.cs" />
     <Compile Include="Json\TokenParsers\CharacterParser.cs" />
-    <Compile Include="Json\TokenParsers\ComplexObjectParser.cs" />
+    <Compile Include="Json\TokenParsers\ComplexTypeParser.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\ConstructorWithLongestParameterListSelector.cs" />
     <Compile Include="Json\ObjectConstruction\DefaultGenericCollectionFactory.cs" />
     <Compile Include="Json\TokenParsers\DoubleParser.cs" />
@@ -112,7 +113,7 @@
     <Compile Include="Json\ComplexTypeDecomposition\IValueProvider.cs" />
     <Compile Include="Json\LowLevelReading\SingleEscapedCharacter.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\ToLowerStringNormalizer.cs" />
-    <Compile Include="Json\TokenParsers\TypeConstructionInfo.cs" />
+    <Compile Include="Json\TokenParsers\TypeCreationInfo.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\DefaultTypeCreationInfoAnalyzer.cs" />
     <Compile Include="Json\Caching\AnalyzerCacheDecorator.cs" />
     <Compile Include="Json\WriterInstructors\CollectionInstructor.cs" />

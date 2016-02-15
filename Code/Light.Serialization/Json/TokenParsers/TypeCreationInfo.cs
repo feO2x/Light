@@ -1,24 +1,20 @@
 ﻿using Light.GuardClauses;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace Light.Serialization.Json.TokenParsers
 {
-    public sealed class TypeConstructionInfo : IEquatable<TypeConstructionInfo>
+    public sealed class TypeCreationInfo : IEquatable<TypeCreationInfo>
     {
         public readonly Type TargetType;
-        public readonly ConstructorInfo TargetConstructor;
         public readonly List<InjectableValueInfo> InjectableValueInfos;
 
-        public TypeConstructionInfo(Type targetType, ConstructorInfo targetConstructor, List<InjectableValueInfo> injectableValueInfos)
+        public TypeCreationInfo(Type targetType, List<InjectableValueInfo> injectableValueInfos)
         {
             targetType.MustNotBeNull(nameof(targetType));
-            targetConstructor.MustNotBeNull(nameof(targetConstructor));
             injectableValueInfos.MustNotBeNullOrEmpty(nameof(injectableValueInfos));
 
             TargetType = targetType;
-            TargetConstructor = targetConstructor;
             InjectableValueInfos = injectableValueInfos;
         }
 
@@ -33,7 +29,7 @@ namespace Light.Serialization.Json.TokenParsers
             return null;
         }
 
-        public bool Equals(TypeConstructionInfo other)
+        public bool Equals(TypeCreationInfo other)
         {
             if (other == null)
                 return false;
@@ -43,7 +39,7 @@ namespace Light.Serialization.Json.TokenParsers
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as TypeConstructionInfo);
+            return Equals(obj as TypeCreationInfo);
         }
 
         public override int GetHashCode()

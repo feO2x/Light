@@ -8,9 +8,9 @@ namespace Light.Serialization.Json.Caching
     public sealed class AnalyzerCacheDecorator : ITypeCreationInfoAnalyzer
     {
         private readonly ITypeCreationInfoAnalyzer _analyzer;
-        private readonly Dictionary<Type, TypeConstructionInfo> _cache;
+        private readonly Dictionary<Type, TypeCreationInfo> _cache;
 
-        public AnalyzerCacheDecorator(ITypeCreationInfoAnalyzer analyzer, Dictionary<Type, TypeConstructionInfo> cache)
+        public AnalyzerCacheDecorator(ITypeCreationInfoAnalyzer analyzer, Dictionary<Type, TypeCreationInfo> cache)
         {
             analyzer.MustNotBeNull(nameof(analyzer));
             cache.MustNotBeNull(nameof(cache));
@@ -19,18 +19,18 @@ namespace Light.Serialization.Json.Caching
             _cache = cache;
         }
 
-        public TypeConstructionInfo CreateInfo(Type typeToAnalyze)
+        public TypeCreationInfo CreateInfo(Type typeToAnalyze)
         {
             typeToAnalyze.MustNotBeNull(nameof(typeToAnalyze));
 
-            TypeConstructionInfo typeConstructionInfo;
-            if (_cache.TryGetValue(typeToAnalyze, out typeConstructionInfo))
-                return typeConstructionInfo;
+            TypeCreationInfo typeCreationInfo;
+            if (_cache.TryGetValue(typeToAnalyze, out typeCreationInfo))
+                return typeCreationInfo;
 
-            typeConstructionInfo = _analyzer.CreateInfo(typeToAnalyze);
-            _cache.Add(typeToAnalyze, typeConstructionInfo);
+            typeCreationInfo = _analyzer.CreateInfo(typeToAnalyze);
+            _cache.Add(typeToAnalyze, typeCreationInfo);
 
-            return typeConstructionInfo;
+            return typeCreationInfo;
         }
     }
 }

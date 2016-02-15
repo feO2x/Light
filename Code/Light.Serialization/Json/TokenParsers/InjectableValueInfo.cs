@@ -1,9 +1,11 @@
 ﻿using Light.GuardClauses;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Light.Serialization.Json.TokenParsers
 {
-    public sealed class InjectableValueInfo : IEquatable<InjectableValueInfo>
+    public class InjectableValueInfo : IEquatable<InjectableValueInfo>
     {
         public readonly string NormalizedName;
         public readonly string ActualName;
@@ -39,6 +41,17 @@ namespace Light.Serialization.Json.TokenParsers
         public override int GetHashCode()
         {
             return NormalizedName.GetHashCode();
+        }
+    }
+
+    public class ConstructorParameterInfo : InjectableValueInfo
+    {
+        public readonly ParameterInfo ParameterInfo;
+
+        public ConstructorParameterInfo(string normalizedName, string actualName, ParameterInfo parameterInfo)
+            : base(normalizedName, actualName, parameterInfo.ParameterType, InjectableValueKind.ConstructorParameter)
+        {
+            ParameterInfo = parameterInfo;
         }
     }
 }

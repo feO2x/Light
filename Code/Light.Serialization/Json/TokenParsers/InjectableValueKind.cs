@@ -4,6 +4,7 @@
     {
         ConstructorParameter,
         PropertySetter,
+        SettableField,
         UnknownOnTargetObject
     }
 }
