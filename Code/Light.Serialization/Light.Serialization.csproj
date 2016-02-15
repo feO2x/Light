@@ -112,7 +112,7 @@
     <Compile Include="Json\ComplexTypeDecomposition\IReadableValuesTypeAnalyzer.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\IValueProvider.cs" />
     <Compile Include="Json\LowLevelReading\SingleEscapedCharacter.cs" />
-    <Compile Include="Json\ComplexTypeDecomposition\ToLowerStringNormalizer.cs" />
+    <Compile Include="Json\ComplexTypeDecomposition\ToLowerWithoutSpecialCharactersNormalizer.cs" />
     <Compile Include="Json\TokenParsers\TypeCreationInfo.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\DefaultTypeCreationInfoAnalyzer.cs" />
     <Compile Include="Json\Caching\AnalyzerCacheDecorator.cs" />
