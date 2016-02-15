@@ -1,7 +1,7 @@
-using Light.BayesianNetwork.FrameworkExtensions;
-using Light.GuardClauses;
 using System;
 using System.Collections.Generic;
+using Light.BayesianNetwork.FrameworkExtensions;
+using Light.GuardClauses;
 
 namespace Light.BayesianNetwork
 {
@@ -9,6 +9,8 @@ namespace Light.BayesianNetwork
     {
         private readonly IList<RandomVariableNode> _childNodes;
         private readonly IReadOnlyList<RandomVariableNode> _childNodesAsReadOnlyList;
+        private readonly IList<Outcome> _outcomes;
+        private readonly IReadOnlyList<Outcome> _outcomesAsReadOnlyList;
         private readonly IList<RandomVariableNode> _parentNodes;
         private readonly IReadOnlyList<RandomVariableNode> _parentNodesAsReadOnlyList;
 
@@ -20,6 +22,7 @@ namespace Light.BayesianNetwork
             Network = network;
             network.CollectionFactory.InitializeListFields(out _parentNodes, out _parentNodesAsReadOnlyList);
             network.CollectionFactory.InitializeListFields(out _childNodes, out _childNodesAsReadOnlyList);
+            network.CollectionFactory.InitializeListFields(out _outcomes, out _outcomesAsReadOnlyList);
             ProbabilityTable = network.CollectionFactory.CreateDictionary<OutcomeCombination, double>();
         }
 
@@ -27,6 +30,7 @@ namespace Light.BayesianNetwork
 
         public IReadOnlyList<RandomVariableNode> ParentNodes => _parentNodesAsReadOnlyList;
         public IReadOnlyList<RandomVariableNode> ChildNodes => _childNodesAsReadOnlyList;
+        public IReadOnlyList<Outcome> Outcomes => _outcomesAsReadOnlyList;
         public IDictionary<OutcomeCombination, double> ProbabilityTable { get; }
 
         public void ConnectChild(RandomVariableNode childNode)
@@ -85,6 +89,49 @@ namespace Light.BayesianNetwork
             _parentNodes.RemoveAt(index);
 
             // TODO: unhook from events of removed node
+        }
+
+        public void AddOutcome(Outcome newOutcome)
+        {
+            newOutcome.MustNotBeNull(nameof(newOutcome));
+            newOutcome.MustNotBeOneOf(_outcomesAsReadOnlyList, nameof(newOutcome));
+
+            _outcomes.Add(newOutcome);
+            newOutcome.EvidenceSet += OnEvidenceSet;
+        }
+
+        public void RemoveOutcome(Outcome existingOutcome)
+        {
+            existingOutcome.MustNotBeNull(nameof(existingOutcome));
+
+            if (_outcomes.Remove(existingOutcome) == false)
+                throw new ArgumentException($"The outcome {existingOutcome} is not registered with node {this}", nameof(existingOutcome));
+
+            existingOutcome.EvidenceSet -= OnEvidenceSet;
+        }
+
+        public void RemoveOutcomeAt(int index)
+        {
+            index.MustNotBeLessThan(0, nameof(index));
+            index.MustNotBeGreaterThan(_outcomes.Count, nameof(index));
+
+            var outcomeToBeRemoved = _outcomes[index];
+            _outcomes.RemoveAt(index);
+
+            outcomeToBeRemoved.EvidenceSet -= OnEvidenceSet;
+        }
+
+        private void OnEvidenceSet(Outcome evidenceOutcome)
+        {
+            foreach (var outcome in _outcomes)
+            {
+                if (evidenceOutcome == outcome)
+                    continue;
+
+                outcome.CurrentProbability = OutcomeProbability.ValueIsNotEvidence;
+            }
+
+            throw new NotImplementedException("Whom do we have to notify that our outcome values have changed?");
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Light.BayesianNetwork
 {
     public class Outcome : EntityWithName
     {
-        private double _currentProbability;
+        private OutcomeProbability _currentProbability = OutcomeProbability.Default;
 
         public Outcome(Guid id, RandomVariableNode node) : base(id)
         {
@@ -15,23 +15,23 @@ namespace Light.BayesianNetwork
             Node = node;
         }
 
-        public double CurrentProbability
+        public OutcomeProbability CurrentProbability
         {
             get { return _currentProbability; }
-            set
-            {
-                value.MustNotBeGreaterThan(1.0, nameof(value));
-                value.MustNotBeLessThan(0.0, nameof(value));
-
-                _currentProbability = value;
-            }
+            set { _currentProbability = value; }
         }
 
         public RandomVariableNode Node { get; }
 
         public void SetEvidence()
         {
-            throw new NotImplementedException("TODO: set the current probability to 100% and raise observable event.");
+            if (_currentProbability.Kind == OutcomeProbabilityKind.SelectedEvidence)
+                return;
+
+            _currentProbability = OutcomeProbability.ValueIsEvidence;
+            EvidenceSet?.Invoke(this);
         }
+
+        public event Action<Outcome> EvidenceSet;
     }
 }

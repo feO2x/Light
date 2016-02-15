@@ -49,6 +49,8 @@
     <Compile Include="FrameworkExtensions\GuidEntity.cs" />
     <Compile Include="FrameworkExtensions\IEntity.cs" />
     <Compile Include="ICollectionFactory.cs" />
+    <Compile Include="OutcomeProbability.cs" />
+    <Compile Include="OutcomeProbabilityKind.cs" />
     <Compile Include="RandomVariableNode.cs" />
     <Compile Include="Outcome.cs" />
     <Compile Include="OutcomeCombination.cs" />
