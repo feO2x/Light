@@ -5,7 +5,7 @@ namespace Light.BayesianNetwork
 {
     public static class CollectionFactoryExtensions
     {
-        public static void InitializeListFields<T>(this CollectionFactory collectionFactory, out IList<T> listField, out IReadOnlyList<T> readOnlyListField)
+        public static void InitializeListFields<T>(this ICollectionFactory collectionFactory, out IList<T> listField, out IReadOnlyList<T> readOnlyListField)
         {
             collectionFactory.MustNotBeNull(nameof(collectionFactory));
 

@@ -9,13 +9,13 @@ namespace Light.BayesianNetwork
     {
         private readonly IList<RandomVariableNode> _nodes;
         private readonly IReadOnlyList<RandomVariableNode> _nodesAsReadOnlyList;
-        public readonly CollectionFactory CollectionFactory;
+        public readonly ICollectionFactory CollectionFactory;
 
-        public BayesianNetwork(Guid id) : this(id, new CollectionFactory())
+        public BayesianNetwork(Guid id) : this(id, new DefaultCollectionFactory())
         {
         }
 
-        public BayesianNetwork(Guid id, CollectionFactory collectionFactory)
+        public BayesianNetwork(Guid id, ICollectionFactory collectionFactory)
             : base(id)
         {
             collectionFactory.MustNotBeNull(nameof(collectionFactory));
@@ -26,7 +26,7 @@ namespace Light.BayesianNetwork
 
         public IReadOnlyList<RandomVariableNode> Nodes => _nodesAsReadOnlyList;
 
-        public virtual void AddNode(RandomVariableNode node)
+        public void AddNode(RandomVariableNode node)
         {
             node.MustNotBeNull(nameof(node));
 
@@ -35,7 +35,7 @@ namespace Light.BayesianNetwork
             // TODO: Check the network for consistency (no circular references etc.)
         }
 
-        public virtual void RemoveNode(RandomVariableNode node)
+        public void RemoveNode(RandomVariableNode node)
         {
             node.MustNotBeNull(nameof(node));
 

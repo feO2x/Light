@@ -2,14 +2,14 @@ using System.Collections.Generic;
 
 namespace Light.BayesianNetwork
 {
-    public class CollectionFactory
+    public sealed class DefaultCollectionFactory : ICollectionFactory
     {
-        public virtual IList<T> CreateList<T>()
+        public IList<T> CreateList<T>()
         {
             return new List<T>();
         }
 
-        public virtual IDictionary<TKey, TValue> CreateDictionary<TKey, TValue>()
+        public IDictionary<TKey, TValue> CreateDictionary<TKey, TValue>()
         {
             return new Dictionary<TKey, TValue>();
         }
