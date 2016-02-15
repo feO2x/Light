@@ -21,6 +21,15 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
         {
             var targetTypeInfo = typeCreationInfo.TargetType.GetTypeInfo();
 
+            if (deserializedChildValues == null || deserializedChildValues.Count == 0)
+            {
+                var defaultConstructor = targetTypeInfo.DeclaredConstructors.FirstOrDefault(c => c.GetParameters().Length == 0);
+                if (defaultConstructor == null)
+                    throw new DeserializationException($"Could not create instance of type {typeCreationInfo.TargetType.FullName} because there was not any JSON data and no default constructor."); // TODO: maybe we can express this a little bit clearer
+
+                return defaultConstructor.Invoke(null);
+            }
+
             object newObject = null;
             foreach (var constructorInfo in targetTypeInfo.DeclaredConstructors
                                                           .Where(c => c.IsPublic && c.IsStatic == false)

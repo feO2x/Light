@@ -9,6 +9,7 @@ namespace Light.Serialization.Json.TokenParsers
         private readonly INameToTypeMapping _nameToTypeMapping;
         private readonly IObjectFactory _objectFactory;
         private readonly Type _objectType = typeof (object);
+        private readonly Type _stringType = typeof (string);
         private readonly ITypeCreationInfoAnalyzer _typeAnalyzer;
         private string _actualTypeSymbol = "$type";
 
@@ -54,7 +55,7 @@ namespace Light.Serialization.Json.TokenParsers
             if (firstToken.JsonType != JsonTokenType.String)
                 throw new JsonDocumentException($"Expected JSON string or end of complex JSON object, but found {firstToken}", firstToken);
 
-            var firstTokenString = firstToken.ToStringWithoutQuotationMarks();
+            var firstTokenString = (string) context.DeserializeToken(firstToken, _stringType);
             Dictionary<InjectableValueInfo, object> deserializedChildValues;
             TypeCreationInfo typeCreationInfo;
 
@@ -67,7 +68,7 @@ namespace Light.Serialization.Json.TokenParsers
                 if (typeStringToken.JsonType != JsonTokenType.String)
                     throw new JsonDocumentException($"Expected JSON string containing the type name for deserialization, but found {typeStringToken}", typeStringToken);
 
-                var typeToConstruct = _nameToTypeMapping.Map(typeStringToken.ToStringWithoutQuotationMarks());
+                var typeToConstruct = _nameToTypeMapping.Map((string) context.DeserializeToken(typeStringToken, _stringType));
                 typeCreationInfo = _typeAnalyzer.CreateInfo(typeToConstruct);
 
                 // If the complex object ends here, then just create the target object using the factory
@@ -106,7 +107,7 @@ namespace Light.Serialization.Json.TokenParsers
                 if (labelToken.JsonType != JsonTokenType.String)
                     throw new JsonDocumentException($"Expected JSON string or end of complex JSON object, but found {labelToken}", labelToken);
 
-                var injectableValueName = labelToken.ToStringWithoutQuotationMarks();
+                var injectableValueName = (string) context.DeserializeToken(labelToken, _stringType);
                 var injectableValueInfo = typeCreationInfo.GetInjectableValueInfoFromName(injectableValueName) ??
                                           new InjectableValueInfo(injectableValueName, injectableValueName, _objectType, InjectableValueKind.UnknownOnTargetObject);
 
