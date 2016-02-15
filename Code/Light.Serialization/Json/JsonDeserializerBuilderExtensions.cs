@@ -9,7 +9,10 @@ namespace Light.Serialization.Json
     {
         public static IList<IJsonTokenParser> AddDefaultTokenParsers(this IList<IJsonTokenParser> targetList,
                                                                      JsonReaderSymbols jsonReaderSymbols,
-                                                                     ICollectionFactory collectionFactory)
+                                                                     ICollectionFactory collectionFactory,
+                                                                     IObjectFactory objectFactory,
+                                                                     INameToTypeMapping nameToTypeMapping,
+                                                                     ITypeCreationInfoAnalyzer typeCreationInfoAnalyzer)
         {
             targetList.MustNotBeNull(nameof(targetList));
 
@@ -20,6 +23,7 @@ namespace Light.Serialization.Json
             targetList.Add(new CharacterParser(jsonReaderSymbols));
             targetList.Add(new BooleanParser());
             targetList.Add(new ArrayToGenericCollectionParser(collectionFactory));
+            targetList.Add(new ComplexTypeParser(objectFactory, nameToTypeMapping, typeCreationInfoAnalyzer));
 
             return targetList;
         }
