@@ -58,5 +58,94 @@ namespace Light.Serialization.FrameworkExtensions
 
             return char.ToLowerInvariant(@string[0]) + @string.Substring(1);
         }
+
+        public static string FirstCharacterToLowerAndRemoveAllSpecialCharacters(this string @string)
+        {
+            int i;
+            char character;
+            for (i = 0; i < @string.Length; i++)
+            {
+                character = @string[i];
+                if (char.IsLetterOrDigit(character) == false)
+                    goto NormalizeString;
+            }
+
+            return @string.MakeFirstCharacterLowercase();
+
+            // This section is only used when a new string has to be created because the old one contains special or uppercase characters
+            // Otherwise, the passed in string is returned (to minimize the creation of object - your GC will thank you).
+            NormalizeString:
+            var numberOfSpecialCharacters = 0;
+
+            for (; i < @string.Length; i++)
+            {
+                if (char.IsLetterOrDigit(@string[i]) == false)
+                    numberOfSpecialCharacters++;
+            }
+
+            if (numberOfSpecialCharacters == @string.Length)
+                throw new DeserializationException($"The specified name {@string} contains only special characters that cannot be normalized.");
+
+            var charArray = new char[@string.Length - numberOfSpecialCharacters];
+            int charArrayIndex = 0;
+
+            for (i = 0; i < @string.Length; i++)
+            {
+                character = @string[i];
+                if (char.IsLetterOrDigit(character) == false)
+                    continue;
+
+                charArray[charArrayIndex] = character;
+                charArrayIndex++;
+            }
+
+            if (char.IsLower(charArray[0]))
+                return new string(charArray);
+
+            charArray[0] = char.ToLowerInvariant(charArray[0]);
+
+            return new string(charArray);
+        }
+
+        public static string ToLowerAndRemoveAllSpecialCharacters(this string @string)
+        {
+            int i;
+            char character;
+            for (i = 0; i < @string.Length; i++)
+            {
+                character = @string[i];
+                if (char.IsLetterOrDigit(character) == false || char.IsLower(character) == false)
+                    goto NormalizeString;
+            }
+
+            return @string;
+
+            // This section is only used when a new string has to be created because the old one contains special or uppercase characters
+            // Otherwise, the passed in string is returned (to minimize the creation of object - your GC will thank you).
+            NormalizeString:
+            var numberOfSpecialCharacters = 0;
+
+            for (; i < @string.Length; i++)
+            {
+                if (char.IsLetterOrDigit(@string[i]) == false)
+                    numberOfSpecialCharacters++;
+            }
+
+            if (numberOfSpecialCharacters == @string.Length)
+                throw new DeserializationException($"The specified name {@string} contains only special characters that cannot be normalized.");
+
+            var charArray = new char[@string.Length - numberOfSpecialCharacters];
+
+            for (i = 0; i < @string.Length; i++)
+            {
+                character = @string[i];
+                if (char.IsLetterOrDigit(character) == false)
+                    continue;
+
+                charArray[i] = char.ToLower(character);
+            }
+
+            return new string(charArray);
+        }
     }
 }

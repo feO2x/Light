@@ -5,6 +5,11 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
 {
     public sealed class DoubleFormatter : BasePrimitiveTypeFormatter<double>, IPrimitiveTypeFormatter
     {
+        public DoubleFormatter() : base(false)
+        {
+            
+        }
+
         public string FormatPrimitiveType(object @object)
         {
             var value = (double) @object;

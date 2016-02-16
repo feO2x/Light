@@ -28,7 +28,7 @@ namespace Light.Serialization.Tests
                         { "Walter", new DummyPerson { Name = "Walter White", Age = 52 } },
                         { "Jesse", new DummyPerson { Name = "Jesse Pinkman", Age = 27 } }
                     },
-                    "{\"Walter\":{\"name\":\"Walter White\",\"age\":52},\"Jesse\":{\"name\":\"Jesse Pinkman\",\"age\":27}}"
+                    "{\"walter\":{\"name\":\"Walter White\",\"age\":52},\"jesse\":{\"name\":\"Jesse Pinkman\",\"age\":27}}"
                 },
                 new object[]
                 {
@@ -38,7 +38,7 @@ namespace Light.Serialization.Tests
                         { new DummyPerson { Name = "Blubb", Age = 55 }, "Xoi" }
                     },
                     string.Format("{{\"{0}\":\"Bla\",\"{0}\":\"Xoi\"}}",
-                                  typeof (DummyPerson).FullName.MakeFirstCharacterLowercase())
+                                  typeof (DummyPerson).FullName)
                 }
             };
     }

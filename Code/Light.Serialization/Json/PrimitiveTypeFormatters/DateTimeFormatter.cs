@@ -9,6 +9,11 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
 
         private TimeZoneInfo _timeZoneInfo = TimeZoneInfo.Local;
 
+        public DateTimeFormatter() : base(false)
+        {
+            
+        }
+
         public TimeZoneInfo TimeZoneInfo
         {
             get { return _timeZoneInfo;}

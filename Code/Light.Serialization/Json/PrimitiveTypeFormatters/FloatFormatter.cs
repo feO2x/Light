@@ -5,6 +5,11 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
 {
     public sealed class FloatFormatter : BasePrimitiveTypeFormatter<float>, IPrimitiveTypeFormatter
     {
+        public FloatFormatter() : base(false)
+        {
+            
+        }
+
         public string FormatPrimitiveType(object @object)
         {
             var value = (float) @object;

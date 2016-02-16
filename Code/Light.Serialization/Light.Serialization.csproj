@@ -42,7 +42,6 @@
     <Compile Include="IDeserializer.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\DefaultObjectFactory.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\SimpleNameToTypeMapping.cs" />
-    <Compile Include="Json\LowLevelWriting\NormalizeKeysWriterDecorator.cs" />
     <Compile Include="Json\Caching\ValueProvidersCache.cs" />
     <Compile Include="Json\JsonDeserializerBuilderExtensions.cs" />
     <Compile Include="Json\SerializationRules\IAndBlackListRule.cs" />

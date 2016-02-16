@@ -6,7 +6,7 @@
         void EndArray();
         void BeginObject();
         void EndObject();
-        void WriteKey(string key);
+        void WriteKey(string key, bool shouldNormalizeKey = true);
         void WriteDelimiter();
         void WritePrimitiveValue(string @string);
         void WriteNull();

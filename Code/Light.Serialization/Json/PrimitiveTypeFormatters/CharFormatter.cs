@@ -7,7 +7,7 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
     {
         private readonly ICharacterEscaper _characterEscaper;
 
-        public CharFormatter(ICharacterEscaper characterEscaper)
+        public CharFormatter(ICharacterEscaper characterEscaper) : base(true)
         {
             characterEscaper.MustNotBeNull(nameof(characterEscaper));
 
