@@ -17,7 +17,7 @@ namespace Light.Serialization.Json.WriterInstructors
                 var valueProvider = valueProvidersForComplexObject[i];
                 var childValue = valueProvider.GetValue(context.ObjectToBeSerialized);
 
-                writer.WriteKey(valueProvider.Name);
+                writer.WriteKey(valueProvider.Name); //todo: normalize or not?
                 if (childValue == null)
                     writer.WriteNull();
                 else

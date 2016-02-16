@@ -6,5 +6,10 @@
         {
             return @object.ToString().ToLower();
         }
+
+        public BooleanFormatter() : base(false)
+        {
+
+        }
     }
 }

@@ -45,8 +45,11 @@ namespace Light.Serialization.Json.LowLevelWriting
             _textWriter.Write(_symbols.EndOfObject);
         }
 
-        public void WriteKey(string key)
+        public void WriteKey(string key, bool shouldNormalizeKey)
         {
+            if (shouldNormalizeKey)
+                key = NormalizeJsonKey(key);
+
             if (key.IsSurroundedByQuotationMarks() == false)
                 key = key.SurroundWithQuotationMarks();
 
@@ -69,6 +72,11 @@ namespace Light.Serialization.Json.LowLevelWriting
         public void WriteNull()
         {
             _textWriter.Write(_symbols.Null);
+        }
+
+        private static string NormalizeJsonKey(string key)
+        {
+            return key.FirstCharacterToLowerAndRemoveAllSpecialCharacters();
         }
     }
 }

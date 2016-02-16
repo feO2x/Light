@@ -1,6 +1,7 @@
 ﻿using Light.GuardClauses;
 using Light.Serialization.FrameworkExtensions;
 using System.Text;
+using Microsoft.CSharp.RuntimeBinder;
 
 namespace Light.Serialization.Json.PrimitiveTypeFormatters
 {
@@ -8,7 +9,7 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
     {
         private readonly ICharacterEscaper _characterEscaper;
 
-        public StringFormatter(ICharacterEscaper characterEscaper)
+        public StringFormatter(ICharacterEscaper characterEscaper) : base(true)
         {
             characterEscaper.MustNotBeNull(nameof(characterEscaper));
 

@@ -6,5 +6,6 @@ namespace Light.Serialization.Json
     {
         Type TargetType { get; }
         string FormatPrimitiveType(object @object);
+        bool ShouldBeNormalizedKey { get; }
     }
 }
