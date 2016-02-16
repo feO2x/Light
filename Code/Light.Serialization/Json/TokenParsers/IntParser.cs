@@ -4,13 +4,13 @@ namespace Light.Serialization.Json.TokenParsers
 {
     public sealed class IntParser : IJsonTokenParser
     {
-        private readonly Type _intType = typeof (int);
+        private readonly Type _intType = typeof (int); //
 
         public const char DecimalPointCharacter = '.';
         public const char NegativeSign = '-';
 
-        public const string MaxIntAsString = "2147483647";
-        public const string MinIntAsString = "-2147483648";
+        public const string MaxIntAsString = "2147483647"; //
+        public const string MinIntAsString = "-2147483648"; //
 
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
@@ -52,12 +52,19 @@ namespace Light.Serialization.Json.TokenParsers
 
             var result = 0;
             var currentPositionBeforeDecimalPoint = positionsBeforeDecimalPoint;
+            bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
                 var digit = token[currentIndex] - '0';
 
-                if (digit > overflowCompareString?[currentIndex] - '0')
-                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                if (isDefinitelyInRange == false)
+                {
+                    var overflowCompareDigit = overflowCompareString?[currentIndex] - '0';
+                    if (digit < overflowCompareDigit)
+                        isDefinitelyInRange = true;
+                    else if (digit > overflowCompareDigit)
+                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                }
 
                 result += digit * CalculateBase(currentPositionBeforeDecimalPoint);
 
