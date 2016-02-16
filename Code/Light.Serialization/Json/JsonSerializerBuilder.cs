@@ -84,7 +84,7 @@ namespace Light.Serialization.Json
 
         public JsonSerializerBuilder UseDefaultWriterFactory()
         {
-            _writerFactory = new JsonWriterFactory().DecorateCreationWith(w => new NormalizeKeysWriterDecorator(w));
+            _writerFactory = new JsonWriterFactory();
             return this;
         }
 

@@ -46,9 +46,12 @@ namespace Light.Serialization.Json.WriterInstructors
                     var keyType = key.GetType();
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                     if (_primitiveTypeToFormattersMapping.ContainsKey(keyType))
-                        writer.WriteKey(_primitiveTypeToFormattersMapping[keyType].FormatPrimitiveType(key));
+                    {
+                        var typeFormatter = _primitiveTypeToFormattersMapping[keyType];
+                        writer.WriteKey(typeFormatter.FormatPrimitiveType(key), typeFormatter.ShouldBeNormalizedKey);
+                    }
                     else
-                        writer.WriteKey(key.ToString());
+                        writer.WriteKey(key.ToString(), false); 
                 }
 
                 var value = dicitionaryEnumerator.Value;
