@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Reflection;
 using Light.GuardClauses;
+using Light.Serialization.Json.ComplexTypeDecomposition;
 using Light.Serialization.Json.TokenParsers;
 
-namespace Light.Serialization.Json.ComplexTypeDecomposition
+namespace Light.Serialization.Json.ComplexTypeConstruction
 {
     public sealed class DefaultObjectFactory : IObjectFactory
     {
@@ -17,15 +18,15 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
             _normalizer = normalizer;
         }
 
-        public object Create(TypeCreationInfo typeCreationInfo, Dictionary<InjectableValueInfo, object> deserializedChildValues)
+        public object Create(TypeCreationDescription typeCreationDescription, Dictionary<InjectableValueDescription, object> deserializedChildValues)
         {
-            var targetTypeInfo = typeCreationInfo.TargetType.GetTypeInfo();
+            var targetTypeInfo = typeCreationDescription.TargetType.GetTypeInfo();
 
             if (deserializedChildValues == null || deserializedChildValues.Count == 0)
             {
                 var defaultConstructor = targetTypeInfo.DeclaredConstructors.FirstOrDefault(c => c.GetParameters().Length == 0);
                 if (defaultConstructor == null)
-                    throw new DeserializationException($"Could not create instance of type {typeCreationInfo.TargetType.FullName} because there was not any JSON data and no default constructor."); // TODO: maybe we can express this a little bit clearer
+                    throw new DeserializationException($"Could not create instance of type {typeCreationDescription.TargetType.FullName} because there was not any JSON data and no default constructor."); // TODO: maybe we can express this a little bit clearer
 
                 return defaultConstructor.Invoke(null);
             }
@@ -45,17 +46,17 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
             }
 
             if (newObject == null)
-                throw new DeserializationException($"The specified type {typeCreationInfo.TargetType.FullName} cannot be created with the given type info."); // TODO: add the deserialized values to this exception message
+                throw new DeserializationException($"The specified type {typeCreationDescription.TargetType.FullName} cannot be created with the given type info."); // TODO: add the deserialized values to this exception message
 
             foreach (var injectablePropertyInfo in deserializedChildValues.Keys.Where(i => i.Kind == InjectableValueKind.PropertySetter))
             {
-                var propertyInfo = typeCreationInfo.TargetType.GetRuntimeProperty(injectablePropertyInfo.ActualName);
+                var propertyInfo = typeCreationDescription.TargetType.GetRuntimeProperty(injectablePropertyInfo.ActualName);
                 propertyInfo.SetMethod.Invoke(newObject, new[] { deserializedChildValues[injectablePropertyInfo] });
             }
 
             foreach (var injectableFieldInfo in deserializedChildValues.Keys.Where(i => i.Kind == InjectableValueKind.SettableField))
             {
-                var fieldInfo = typeCreationInfo.TargetType.GetRuntimeField(injectableFieldInfo.ActualName);
+                var fieldInfo = typeCreationDescription.TargetType.GetRuntimeField(injectableFieldInfo.ActualName);
                 fieldInfo.SetValue(newObject, deserializedChildValues[injectableFieldInfo]);
             }
 
@@ -66,7 +67,7 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
 
         private object CreateObjectIfPossible(ConstructorInfo constructorInfo,
                                               ParameterInfo[] constructorParameters,
-                                              Dictionary<InjectableValueInfo, object> deserializedChildValues)
+                                              Dictionary<InjectableValueDescription, object> deserializedChildValues)
         {
             if (constructorParameters.Length == 0)
                 return constructorInfo.Invoke(null);

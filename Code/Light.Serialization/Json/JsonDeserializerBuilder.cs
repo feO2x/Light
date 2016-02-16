@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Light.Serialization.Json.ComplexTypeConstruction;
 using Light.Serialization.Json.ComplexTypeDecomposition;
 using Light.Serialization.Json.LowLevelReading;
 using Light.Serialization.Json.ObjectConstruction;

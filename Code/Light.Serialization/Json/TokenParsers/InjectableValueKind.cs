@@ -1,5 +1,8 @@
-﻿namespace Light.Serialization.Json.TokenParsers
+﻿using System;
+
+namespace Light.Serialization.Json.TokenParsers
 {
+    [Flags]
     public enum InjectableValueKind
     {
         ConstructorParameter,

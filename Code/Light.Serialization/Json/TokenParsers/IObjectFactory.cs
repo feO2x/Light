@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using Light.Serialization.Json.ComplexTypeConstruction;
 
 namespace Light.Serialization.Json.TokenParsers
 {
     public interface IObjectFactory
     {
-        object Create(TypeCreationInfo typeCreationInfo, Dictionary<InjectableValueInfo, object> deserializedChildValues);
+        object Create(TypeCreationDescription typeCreationDescription, Dictionary<InjectableValueDescription, object> deserializedChildValues);
     }
 }

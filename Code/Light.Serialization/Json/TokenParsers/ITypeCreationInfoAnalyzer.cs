@@ -1,9 +1,10 @@
 ﻿using System;
+using Light.Serialization.Json.ComplexTypeConstruction;
 
 namespace Light.Serialization.Json.TokenParsers
 {
     public interface ITypeCreationInfoAnalyzer
     {
-        TypeCreationInfo CreateInfo(Type typeToAnalyze);
+        TypeCreationDescription CreateInfo(Type typeToAnalyze);
     }
 }

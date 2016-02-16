@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Light.GuardClauses;
+using Light.Serialization.Json.ComplexTypeConstruction;
 
 namespace Light.Serialization.Json.TokenParsers
 {
@@ -56,8 +57,8 @@ namespace Light.Serialization.Json.TokenParsers
                 throw new JsonDocumentException($"Expected JSON string or end of complex JSON object, but found {firstToken}", firstToken);
 
             var firstTokenString = (string) context.DeserializeToken(firstToken, _stringType);
-            Dictionary<InjectableValueInfo, object> deserializedChildValues;
-            TypeCreationInfo typeCreationInfo;
+            Dictionary<InjectableValueDescription, object> deserializedChildValues;
+            TypeCreationDescription typeCreationDescription;
 
             // Check if the first string marks the actual type that should be used for deserializing
             if (firstTokenString == _actualTypeSymbol)
@@ -69,25 +70,25 @@ namespace Light.Serialization.Json.TokenParsers
                     throw new JsonDocumentException($"Expected JSON string containing the type name for deserialization, but found {typeStringToken}", typeStringToken);
 
                 var typeToConstruct = _nameToTypeMapping.Map((string) context.DeserializeToken(typeStringToken, _stringType));
-                typeCreationInfo = _typeAnalyzer.CreateInfo(typeToConstruct);
+                typeCreationDescription = _typeAnalyzer.CreateInfo(typeToConstruct);
 
                 // If the complex object ends here, then just create the target object using the factory
                 // There are no more label value pairs in this object to be deserialized
                 if (ReadAndExpectEndOfObjectOrValueDelimiter(jsonReader) == JsonTokenType.EndOfObject)
-                    return _objectFactory.Create(typeCreationInfo, null);
+                    return _objectFactory.Create(typeCreationDescription, null);
 
-                deserializedChildValues = new Dictionary<InjectableValueInfo, object>();
+                deserializedChildValues = new Dictionary<InjectableValueDescription, object>();
             }
             // If not then the first label corresponds to a value that must be injected into the object to be created
             else
             {
-                deserializedChildValues = new Dictionary<InjectableValueInfo, object>();
+                deserializedChildValues = new Dictionary<InjectableValueDescription, object>();
 
                 var typeToConstruct = context.RequestedType;
-                typeCreationInfo = _typeAnalyzer.CreateInfo(typeToConstruct);
+                typeCreationDescription = _typeAnalyzer.CreateInfo(typeToConstruct);
 
-                var injectableValueInfo = typeCreationInfo.GetInjectableValueInfoFromName(firstTokenString) ??
-                                          new InjectableValueInfo(firstTokenString, firstTokenString, _objectType, InjectableValueKind.UnknownOnTargetObject);
+                var injectableValueInfo = typeCreationDescription.GetInjectableValueInfoFromName(firstTokenString) ??
+                                          new InjectableValueDescription(firstTokenString, firstTokenString, _objectType, InjectableValueKind.UnknownOnTargetObject);
 
                 ReadAndExpectPairDelimiterToken(jsonReader);
 
@@ -97,7 +98,7 @@ namespace Light.Serialization.Json.TokenParsers
                 deserializedChildValues.Add(injectableValueInfo, value);
 
                 if (ReadAndExpectEndOfObjectOrValueDelimiter(jsonReader) == JsonTokenType.EndOfObject)
-                    return _objectFactory.Create(typeCreationInfo, deserializedChildValues);
+                    return _objectFactory.Create(typeCreationDescription, deserializedChildValues);
             }
 
             // At this point, there must be definitely another label value pair in the complex JSON object
@@ -108,8 +109,8 @@ namespace Light.Serialization.Json.TokenParsers
                     throw new JsonDocumentException($"Expected JSON string or end of complex JSON object, but found {labelToken}", labelToken);
 
                 var injectableValueName = (string) context.DeserializeToken(labelToken, _stringType);
-                var injectableValueInfo = typeCreationInfo.GetInjectableValueInfoFromName(injectableValueName) ??
-                                          new InjectableValueInfo(injectableValueName, injectableValueName, _objectType, InjectableValueKind.UnknownOnTargetObject);
+                var injectableValueInfo = typeCreationDescription.GetInjectableValueInfoFromName(injectableValueName) ??
+                                          new InjectableValueDescription(injectableValueName, injectableValueName, _objectType, InjectableValueKind.UnknownOnTargetObject);
 
                 ReadAndExpectPairDelimiterToken(jsonReader);
 
@@ -119,7 +120,7 @@ namespace Light.Serialization.Json.TokenParsers
                 deserializedChildValues.Add(injectableValueInfo, value);
 
                 if (ReadAndExpectEndOfObjectOrValueDelimiter(jsonReader) == JsonTokenType.EndOfObject)
-                    return _objectFactory.Create(typeCreationInfo, deserializedChildValues);
+                    return _objectFactory.Create(typeCreationDescription, deserializedChildValues);
             }
         }
 

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Light.GuardClauses;
+using Light.Serialization.Json.ComplexTypeDecomposition;
 using Light.Serialization.Json.TokenParsers;
 
-namespace Light.Serialization.Json.ComplexTypeDecomposition
+namespace Light.Serialization.Json.ComplexTypeConstruction
 {
     public sealed class DefaultTypeCreationInfoAnalyzer : ITypeCreationInfoAnalyzer
     {
@@ -18,7 +19,7 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
             _injectableValueNameNormalizer = injectableValueNameNormalizer;
         }
 
-        public TypeCreationInfo CreateInfo(Type typeToAnalyze)
+        public TypeCreationDescription CreateInfo(Type typeToAnalyze)
         {
             typeToAnalyze.MustNotBeNull(nameof(typeToAnalyze));
 
@@ -29,14 +30,14 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
 
             var constructors = typeInfo.DeclaredConstructors
                                        .Where(c => c.IsStatic == false && c.IsPublic);
-            var injectableValueInfos = new List<InjectableValueInfo>();
+            var injectableValueInfos = new List<InjectableValueDescription>();
             foreach (var constructorInfo in constructors)
             {
                 foreach (var parameterInfo in constructorInfo.GetParameters())
                 {
                     var normalizedParameterName = _injectableValueNameNormalizer.Normalize(parameterInfo.Name);
 
-                    var injectableValueInfo = new InjectableValueInfo(normalizedParameterName,
+                    var injectableValueInfo = new InjectableValueDescription(normalizedParameterName,
                                                                       parameterInfo.Name,
                                                                       parameterInfo.ParameterType,
                                                                       InjectableValueKind.ConstructorParameter);
@@ -63,17 +64,17 @@ namespace Light.Serialization.Json.ComplexTypeDecomposition
                 CreateInfoForPropertyOrField(fieldInfo.Name, fieldInfo.FieldType, InjectableValueKind.SettableField, injectableValueInfos, typeToAnalyze);
             }
 
-            return new TypeCreationInfo(typeToAnalyze, injectableValueInfos);
+            return new TypeCreationDescription(typeToAnalyze, injectableValueInfos);
         }
 
-        private void CreateInfoForPropertyOrField(string actualName, Type memberType, InjectableValueKind kind, List<InjectableValueInfo> list, Type typeToAnalyze)
+        private void CreateInfoForPropertyOrField(string actualName, Type memberType, InjectableValueKind kind, List<InjectableValueDescription> list, Type typeToAnalyze)
         {
             var normalizedName = _injectableValueNameNormalizer.Normalize(actualName);
 
             var existingInfoWithSameName = list.FirstOrDefault(i => i.NormalizedName == normalizedName);
             if (existingInfoWithSameName == null)
             {
-                list.Add(new InjectableValueInfo(normalizedName, actualName, memberType, kind));
+                list.Add(new InjectableValueDescription(normalizedName, actualName, memberType, kind));
                 return;
             }
 

@@ -40,8 +40,8 @@
     <Compile Include="FrameworkExtensions\ReflectionExtensions.cs" />
     <Compile Include="FrameworkExtensions\StringExtensions.cs" />
     <Compile Include="IDeserializer.cs" />
-    <Compile Include="Json\ComplexTypeConstruction\ComplexTypeCreationAnalysis.cs" />
-    <Compile Include="Json\ComplexTypeDecomposition\DefaultObjectFactory.cs" />
+    <Compile Include="Json\ComplexTypeConstruction\PublicConstructorDescription.cs" />
+    <Compile Include="Json\ComplexTypeConstruction\DefaultObjectFactory.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\SimpleNameToTypeMapping.cs" />
     <Compile Include="Json\Caching\ValueProvidersCache.cs" />
     <Compile Include="Json\JsonDeserializerBuilderExtensions.cs" />
@@ -69,7 +69,7 @@
     <Compile Include="Json\ComplexTypeDecomposition\IConstructorSelector.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\IInjectableValueNameNormalizer.cs" />
     <Compile Include="Json\TokenParsers\INameToTypeMapping.cs" />
-    <Compile Include="Json\TokenParsers\InjectableValueInfo.cs" />
+    <Compile Include="Json\ComplexTypeConstruction\InjectableValueDescription.cs" />
     <Compile Include="Json\TokenParsers\InjectableValueKind.cs" />
     <Compile Include="Json\TokenParsers\IntParser.cs" />
     <Compile Include="Json\JsonToken.cs" />
@@ -114,8 +114,8 @@
     <Compile Include="Json\ComplexTypeDecomposition\IValueProvider.cs" />
     <Compile Include="Json\LowLevelReading\SingleEscapedCharacter.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\ToLowerWithoutSpecialCharactersNormalizer.cs" />
-    <Compile Include="Json\TokenParsers\TypeCreationInfo.cs" />
-    <Compile Include="Json\ComplexTypeDecomposition\DefaultTypeCreationInfoAnalyzer.cs" />
+    <Compile Include="Json\ComplexTypeConstruction\TypeCreationDescription.cs" />
+    <Compile Include="Json\ComplexTypeConstruction\DefaultTypeCreationInfoAnalyzer.cs" />
     <Compile Include="Json\Caching\AnalyzerCacheDecorator.cs" />
     <Compile Include="Json\WriterInstructors\CollectionInstructor.cs" />
     <Compile Include="Json\WriterInstructors\ComplexObjectInstructor.cs" />
