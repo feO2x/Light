@@ -4,13 +4,13 @@ using System.Reflection;
 
 namespace Light.Serialization.Json.ComplexTypeConstruction
 {
-    public sealed class PublicConstructorDescription
+    public sealed class ConstructorDescription
     {
         public readonly ConstructorInfo ConstructorInfo;
 
         public List<InjectableValueDescription> ConstructorParameters;
 
-        public PublicConstructorDescription(ConstructorInfo constructorInfo, List<InjectableValueDescription> constructorParameters)
+        public ConstructorDescription(ConstructorInfo constructorInfo, List<InjectableValueDescription> constructorParameters)
         {
             constructorInfo.MustNotBeNull(nameof(constructorInfo));
             constructorParameters.MustNotBeNull(nameof(constructorParameters));

@@ -40,7 +40,7 @@
     <Compile Include="FrameworkExtensions\ReflectionExtensions.cs" />
     <Compile Include="FrameworkExtensions\StringExtensions.cs" />
     <Compile Include="IDeserializer.cs" />
-    <Compile Include="Json\ComplexTypeConstruction\PublicConstructorDescription.cs" />
+    <Compile Include="Json\ComplexTypeConstruction\ConstructorDescription.cs" />
     <Compile Include="Json\ComplexTypeConstruction\DefaultObjectFactory.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\SimpleNameToTypeMapping.cs" />
     <Compile Include="Json\Caching\ValueProvidersCache.cs" />
