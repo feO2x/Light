@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<parser>
+  <short id="short" name="ShortParser">
+    <maxAsString id="maxAsString"> </maxAsString>
+    <minAsString id="maxAsString"> </minAsString>
+  </short>
+</parser>
