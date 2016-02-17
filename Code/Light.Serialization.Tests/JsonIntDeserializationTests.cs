@@ -6,7 +6,9 @@ namespace Light.Serialization.Tests
     {
         [Theory]
         [InlineData("42", 42)]
+        [InlineData("1947483647", 1947483647)]
         [InlineData("2147483647", 2147483647)]
+        [InlineData("-2147483648", -2147483648)]
         [InlineData("0", 0)]
         [InlineData("-420", -420)]
         public void IntValueCanBeDeserializedCorrectly(string json, int expected)
@@ -16,7 +18,9 @@ namespace Light.Serialization.Tests
 
         [Theory]
         [InlineData("2147483648")]
+        [InlineData("2247483647")]
         [InlineData("-2147483649")]
+        [InlineData("-2247483648")]
         [InlineData("185000000000")]
         [InlineData("-375000000000")]
         public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
