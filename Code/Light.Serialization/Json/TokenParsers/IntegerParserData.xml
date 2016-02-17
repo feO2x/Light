@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<parser>
-  <short id="short" name="ShortParser">
-    <maxAsString id="maxAsString"> </maxAsString>
-    <minAsString id="maxAsString"> </minAsString>
-  </short>
-</parser>
+<Parsers>
+  <Parser>
+    <ID>short</ID>
+    <Name>ShortParser</Name>
+    <maxAsString id="maxAsString">1 </maxAsString>
+    <minAsString id="maxAsString">1 </minAsString>
+  </Parser>
+</Parsers>
