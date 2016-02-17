@@ -8,6 +8,10 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".txt" #>
+using System;
+
+namespace Light.Serialization.Json.TokenParsers
+{
 
 <#
 	EnvDTE.DTE dte = (EnvDTE.DTE) ((IServiceProvider) this.Host)
@@ -18,9 +22,30 @@
 		
 		foreach(XmlNode parser in listOfPasers)
 		{
-			string parserNode = parser.SelectSingleNode("Name").InnerText;
+			string parserName = parser.SelectSingleNode("Name").InnerText;
+			string parserType = parser.SelectSingleNode("Type").InnerText;
+			string parserNegativeSign = parser.SelectSingleNode("NegativeSign").InnerText;
+			string parserDecimalPointCharacter = parser.SelectSingleNode("DecimalPointCharacter").InnerText;
+			string parserMaxAsString = parser.SelectSingleNode("MaxAsString").InnerText;
+			string parserMinAsString = parser.SelectSingleNode("MinAsString").InnerText;
 			#>
-				public class <#= parserNode #> {}
+
+	public class <#= parserName #> : IJsonTokenParser
+	{
+		private readonly Type _integerType = typeof (<#= parserType #>);
+		
+        public const char DecimalPointCharacter = '<#= parserDecimalPointCharacter #>';
+        public const char NegativeSign = '<#= parserNegativeSign #>';
+
+        public const string MaxAsString = "<#= parserMaxAsString #>";
+        public const string MinAsString = "<#= parserMinAsString #>";
+
+		public bool IsSuitableFor(JsonToken token, Type requestedType)
+        {
+            return (token.JsonType == JsonTokenType.IntegerNumber || token.JsonType == JsonTokenType.FloatingPointNumber) && requestedType == _integerType;
+        }
+	}
 			<#
 			}
 			#>
+}

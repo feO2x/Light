@@ -3,7 +3,19 @@
   <Parser>
     <ID>short</ID>
     <Name>ShortParser</Name>
-    <maxAsString id="maxAsString">1 </maxAsString>
-    <minAsString id="maxAsString">1 </minAsString>
+    <Type>short</Type>
+    <DecimalPointCharacter>.</DecimalPointCharacter>
+    <MaxAsString>1 </MaxAsString>
+    <MinAsString>1 </MinAsString>
+    <NegativeSign>-</NegativeSign>
+  </Parser>
+  <Parser>
+    <ID>uint</ID>
+    <Name>UIntParser</Name>
+    <Type>uint</Type>
+    <DecimalPointCharacter>.</DecimalPointCharacter>
+    <MaxAsString>1 </MaxAsString>
+    <MinAsString>1 </MinAsString>
+    <NegativeSign></NegativeSign>
   </Parser>
 </Parsers>
