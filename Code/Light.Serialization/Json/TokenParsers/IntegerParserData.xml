@@ -1,5 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Parsers>
+    <Parser>
+    <ID>int</ID>
+    <Name>IntParser</Name>
+    <Type>int</Type>
+    <DecimalPointCharacter>.</DecimalPointCharacter>
+    <MaxAsString>2147483647</MaxAsString>
+    <MinAsString>-2147483648</MinAsString>
+    <NegativeSign>-</NegativeSign>
+  </Parser>
   <Parser>
     <ID>short</ID>
     <Name>ShortParser</Name>
@@ -14,8 +23,8 @@
     <Name>UIntParser</Name>
     <Type>uint</Type>
     <DecimalPointCharacter>.</DecimalPointCharacter>
-    <MaxAsString>1 </MaxAsString>
-    <MinAsString>1 </MinAsString>
+    <MaxAsString>1</MaxAsString>
+    <MinAsString>1</MinAsString>
     <NegativeSign></NegativeSign>
   </Parser>
 </Parsers>

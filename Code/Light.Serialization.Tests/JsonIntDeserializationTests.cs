@@ -6,6 +6,7 @@ namespace Light.Serialization.Tests
     {
         [Theory]
         [InlineData("42", 42)]
+        [InlineData("2147483647", 2147483647)]
         [InlineData("0", 0)]
         [InlineData("-420", -420)]
         public void IntValueCanBeDeserializedCorrectly(string json, int expected)
