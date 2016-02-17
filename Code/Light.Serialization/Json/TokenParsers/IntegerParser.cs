@@ -53,12 +53,19 @@ namespace Light.Serialization.Json.TokenParsers
 
 			int  result = 0;
 			var currentPositionBeforeDecimalPoint = positionsBeforeDecimalPoint;
+			bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
                 int digit = (int)(token[currentIndex] - '0');
 
-                if (digit > overflowCompareString?[currentIndex] - '0')
-                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+				if (isDefinitelyInRange == false)
+                {
+                    var overflowCompareDigit = overflowCompareString?[currentIndex] - '0';
+                    if (digit < overflowCompareDigit)
+                        isDefinitelyInRange = true;
+                    else if (digit > overflowCompareDigit)
+                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                }
 
                 result += (int)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
 
@@ -172,12 +179,19 @@ namespace Light.Serialization.Json.TokenParsers
 
 			uint  result = 0;
 			var currentPositionBeforeDecimalPoint = positionsBeforeDecimalPoint;
+			bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
                 uint digit = (uint)(token[currentIndex] - '0');
 
-                if (digit > overflowCompareString?[currentIndex] - '0')
-                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+				if (isDefinitelyInRange == false)
+                {
+                    var overflowCompareDigit = overflowCompareString?[currentIndex] - '0';
+                    if (digit < overflowCompareDigit)
+                        isDefinitelyInRange = true;
+                    else if (digit > overflowCompareDigit)
+                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                }
 
                 result += (uint)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
 
@@ -291,12 +305,19 @@ namespace Light.Serialization.Json.TokenParsers
 
 			short  result = 0;
 			var currentPositionBeforeDecimalPoint = positionsBeforeDecimalPoint;
+			bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
                 short digit = (short)(token[currentIndex] - '0');
 
-                if (digit > overflowCompareString?[currentIndex] - '0')
-                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+				if (isDefinitelyInRange == false)
+                {
+                    var overflowCompareDigit = overflowCompareString?[currentIndex] - '0';
+                    if (digit < overflowCompareDigit)
+                        isDefinitelyInRange = true;
+                    else if (digit > overflowCompareDigit)
+                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                }
 
                 result += (short)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
 
@@ -410,12 +431,19 @@ namespace Light.Serialization.Json.TokenParsers
 
 			ushort  result = 0;
 			var currentPositionBeforeDecimalPoint = positionsBeforeDecimalPoint;
+			bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
                 ushort digit = (ushort)(token[currentIndex] - '0');
 
-                if (digit > overflowCompareString?[currentIndex] - '0')
-                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+				if (isDefinitelyInRange == false)
+                {
+                    var overflowCompareDigit = overflowCompareString?[currentIndex] - '0';
+                    if (digit < overflowCompareDigit)
+                        isDefinitelyInRange = true;
+                    else if (digit > overflowCompareDigit)
+                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                }
 
                 result += (ushort)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
 
@@ -515,7 +543,7 @@ namespace Light.Serialization.Json.TokenParsers
             {
                 if (positionsBeforeDecimalPoint > MinAsString.Length)
                     throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
-                if (token.Length == MinAsString.Length)
+                if (positionsBeforeDecimalPoint == MinAsString.Length)
                     overflowCompareString = MinAsString;
                 isResultNegative = true;
 
@@ -529,12 +557,19 @@ namespace Light.Serialization.Json.TokenParsers
 
 			byte  result = 0;
 			var currentPositionBeforeDecimalPoint = positionsBeforeDecimalPoint;
+			bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
                 byte digit = (byte)(token[currentIndex] - '0');
 
-                if (digit > overflowCompareString?[currentIndex] - '0')
-                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+				if (isDefinitelyInRange == false)
+                {
+                    var overflowCompareDigit = overflowCompareString?[currentIndex] - '0';
+                    if (digit < overflowCompareDigit)
+                        isDefinitelyInRange = true;
+                    else if (digit > overflowCompareDigit)
+                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                }
 
                 result += (byte)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
 
@@ -648,12 +683,19 @@ namespace Light.Serialization.Json.TokenParsers
 
 			sbyte  result = 0;
 			var currentPositionBeforeDecimalPoint = positionsBeforeDecimalPoint;
+			bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
                 sbyte digit = (sbyte)(token[currentIndex] - '0');
 
-                if (digit > overflowCompareString?[currentIndex] - '0')
-                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+				if (isDefinitelyInRange == false)
+                {
+                    var overflowCompareDigit = overflowCompareString?[currentIndex] - '0';
+                    if (digit < overflowCompareDigit)
+                        isDefinitelyInRange = true;
+                    else if (digit > overflowCompareDigit)
+                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                }
 
                 result += (sbyte)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
 
@@ -767,12 +809,19 @@ namespace Light.Serialization.Json.TokenParsers
 
 			long  result = 0;
 			var currentPositionBeforeDecimalPoint = positionsBeforeDecimalPoint;
+			bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
                 long digit = (long)(token[currentIndex] - '0');
 
-                if (digit > overflowCompareString?[currentIndex] - '0')
-                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+				if (isDefinitelyInRange == false)
+                {
+                    var overflowCompareDigit = overflowCompareString?[currentIndex] - '0';
+                    if (digit < overflowCompareDigit)
+                        isDefinitelyInRange = true;
+                    else if (digit > overflowCompareDigit)
+                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                }
 
                 result += (long)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
 

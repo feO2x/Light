@@ -84,12 +84,19 @@ namespace Light.Serialization.Json.TokenParsers
 
 			<#= parserType #>  result = 0;
 			var currentPositionBeforeDecimalPoint = positionsBeforeDecimalPoint;
+			bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
                 <#= parserType #> digit = (<#= parserType #>)(token[currentIndex] - '0');
 
-                if (digit > overflowCompareString?[currentIndex] - '0')
-                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+				if (isDefinitelyInRange == false)
+                {
+                    var overflowCompareDigit = overflowCompareString?[currentIndex] - '0';
+                    if (digit < overflowCompareDigit)
+                        isDefinitelyInRange = true;
+                    else if (digit > overflowCompareDigit)
+                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                }
 
                 result += (<#= parserType #>)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
 
