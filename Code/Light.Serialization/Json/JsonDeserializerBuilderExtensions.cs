@@ -17,6 +17,8 @@ namespace Light.Serialization.Json
             targetList.MustNotBeNull(nameof(targetList));
 
             targetList.Add(new IntParser());
+            targetList.Add(new LongParser());
+            targetList.Add(new ByteParser());
             targetList.Add(new StringParser(jsonReaderSymbols));
             targetList.Add(new DoubleParser());
             targetList.Add(new NullParser());

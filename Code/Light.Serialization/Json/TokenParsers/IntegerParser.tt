@@ -17,22 +17,22 @@ namespace Light.Serialization.Json.TokenParsers
 											.GetService(typeof(EnvDTE.DTE));
 	XmlDocument parserDataXml = new XmlDocument();
 	parserDataXml.Load(System.IO.Path.Combine(dte.ActiveDocument.Path, "IntegerParserData.xml"));
-		XmlNodeList listOfPasers = parserDataXml.SelectNodes("/Parsers/Parser");
+	XmlNodeList listOfPasers = parserDataXml.SelectNodes("/Parsers/Parser");
 		
-		foreach(XmlNode parser in listOfPasers)
-		{
-			string parserName = parser.SelectSingleNode("Name").InnerText;
-			string parserType = parser.SelectSingleNode("Type").InnerText;
-			string parserNegativeSign = parser.SelectSingleNode("NegativeSign").InnerText;
+	foreach(XmlNode parser in listOfPasers)
+	{
+		string parserName = parser.SelectSingleNode("Name").InnerText;
+		string parserType = parser.SelectSingleNode("Type").InnerText;
+		string parserNegativeSign = parser.SelectSingleNode("NegativeSign").InnerText;
 
-			//todo: find a better solution
-			if(parserNegativeSign == "")
-				parserNegativeSign = "+";
+		//todo: find a better solution
+		if(parserNegativeSign == "")
+			parserNegativeSign = "+";
 
-			string parserDecimalPointCharacter = parser.SelectSingleNode("DecimalPointCharacter").InnerText;
-			string parserMaxAsString = parser.SelectSingleNode("MaxAsString").InnerText;
-			string parserMinAsString = parser.SelectSingleNode("MinAsString").InnerText;
-			#>
+		string parserDecimalPointCharacter = parser.SelectSingleNode("DecimalPointCharacter").InnerText;
+		string parserMaxAsString = parser.SelectSingleNode("MaxAsString").InnerText;
+		string parserMinAsString = parser.SelectSingleNode("MinAsString").InnerText;
+		#>
 	public class <#= parserName #> : IJsonTokenParser
 	{
 		private readonly Type _integerType = typeof (<#= parserType #>);
@@ -82,16 +82,16 @@ namespace Light.Serialization.Json.TokenParsers
             else if (token.Length == MaxAsString.Length)
                 overflowCompareString = MaxAsString;
 
-			var result = 0;
+			<#= parserType #>  result = 0;
 			var currentPositionBeforeDecimalPoint = positionsBeforeDecimalPoint;
             while (currentPositionBeforeDecimalPoint > 0)
             {
-                var digit = token[currentIndex] - '0';
+                <#= parserType #> digit = (<#= parserType #>)(token[currentIndex] - '0');
 
                 if (digit > overflowCompareString?[currentIndex] - '0')
                     throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
 
-                result += digit * CalculateBase(currentPositionBeforeDecimalPoint);
+                result += (<#= parserType #>)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
 
                 currentIndex++;
                 currentPositionBeforeDecimalPoint--;
@@ -103,12 +103,12 @@ namespace Light.Serialization.Json.TokenParsers
             return result;
         }
 
-		private static int CalculateBase(int positionsBeforeDecimalPoint)
+		private static <#= parserType #> CalculateBase(int positionsBeforeDecimalPoint)
         {
             if (positionsBeforeDecimalPoint == 1)
                 return 1;
 
-            var result = 10;
+            <#= parserType #> result = 10;
             for (var i = 2; i < positionsBeforeDecimalPoint; i++)
             {
                 result *= 10;

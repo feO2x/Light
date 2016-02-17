@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Parsers>
-    <Parser>
+  <Parser>
     <ID>int</ID>
     <Name>IntParser</Name>
     <Type>int</Type>
@@ -9,22 +9,58 @@
     <MinAsString>-2147483648</MinAsString>
     <NegativeSign>-</NegativeSign>
   </Parser>
+    <Parser>
+    <ID>uint</ID>
+    <Name>UIntParser</Name>
+    <Type>uint</Type>
+    <DecimalPointCharacter>.</DecimalPointCharacter>
+    <MaxAsString>4294967295</MaxAsString>
+    <MinAsString>0</MinAsString>
+    <NegativeSign></NegativeSign>
+  </Parser>
   <Parser>
     <ID>short</ID>
     <Name>ShortParser</Name>
     <Type>short</Type>
     <DecimalPointCharacter>.</DecimalPointCharacter>
-    <MaxAsString>1 </MaxAsString>
-    <MinAsString>1 </MinAsString>
+    <MaxAsString>32767</MaxAsString>
+    <MinAsString>-32768</MinAsString>
     <NegativeSign>-</NegativeSign>
   </Parser>
   <Parser>
-    <ID>uint</ID>
-    <Name>UIntParser</Name>
-    <Type>uint</Type>
+    <ID>ushort</ID>
+    <Name>UShortParser</Name>
+    <Type>ushort</Type>
     <DecimalPointCharacter>.</DecimalPointCharacter>
-    <MaxAsString>1</MaxAsString>
-    <MinAsString>1</MinAsString>
-    <NegativeSign></NegativeSign>
+    <MaxAsString>65535</MaxAsString>
+    <MinAsString>0</MinAsString>
+    <NegativeSign>-</NegativeSign>
+  </Parser>
+  <Parser>
+    <ID>byte</ID>
+    <Name>ByteParser</Name>
+    <Type>byte</Type>
+    <DecimalPointCharacter>.</DecimalPointCharacter>
+    <MaxAsString>255</MaxAsString>
+    <MinAsString>0</MinAsString>
+    <NegativeSign>-</NegativeSign>
+  </Parser>
+  <Parser>
+    <ID>sbyte</ID>
+    <Name>SByteParser</Name>
+    <Type>sbyte</Type>
+    <DecimalPointCharacter>.</DecimalPointCharacter>
+    <MaxAsString>127</MaxAsString>
+    <MinAsString>-128</MinAsString>
+    <NegativeSign>-</NegativeSign>
+  </Parser>
+  <Parser>
+    <ID>long</ID>
+    <Name>LongParser</Name>
+    <Type>long</Type>
+    <DecimalPointCharacter>.</DecimalPointCharacter>
+    <MaxAsString>9223372036854775807</MaxAsString>
+    <MinAsString>–9223372036854775808</MinAsString>
+    <NegativeSign>-</NegativeSign>
   </Parser>
 </Parsers>

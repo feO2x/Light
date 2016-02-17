@@ -22,7 +22,8 @@ namespace Light.Serialization.Json
 
         public T Deserialize<T>(string json)
         {
-            return (T) Deserialize(json, typeof (T));
+            var result = Deserialize(json, typeof (T));
+            return (T) result;
         }
 
         public object Deserialize(string json, Type requestedType)
