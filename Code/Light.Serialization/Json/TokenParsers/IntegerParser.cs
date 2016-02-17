@@ -513,7 +513,7 @@ namespace Light.Serialization.Json.TokenParsers
 
 			if (NegativeSign != '+' && token[0] == NegativeSign)
             {
-                if (token.Length > MinAsString.Length)
+                if (positionsBeforeDecimalPoint > MinAsString.Length)
                     throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
                 if (token.Length == MinAsString.Length)
                     overflowCompareString = MinAsString;
@@ -522,9 +522,9 @@ namespace Light.Serialization.Json.TokenParsers
                 positionsBeforeDecimalPoint--;
                 currentIndex++;
             }
-			else if (token.Length > MaxAsString.Length)
+			else if (positionsBeforeDecimalPoint > MaxAsString.Length)
                 throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
-            else if (token.Length == MaxAsString.Length)
+            else if (positionsBeforeDecimalPoint == MaxAsString.Length)
                 overflowCompareString = MaxAsString;
 
 			byte  result = 0;

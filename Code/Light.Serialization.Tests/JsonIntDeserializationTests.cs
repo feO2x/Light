@@ -27,9 +27,9 @@ namespace Light.Serialization.Tests
         [Theory]
         [InlineData("42.0", 42)]
         [InlineData("3.00", 3)]
-        //[InlineData("555.0000", 555)]
+        [InlineData("555.0000", 555)]
         [InlineData("0.000000", 0)]
-        public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, byte expected)
+        public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, int expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
