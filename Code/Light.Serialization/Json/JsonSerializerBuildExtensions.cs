@@ -13,22 +13,22 @@ namespace Light.Serialization.Json
         {
             targetList.MustNotBeNull(nameof(targetList));
 
-            targetList.Add(new ToStringPrimitiveTypeFormatter<int>());
+            targetList.Add(new ToStringPrimitiveTypeFormatter<int>(false));
             targetList.Add(new StringFormatter(characterEscaper));
             targetList.Add(new DoubleFormatter());
             targetList.Add(new DateTimeFormatter());
             targetList.Add(new ToStringWithQuotationMarksFormatter<Guid>());
             targetList.Add(new BooleanFormatter());
             targetList.Add(new DecimalFormatter());
-            targetList.Add(new ToStringPrimitiveTypeFormatter<long>());
+            targetList.Add(new ToStringPrimitiveTypeFormatter<long>(false));
             targetList.Add(new FloatFormatter());
             targetList.Add(new CharFormatter(characterEscaper));
-            targetList.Add(new ToStringPrimitiveTypeFormatter<short>());
-            targetList.Add(new ToStringPrimitiveTypeFormatter<byte>());
-            targetList.Add(new ToStringPrimitiveTypeFormatter<uint>());
-            targetList.Add(new ToStringPrimitiveTypeFormatter<ulong>());
-            targetList.Add(new ToStringPrimitiveTypeFormatter<ushort>());
-            targetList.Add(new ToStringPrimitiveTypeFormatter<sbyte>());
+            targetList.Add(new ToStringPrimitiveTypeFormatter<short>(false));
+            targetList.Add(new ToStringPrimitiveTypeFormatter<byte>(false));
+            targetList.Add(new ToStringPrimitiveTypeFormatter<uint>(false));
+            targetList.Add(new ToStringPrimitiveTypeFormatter<ulong>(false));
+            targetList.Add(new ToStringPrimitiveTypeFormatter<ushort>(false));
+            targetList.Add(new ToStringPrimitiveTypeFormatter<sbyte>(false));
 
             return targetList;
         }
