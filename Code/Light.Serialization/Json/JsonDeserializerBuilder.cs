@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Light.Serialization.Json.Caching;
 using Light.Serialization.Json.ComplexTypeConstruction;
 using Light.Serialization.Json.ComplexTypeDecomposition;
 using Light.Serialization.Json.LowLevelReading;
@@ -22,7 +23,7 @@ namespace Light.Serialization.Json
 
         public JsonDeserializerBuilder()
         {
-            _typeDescriptionProvider = new DefaultTypeDescriptionProvider(_nameNormalizer);
+            _typeDescriptionProvider = new TypeDescriptionCacheDecorator(new DefaultTypeDescriptionProvider(_nameNormalizer), new Dictionary<Type, TypeCreationDescription>());
         }
 
         public JsonDeserializerBuilder WithReaderFactory(IJsonReaderFactory readerFactory)
