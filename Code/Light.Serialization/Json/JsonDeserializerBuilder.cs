@@ -3,28 +3,26 @@ using System.Collections.Generic;
 using Light.Serialization.Json.ComplexTypeConstruction;
 using Light.Serialization.Json.ComplexTypeDecomposition;
 using Light.Serialization.Json.LowLevelReading;
-using Light.Serialization.Json.ObjectConstruction;
 using Light.Serialization.Json.TokenParsers;
 
 namespace Light.Serialization.Json
 {
     public class JsonDeserializerBuilder
     {
-        private IInjectableValueNameNormalizer _nameNormalizer = new ToLowerWithoutSpecialCharactersNormalizer();
-        private ITypeCreationInfoAnalyzer _typeCreationInfoAnalyzer;
         public readonly JsonReaderSymbols JsonReaderSymbols = new JsonReaderSymbols();
 
         private ICollectionFactory _collectionFactory = new DefaultGenericCollectionFactory();
         private IJsonReaderFactory _jsonReaderFactory = new SingleBufferJsonReaderFactory();
 
         private IList<IJsonTokenParser> _jsonTokenParsers;
+        private IInjectableValueNameNormalizer _nameNormalizer = new ToLowerWithoutSpecialCharactersNormalizer();
         private INameToTypeMapping _nameToTypeMapping = new SimpleNameToTypeMapping();
-        private IObjectFactory _objectFactory;
+        private IObjectFactory _objectFactory = new DefaultObjectFactory();
+        private ITypeDescriptionProvider _typeDescriptionProvider;
 
         public JsonDeserializerBuilder()
         {
-            _objectFactory = new DefaultObjectFactory(_nameNormalizer);
-            _typeCreationInfoAnalyzer = new DefaultTypeCreationInfoAnalyzer(_nameNormalizer);
+            _typeDescriptionProvider = new DefaultTypeDescriptionProvider(_nameNormalizer);
         }
 
         public JsonDeserializerBuilder WithReaderFactory(IJsonReaderFactory readerFactory)
@@ -57,9 +55,9 @@ namespace Light.Serialization.Json
             return this;
         }
 
-        public JsonDeserializerBuilder WithTypeCreationInfoAnalyzer(ITypeCreationInfoAnalyzer analyzer)
+        public JsonDeserializerBuilder WithTypeCreationInfoAnalyzer(ITypeDescriptionProvider analyzer)
         {
-            _typeCreationInfoAnalyzer = analyzer;
+            _typeDescriptionProvider = analyzer;
             return this;
         }
 
@@ -83,7 +81,8 @@ namespace Light.Serialization.Json
                                                                                         _collectionFactory,
                                                                                         _objectFactory,
                                                                                         _nameToTypeMapping,
-                                                                                        _typeCreationInfoAnalyzer);
+                                                                                        _nameNormalizer,
+                                                                                        _typeDescriptionProvider);
             }
 
             return new JsonDeserializer(_jsonReaderFactory, _jsonTokenParsers);

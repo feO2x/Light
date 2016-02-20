@@ -1,14 +1,14 @@
-﻿using Light.GuardClauses;
-using Light.Serialization.Json.ComplexTypeDecomposition;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Light.GuardClauses;
+using Light.Serialization.Json.ComplexTypeDecomposition;
 
 namespace Light.Serialization.Json.Caching
 {
     public sealed class ValueProvidersCacheDecorator : IReadableValuesTypeAnalyzer
     {
-        private readonly IReadableValuesTypeAnalyzer _decoratedAnalyzer;
         private readonly IDictionary<Type, IList<IValueProvider>> _cache;
+        private readonly IReadableValuesTypeAnalyzer _decoratedAnalyzer;
 
         public ValueProvidersCacheDecorator(IReadableValuesTypeAnalyzer decoratedAnalyzer, IDictionary<Type, IList<IValueProvider>> cache)
         {

@@ -1,12 +1,12 @@
-﻿using Light.GuardClauses;
-using Light.Serialization.Json.TokenParsers;
-using System;
+﻿using System;
 using System.Linq;
 using System.Reflection;
+using Light.GuardClauses;
+using Light.Serialization.Json.TokenParsers;
 
-namespace Light.Serialization.Json.ObjectConstruction
+namespace Light.Serialization.Json.ComplexTypeConstruction
 {
-    public class DefaultGenericCollectionFactory : ICollectionFactory
+    public sealed class DefaultGenericCollectionFactory : ICollectionFactory
     {
         public object CreateCollection(Type requestedCollectionType)
         {

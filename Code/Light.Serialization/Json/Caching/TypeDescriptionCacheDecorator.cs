@@ -2,25 +2,24 @@
 using System.Collections.Generic;
 using Light.GuardClauses;
 using Light.Serialization.Json.ComplexTypeConstruction;
-using Light.Serialization.Json.TokenParsers;
 
 namespace Light.Serialization.Json.Caching
 {
-    public sealed class AnalyzerCacheDecorator : ITypeCreationInfoAnalyzer
+    public sealed class TypeDescriptionCacheDecorator : ITypeDescriptionProvider
     {
-        private readonly ITypeCreationInfoAnalyzer _analyzer;
+        private readonly ITypeDescriptionProvider _decoratedProvider;
         private readonly Dictionary<Type, TypeCreationDescription> _cache;
 
-        public AnalyzerCacheDecorator(ITypeCreationInfoAnalyzer analyzer, Dictionary<Type, TypeCreationDescription> cache)
+        public TypeDescriptionCacheDecorator(ITypeDescriptionProvider decoratedProvider, Dictionary<Type, TypeCreationDescription> cache)
         {
-            analyzer.MustNotBeNull(nameof(analyzer));
+            decoratedProvider.MustNotBeNull(nameof(decoratedProvider));
             cache.MustNotBeNull(nameof(cache));
 
-            _analyzer = analyzer;
+            _decoratedProvider = decoratedProvider;
             _cache = cache;
         }
 
-        public TypeCreationDescription CreateInfo(Type typeToAnalyze)
+        public TypeCreationDescription GetTypeCreationDescription(Type typeToAnalyze)
         {
             typeToAnalyze.MustNotBeNull(nameof(typeToAnalyze));
 
@@ -28,7 +27,7 @@ namespace Light.Serialization.Json.Caching
             if (_cache.TryGetValue(typeToAnalyze, out typeCreationDescription))
                 return typeCreationDescription;
 
-            typeCreationDescription = _analyzer.CreateInfo(typeToAnalyze);
+            typeCreationDescription = _decoratedProvider.GetTypeCreationDescription(typeToAnalyze);
             _cache.Add(typeToAnalyze, typeCreationDescription);
 
             return typeCreationDescription;

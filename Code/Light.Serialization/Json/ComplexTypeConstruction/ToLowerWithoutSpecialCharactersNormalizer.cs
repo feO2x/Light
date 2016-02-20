@@ -1,7 +1,6 @@
-﻿using Light.GuardClauses;
-using Light.Serialization.FrameworkExtensions;
+﻿using Light.Serialization.FrameworkExtensions;
 
-namespace Light.Serialization.Json.ComplexTypeDecomposition
+namespace Light.Serialization.Json.ComplexTypeConstruction
 {
     public sealed class ToLowerWithoutSpecialCharactersNormalizer : IInjectableValueNameNormalizer
     {

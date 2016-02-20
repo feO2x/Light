@@ -1,4 +1,6 @@
 ﻿
+using Light.GuardClauses;
+
 namespace Light.Serialization.FrameworkExtensions
 {
     public static class StringExtensions
@@ -73,7 +75,7 @@ namespace Light.Serialization.FrameworkExtensions
             return @string.MakeFirstCharacterLowercase();
 
             // This section is only used when a new string has to be created because the old one contains special or uppercase characters
-            // Otherwise, the passed in string is returned (to minimize the creation of object - your GC will thank you).
+            // Otherwise, the passed in string is returned (to minimize the creation of objects - your GC will thank you).
             NormalizeString:
             var numberOfSpecialCharacters = 0;
 
@@ -109,6 +111,8 @@ namespace Light.Serialization.FrameworkExtensions
 
         public static string ToLowerAndRemoveAllSpecialCharacters(this string @string)
         {
+            @string.MustNotBeNull(nameof(@string));
+
             int i;
             char character;
             for (i = 0; i < @string.Length; i++)
@@ -121,7 +125,7 @@ namespace Light.Serialization.FrameworkExtensions
             return @string;
 
             // This section is only used when a new string has to be created because the old one contains special or uppercase characters
-            // Otherwise, the passed in string is returned (to minimize the creation of object - your GC will thank you).
+            // Otherwise, the passed in string is returned (to minimize the creation of objects - your GC will thank you).
             NormalizeString:
             var numberOfSpecialCharacters = 0;
 

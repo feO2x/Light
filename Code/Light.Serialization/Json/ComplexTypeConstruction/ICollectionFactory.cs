@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Light.Serialization.Json.TokenParsers
+namespace Light.Serialization.Json.ComplexTypeConstruction
 {
     public interface ICollectionFactory
     {

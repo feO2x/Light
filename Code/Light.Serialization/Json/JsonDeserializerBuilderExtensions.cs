@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Light.GuardClauses;
+using Light.Serialization.Json.ComplexTypeConstruction;
 using Light.Serialization.Json.LowLevelReading;
 using Light.Serialization.Json.TokenParsers;
 
@@ -12,7 +13,8 @@ namespace Light.Serialization.Json
                                                                      ICollectionFactory collectionFactory,
                                                                      IObjectFactory objectFactory,
                                                                      INameToTypeMapping nameToTypeMapping,
-                                                                     ITypeCreationInfoAnalyzer typeCreationInfoAnalyzer)
+                                                                     IInjectableValueNameNormalizer nameNormalizer,
+                                                                     ITypeDescriptionProvider typeDescriptionProvider)
         {
             targetList.MustNotBeNull(nameof(targetList));
 
@@ -23,7 +25,7 @@ namespace Light.Serialization.Json
             targetList.Add(new CharacterParser(jsonReaderSymbols));
             targetList.Add(new BooleanParser());
             targetList.Add(new ArrayToGenericCollectionParser(collectionFactory));
-            targetList.Add(new ComplexTypeParser(objectFactory, nameToTypeMapping, typeCreationInfoAnalyzer));
+            targetList.Add(new ComplexTypeParser(objectFactory, nameToTypeMapping, nameNormalizer, typeDescriptionProvider));
 
             return targetList;
         }

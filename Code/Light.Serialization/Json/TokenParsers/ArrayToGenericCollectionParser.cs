@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Reflection;
 using Light.GuardClauses;
 using Light.Serialization.FrameworkExtensions;
+using Light.Serialization.Json.ComplexTypeConstruction;
 
 namespace Light.Serialization.Json.TokenParsers
 {
     public sealed class ArrayToGenericCollectionParser : IJsonTokenParser
     {
-        private readonly TypeInfo _iEnumerableTypeInfo = typeof (IEnumerable<>).GetTypeInfo();
         private readonly ICollectionFactory _collectionFactory;
+        private readonly TypeInfo _iEnumerableTypeInfo = typeof (IEnumerable<>).GetTypeInfo();
         private readonly MethodInfo _populateGenericCollectionMethodInfo;
         private readonly object[] _populateGenericCollectionParameters = new object[3];
 

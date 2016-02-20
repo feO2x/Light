@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Light.Serialization.Json.ComplexTypeConstruction;
 
-namespace Light.Serialization.Json.TokenParsers
+namespace Light.Serialization.Json.ComplexTypeConstruction
 {
     public interface IObjectFactory
     {

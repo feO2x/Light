@@ -1,4 +1,4 @@
-namespace Light.Serialization.Json.ComplexTypeDecomposition
+namespace Light.Serialization.Json.ComplexTypeConstruction
 {
     public interface IInjectableValueNameNormalizer
     {

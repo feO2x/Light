@@ -1,23 +1,18 @@
-﻿using Light.GuardClauses;
-using Light.Serialization.Json.TokenParsers;
-using System;
+﻿using System;
+using System.Reflection;
+using Light.GuardClauses;
 
 namespace Light.Serialization.Json.ComplexTypeConstruction
 {
     public sealed class InjectableValueDescription
     {
         public readonly string NormalizedName;
-        private string _constructorParameterName;
-        private string _propertyName;
-
-        private InjectableValueKind _kind;
-        public string ConstructorParameterName => _constructorParameterName;
-        
         public readonly Type Type;
-        public InjectableValueKind Kind => _kind;
-        public string PropertyName => _propertyName;
-        private string _fieldName;
-        public string FieldName => _fieldName;
+
+        private ParameterInfo _constructorParameterInfo;
+        private PropertyInfo _propertyInfo;
+        private FieldInfo _fieldInfo;
+        private InjectableValueKind _kind;
 
         private InjectableValueDescription(string normalizedName, Type type)
         {
@@ -28,48 +23,100 @@ namespace Light.Serialization.Json.ComplexTypeConstruction
             Type = type;
         }
 
-        public void AddConstructorParameterName(string parameterName)
+        public ParameterInfo ConstructorParameterInfo => _constructorParameterInfo;
+        public PropertyInfo PropertyInfo => _propertyInfo;
+        public FieldInfo FieldInfo => _fieldInfo;
+        public InjectableValueKind Kind => _kind;
+
+        public void AddConstructorParameter(ParameterInfo parameterInfo)
         {
-            _kind &= InjectableValueKind.ConstructorParameter;
-            _constructorParameterName = parameterName;
+            parameterInfo.MustNotBeNull(nameof(parameterInfo));
+            Guard.Against(parameterInfo.Member is ConstructorInfo == false, () => new ArgumentException($"The specified parameterInfo {parameterInfo} does not belong to a constructor."));
+
+            _kind |= InjectableValueKind.ConstructorParameter;
+            _constructorParameterInfo = parameterInfo;
         }
 
-        public void AddPropertyName(string propertyName)
+        public void AddPropertyName(PropertyInfo propertyInfo)
         {
-            _kind &= InjectableValueKind.PropertySetter;
-            _propertyName = propertyName;
+            // ReSharper disable PossibleNullReferenceException
+            Guard.Against(propertyInfo.SetMethod == null, () => new ArgumentException($"The specified PropertyInfo {propertyInfo} of type {propertyInfo.DeclaringType} does not have a set method."));
+            Guard.Against(propertyInfo.SetMethod.IsPublic == false, () => new ArgumentException($"The specified PropertyInfo {propertyInfo} of type {propertyInfo.DeclaringType} has no public set method"));
+            Guard.Against(propertyInfo.SetMethod.IsStatic, () => new ArgumentException($"The specified PropertyInfo {propertyInfo} of type {propertyInfo.DeclaringType} is static."));
+            Guard.Against(propertyInfo.PropertyType != Type, () => new ArgumentException($"The specified PropertyInfo {propertyInfo} of type {propertyInfo.DeclaringType} does not have the same type {Type} as this injectable value info."));
+            // ReSharper restore PossibleNullReferenceException
+
+            _kind |= InjectableValueKind.PropertySetter;
+            _propertyInfo = propertyInfo;
         }
 
-        public void AddFieldName(string fieldName)
+        public void AddFieldInfo(FieldInfo fieldInfo)
         {
-            _kind &= InjectableValueKind.SettableField;
-            _fieldName = fieldName;
+            fieldInfo.MustNotBeNull(nameof(fieldInfo));
+            Guard.Against(fieldInfo.IsStatic, () => new ArgumentException($"The specified FieldInfo {fieldInfo} of type {fieldInfo.DeclaringType} is static."));
+            Guard.Against(fieldInfo.IsPublic == false, () => new ArgumentException($"The specified FieldInfo {fieldInfo} of type {fieldInfo.DeclaringType} is not public."));
+            Guard.Against(fieldInfo.FieldType != Type, () => new ArgumentException($"The specified FieldInfo {fieldInfo} of type {fieldInfo.DeclaringType} does not have the same type {Type} as this injectable value info."));
+
+            _kind |= InjectableValueKind.SettableField;
+            _fieldInfo = fieldInfo;
         }
 
-        public static InjectableValueDescription FromConstructorParameter(string normalizedName, string actualName, Type parameterType)
+        private void AddUnknownValue()
         {
-            var injectableValueInfo = new InjectableValueDescription(normalizedName, parameterType);
-            injectableValueInfo.AddConstructorParameterName(actualName);
+            _kind = InjectableValueKind.UnknownOnTargetObject;
+        }
+
+        public static InjectableValueDescription FromConstructorParameter(string normalizedName, ParameterInfo parameterInfo)
+        {
+            parameterInfo.MustNotBeNull(nameof(parameterInfo));
+
+            var injectableValueInfo = new InjectableValueDescription(normalizedName, parameterInfo.ParameterType);
+            injectableValueInfo.AddConstructorParameter(parameterInfo);
             return injectableValueInfo;
         }
 
-        public static InjectableValueDescription FromProperty(string normalizedName, string actualName, Type propertyType)
+        public static InjectableValueDescription FromProperty(string normalizedName, PropertyInfo propertyInfo)
         {
-            var injectableValueInfo = new InjectableValueDescription(normalizedName, propertyType);
-            injectableValueInfo.AddPropertyName(actualName);
+            var injectableValueInfo = new InjectableValueDescription(normalizedName, propertyInfo.PropertyType);
+            injectableValueInfo.AddPropertyName(propertyInfo);
             return injectableValueInfo;
         }
 
-        public static InjectableValueDescription FromField(string normalizedName, string actualName, Type fieldType)
+        public static InjectableValueDescription FromField(string normalizedName, FieldInfo fieldInfo)
         {
-            var injectableValueInfo = new InjectableValueDescription(normalizedName, fieldType);
-            injectableValueInfo.AddFieldName(actualName);
+            var injectableValueInfo = new InjectableValueDescription(normalizedName, fieldInfo.FieldType);
+            injectableValueInfo.AddFieldInfo(fieldInfo);
             return injectableValueInfo;
+        }
+
+        public static InjectableValueDescription FromUnknownValue(string normalizedName, Type type)
+        {
+            var injectableValueDescription = new InjectableValueDescription(normalizedName, type);
+            injectableValueDescription.AddUnknownValue();
+            return injectableValueDescription;
         }
 
         public override string ToString()
         {
             return NormalizedName;
+        }
+
+        public void SetFieldValue(object targetObject, object value)
+        {
+            targetObject.MustNotBeNull(nameof(targetObject));
+            Guard.Against((_kind & InjectableValueKind.SettableField) != 0,
+                          () => new InvalidOperationException($"You try to set a field value on {NormalizedName}, but there is no such field on type {targetObject.GetType().FullName}."));
+
+            _fieldInfo.SetValue(targetObject, value);
+        }
+
+        public void SetPropertyValue(object targetObject, object value)
+        {
+            targetObject.MustNotBeNull(nameof(targetObject));
+            Guard.Against((_kind & InjectableValueKind.PropertySetter) != 0,
+                          () => new InvalidOperationException($"You try to set a property value on {NormalizedName}, but there is no such property on type {targetObject.GetType().FullName}."));
+
+            PropertyInfo.SetValue(targetObject, value);
         }
     }
 }

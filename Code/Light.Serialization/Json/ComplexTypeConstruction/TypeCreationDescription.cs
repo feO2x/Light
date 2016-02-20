@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Light.GuardClauses;
-using Light.Serialization.Json.TokenParsers;
 
 namespace Light.Serialization.Json.ComplexTypeConstruction
 {
@@ -31,7 +30,7 @@ namespace Light.Serialization.Json.ComplexTypeConstruction
             return description;
         }
 
-        public void AddSettableValueDescription(InjectableValueDescription description)
+        public void AddInjectableValueDescription(InjectableValueDescription description)
         {
             _injectableValueDescriptions.Add(description.NormalizedName, description);
         }
