@@ -33,6 +33,7 @@ namespace Light.Serialization.Json.TokenParsers
 		string parserMaxAsString = parser.SelectSingleNode("MaxAsString").InnerText;
 		string parserMinAsString = parser.SelectSingleNode("MinAsString").InnerText;
 		#>
+
 	public class <#= parserName #> : IJsonTokenParser
 	{
 		private readonly Type _integerType = typeof (<#= parserType #>);
@@ -63,10 +64,11 @@ namespace Light.Serialization.Json.TokenParsers
             }
 
             var currentIndex = 0;
-            var isResultNegative = false;
-            string overflowCompareString = null;
+            <# if (parserNegativeSign == "-") #>var isResultNegative = false;
+			<# #>string overflowCompareString = null;
 
-			if (NegativeSign != '+' && token[0] == NegativeSign)
+			<# if (parserNegativeSign == "-")
+			{ #>if (token[0] == NegativeSign)
             {
                 if (token.Length > MinAsString.Length)
                     throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
@@ -81,6 +83,17 @@ namespace Light.Serialization.Json.TokenParsers
                 throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
             else if (token.Length == MaxAsString.Length)
                 overflowCompareString = MaxAsString;
+			<# }
+			#>
+
+			<# if (parserNegativeSign == "+")
+			{ #>
+			if (token.Length > MaxAsString.Length)
+                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+            if (token.Length == MaxAsString.Length)
+                overflowCompareString = MaxAsString;
+			<# }
+			#>
 
 			<#= parserType #>  result = 0;
 			var currentPositionBeforeDecimalPoint = positionsBeforeDecimalPoint;
@@ -104,10 +117,13 @@ namespace Light.Serialization.Json.TokenParsers
                 currentPositionBeforeDecimalPoint--;
             }
 
+			<# if (parserNegativeSign == "-")
+			{ #>
             if (isResultNegative)
                 return -result;
+			<# } #>
 
-            return result;
+	    return result;
         }
 
 		private static <#= parserType #> CalculateBase(int positionsBeforeDecimalPoint)
