@@ -53,15 +53,28 @@ namespace Light.Serialization.Tests
 		[Theory]
 		[InlineData("<#=IncrementMaxValueInString()#>")] //<#= parserType #> max value ( <#= _maxAsString #> ) +1
         [InlineData("<#=DecrementMinValueInString()#>")]
-        //[InlineData("-2247483648")]
+        [InlineData("<#=IncrementSecondLeftMostNumberInString()#>")]
         [InlineData("<#=IncrementLeftMostNumberInString()#>")]
-        //[InlineData("-375000000000")]
+        [InlineData("<#=_maxAsString#>00000000")]
 
         public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<<#= parserType #>>(json, $"Could not deserialize value {json} because it produces an overflow for type <#= parserType #>.");
 		}
 
+		[Theory]
+        [InlineData("42.0", 42)]
+        [InlineData("<#= DecrementLeftMostIncrementSecondLeftMostNumberInString() #>.000", <#= DecrementLeftMostIncrementSecondLeftMostNumberInString() #>)]
+        [InlineData("<#= _maxAsString #>.0000", <#= parserType #>.MaxValue)]
+        [InlineData("<#= _minAsString #>.00000", <#= parserType #>.MinValue)]
+		<# if (parserNegativeSign == "-") 
+		{ #>[InlineData("0.0", 0)]
+		<# }#>
+		
+		public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, <#= parserType #> expected)
+        {
+            CompareDeserializedJsonToExpected(json, expected);
+        }
 	}
 	<# } #>
 }
@@ -69,6 +82,30 @@ namespace Light.Serialization.Tests
 <#+
     private string _maxAsString;
     private string _minAsString;
+
+	private string IncrementSecondLeftMostNumberInString()
+    {
+	    int i = 1;
+
+        if(_maxAsString.All(c => !char.IsDigit(c) && (c != '-')))
+			throw new ArgumentException("number must contain digits only.");
+
+		var numberArray = _maxAsString.ToCharArray();
+
+        if (numberArray[0] == '-')
+            i++;
+
+        if (numberArray[i] == '9')
+        {
+            numberArray[i] = '0';
+            var numberString = new string(numberArray);
+            return "1" + numberString;
+        }
+
+        numberArray[i] = (char)(numberArray[i] + 1);
+
+		return new string(numberArray);
+    }
 
     private string IncrementLeftMostNumberInString()
     {

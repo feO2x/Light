@@ -68,27 +68,27 @@ namespace Light.Serialization.Json.TokenParsers
 			<# if (parserNegativeSign == "-")
 			{ #>if (token[0] == NegativeSign)
             {
-                if (token.Length > MinAsString.Length)
+                if (positionsBeforeDecimalPoint > MinAsString.Length)
                     throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type <#= parserType #>.");
-                if (token.Length == MinAsString.Length)
+                if (positionsBeforeDecimalPoint == MinAsString.Length)
                     overflowCompareString = MinAsString;
                 isResultNegative = true;
 
                 positionsBeforeDecimalPoint--;
                 currentIndex++;
             }
-			else if (token.Length > MaxAsString.Length)
+			else if (positionsBeforeDecimalPoint > MaxAsString.Length)
                 throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type <#= parserType #>.");
-            else if (token.Length == MaxAsString.Length)
+            else if (positionsBeforeDecimalPoint == MaxAsString.Length)
                 overflowCompareString = MaxAsString;
 			<# }
 			#>
 
 			<# if (parserNegativeSign == "+")
 			{ #>
-			if (token.Length > MaxAsString.Length)
+			if (positionsBeforeDecimalPoint > MaxAsString.Length)
                 throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type <#= parserType #>.");
-            if (token.Length == MaxAsString.Length)
+            if (positionsBeforeDecimalPoint == MaxAsString.Length)
                 overflowCompareString = MaxAsString;
 			<# }
 			#>
