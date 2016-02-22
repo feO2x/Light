@@ -19,6 +19,7 @@ namespace Light.Serialization.Json
             targetList.MustNotBeNull(nameof(targetList));
 
             targetList.Add(new IntParser());
+            targetList.Add(new DateTimeParser());
             targetList.Add(new UIntParser());
             targetList.Add(new ShortParser());
             targetList.Add(new UShortParser());

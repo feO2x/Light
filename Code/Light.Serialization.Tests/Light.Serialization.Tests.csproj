@@ -77,6 +77,7 @@
     <Compile Include="JsonCollectionSerializationTests.cs" />
     <Compile Include="JsonComplexTypesSerializationTests.cs" />
     <Compile Include="JsonCustomRuleSerializationTest.cs" />
+    <Compile Include="JsonDateTimeDeserializationTests.cs" />
     <Compile Include="JsonDateTimeSerializationTests.cs" />
     <Compile Include="JsonDelegateSerializationTests.cs" />
     <Compile Include="JsonDictionarySerializationTests.cs" />

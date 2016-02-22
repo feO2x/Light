@@ -66,6 +66,7 @@
     <Compile Include="Json\TokenParsers\CharacterParser.cs" />
     <Compile Include="Json\TokenParsers\ComplexTypeParser.cs" />
     <Compile Include="Json\ComplexTypeConstruction\DefaultGenericCollectionFactory.cs" />
+    <Compile Include="Json\TokenParsers\DateTimeParser.cs" />
     <Compile Include="Json\TokenParsers\DoubleParser.cs" />
     <Compile Include="Json\ComplexTypeConstruction\ICollectionFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\IInjectableValueNameNormalizer.cs" />
