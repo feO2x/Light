@@ -52,7 +52,7 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
                 _stringBuilder.Append(dateTime.Second.ToString("D2"));
                 if (isMillisecondZero == false)
                 {
-                    _stringBuilder.Append(':');
+                    _stringBuilder.Append('.');
                     _stringBuilder.Append(dateTime.Millisecond.ToString("D3"));
                 }
             }
