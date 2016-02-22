@@ -3,20 +3,18 @@
 <#@ assembly name="System.Core" #>
 <#@ assembly name="System.Xml" #>
 <#@ assembly name="EnvDTE" #>
-<#@ import namespace="System.Linq" #>
+<#@ import namespace="EnvDTE" #>
+<#@ import namespace="System.IO" #>
 <#@ import namespace="System.Xml" #>
-<#@ import namespace="System.Text" #>
-<#@ import namespace="System.Collections.Generic" #>
-<#@ output extension=".txt" #>
 using System;
 
 namespace Light.Serialization.Json.TokenParsers
 {
 <#
-	EnvDTE.DTE dte = (EnvDTE.DTE) ((IServiceProvider) this.Host)
-											.GetService(typeof(EnvDTE.DTE));
+	DTE dte = (DTE) ((IServiceProvider) this.Host)
+											.GetService(typeof(DTE));
 	XmlDocument parserDataXml = new XmlDocument();
-	parserDataXml.Load(System.IO.Path.Combine(dte.ActiveDocument.Path, "IntegerParserData.xml"));
+	parserDataXml.Load(Path.Combine(dte.ActiveDocument.Path, "IntegerParserData.xml"));
 	XmlNodeList listOfPasers = parserDataXml.SelectNodes("/Parsers/Parser");
 		
 	foreach(XmlNode parser in listOfPasers)
@@ -100,7 +98,7 @@ namespace Light.Serialization.Json.TokenParsers
 			bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
-                <#= parserType #> digit = (<#= parserType #>)(token[currentIndex] - '0');
+                int digit = token[currentIndex] - '0';
 
 				if (isDefinitelyInRange == false)
                 {
@@ -118,9 +116,8 @@ namespace Light.Serialization.Json.TokenParsers
             }
 
 			<# if (parserNegativeSign == "-")
-			{ #>
-            if (isResultNegative)
-                return -result;
+			{ #>if (isResultNegative)
+                return (<#= parserType #>) -result ;
 			<# } #>
 
 	    return result;

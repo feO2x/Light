@@ -58,7 +58,7 @@ namespace Light.Serialization.Json.TokenParsers
 			bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
-                int digit = (int)(token[currentIndex] - '0');
+                int digit = token[currentIndex] - '0';
 
 				if (isDefinitelyInRange == false)
                 {
@@ -75,8 +75,8 @@ namespace Light.Serialization.Json.TokenParsers
                 currentPositionBeforeDecimalPoint--;
             }
 
-			            if (isResultNegative)
-                return -result;
+			if (isResultNegative)
+                return (int) -result ;
 			
 	    return result;
         }
@@ -174,7 +174,7 @@ namespace Light.Serialization.Json.TokenParsers
 			bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
-                uint digit = (uint)(token[currentIndex] - '0');
+                int digit = token[currentIndex] - '0';
 
 				if (isDefinitelyInRange == false)
                 {
@@ -300,7 +300,7 @@ namespace Light.Serialization.Json.TokenParsers
 			bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
-                short digit = (short)(token[currentIndex] - '0');
+                int digit = token[currentIndex] - '0';
 
 				if (isDefinitelyInRange == false)
                 {
@@ -317,8 +317,8 @@ namespace Light.Serialization.Json.TokenParsers
                 currentPositionBeforeDecimalPoint--;
             }
 
-			            if (isResultNegative)
-                return -result;
+			if (isResultNegative)
+                return (short) -result ;
 			
 	    return result;
         }
@@ -428,7 +428,7 @@ namespace Light.Serialization.Json.TokenParsers
 			bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
-                ushort digit = (ushort)(token[currentIndex] - '0');
+                int digit = token[currentIndex] - '0';
 
 				if (isDefinitelyInRange == false)
                 {
@@ -445,8 +445,8 @@ namespace Light.Serialization.Json.TokenParsers
                 currentPositionBeforeDecimalPoint--;
             }
 
-			            if (isResultNegative)
-                return -result;
+			if (isResultNegative)
+                return (ushort) -result ;
 			
 	    return result;
         }
@@ -556,7 +556,7 @@ namespace Light.Serialization.Json.TokenParsers
 			bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
-                byte digit = (byte)(token[currentIndex] - '0');
+                int digit = token[currentIndex] - '0';
 
 				if (isDefinitelyInRange == false)
                 {
@@ -573,8 +573,8 @@ namespace Light.Serialization.Json.TokenParsers
                 currentPositionBeforeDecimalPoint--;
             }
 
-			            if (isResultNegative)
-                return -result;
+			if (isResultNegative)
+                return (byte) -result ;
 			
 	    return result;
         }
@@ -684,7 +684,7 @@ namespace Light.Serialization.Json.TokenParsers
 			bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
-                sbyte digit = (sbyte)(token[currentIndex] - '0');
+                int digit = token[currentIndex] - '0';
 
 				if (isDefinitelyInRange == false)
                 {
@@ -701,8 +701,8 @@ namespace Light.Serialization.Json.TokenParsers
                 currentPositionBeforeDecimalPoint--;
             }
 
-			            if (isResultNegative)
-                return -result;
+			if (isResultNegative)
+                return (sbyte) -result ;
 			
 	    return result;
         }
@@ -812,7 +812,7 @@ namespace Light.Serialization.Json.TokenParsers
 			bool isDefinitelyInRange = false;
             while (currentPositionBeforeDecimalPoint > 0)
             {
-                long digit = (long)(token[currentIndex] - '0');
+                int digit = token[currentIndex] - '0';
 
 				if (isDefinitelyInRange == false)
                 {
@@ -829,8 +829,8 @@ namespace Light.Serialization.Json.TokenParsers
                 currentPositionBeforeDecimalPoint--;
             }
 
-			            if (isResultNegative)
-                return -result;
+			if (isResultNegative)
+                return (long) -result ;
 			
 	    return result;
         }
