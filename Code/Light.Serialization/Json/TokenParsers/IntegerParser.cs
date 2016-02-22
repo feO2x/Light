@@ -69,11 +69,22 @@ namespace Light.Serialization.Json.TokenParsers
                         throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
                 }
 
-                result += (int)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
+                try
+                { 
+                    result += checked((int)(digit * CalculateBase(currentPositionBeforeDecimalPoint)));
+                }
+                catch (OverflowException e)
+                {
+                    // The following line displays information about the error.
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type uint.");
+                }
 
                 currentIndex++;
                 currentPositionBeforeDecimalPoint--;
             }
+
+			if(result > int.MaxValue || result < int.MinValue)
+				throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
 
 			if (isResultNegative)
                 return (int) -result;
@@ -185,11 +196,22 @@ namespace Light.Serialization.Json.TokenParsers
                         throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type uint.");
                 }
 
-                result += (uint)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
+                try
+                { 
+                    result += checked((uint)(digit * CalculateBase(currentPositionBeforeDecimalPoint)));
+                }
+                catch (OverflowException e)
+                {
+                    // The following line displays information about the error.
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type uint.");
+                }
 
                 currentIndex++;
                 currentPositionBeforeDecimalPoint--;
             }
+
+			if(result > uint.MaxValue || result < uint.MinValue)
+				throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type uint.");
 
 			
 	    return result;
@@ -311,11 +333,22 @@ namespace Light.Serialization.Json.TokenParsers
                         throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type short.");
                 }
 
-                result += (short)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
+                try
+                { 
+                    result += checked((short)(digit * CalculateBase(currentPositionBeforeDecimalPoint)));
+                }
+                catch (OverflowException e)
+                {
+                    // The following line displays information about the error.
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type uint.");
+                }
 
                 currentIndex++;
                 currentPositionBeforeDecimalPoint--;
             }
+
+			if(result > short.MaxValue || result < short.MinValue)
+				throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type short.");
 
 			if (isResultNegative)
                 return (short) -result;
@@ -439,11 +472,22 @@ namespace Light.Serialization.Json.TokenParsers
                         throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type ushort.");
                 }
 
-                result += (ushort)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
+                try
+                { 
+                    result += checked((ushort)(digit * CalculateBase(currentPositionBeforeDecimalPoint)));
+                }
+                catch (OverflowException e)
+                {
+                    // The following line displays information about the error.
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type uint.");
+                }
 
                 currentIndex++;
                 currentPositionBeforeDecimalPoint--;
             }
+
+			if(result > ushort.MaxValue || result < ushort.MinValue)
+				throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type ushort.");
 
 			if (isResultNegative)
                 return (ushort) -result;
@@ -567,11 +611,22 @@ namespace Light.Serialization.Json.TokenParsers
                         throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type byte.");
                 }
 
-                result += (byte)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
+                try
+                { 
+                    result += checked((byte)(digit * CalculateBase(currentPositionBeforeDecimalPoint)));
+                }
+                catch (OverflowException e)
+                {
+                    // The following line displays information about the error.
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type uint.");
+                }
 
                 currentIndex++;
                 currentPositionBeforeDecimalPoint--;
             }
+
+			if(result > byte.MaxValue || result < byte.MinValue)
+				throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type byte.");
 
 			if (isResultNegative)
                 return (byte) -result;
@@ -695,11 +750,22 @@ namespace Light.Serialization.Json.TokenParsers
                         throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type sbyte.");
                 }
 
-                result += (sbyte)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
+                try
+                { 
+                    result += checked((sbyte)(digit * CalculateBase(currentPositionBeforeDecimalPoint)));
+                }
+                catch (OverflowException e)
+                {
+                    // The following line displays information about the error.
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type uint.");
+                }
 
                 currentIndex++;
                 currentPositionBeforeDecimalPoint--;
             }
+
+			if(result > sbyte.MaxValue || result < sbyte.MinValue)
+				throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type sbyte.");
 
 			if (isResultNegative)
                 return (sbyte) -result;
@@ -765,7 +831,7 @@ namespace Light.Serialization.Json.TokenParsers
         public const char NegativeSign = '-';
 
         public const string MaxAsString = "9223372036854775807";
-        public const string MinAsString = "–9223372036854775808";
+        public const string MinAsString = "-9223372036854775808";
 
 		public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
@@ -823,11 +889,22 @@ namespace Light.Serialization.Json.TokenParsers
                         throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type long.");
                 }
 
-                result += (long)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
+                try
+                { 
+                    result += checked((long)(digit * CalculateBase(currentPositionBeforeDecimalPoint)));
+                }
+                catch (OverflowException e)
+                {
+                    // The following line displays information about the error.
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type uint.");
+                }
 
                 currentIndex++;
                 currentPositionBeforeDecimalPoint--;
             }
+
+			if(result > long.MaxValue || result < long.MinValue)
+				throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type long.");
 
 			if (isResultNegative)
                 return (long) -result;

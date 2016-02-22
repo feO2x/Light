@@ -109,11 +109,22 @@ namespace Light.Serialization.Json.TokenParsers
                         throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type <#= parserType #>.");
                 }
 
-                result += (<#= parserType #>)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
+                try
+                { 
+                    result += checked((<#= parserType #>)(digit * CalculateBase(currentPositionBeforeDecimalPoint)));
+                }
+                catch (OverflowException e)
+                {
+                    // The following line displays information about the error.
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type uint.");
+                }
 
                 currentIndex++;
                 currentPositionBeforeDecimalPoint--;
             }
+
+			if(result > <#= parserType #>.MaxValue || result < <#= parserType #>.MinValue)
+				throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type <#= parserType #>.");
 
 			<# if (parserNegativeSign == "-")
 			{ #>if (isResultNegative)

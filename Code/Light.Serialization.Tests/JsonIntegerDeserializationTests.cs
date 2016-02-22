@@ -24,8 +24,7 @@ namespace Light.Serialization.Tests
 
 		[Theory]
 		[InlineData("2147483648")] //int max value ( 2147483647 ) +1
-        //[InlineData("2247483647")]
-        //[InlineData("-2147483649")]
+        [InlineData("-2147483658")]
         //[InlineData("-2247483648")]
         [InlineData("3147483647")]
         //[InlineData("-375000000000")]
@@ -52,11 +51,10 @@ namespace Light.Serialization.Tests
         }
 
 		[Theory]
-		[InlineData("4294967296")] //uint max value ( 4294967295 ) +1
-        //[InlineData("2247483647")]
-        //[InlineData("-2147483649")]
+		//[InlineData("4294967296")] //uint max value ( 4294967295 ) +1
+        [InlineData("-1")]
         //[InlineData("-2247483648")]
-        [InlineData("5294967295")]
+        //[InlineData("5294967295")]
         //[InlineData("-375000000000")]
 
         public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
@@ -84,8 +82,7 @@ namespace Light.Serialization.Tests
 
 		[Theory]
 		[InlineData("32768")] //short max value ( 32767 ) +1
-        //[InlineData("2247483647")]
-        //[InlineData("-2147483649")]
+        [InlineData("-32778")]
         //[InlineData("-2247483648")]
         [InlineData("42767")]
         //[InlineData("-375000000000")]
@@ -115,8 +112,7 @@ namespace Light.Serialization.Tests
 
 		[Theory]
 		[InlineData("65536")] //ushort max value ( 65535 ) +1
-        //[InlineData("2247483647")]
-        //[InlineData("-2147483649")]
+        [InlineData("-1")]
         //[InlineData("-2247483648")]
         [InlineData("75535")]
         //[InlineData("-375000000000")]
@@ -146,8 +142,7 @@ namespace Light.Serialization.Tests
 
 		[Theory]
 		[InlineData("256")] //byte max value ( 255 ) +1
-        //[InlineData("2247483647")]
-        //[InlineData("-2147483649")]
+        [InlineData("-1")]
         //[InlineData("-2247483648")]
         [InlineData("355")]
         //[InlineData("-375000000000")]
@@ -177,8 +172,7 @@ namespace Light.Serialization.Tests
 
 		[Theory]
 		[InlineData("128")] //sbyte max value ( 127 ) +1
-        //[InlineData("2247483647")]
-        //[InlineData("-2147483649")]
+        [InlineData("-138")]
         //[InlineData("-2247483648")]
         [InlineData("227")]
         //[InlineData("-375000000000")]
@@ -208,8 +202,7 @@ namespace Light.Serialization.Tests
 
 		[Theory]
 		[InlineData("9223372036854775808")] //long max value ( 9223372036854775807 ) +1
-        //[InlineData("2247483647")]
-        //[InlineData("-2147483649")]
+        [InlineData("-9223372036854775818")]
         //[InlineData("-2247483648")]
         [InlineData("10223372036854775807")]
         //[InlineData("-375000000000")]
