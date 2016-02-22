@@ -75,6 +75,19 @@ namespace Light.Serialization.Tests
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
+
+		        [Theory]
+        [InlineData("42.7")]
+        [InlineData("<#= DecrementLeftMostIncrementSecondLeftMostNumberInString() #>.007")]
+        [InlineData("<#= _maxAsString #>.0353")]
+        [InlineData("0.00000856")]
+		[InlineData("<#= _minAsString #>.000000001")]
+
+        public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
+        {
+            CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number");
+        }
+
 	}
 	<# } #>
 }

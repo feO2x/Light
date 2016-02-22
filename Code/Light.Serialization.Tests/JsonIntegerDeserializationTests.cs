@@ -45,6 +45,19 @@ namespace Light.Serialization.Tests
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
+
+		        [Theory]
+        [InlineData("42.7")]
+        [InlineData("1247483647.007")]
+        [InlineData("2147483647.0353")]
+        [InlineData("0.00000856")]
+		[InlineData("-2147483648.000000001")]
+
+        public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
+        {
+            CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number");
+        }
+
 	}
 	
     public sealed class JsonUIntParserDeserializationTests : BaseDefaultJsonDeserializationTest
@@ -83,6 +96,19 @@ namespace Light.Serialization.Tests
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
+
+		        [Theory]
+        [InlineData("42.7")]
+        [InlineData("3394967295.007")]
+        [InlineData("4294967295.0353")]
+        [InlineData("0.00000856")]
+		[InlineData("0.000000001")]
+
+        public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
+        {
+            CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number");
+        }
+
 	}
 	
     public sealed class JsonShortParserDeserializationTests : BaseDefaultJsonDeserializationTest
@@ -124,6 +150,19 @@ namespace Light.Serialization.Tests
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
+
+		        [Theory]
+        [InlineData("42.7")]
+        [InlineData("23767.007")]
+        [InlineData("32767.0353")]
+        [InlineData("0.00000856")]
+		[InlineData("-32768.000000001")]
+
+        public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
+        {
+            CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number");
+        }
+
 	}
 	
     public sealed class JsonUShortParserDeserializationTests : BaseDefaultJsonDeserializationTest
@@ -165,6 +204,19 @@ namespace Light.Serialization.Tests
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
+
+		        [Theory]
+        [InlineData("42.7")]
+        [InlineData("56535.007")]
+        [InlineData("65535.0353")]
+        [InlineData("0.00000856")]
+		[InlineData("0.000000001")]
+
+        public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
+        {
+            CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number");
+        }
+
 	}
 	
     public sealed class JsonByteParserDeserializationTests : BaseDefaultJsonDeserializationTest
@@ -206,6 +258,19 @@ namespace Light.Serialization.Tests
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
+
+		        [Theory]
+        [InlineData("42.7")]
+        [InlineData("165.007")]
+        [InlineData("255.0353")]
+        [InlineData("0.00000856")]
+		[InlineData("0.000000001")]
+
+        public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
+        {
+            CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number");
+        }
+
 	}
 	
     public sealed class JsonSByteParserDeserializationTests : BaseDefaultJsonDeserializationTest
@@ -247,6 +312,19 @@ namespace Light.Serialization.Tests
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
+
+		        [Theory]
+        [InlineData("42.7")]
+        [InlineData("37.007")]
+        [InlineData("127.0353")]
+        [InlineData("0.00000856")]
+		[InlineData("-128.000000001")]
+
+        public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
+        {
+            CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number");
+        }
+
 	}
 	
     public sealed class JsonLongParserDeserializationTests : BaseDefaultJsonDeserializationTest
@@ -288,6 +366,19 @@ namespace Light.Serialization.Tests
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
+
+		        [Theory]
+        [InlineData("42.7")]
+        [InlineData("8323372036854775807.007")]
+        [InlineData("9223372036854775807.0353")]
+        [InlineData("0.00000856")]
+		[InlineData("-9223372036854775808.000000001")]
+
+        public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
+        {
+            CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number");
+        }
+
 	}
 	}
 
