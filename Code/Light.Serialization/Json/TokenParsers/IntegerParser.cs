@@ -76,7 +76,7 @@ namespace Light.Serialization.Json.TokenParsers
             }
 
 			if (isResultNegative)
-                return (int) -result ;
+                return (int) -result;
 			
 	    return result;
         }
@@ -165,7 +165,7 @@ namespace Light.Serialization.Json.TokenParsers
 
 			
 						if (token.Length > MaxAsString.Length)
-                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type uint.");
             if (token.Length == MaxAsString.Length)
                 overflowCompareString = MaxAsString;
 			
@@ -182,7 +182,7 @@ namespace Light.Serialization.Json.TokenParsers
                     if (digit < overflowCompareDigit)
                         isDefinitelyInRange = true;
                     else if (digit > overflowCompareDigit)
-                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type uint.");
                 }
 
                 result += (uint)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
@@ -281,7 +281,7 @@ namespace Light.Serialization.Json.TokenParsers
 			if (token[0] == NegativeSign)
             {
                 if (token.Length > MinAsString.Length)
-                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type short.");
                 if (token.Length == MinAsString.Length)
                     overflowCompareString = MinAsString;
                 isResultNegative = true;
@@ -290,7 +290,7 @@ namespace Light.Serialization.Json.TokenParsers
                 currentIndex++;
             }
 			else if (token.Length > MaxAsString.Length)
-                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type short.");
             else if (token.Length == MaxAsString.Length)
                 overflowCompareString = MaxAsString;
 			
@@ -308,7 +308,7 @@ namespace Light.Serialization.Json.TokenParsers
                     if (digit < overflowCompareDigit)
                         isDefinitelyInRange = true;
                     else if (digit > overflowCompareDigit)
-                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type short.");
                 }
 
                 result += (short)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
@@ -318,7 +318,7 @@ namespace Light.Serialization.Json.TokenParsers
             }
 
 			if (isResultNegative)
-                return (short) -result ;
+                return (short) -result;
 			
 	    return result;
         }
@@ -409,7 +409,7 @@ namespace Light.Serialization.Json.TokenParsers
 			if (token[0] == NegativeSign)
             {
                 if (token.Length > MinAsString.Length)
-                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type ushort.");
                 if (token.Length == MinAsString.Length)
                     overflowCompareString = MinAsString;
                 isResultNegative = true;
@@ -418,7 +418,7 @@ namespace Light.Serialization.Json.TokenParsers
                 currentIndex++;
             }
 			else if (token.Length > MaxAsString.Length)
-                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type ushort.");
             else if (token.Length == MaxAsString.Length)
                 overflowCompareString = MaxAsString;
 			
@@ -436,7 +436,7 @@ namespace Light.Serialization.Json.TokenParsers
                     if (digit < overflowCompareDigit)
                         isDefinitelyInRange = true;
                     else if (digit > overflowCompareDigit)
-                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type ushort.");
                 }
 
                 result += (ushort)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
@@ -446,7 +446,7 @@ namespace Light.Serialization.Json.TokenParsers
             }
 
 			if (isResultNegative)
-                return (ushort) -result ;
+                return (ushort) -result;
 			
 	    return result;
         }
@@ -537,7 +537,7 @@ namespace Light.Serialization.Json.TokenParsers
 			if (token[0] == NegativeSign)
             {
                 if (token.Length > MinAsString.Length)
-                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type byte.");
                 if (token.Length == MinAsString.Length)
                     overflowCompareString = MinAsString;
                 isResultNegative = true;
@@ -546,7 +546,7 @@ namespace Light.Serialization.Json.TokenParsers
                 currentIndex++;
             }
 			else if (token.Length > MaxAsString.Length)
-                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type byte.");
             else if (token.Length == MaxAsString.Length)
                 overflowCompareString = MaxAsString;
 			
@@ -564,7 +564,7 @@ namespace Light.Serialization.Json.TokenParsers
                     if (digit < overflowCompareDigit)
                         isDefinitelyInRange = true;
                     else if (digit > overflowCompareDigit)
-                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type byte.");
                 }
 
                 result += (byte)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
@@ -574,7 +574,7 @@ namespace Light.Serialization.Json.TokenParsers
             }
 
 			if (isResultNegative)
-                return (byte) -result ;
+                return (byte) -result;
 			
 	    return result;
         }
@@ -665,7 +665,7 @@ namespace Light.Serialization.Json.TokenParsers
 			if (token[0] == NegativeSign)
             {
                 if (token.Length > MinAsString.Length)
-                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type sbyte.");
                 if (token.Length == MinAsString.Length)
                     overflowCompareString = MinAsString;
                 isResultNegative = true;
@@ -674,7 +674,7 @@ namespace Light.Serialization.Json.TokenParsers
                 currentIndex++;
             }
 			else if (token.Length > MaxAsString.Length)
-                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type sbyte.");
             else if (token.Length == MaxAsString.Length)
                 overflowCompareString = MaxAsString;
 			
@@ -692,7 +692,7 @@ namespace Light.Serialization.Json.TokenParsers
                     if (digit < overflowCompareDigit)
                         isDefinitelyInRange = true;
                     else if (digit > overflowCompareDigit)
-                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type sbyte.");
                 }
 
                 result += (sbyte)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
@@ -702,7 +702,7 @@ namespace Light.Serialization.Json.TokenParsers
             }
 
 			if (isResultNegative)
-                return (sbyte) -result ;
+                return (sbyte) -result;
 			
 	    return result;
         }
@@ -793,7 +793,7 @@ namespace Light.Serialization.Json.TokenParsers
 			if (token[0] == NegativeSign)
             {
                 if (token.Length > MinAsString.Length)
-                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type long.");
                 if (token.Length == MinAsString.Length)
                     overflowCompareString = MinAsString;
                 isResultNegative = true;
@@ -802,7 +802,7 @@ namespace Light.Serialization.Json.TokenParsers
                 currentIndex++;
             }
 			else if (token.Length > MaxAsString.Length)
-                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type long.");
             else if (token.Length == MaxAsString.Length)
                 overflowCompareString = MaxAsString;
 			
@@ -820,7 +820,7 @@ namespace Light.Serialization.Json.TokenParsers
                     if (digit < overflowCompareDigit)
                         isDefinitelyInRange = true;
                     else if (digit > overflowCompareDigit)
-                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type long.");
                 }
 
                 result += (long)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
@@ -830,7 +830,7 @@ namespace Light.Serialization.Json.TokenParsers
             }
 
 			if (isResultNegative)
-                return (long) -result ;
+                return (long) -result;
 			
 	    return result;
         }

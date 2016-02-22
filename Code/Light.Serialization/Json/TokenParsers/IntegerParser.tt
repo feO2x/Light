@@ -69,7 +69,7 @@ namespace Light.Serialization.Json.TokenParsers
 			{ #>if (token[0] == NegativeSign)
             {
                 if (token.Length > MinAsString.Length)
-                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type <#= parserType #>.");
                 if (token.Length == MinAsString.Length)
                     overflowCompareString = MinAsString;
                 isResultNegative = true;
@@ -78,7 +78,7 @@ namespace Light.Serialization.Json.TokenParsers
                 currentIndex++;
             }
 			else if (token.Length > MaxAsString.Length)
-                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type <#= parserType #>.");
             else if (token.Length == MaxAsString.Length)
                 overflowCompareString = MaxAsString;
 			<# }
@@ -87,7 +87,7 @@ namespace Light.Serialization.Json.TokenParsers
 			<# if (parserNegativeSign == "+")
 			{ #>
 			if (token.Length > MaxAsString.Length)
-                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type <#= parserType #>.");
             if (token.Length == MaxAsString.Length)
                 overflowCompareString = MaxAsString;
 			<# }
@@ -106,7 +106,7 @@ namespace Light.Serialization.Json.TokenParsers
                     if (digit < overflowCompareDigit)
                         isDefinitelyInRange = true;
                     else if (digit > overflowCompareDigit)
-                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type int.");
+                        throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type <#= parserType #>.");
                 }
 
                 result += (<#= parserType #>)(digit * CalculateBase(currentPositionBeforeDecimalPoint));
@@ -117,7 +117,7 @@ namespace Light.Serialization.Json.TokenParsers
 
 			<# if (parserNegativeSign == "-")
 			{ #>if (isResultNegative)
-                return (<#= parserType #>) -result ;
+                return (<#= parserType #>) -result;
 			<# } #>
 
 	    return result;

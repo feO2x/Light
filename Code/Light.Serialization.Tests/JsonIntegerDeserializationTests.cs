@@ -27,7 +27,7 @@ namespace Light.Serialization.Tests
         //[InlineData("2247483647")]
         //[InlineData("-2147483649")]
         //[InlineData("-2247483648")]
-        //[InlineData("185000000000")]
+        [InlineData("3147483647")]
         //[InlineData("-375000000000")]
 
         public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
@@ -56,12 +56,12 @@ namespace Light.Serialization.Tests
         //[InlineData("2247483647")]
         //[InlineData("-2147483649")]
         //[InlineData("-2247483648")]
-        //[InlineData("185000000000")]
+        [InlineData("5294967295")]
         //[InlineData("-375000000000")]
 
         public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
         {
-            CheckDeserializerThrowsExceptionWithMessage<uint>(json, $"Could not deserialize value {json} because it produces an overflow for type int.");
+            CheckDeserializerThrowsExceptionWithMessage<uint>(json, $"Could not deserialize value {json} because it produces an overflow for type uint.");
 		}
 
 	}
@@ -87,12 +87,12 @@ namespace Light.Serialization.Tests
         //[InlineData("2247483647")]
         //[InlineData("-2147483649")]
         //[InlineData("-2247483648")]
-        //[InlineData("185000000000")]
+        [InlineData("42767")]
         //[InlineData("-375000000000")]
 
         public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
         {
-            CheckDeserializerThrowsExceptionWithMessage<short>(json, $"Could not deserialize value {json} because it produces an overflow for type int.");
+            CheckDeserializerThrowsExceptionWithMessage<short>(json, $"Could not deserialize value {json} because it produces an overflow for type short.");
 		}
 
 	}
@@ -118,12 +118,12 @@ namespace Light.Serialization.Tests
         //[InlineData("2247483647")]
         //[InlineData("-2147483649")]
         //[InlineData("-2247483648")]
-        //[InlineData("185000000000")]
+        [InlineData("75535")]
         //[InlineData("-375000000000")]
 
         public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
         {
-            CheckDeserializerThrowsExceptionWithMessage<ushort>(json, $"Could not deserialize value {json} because it produces an overflow for type int.");
+            CheckDeserializerThrowsExceptionWithMessage<ushort>(json, $"Could not deserialize value {json} because it produces an overflow for type ushort.");
 		}
 
 	}
@@ -149,12 +149,12 @@ namespace Light.Serialization.Tests
         //[InlineData("2247483647")]
         //[InlineData("-2147483649")]
         //[InlineData("-2247483648")]
-        //[InlineData("185000000000")]
+        [InlineData("355")]
         //[InlineData("-375000000000")]
 
         public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
         {
-            CheckDeserializerThrowsExceptionWithMessage<byte>(json, $"Could not deserialize value {json} because it produces an overflow for type int.");
+            CheckDeserializerThrowsExceptionWithMessage<byte>(json, $"Could not deserialize value {json} because it produces an overflow for type byte.");
 		}
 
 	}
@@ -164,7 +164,7 @@ namespace Light.Serialization.Tests
 		[Theory]
         [InlineData("42", 42)]
 		[InlineData(sbyte.MaxValue/2, sbyte.MaxValue/2)]
-        [InlineData("037", 037)]
+        [InlineData("28", 28)]
         [InlineData(sbyte.MaxValue, sbyte.MaxValue)]
         [InlineData(sbyte.MinValue, sbyte.MinValue)]
 		[InlineData("0", 0)]
@@ -180,12 +180,12 @@ namespace Light.Serialization.Tests
         //[InlineData("2247483647")]
         //[InlineData("-2147483649")]
         //[InlineData("-2247483648")]
-        //[InlineData("185000000000")]
+        [InlineData("227")]
         //[InlineData("-375000000000")]
 
         public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
         {
-            CheckDeserializerThrowsExceptionWithMessage<sbyte>(json, $"Could not deserialize value {json} because it produces an overflow for type int.");
+            CheckDeserializerThrowsExceptionWithMessage<sbyte>(json, $"Could not deserialize value {json} because it produces an overflow for type sbyte.");
 		}
 
 	}
@@ -211,12 +211,12 @@ namespace Light.Serialization.Tests
         //[InlineData("2247483647")]
         //[InlineData("-2147483649")]
         //[InlineData("-2247483648")]
-        //[InlineData("185000000000")]
+        [InlineData("10223372036854775807")]
         //[InlineData("-375000000000")]
 
         public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
         {
-            CheckDeserializerThrowsExceptionWithMessage<long>(json, $"Could not deserialize value {json} because it produces an overflow for type int.");
+            CheckDeserializerThrowsExceptionWithMessage<long>(json, $"Could not deserialize value {json} because it produces an overflow for type long.");
 		}
 
 	}
