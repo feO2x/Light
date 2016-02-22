@@ -164,7 +164,7 @@ namespace Light.Serialization.Tests
 		[Theory]
         [InlineData("42", 42)]
 		[InlineData(sbyte.MaxValue/2, sbyte.MaxValue/2)]
-        [InlineData("28", 28)]
+        [InlineData("37", 37)]
         [InlineData(sbyte.MaxValue, sbyte.MaxValue)]
         [InlineData(sbyte.MinValue, sbyte.MinValue)]
 		[InlineData("0", 0)]

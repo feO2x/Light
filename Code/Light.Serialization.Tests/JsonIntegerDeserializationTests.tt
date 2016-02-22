@@ -90,19 +90,23 @@ namespace Light.Serialization.Tests
 
     private string DecrementLeftMostIncrementSecondLeftMostNumberInString()
     {
+        int i = 0;
         if(_maxAsString.All(c => char.IsDigit(c)) == false)
 			throw new ArgumentException("number must contain digits only.");
 
 		var numberArray = _maxAsString.ToCharArray();
 
-        if (numberArray[0] == '1')
+        if (numberArray[i] == '1')
             numberArray = _maxAsString.Remove(0, 1).ToArray();
         else
-            numberArray[0] = (char)(numberArray[0] - 1);
+		{
+            numberArray[i] = (char)(numberArray[0] - 1);
+		    i++;
+		}
 
-        if (numberArray[1] == '9')
+        if (numberArray[i] == '9')
         {
-            numberArray[1] = '0';
+            numberArray[i] = '0';
             if (numberArray[0] == '9')
             {
                 numberArray[0] = '0';
@@ -110,11 +114,11 @@ namespace Light.Serialization.Tests
                 return "1" + numbers;
             }
 
-            numberArray[0]++;
+            numberArray[i] = (char)((int)numberArray[i] + 1);
             return new string(numberArray);
         }
 
-        numberArray[1]++;
+        numberArray[i] = (char)((int)numberArray[i] + 1);
 
         return new string(numberArray);
     }
