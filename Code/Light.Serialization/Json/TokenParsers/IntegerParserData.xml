@@ -60,7 +60,7 @@
     <Type>long</Type>
     <DecimalPointCharacter>.</DecimalPointCharacter>
     <MaxAsString>9223372036854775807</MaxAsString>
-    <MinAsString>–9223372036854775808</MinAsString>
+    <MinAsString>-9223372036854775808</MinAsString>
     <NegativeSign>-</NegativeSign>
   </Parser>
 </Parsers>
