@@ -44,7 +44,7 @@
     <Compile Include="Json\ComplexTypeConstruction\ConstructorDescription.cs" />
     <Compile Include="Json\ComplexTypeConstruction\DefaultObjectFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\InjectableValueKind.cs" />
-    <Compile Include="Json\ComplexTypeDecomposition\SimpleNameToTypeMapping.cs" />
+    <Compile Include="Json\ComplexTypeConstruction\SimpleNameToTypeMapping.cs" />
     <Compile Include="Json\Caching\ValueProvidersCacheDecorator.cs" />
     <Compile Include="Json\JsonDeserializerBuilderExtensions.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\TimeSpanFormatter.cs" />

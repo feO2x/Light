@@ -8,13 +8,14 @@ namespace Light.Serialization.Json
 {
     public static class JsonDeserializerBuilderExtensions
     {
-        public static IList<IJsonTokenParser> AddDefaultTokenParsers(this IList<IJsonTokenParser> targetList,
-                                                                     JsonReaderSymbols jsonReaderSymbols,
-                                                                     ICollectionFactory collectionFactory,
-                                                                     IObjectFactory objectFactory,
-                                                                     INameToTypeMapping nameToTypeMapping,
-                                                                     IInjectableValueNameNormalizer nameNormalizer,
-                                                                     ITypeDescriptionProvider typeDescriptionProvider)
+        public static TCollection AddDefaultTokenParsers<TCollection>(this TCollection targetList,
+                                                                      JsonReaderSymbols jsonReaderSymbols,
+                                                                      ICollectionFactory collectionFactory,
+                                                                      IObjectFactory objectFactory,
+                                                                      INameToTypeMapping nameToTypeMapping,
+                                                                      IInjectableValueNameNormalizer nameNormalizer,
+                                                                      ITypeDescriptionProvider typeDescriptionProvider)
+            where TCollection : IList<IJsonTokenParser>
         {
             targetList.MustNotBeNull(nameof(targetList));
 

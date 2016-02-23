@@ -7,10 +7,10 @@ namespace Light.Serialization.Json
     public sealed class JsonDeserializer : IDeserializer
     {
         private readonly IJsonReaderFactory _jsonReaderFactory;
-        private readonly IList<IJsonTokenParser> _tokenParsers;
+        private readonly IReadOnlyList<IJsonTokenParser> _tokenParsers;
         private IJsonReader _jsonReader;
 
-        public JsonDeserializer(IJsonReaderFactory jsonReaderFactory, IList<IJsonTokenParser> tokenParsers)
+        public JsonDeserializer(IJsonReaderFactory jsonReaderFactory, IReadOnlyList<IJsonTokenParser> tokenParsers)
         {
             jsonReaderFactory.MustNotBeNull(nameof(jsonReaderFactory));
             tokenParsers.MustNotBeNull(nameof(tokenParsers));

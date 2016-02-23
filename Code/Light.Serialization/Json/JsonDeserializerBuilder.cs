@@ -15,7 +15,7 @@ namespace Light.Serialization.Json
         private ICollectionFactory _collectionFactory = new DefaultGenericCollectionFactory();
         private IJsonReaderFactory _jsonReaderFactory = new SingleBufferJsonReaderFactory();
 
-        private IList<IJsonTokenParser> _jsonTokenParsers;
+        private IReadOnlyList<IJsonTokenParser> _jsonTokenParsers;
         private IInjectableValueNameNormalizer _nameNormalizer = new ToLowerWithoutSpecialCharactersNormalizer();
         private INameToTypeMapping _nameToTypeMapping = new SimpleNameToTypeMapping();
         private IObjectFactory _objectFactory = new DefaultObjectFactory();
@@ -32,7 +32,7 @@ namespace Light.Serialization.Json
             return this;
         }
 
-        public JsonDeserializerBuilder WithTokenParsers(IList<IJsonTokenParser> tokenParsers)
+        public JsonDeserializerBuilder WithTokenParsers(IReadOnlyList<IJsonTokenParser> tokenParsers)
         {
             _jsonTokenParsers = tokenParsers;
             return this;
