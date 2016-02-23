@@ -29,7 +29,7 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
             if (isDaysZero == false ||
                 isHoursZero && isMinutesZero && isSecondsZero && isMillisecondsZero)
             {
-                AppendTimespanSection('D', timeSpan.Days);
+                AppendDurationSection('D', timeSpan.Days);
                 if (isHoursZero && isMinutesZero && isSecondsZero && isMillisecondsZero)
                     return _stringBuilder.CompleteJsonStringWithQuotationMarkAndClearBuilder();
             }
@@ -60,10 +60,10 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
             if (duration == 0)
                 return;
 
-            AppendTimespanSection(identifier, duration);
+            AppendDurationSection(identifier, duration);
         }
 
-        private void AppendTimespanSection(char identifier, int duration)
+        private void AppendDurationSection(char identifier, int duration)
         {
             _stringBuilder.Append(duration);
             _stringBuilder.Append(identifier);

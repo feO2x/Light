@@ -15,7 +15,6 @@ namespace Light.Serialization.Json.TokenParsers
 
         public object ParseValue(JsonDeserializationContext context)
         {
-
             int year,
                 month,
                 day = 1,
@@ -146,7 +145,6 @@ namespace Light.Serialization.Json.TokenParsers
         private static JsonDocumentException CreateException(ref JsonToken token, Exception innerException = null)
         {
             return new JsonDocumentException($"The specified token {token} does not represent a valid date time.", token, innerException);
-            
         }
     }
 }
