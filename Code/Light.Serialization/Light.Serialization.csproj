@@ -38,6 +38,7 @@
     <Compile Include="FrameworkExtensions\CharExtensions.cs" />
     <Compile Include="FrameworkExtensions\ExpressionExtensions.cs" />
     <Compile Include="FrameworkExtensions\ReflectionExtensions.cs" />
+    <Compile Include="FrameworkExtensions\StringBuilderExtensions.cs" />
     <Compile Include="FrameworkExtensions\StringExtensions.cs" />
     <Compile Include="IDeserializer.cs" />
     <Compile Include="Json\ComplexTypeConstruction\ConstructorDescription.cs" />
@@ -46,6 +47,7 @@
     <Compile Include="Json\ComplexTypeDecomposition\SimpleNameToTypeMapping.cs" />
     <Compile Include="Json\Caching\ValueProvidersCacheDecorator.cs" />
     <Compile Include="Json\JsonDeserializerBuilderExtensions.cs" />
+    <Compile Include="Json\PrimitiveTypeFormatters\TimeSpanFormatter.cs" />
     <Compile Include="Json\SerializationRules\IAndBlackListRule.cs" />
     <Compile Include="Json\SerializationRules\IAndWhiteListRule.cs" />
     <Compile Include="Json\SerializationRules\IButWhiteListRule.cs" />
@@ -64,6 +66,7 @@
     <Compile Include="Json\TokenParsers\CharacterParser.cs" />
     <Compile Include="Json\TokenParsers\ComplexTypeParser.cs" />
     <Compile Include="Json\ComplexTypeConstruction\DefaultGenericCollectionFactory.cs" />
+    <Compile Include="Json\TokenParsers\DateTimeParser.cs" />
     <Compile Include="Json\TokenParsers\DoubleParser.cs" />
     <Compile Include="Json\ComplexTypeConstruction\ICollectionFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\IInjectableValueNameNormalizer.cs" />
@@ -82,6 +85,7 @@
     <Compile Include="Json\JsonTokenType.cs" />
     <Compile Include="Json\ComplexTypeConstruction\IObjectFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\ITypeDescriptionProvider.cs" />
+    <Compile Include="Json\TokenParsers\Iso8601DurationParser.cs" />
     <Compile Include="Json\TokenParsers\NullParser.cs" />
     <Compile Include="Json\TokenParsers\StringParser.cs" />
     <Compile Include="Json\LowLevelWriting\JsonWriterSymbols.cs" />
@@ -119,6 +123,7 @@
     <Compile Include="Json\ComplexTypeConstruction\TypeCreationDescription.cs" />
     <Compile Include="Json\ComplexTypeConstruction\DefaultTypeDescriptionProvider.cs" />
     <Compile Include="Json\Caching\TypeDescriptionCacheDecorator.cs" />
+    <Compile Include="Json\TokenParsers\TimeSpanParser.cs" />
     <Compile Include="Json\WriterInstructors\CollectionInstructor.cs" />
     <Compile Include="Json\WriterInstructors\ComplexObjectInstructor.cs" />
     <Compile Include="Json\WriterInstructors\ComplexObjectWriting.cs" />

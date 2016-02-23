@@ -1,0 +1,56 @@
+﻿using System;
+using Xunit;
+using TestData = System.Collections.Generic.IEnumerable<object[]>;
+
+namespace Light.Serialization.Tests
+{
+    public sealed class JsonTimeSpanDeserializationTests : BaseDefaultJsonDeserializationTest
+    {
+        [Theory(DisplayName = "JSON strings that represent valid ISO 8601 durations must be deserialized to time spans.")]
+        [MemberData(nameof(ValidTimeSpansData))]
+        public void ValidTimeSpans(string json, TimeSpan expected)
+        {
+            CompareDeserializedJsonToExpected(json, expected);
+        }
+
+        public static readonly TestData ValidTimeSpansData =
+            new[]
+            {
+                new object[] { "\"P12D\"", new TimeSpan(12, 0, 0, 0) },
+                new object[] { "\"P3D\"", new TimeSpan(3, 0, 0, 0) },
+                new object[] { "\"PT17H\"", new TimeSpan(17, 0, 0) },
+                new object[] { "\"PT24H\"", new TimeSpan(24, 0, 0) },
+                new object[] { "\"PT5M\"", new TimeSpan(0, 5, 0) },
+                new object[] { "\"PT59M\"", new TimeSpan(0, 59, 0) },
+                new object[] { "\"PT30S\"", new TimeSpan(0, 0, 30) },
+                new object[] { "\"PT2S\"", new TimeSpan(0, 0, 2) },
+                new object[] { "\"PT04S\"", new TimeSpan(0, 0, 4) },
+                new object[] { "\"PT00.300S\"", new TimeSpan(0, 0, 0, 0, 300) },
+                new object[] { "\"PT19.588S\"", new TimeSpan(0, 0, 0, 19, 588) },
+                new object[] { "\"PT7.132S\"", new TimeSpan(0, 0, 0, 7, 132) },
+                new object[] { "\"PT7.132S\"", new TimeSpan(0, 0, 0, 7, 132) },
+                new object[] { "\"P1DT5H48M53.500S\"", new TimeSpan(1, 5, 48, 53, 500) }
+            };
+
+        [Theory(DisplayName = "An exception must be thrown when a JSON string contains invalid ISO 8601 durations.")]
+        [MemberData(nameof(InvalidTimeSpansData))]
+        public void InvalidTimeSpans(string json)
+        {
+            CheckDeserializerThrowsExceptionWithMessageContaining<TimeSpan>(json, $"The specified token {json} does not represent a valid time span.");
+        }
+
+        public static readonly TestData InvalidTimeSpansData =
+            new[]
+            {
+                new object[] { "\"12D\"" },
+                new object[] { "\"6D\"" },
+                new object[] { "\"P12D40M\"" },
+                new object[] { "\"P12D3H\"" },
+                new object[] { "\"P4M\"" },
+                new object[] { "\"P07H\"" },
+                new object[] { "\"P12S\"" },
+                new object[] { "\"PT30.0S\"" },
+                new object[] { "\"P17DT5H-14M30S\"" }
+            };
+    }
+}

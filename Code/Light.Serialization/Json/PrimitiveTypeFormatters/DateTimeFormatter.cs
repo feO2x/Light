@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using Light.Serialization.FrameworkExtensions;
 
 namespace Light.Serialization.Json.PrimitiveTypeFormatters
 {
@@ -38,7 +39,7 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
 
             // Omit the time part if possible
             if (isHourZero && isMinuteZero && isSecondZero && isMillisecondZero)
-                return ConstructStringAndClearBuilder();
+                return _stringBuilder.CompleteJsonStringWithQuotationMarkAndClearBuilder();
 
             // Otherwise append hour and minute at least
             _stringBuilder.Append('T');
@@ -51,7 +52,7 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
                 _stringBuilder.Append(dateTime.Second.ToString("D2"));
                 if (isMillisecondZero == false)
                 {
-                    _stringBuilder.Append(':');
+                    _stringBuilder.Append('.');
                     _stringBuilder.Append(dateTime.Millisecond.ToString("D3"));
                 }
             }
@@ -80,15 +81,7 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
                     break;
             }
             
-            return ConstructStringAndClearBuilder();
-        }
-
-        private string ConstructStringAndClearBuilder()
-        {
-            _stringBuilder.Append('"');
-            var result = _stringBuilder.ToString();
-            _stringBuilder.Clear();
-            return result;
+            return _stringBuilder.CompleteJsonStringWithQuotationMarkAndClearBuilder();
         }
     }
 }

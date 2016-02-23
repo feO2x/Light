@@ -1,3 +1,4 @@
+using System;
 using Light.GuardClauses;
 
 namespace Light.Serialization.Json
@@ -6,7 +7,8 @@ namespace Light.Serialization.Json
     {
         public readonly JsonToken ErroneousToken;
 
-        public JsonDocumentException(string message, JsonToken erroneousToken) : base(message)
+        public JsonDocumentException(string message, JsonToken erroneousToken, Exception innerException = null) 
+            : base(message, innerException)
         {
             erroneousToken.MustNotBeNull(nameof(erroneousToken));
 
