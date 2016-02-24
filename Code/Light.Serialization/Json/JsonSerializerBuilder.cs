@@ -119,7 +119,7 @@ namespace Light.Serialization.Json
                     _instructorCache.Add(targetRule.TargetType, customInstructor);
             }
 
-            return new JsonSerializer(writerInstructors, _writerFactory, _instructorCache);
+            return new JsonSerializer((IReadOnlyList<IJsonWriterInstructor>) writerInstructors, _writerFactory, _instructorCache);
         }
     }
 }

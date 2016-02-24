@@ -6,12 +6,12 @@ namespace Light.Serialization.Json
 {
     public sealed class JsonSerializer : ISerializer
     {
-        private readonly IList<IJsonWriterInstructor> _writerInstructors;
+        private readonly IReadOnlyList<IJsonWriterInstructor> _writerInstructors;
         private readonly IJsonWriterFactory _writerFactory;
         private readonly IDictionary<Type, IJsonWriterInstructor> _instructorCache;
         private IJsonWriter _jsonWriter;
 
-        public JsonSerializer(IList<IJsonWriterInstructor> writerInstructors,
+        public JsonSerializer(IReadOnlyList<IJsonWriterInstructor> writerInstructors,
                               IJsonWriterFactory writerFactory,
                               IDictionary<Type, IJsonWriterInstructor> instructorCache)
         {
