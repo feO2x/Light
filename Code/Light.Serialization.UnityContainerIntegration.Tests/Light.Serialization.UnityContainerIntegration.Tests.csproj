@@ -76,6 +76,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RulesSupportTests.cs" />
     <Compile Include="SerializerResolveTests.cs" />
     <Compile Include="UnityObjectFactoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,6 +85,10 @@
     <ProjectReference Include="..\Light.GuardClauses\Light.GuardClauses.csproj">
       <Project>{65bb1768-e9a0-46ed-b698-b92de2bb8504}</Project>
       <Name>Light.GuardClauses</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Light.Serialization.Tests\Light.Serialization.Tests.csproj">
+      <Project>{c5b65a88-58c1-474a-80d2-3dc86e94c455}</Project>
+      <Name>Light.Serialization.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\Light.Serialization.UnityContainerIntegration\Light.Serialization.UnityContainerIntegration.csproj">
       <Project>{5c392074-de04-4574-b4e3-5131c5e30589}</Project>

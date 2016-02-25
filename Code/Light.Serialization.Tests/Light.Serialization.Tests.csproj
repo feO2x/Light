@@ -95,6 +95,7 @@
     <Compile Include="JsonTimeSpanDeserializationTests.cs" />
     <Compile Include="JsonTimeSpanSerializationTests.cs" />
     <Compile Include="JsonWhitespaceDeserializationTests.cs" />
+    <Compile Include="MoreComplexDummyClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringExtensionsTests.cs" />
   </ItemGroup>

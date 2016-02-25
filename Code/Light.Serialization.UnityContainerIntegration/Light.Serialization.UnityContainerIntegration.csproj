@@ -48,6 +48,7 @@
     <Compile Include="KnownNames.cs" />
     <Compile Include="LightSerializationModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RulesSupport.cs" />
     <Compile Include="UnityObjectFactory.cs" />
   </ItemGroup>
   <ItemGroup>

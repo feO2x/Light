@@ -2,6 +2,7 @@
 using FluentAssertions;
 using Light.Serialization.Json;
 using Xunit;
+#pragma warning disable 169
 
 namespace Light.Serialization.Tests
 {
@@ -11,14 +12,14 @@ namespace Light.Serialization.Tests
         public void CustomObjectNormalizeJsonKeys()
         {
             var moreComplexDummyObject = new MoreComplexDummyClass("PrivateFieldValue", 11, new DateTime(2016, 2, 10), 42.0, "PublicStringProperty", "publicStringPropertyTwo");
-            var serializer = new JsonSerializerBuilder().WithRuleFor<JsonCustomRuleSerializationTest.MoreComplexDummyClass>(r => r.IgnoreAll()
-                                                                                                                                  .ButProperty(o => o.PublicStringProperty)
-                                                                                                                                  .AndField(o => o.PublicField))
+            var serializer = new JsonSerializerBuilder().WithRuleFor<MoreComplexDummyClass>(r => r.IgnoreAll()
+                                                                                                  .ButProperty(o => o.PublicStringProperty)
+                                                                                                  .AndField(o => o.PublicField))
                                                         .Build();
 
             var json = serializer.Serialize(moreComplexDummyObject);
 
-            json.Should().Be("{\"publicProperty\":\"2016-02-10\",\"publicDoubleProperty\":42.0,\"publicStringProperty\":\"PublicStringProperty\",\"publicStringPropertyTwo\":\"publicStringPropertyTwo\",\"publicField\":11}");
+            json.Should().Be("{\"publicStringProperty\":\"PublicStringProperty\",\"publicField\":11}");
         }
 
         public class MoreComplexDummyClass
