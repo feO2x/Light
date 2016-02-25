@@ -70,6 +70,7 @@
     <Compile Include="Json\TokenParsers\DoubleParser.cs" />
     <Compile Include="Json\ComplexTypeConstruction\ICollectionFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\IInjectableValueNameNormalizer.cs" />
+    <Compile Include="Json\TokenParsers\EnumerationValueParser.cs" />
     <Compile Include="Json\TokenParsers\INameToTypeMapping.cs" />
     <Compile Include="Json\TokenParsers\IntegerParser.cs">
       <AutoGen>True</AutoGen>
