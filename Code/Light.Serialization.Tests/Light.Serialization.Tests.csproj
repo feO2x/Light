@@ -80,6 +80,7 @@
     <Compile Include="JsonCustomRuleSerializationTest.cs" />
     <Compile Include="JsonDateTimeDeserializationTests.cs" />
     <Compile Include="JsonDateTimeSerializationTests.cs" />
+    <Compile Include="JsonDecimalDeserializationTests.cs" />
     <Compile Include="JsonDelegateSerializationTests.cs" />
     <Compile Include="JsonDictionarySerializationTests.cs" />
     <Compile Include="JsonDoubleDeserializationTests.cs" />
