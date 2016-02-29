@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Light.Serialization.Json;
 using Xunit;
 using TestData = System.Collections.Generic.IEnumerable<object[]>;
@@ -12,7 +7,7 @@ namespace Light.Serialization.Tests
 {
     public sealed class JsonDecimalDeserializationTests : BaseDefaultJsonDeserializationTest
     {
-        [Theory]
+        [Theory(DisplayName = "JSON strings that represent floating point numbers are correctly parsed to decimal.")]
         [MemberData("DecimalTestData")]
         public void DecimalValuesCanBeDeserializedCorrectly(string json, decimal expected, decimal tolerance)
         {
@@ -30,7 +25,7 @@ namespace Light.Serialization.Tests
                                                               new object[] { "-79228162514264337593543950335.0", decimal.MinValue, 0.1 },
                                                               new object[] { "-42.00200", - 42.00200m, 0.00001 }
                                                           };
-        [Theory]
+        [Theory(DisplayName = "JSON strings that contain malformed floating point numbers or numbers that are to large for decimal result in an expection.")]
         [InlineData("42.0.")]
         [InlineData("42.0m")]
         [InlineData("3k.0")]

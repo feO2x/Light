@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Light.Serialization.FrameworkExtensions;
 using Xunit;
 
 namespace Light.Serialization.Tests

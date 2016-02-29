@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Light.Serialization.Json;
 using Xunit;
 
@@ -11,7 +6,7 @@ namespace Light.Serialization.Tests
 {
     public sealed class JsonFloatDeserializationTests : BaseDefaultJsonDeserializationTest
     {
-        [Theory]
+        [Theory (DisplayName = "JSON strings that represent floating point numbers are correctly parsed to float.")]
         [InlineData("3.402823e38", 3.402823e38f, 0.000001f)]
         [InlineData("2.402823e38", 2.402823e38f, 0.000001f)]
         [InlineData("2.0e38", 2.0e38f, 0.1f)]
@@ -26,7 +21,7 @@ namespace Light.Serialization.Tests
             actual.Should().BeApproximately(expected, tolerance);
         }
 
-        [Theory]
+        [Theory (DisplayName = "JSON strings that contain malformed floating point numbers or numbers that are to large for float result in an expection.")]
         [InlineData("42.0.")]
         [InlineData("3k.0")]
         [InlineData("3.141E1f")]
