@@ -9,7 +9,7 @@ namespace Light.Serialization.Json.TokenParsers
 
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
-            return (token.JsonType == JsonTokenType.FloatingPointNumber || token.JsonType == JsonTokenType.IntegerNumber) && requestedType == _doubleType;
+            return token.JsonType == JsonTokenType.FloatingPointNumber || token.JsonType == JsonTokenType.IntegerNumber && requestedType == _doubleType;
         }
 
         public object ParseValue(JsonDeserializationContext context)
