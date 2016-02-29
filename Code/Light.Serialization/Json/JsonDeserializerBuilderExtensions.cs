@@ -30,6 +30,7 @@ namespace Light.Serialization.Json
             targetList.Add(new LongParser());
             targetList.Add(new StringParser(jsonReaderSymbols));
             targetList.Add(new DoubleParser());
+            targetList.Add(new FloatParser());
             targetList.Add(new NullParser());
             targetList.Add(new CharacterParser(jsonReaderSymbols));
             targetList.Add(new BooleanParser());

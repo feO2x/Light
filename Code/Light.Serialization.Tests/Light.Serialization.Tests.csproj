@@ -84,6 +84,7 @@
     <Compile Include="JsonDictionarySerializationTests.cs" />
     <Compile Include="JsonDoubleDeserializationTests.cs" />
     <Compile Include="JsonEnumerationDeserializationTests.cs" />
+    <Compile Include="JsonFloatDeserializationTests.cs" />
     <Compile Include="JsonIntDeserializationTests.cs" />
     <Compile Include="JsonIntegerDeserializationTests.cs">
       <AutoGen>True</AutoGen>
