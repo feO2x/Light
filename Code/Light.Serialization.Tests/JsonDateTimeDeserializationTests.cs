@@ -1,4 +1,5 @@
 ﻿using System;
+using FluentAssertions;
 using Xunit;
 using TestData = System.Collections.Generic.IEnumerable<object[]>;
 
@@ -52,6 +53,24 @@ namespace Light.Serialization.Tests
                 new object[] { "\"2001-04-17T03:15-1\"" },
                 new object[] { "\"2010-09-20T05:14+01:1\"" },
                 new object[] { "\"2010-09-20T05:14-01:7\"" }
+            };
+
+        [Theory(DisplayName = "A JSON string containing a valid ISO 8601 date time value must be parsed to a DateTime even when the requested type is a base type of DateTime.")]
+        [MemberData(nameof(DateTimeReferencedAsBaseClassData))]
+        public void DateTimeReferencedAsBaseClass(string json, Type requestedType, DateTime expected)
+        {
+            var actual = GetDeserializedJson(json, requestedType);
+
+            actual.As<DateTime>().Should().Be(expected);
+        }
+
+        public static readonly TestData DateTimeReferencedAsBaseClassData =
+            new[]
+            {
+                new object[] { "\"2016-02\"", typeof(object), new DateTime(2016, 2, 1, 0, 0, 0, DateTimeKind.Utc) },
+                new object[] { "\"2016-03-01\"", typeof(ValueType), new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc) },
+                new object[] { "\"2016-05-12T10:32+02\"", typeof(IComparable), new DateTime(2016, 5, 12, 10, 32, 0, DateTimeKind.Local) },
+                new object[] { "\"2001-11-07T11:08:33.400Z\"", typeof(IComparable<DateTime>), new DateTime(2001, 11, 7, 11, 8, 33, 400, DateTimeKind.Utc) }
             };
     }
 }

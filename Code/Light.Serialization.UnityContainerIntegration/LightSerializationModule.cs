@@ -27,6 +27,7 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterType<IReadOnlyList<IJsonTokenParser>, IJsonTokenParser[]>()
                             .RegisterTypeWithTypeName<IJsonTokenParser, IntParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, DateTimeParser>(new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IJsonStringToPrimitiveParser, DateTimeParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, TimeSpanParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, UIntParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, ShortParser>(new ContainerControlledLifetimeManager())

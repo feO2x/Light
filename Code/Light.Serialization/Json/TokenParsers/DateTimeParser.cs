@@ -2,7 +2,7 @@
 
 namespace Light.Serialization.Json.TokenParsers
 {
-    public sealed class DateTimeParser : IJsonTokenParser
+    public sealed class DateTimeParser : BaseJsonStringToPrimitiveParser<DateTime>, IJsonStringToPrimitiveParser
     {
         private readonly Type _dateTimeType = typeof (DateTime);
 
@@ -15,6 +15,23 @@ namespace Light.Serialization.Json.TokenParsers
 
         public object ParseValue(JsonDeserializationContext context)
         {
+            return Parse(context.Token);
+        }
+
+        public ParseResult TryParse(JsonToken token)
+        {
+            try
+            {
+                return new ParseResult(true, Parse(token));
+            }
+            catch (JsonDocumentException)
+            {
+                return new ParseResult(false);
+            }
+        }
+
+        private DateTime Parse(JsonToken token)
+        {
             int year,
                 month,
                 day = 1,
@@ -24,7 +41,6 @@ namespace Light.Serialization.Json.TokenParsers
                 millisecond = 0;
 
             var currentIndex = 1;
-            var token = context.Token;
             var kind = DefaultDateTimeKind;
 
             year = ReadNumber(4, ref currentIndex, ref token);
@@ -89,7 +105,6 @@ namespace Light.Serialization.Json.TokenParsers
             {
                 throw CreateException(ref token, ex);
             }
-            
         }
 
         private static void ExpectCharacter(char character, ref int currentIndex, ref JsonToken token)
