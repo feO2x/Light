@@ -4,35 +4,14 @@ namespace Light.Serialization.Json.TokenParsers
 {
     public struct Iso8601DurationParser
     {
-        public int Days;
-        public int Hours;
-        public int Minutes;
-        public int Seconds;
-        public int Milliseconds;
+        private int _days;
+        private int _hours;
+        private int _minutes;
+        private int _seconds;
+        private int _milliseconds;
         private int _currentIndex;
         private bool _wasTDesignatorHit;
         private int _indexOfDot;
-
-        public void SetValue(char iso8601Designator, int value)
-        {
-            switch (iso8601Designator)
-            {
-                case 'D':
-                    Days = value;
-                    break;
-                case 'H':
-                    Hours = value;
-                    break;
-                case 'M':
-                    Minutes = value;
-                    break;
-                case 'S':
-                    Seconds = value;
-                    break;
-                default:
-                    throw new ArgumentException($"The specified ISO 8601 designator {iso8601Designator} is unknown.", nameof(iso8601Designator));
-            }
-        }
 
         public TimeSpan ParseToken(ref JsonToken token)
         {
@@ -59,20 +38,19 @@ namespace Light.Serialization.Json.TokenParsers
                 }
                 else
                 {
-                    Seconds = ReadNumber(_indexOfDot - startIndex, ref token, startIndex);
-                    Milliseconds = ReadNumber(3, ref token, _indexOfDot + 1);
+                    _seconds = ReadNumber(_indexOfDot - startIndex, ref token, startIndex);
+                    _milliseconds = ReadNumber(3, ref token, _indexOfDot + 1);
                 }
             }
 
             try
             {
-                return new TimeSpan(Days, Hours, Minutes, Seconds, Milliseconds);
+                return new TimeSpan(_days, _hours, _minutes, _seconds, _milliseconds);
             }
             catch (ArgumentOutOfRangeException ex)
             {
                 throw CreateException(ref token, ex);
             }
-            
         }
 
         private bool DoesNumberContainDot(int startIndex, int numberOfDigitsToParse, ref JsonToken token)
@@ -96,22 +74,22 @@ namespace Light.Serialization.Json.TokenParsers
             switch (designator)
             {
                 case 'D':
-                    Days = number;
+                    _days = number;
                     break;
                 case 'H':
                     if (_wasTDesignatorHit == false)
                         throw CreateException(ref token);
-                    Hours = number;
+                    _hours = number;
                     break;
                 case 'M':
                     if (_wasTDesignatorHit == false)
                         throw CreateException(ref token);
-                    Minutes = number;
+                    _minutes = number;
                     break;
                 case 'S':
                     if (_wasTDesignatorHit == false)
                         throw CreateException(ref token);
-                    Seconds = number;
+                    _seconds = number;
                     break;
                 default:
                     throw CreateException(ref token);

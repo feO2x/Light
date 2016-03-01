@@ -2,7 +2,7 @@
 
 namespace Light.Serialization.Json.TokenParsers
 {
-    public sealed class TimeSpanParser : IJsonTokenParser
+    public sealed class TimeSpanParser : BaseJsonStringToPrimitiveParser<TimeSpan>, IJsonStringToPrimitiveParser
     {
         private readonly Type _timeSpanType = typeof (TimeSpan);
 
@@ -13,9 +13,25 @@ namespace Light.Serialization.Json.TokenParsers
 
         public object ParseValue(JsonDeserializationContext context)
         {
+            return ParseValue(context.Token);
+        }
+
+        private static object ParseValue(JsonToken token)
+        {
             var parser = new Iso8601DurationParser();
-            var token = context.Token;
             return parser.ParseToken(ref token);
+        }
+
+        public ParseResult TryParse(JsonToken token)
+        {
+            try
+            {
+                return new ParseResult(true, ParseValue(token));
+            }
+            catch (JsonDocumentException)
+            {
+                return new ParseResult(false);
+            }
         }
     }
 }

@@ -56,15 +56,15 @@ namespace Light.Serialization.Tests
             };
 
         [Theory(DisplayName = "A JSON string containing a valid ISO 8601 date time value must be parsed to a DateTime even when the requested type is a base type of DateTime.")]
-        [MemberData(nameof(DateTimeReferencedAsBaseClassData))]
-        public void DateTimeReferencedAsBaseClass(string json, Type requestedType, DateTime expected)
+        [MemberData(nameof(DateTimeReferencedAsBaseTypeData))]
+        public void DateTimeReferencedAsBaseType(string json, Type requestedType, DateTime expected)
         {
             var actual = GetDeserializedJson(json, requestedType);
 
             actual.As<DateTime>().Should().Be(expected);
         }
 
-        public static readonly TestData DateTimeReferencedAsBaseClassData =
+        public static readonly TestData DateTimeReferencedAsBaseTypeData =
             new[]
             {
                 new object[] { "\"2016-02\"", typeof(object), new DateTime(2016, 2, 1, 0, 0, 0, DateTimeKind.Utc) },
