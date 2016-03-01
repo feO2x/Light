@@ -10,9 +10,9 @@ namespace Light.Serialization.Json.ComplexTypeConstruction
         public readonly Type Type;
 
         private ParameterInfo _constructorParameterInfo;
-        private PropertyInfo _propertyInfo;
         private FieldInfo _fieldInfo;
         private InjectableValueKind _kind;
+        private PropertyInfo _propertyInfo;
 
         private InjectableValueDescription(string normalizedName, Type type)
         {

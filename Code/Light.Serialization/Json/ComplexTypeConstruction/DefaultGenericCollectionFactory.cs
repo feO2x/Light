@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Reflection;
 using Light.GuardClauses;
-using Light.Serialization.Json.TokenParsers;
 
 namespace Light.Serialization.Json.ComplexTypeConstruction
 {

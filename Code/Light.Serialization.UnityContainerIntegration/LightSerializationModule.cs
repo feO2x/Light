@@ -10,6 +10,7 @@ using Light.Serialization.Json.LowLevelReading;
 using Light.Serialization.Json.LowLevelWriting;
 using Light.Serialization.Json.PrimitiveTypeFormatters;
 using Light.Serialization.Json.TokenParsers;
+using Light.Serialization.Json.TypeNaming;
 using Light.Serialization.Json.WriterInstructors;
 using Microsoft.Practices.Unity;
 
@@ -96,6 +97,16 @@ namespace Light.Serialization.UnityContainerIntegration
 
             lifetimeManager = lifetimeManager ?? new TransientLifetimeManager();
             return container.RegisterType<TFrom, TTo>(typeof (TTo).Name, lifetimeManager);
+        }
+
+        public static IUnityContainer RegisterDomainFriendlyNames(this IUnityContainer container, Action<IAssemblyNameMappingOptions> configureMappings)
+        {
+            container.MustNotBeNull(nameof(container));
+            configureMappings.MustNotBeNull(nameof(configureMappings));
+
+            var builder = new DomainFriendlyNameMappingBuilder();
+            configureMappings(builder);
+            return container.RegisterInstance<INameToTypeMapping>(builder.Build());
         }
     }
 }

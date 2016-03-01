@@ -1,7 +1,7 @@
 ﻿using System;
 using Light.Serialization.Json.TokenParsers;
 
-namespace Light.Serialization.Json.ComplexTypeConstruction
+namespace Light.Serialization.Json.TypeNaming
 {
     public sealed class SimpleNameToTypeMapping : INameToTypeMapping
     {

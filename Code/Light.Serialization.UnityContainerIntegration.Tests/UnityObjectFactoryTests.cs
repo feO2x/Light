@@ -13,12 +13,16 @@ namespace Light.Serialization.UnityContainerIntegration.Tests
         public void ResolveTest()
         {
             var diContainer = new UnityContainer().RegisterDefaultDeserializationTypes()
+                                                  .RegisterDomainFriendlyNames(options => options.FromAssemblies(typeof (AssemblyMarker))
+                                                                                                 .IgnoreAllNamespaces()
+                                                                                                 .But(nameof(Domain)))
                                                   .RegisterType<Ship>(new InjectionFactory(c => new Ship(Guid.NewGuid())))
                                                   .RegisterType<IClock, UtcDateTimeClock>(new ContainerControlledLifetimeManager());
+
             var ship = diContainer.Resolve<Ship>();
             var deserializer = diContainer.Resolve<IDeserializer>();
             const string json = @"{
-                                      ""$type"": ""Domain.AddCargoEvent, Light.Serialization.UnityContainerIntegration.Tests"",
+                                      ""$type"": ""AddCargoEvent"",
                                       ""cargoName"": ""Cargo From Germany""
                                   }";
 
@@ -32,6 +36,8 @@ namespace Light.Serialization.UnityContainerIntegration.Tests
 
 namespace Domain
 {
+    public static class AssemblyMarker { }
+
     public class Ship
     {
         private readonly List<string> _cargo = new List<string>();
