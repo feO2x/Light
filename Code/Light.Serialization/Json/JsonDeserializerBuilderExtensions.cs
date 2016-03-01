@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Light.GuardClauses;
 using Light.Serialization.Json.ComplexTypeConstruction;
 using Light.Serialization.Json.LowLevelReading;
@@ -28,14 +29,17 @@ namespace Light.Serialization.Json
             targetList.Add(new ByteParser());
             targetList.Add(new SByteParser());
             targetList.Add(new LongParser());
-            targetList.Add(new StringParser(jsonReaderSymbols));
             targetList.Add(new FloatParser());
             targetList.Add(new DecimalParser());
+            
             targetList.Add(new DoubleParser());
+            targetList.Add(new BooleanParser());
             targetList.Add(new NullParser());
             targetList.Add(new CharacterParser(jsonReaderSymbols));
-            targetList.Add(new BooleanParser());
             targetList.Add(new EnumerationValueParser());
+            var stringParser = new StringParser(jsonReaderSymbols);
+            targetList.Add(stringParser);
+            targetList.Add(new JsonStringParserOrchestrator(targetList.OfType<IJsonStringToPrimitiveParser>().ToList(), stringParser));
             targetList.Add(new ArrayToGenericCollectionParser(collectionFactory));
             targetList.Add(new ComplexTypeParser(objectFactory, nameToTypeMapping, nameNormalizer, typeDescriptionProvider));
 

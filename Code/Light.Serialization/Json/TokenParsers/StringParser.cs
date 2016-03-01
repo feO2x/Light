@@ -24,7 +24,11 @@ namespace Light.Serialization.Json.TokenParsers
 
         public object ParseValue(JsonDeserializationContext context)
         {
-            var token = context.Token;
+            return ParseValue(context.Token);
+        }
+
+        public string ParseValue(JsonToken token)
+        {
             // If the token has only two character, then it is an empty string.
             if (token.Length == 2)
                 return string.Empty;

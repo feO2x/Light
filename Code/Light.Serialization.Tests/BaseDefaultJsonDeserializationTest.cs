@@ -13,6 +13,18 @@ namespace Light.Serialization.Tests
             actual.Should().Be(expected);
         }
 
+        public static T GetDeserializedJson<T>(string json)
+        {
+            var testTarget = new JsonDeserializerBuilder().Build();
+            return testTarget.Deserialize<T>(json);
+        }
+
+        public static object GetDeserializedJson(string json, Type requestedType)
+        {
+            var testTarget = new JsonDeserializerBuilder().Build();
+            return testTarget.Deserialize(json, requestedType);
+        }
+
         public static void CheckDeserializerThrowsExceptionWithMessageContaining<T>(string json, string partOfExceptionMessage)
         {
             var testTarget = new JsonDeserializerBuilder().Build();

@@ -11,5 +11,6 @@
         public const string ULongFormatter = "ULongFormatter";
         public const string UShortFormatter = "UShortFormatter";
         public const string SByteFormatter = "SByteFormatter";
+        public const string JsonStringParserOrchestrator = "JsonStringParserOrchestrator";
     }
 }

@@ -62,6 +62,7 @@
     <Compile Include="Json\PrimitiveTypeFormatters\DateTimeFormatter.cs" />
     <Compile Include="Json\SerializationRules\Rule.cs" />
     <Compile Include="Json\TokenParsers\ArrayToGenericCollectionParser.cs" />
+    <Compile Include="Json\TokenParsers\BaseJsonStringToPrimitiveParser.cs" />
     <Compile Include="Json\TokenParsers\BooleanParser.cs" />
     <Compile Include="Json\TokenParsers\CharacterParser.cs" />
     <Compile Include="Json\TokenParsers\ComplexTypeParser.cs" />
@@ -88,8 +89,11 @@
     <Compile Include="Json\JsonTokenType.cs" />
     <Compile Include="Json\ComplexTypeConstruction\IObjectFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\ITypeDescriptionProvider.cs" />
+    <Compile Include="Json\TokenParsers\IJsonStringToPrimitiveParser.cs" />
     <Compile Include="Json\TokenParsers\Iso8601DurationParser.cs" />
+    <Compile Include="Json\TokenParsers\JsonStringParserOrchestrator.cs" />
     <Compile Include="Json\TokenParsers\NullParser.cs" />
+    <Compile Include="Json\TokenParsers\ParseResult.cs" />
     <Compile Include="Json\TokenParsers\StringParser.cs" />
     <Compile Include="Json\LowLevelWriting\JsonWriterSymbols.cs" />
     <Compile Include="Json\LowLevelReading\JsonReaderSymbols.cs" />
