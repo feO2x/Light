@@ -4,13 +4,13 @@ namespace Light.Serialization.Json.LowLevelWriting
 {
     public class JsonWriterSymbols
     {
-        public char BeginOfArray = DefaultJsonSymbols.BeginOfArray;
-        public char BeginOfObject = DefaultJsonSymbols.BeginOfObject;
-        public char EndOfArray = DefaultJsonSymbols.EndOfArray;
-        public char EndOfObject = DefaultJsonSymbols.EndOfObject;
-        private string _null = DefaultJsonSymbols.Null;
-        public char PairDelimiter = DefaultJsonSymbols.PairDelimiter;
-        public char ValueDelimiter = DefaultJsonSymbols.ValueDelimiter;
+        public char BeginOfArray = JsonSymbols.BeginOfArray;
+        public char BeginOfObject = JsonSymbols.BeginOfObject;
+        public char EndOfArray = JsonSymbols.EndOfArray;
+        public char EndOfObject = JsonSymbols.EndOfObject;
+        private string _null = JsonSymbols.Null;
+        public char PairDelimiter = JsonSymbols.PairDelimiter;
+        public char ValueDelimiter = JsonSymbols.ValueDelimiter;
 
         public string Null
         {

@@ -77,7 +77,7 @@ namespace Light.Serialization.Json.LowLevelReading
             var startIndex = _currentIndex;
             var tokenType = CheckNumber(firstCharacter);
             if (tokenType == JsonTokenType.Error)
-                throw ReadToEndOfTokenAndCreateJsonDocumentException(startIndex, DefaultJsonSymbols.Number);
+                throw ReadToEndOfTokenAndCreateJsonDocumentException(startIndex, JsonSymbols.Number);
 
             return CreateToken(startIndex, tokenType);
         }
@@ -90,16 +90,16 @@ namespace Light.Serialization.Json.LowLevelReading
             // Advance the current index and check if it is a digit
             _currentIndex++;
             if (IsEndOfToken())
-                throw CreateJsonDocumentException(startIndex, DefaultJsonSymbols.Number);
+                throw CreateJsonDocumentException(startIndex, JsonSymbols.Number);
 
             var currentCharacter = _buffer[_currentIndex];
             // If there is no number, then the document is not formatted properly
             if (char.IsDigit(currentCharacter) == false)
-                throw ReadToEndOfTokenAndCreateJsonDocumentException(startIndex, DefaultJsonSymbols.Number);
+                throw ReadToEndOfTokenAndCreateJsonDocumentException(startIndex, JsonSymbols.Number);
 
             var tokenType = CheckNumber(currentCharacter);
             if (tokenType == JsonTokenType.Error)
-                throw ReadToEndOfTokenAndCreateJsonDocumentException(startIndex, DefaultJsonSymbols.Number);
+                throw ReadToEndOfTokenAndCreateJsonDocumentException(startIndex, JsonSymbols.Number);
 
             return CreateToken(startIndex, tokenType);
         }
@@ -220,7 +220,7 @@ namespace Light.Serialization.Json.LowLevelReading
                 _currentIndex++;
                 // A string must end with a string delimiter, if the buffer ends now, then the string is erroneous
                 if (IsEndOfBuffer())
-                    throw CreateJsonDocumentException(startIndex, DefaultJsonSymbols.String);
+                    throw CreateJsonDocumentException(startIndex, JsonSymbols.String);
 
                 var currentCharacter = _buffer[_currentIndex];
 
@@ -360,7 +360,7 @@ namespace Light.Serialization.Json.LowLevelReading
                 break;
             }
 
-            return CreateJsonDocumentException(tokenStartIndex, DefaultJsonSymbols.String);
+            return CreateJsonDocumentException(tokenStartIndex, JsonSymbols.String);
         }
     }
 }

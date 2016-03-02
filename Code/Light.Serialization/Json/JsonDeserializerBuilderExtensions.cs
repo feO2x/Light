@@ -20,18 +20,12 @@ namespace Light.Serialization.Json
         {
             targetList.MustNotBeNull(nameof(targetList));
 
-            targetList.Add(new IntParser());
+            targetList.Add(new UnsignedIntegerParser());
+            targetList.Add(new SignedIntegerParser());
             targetList.Add(new DateTimeParser());
             targetList.Add(new TimeSpanParser());
-            targetList.Add(new UIntParser());
-            targetList.Add(new ShortParser());
-            targetList.Add(new UShortParser());
-            targetList.Add(new ByteParser());
-            targetList.Add(new SByteParser());
-            targetList.Add(new LongParser());
             targetList.Add(new FloatParser());
             targetList.Add(new DecimalParser());
-            
             targetList.Add(new DoubleParser());
             targetList.Add(new BooleanParser());
             targetList.Add(new NullParser());

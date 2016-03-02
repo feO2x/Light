@@ -5,7 +5,7 @@ namespace Light.Serialization.Json.LowLevelReading
 {
     public sealed class JsonReaderSymbols
     {
-        private string _true = DefaultJsonSymbols.True;
+        private string _true = JsonSymbols.True;
 
         public string True
         {
@@ -17,7 +17,7 @@ namespace Light.Serialization.Json.LowLevelReading
             }
         }
 
-        private string _false = DefaultJsonSymbols.False;
+        private string _false = JsonSymbols.False;
 
         public string False
         {
@@ -29,7 +29,7 @@ namespace Light.Serialization.Json.LowLevelReading
             }
         }
 
-        private string _null = DefaultJsonSymbols.Null;
+        private string _null = JsonSymbols.Null;
 
         public string Null
         {
@@ -41,11 +41,11 @@ namespace Light.Serialization.Json.LowLevelReading
             }
         }
 
-        public char StringDelimiter = DefaultJsonSymbols.StringDelimiter;
-        public char DecimalPoint = DefaultJsonSymbols.DecimalPoint;
+        public char StringDelimiter = JsonSymbols.StringDelimiter;
+        public char DecimalPoint = JsonSymbols.DecimalPoint;
 
 
-        private IList<char> _exponentialSymbols = new[] { DefaultJsonSymbols.LowercaseExponential, DefaultJsonSymbols.UppercaseExponential };
+        private IList<char> _exponentialSymbols = new[] { JsonSymbols.LowercaseExponential, JsonSymbols.UppercaseExponential };
 
         public IList<char> ExponentialSymbols
         {
@@ -57,9 +57,9 @@ namespace Light.Serialization.Json.LowLevelReading
             }
         }
 
-        public char PositiveSign = DefaultJsonSymbols.Positive;
-        public char NegativeSign = DefaultJsonSymbols.Negative;
-        public char StringEscapeCharacter = DefaultJsonSymbols.StringEscapeCharacter;
+        public char PositiveSign = JsonSymbols.Positive;
+        public char NegativeSign = JsonSymbols.Negative;
+        public char StringEscapeCharacter = JsonSymbols.StringEscapeCharacter;
 
 
         private IList<SingleEscapedCharacter> _singleEscapedCharacters = new[]
@@ -85,11 +85,11 @@ namespace Light.Serialization.Json.LowLevelReading
         }
 
         public char HexadecimalEscapeIndicator = 'u';
-        public char BeginOfArray = DefaultJsonSymbols.BeginOfArray;
-        public char EndOfArray = DefaultJsonSymbols.EndOfArray;
-        public char ValueDelimiter = DefaultJsonSymbols.ValueDelimiter;
-        public char PairDelimiter = DefaultJsonSymbols.PairDelimiter;
-        public char BeginOfObject = DefaultJsonSymbols.BeginOfObject;
-        public char EndOfObject = DefaultJsonSymbols.EndOfObject;
+        public char BeginOfArray = JsonSymbols.BeginOfArray;
+        public char EndOfArray = JsonSymbols.EndOfArray;
+        public char ValueDelimiter = JsonSymbols.ValueDelimiter;
+        public char PairDelimiter = JsonSymbols.PairDelimiter;
+        public char BeginOfObject = JsonSymbols.BeginOfObject;
+        public char EndOfObject = JsonSymbols.EndOfObject;
     }
 }

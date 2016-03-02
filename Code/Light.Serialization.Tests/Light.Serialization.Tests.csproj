@@ -86,12 +86,7 @@
     <Compile Include="JsonDoubleDeserializationTests.cs" />
     <Compile Include="JsonEnumerationDeserializationTests.cs" />
     <Compile Include="JsonFloatDeserializationTests.cs" />
-    <Compile Include="JsonIntDeserializationTests.cs" />
-    <Compile Include="JsonIntegerDeserializationTests.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>JsonIntegerDeserializationTests.tt</DependentUpon>
-    </Compile>
+    <Compile Include="JsonIntegerDeserializationTests.cs" />
     <Compile Include="JsonNormalizedKeysTests.cs" />
     <Compile Include="JsonNullDeserializationTests.cs" />
     <Compile Include="JsonPrimitiveTypesSerializationTests.cs" />
@@ -116,12 +111,6 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="JsonIntegerDeserializationTests.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>JsonIntegerDeserializationTests.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

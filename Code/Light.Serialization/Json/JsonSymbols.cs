@@ -1,6 +1,6 @@
 ﻿namespace Light.Serialization.Json
 {
-    public static class DefaultJsonSymbols
+    public static class JsonSymbols
     {
         public const string Number = "number";
         public const string Array = "array";

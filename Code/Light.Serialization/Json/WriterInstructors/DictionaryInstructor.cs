@@ -40,7 +40,7 @@ namespace Light.Serialization.Json.WriterInstructors
             {
                 var key = dicitionaryEnumerator.Key;
                 if (key == null)
-                    writer.WriteKey(DefaultJsonSymbols.Null);
+                    writer.WriteKey(JsonSymbols.Null);
                 else
                 {
                     var keyType = key.GetType();
