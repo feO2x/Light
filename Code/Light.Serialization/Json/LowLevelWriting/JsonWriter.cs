@@ -8,41 +8,38 @@ namespace Light.Serialization.Json.LowLevelWriting
     {
         private readonly IJsonFormatter _formatter;
         private readonly TextWriter _textWriter;
-        private readonly JsonWriterSymbols _symbols;
 
-        public JsonWriter(TextWriter textWriter, IJsonFormatter formatter, JsonWriterSymbols symbols)
+        public JsonWriter(TextWriter textWriter, IJsonFormatter formatter)
         {
             textWriter.MustNotBeNull(nameof(textWriter));
             formatter.MustNotBeNull(nameof(formatter));
-            symbols.MustNotBeNull(nameof(symbols));
 
             _textWriter = textWriter;
             _formatter = formatter;
-            _symbols = symbols;
         }
 
         public void BeginArray()
         {
-            _textWriter.Write(_symbols.BeginOfArray);
+            _textWriter.Write(JsonSymbols.BeginOfArray);
             _formatter.NewlineAndIncreaseIndent(this);
         }
 
         public void EndArray()
         {
             _formatter.NewlineAndDecreaseIndent(this);
-            _textWriter.Write(_symbols.EndOfArray);
+            _textWriter.Write(JsonSymbols.EndOfArray);
         }
 
         public void BeginObject()
         {
-            _textWriter.Write(_symbols.BeginOfObject);
+            _textWriter.Write(JsonSymbols.BeginOfObject);
             _formatter.NewlineAndIncreaseIndent(this);
         }
 
         public void EndObject()
         {
             _formatter.NewlineAndDecreaseIndent(this);
-            _textWriter.Write(_symbols.EndOfObject);
+            _textWriter.Write(JsonSymbols.EndOfObject);
         }
 
         public void WriteKey(string key, bool shouldNormalizeKey)
@@ -54,13 +51,13 @@ namespace Light.Serialization.Json.LowLevelWriting
                 key = key.SurroundWithQuotationMarks();
 
             _textWriter.Write(key);
-            _textWriter.Write(_symbols.PairDelimiter);
+            _textWriter.Write(JsonSymbols.PairDelimiter);
             _formatter.InsertWhitespaceBetweenKeyAndValue(this);
         }
 
         public void WriteDelimiter()
         {
-            _textWriter.Write(_symbols.ValueDelimiter);
+            _textWriter.Write(JsonSymbols.ValueDelimiter);
             _formatter.Newline(this);
         }
 
@@ -71,7 +68,7 @@ namespace Light.Serialization.Json.LowLevelWriting
 
         public void WriteNull()
         {
-            _textWriter.Write(_symbols.Null);
+            _textWriter.Write(JsonSymbols.Null);
         }
 
         private static string NormalizeJsonKey(string key)

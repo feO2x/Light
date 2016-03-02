@@ -10,7 +10,6 @@ namespace Light.Serialization.Json.LowLevelWriting
     {
         private readonly List<Func<IJsonWriter, IJsonWriter>> _decorateFunctions = new List<Func<IJsonWriter, IJsonWriter>>();
         private IJsonFormatter _jsonFormatter = new JsonFormatterNullObject();
-        private JsonWriterSymbols _jsonWriterSymbols = new JsonWriterSymbols();
         private StringBuilder _stringBuilder;
         private StringWriter _stringWriter;
 
@@ -24,21 +23,11 @@ namespace Light.Serialization.Json.LowLevelWriting
             }
         }
 
-        public JsonWriterSymbols JsonWriterSymbols
-        {
-            get { return _jsonWriterSymbols; }
-            set
-            {
-                value.MustNotBeNull(nameof(value));
-                _jsonWriterSymbols = value;
-            }
-        }
-
         public IJsonWriter Create()
         {
             _stringBuilder = new StringBuilder();
             _stringWriter = new StringWriter(_stringBuilder);
-            IJsonWriter returnValue = new JsonWriter(_stringWriter, _jsonFormatter, _jsonWriterSymbols);
+            IJsonWriter returnValue = new JsonWriter(_stringWriter, _jsonFormatter);
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var decorateFunction in _decorateFunctions)
             {
