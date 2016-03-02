@@ -10,7 +10,6 @@ namespace Light.Serialization.Json
     public static class JsonDeserializerBuilderExtensions
     {
         public static TCollection AddDefaultTokenParsers<TCollection>(this TCollection targetList,
-                                                                      JsonReaderSymbols jsonReaderSymbols,
                                                                       ICollectionFactory collectionFactory,
                                                                       IObjectFactory objectFactory,
                                                                       INameToTypeMapping nameToTypeMapping,
@@ -29,9 +28,9 @@ namespace Light.Serialization.Json
             targetList.Add(new DoubleParser());
             targetList.Add(new BooleanParser());
             targetList.Add(new NullParser());
-            targetList.Add(new CharacterParser(jsonReaderSymbols));
+            targetList.Add(new CharacterParser());
             targetList.Add(new EnumerationValueParser());
-            var stringParser = new StringParser(jsonReaderSymbols);
+            var stringParser = new StringParser();
             targetList.Add(stringParser);
             targetList.Add(new JsonStringParserOrchestrator(targetList.OfType<IJsonStringToPrimitiveParser>().ToList(), stringParser));
             targetList.Add(new ArrayToGenericCollectionParser(collectionFactory));

@@ -10,8 +10,6 @@ namespace Light.Serialization.Json
 {
     public class JsonDeserializerBuilder
     {
-        public readonly JsonReaderSymbols JsonReaderSymbols = new JsonReaderSymbols();
-
         private ICollectionFactory _collectionFactory = new DefaultGenericCollectionFactory();
         private IJsonReaderFactory _jsonReaderFactory = new SingleBufferJsonReaderFactory();
 
@@ -62,12 +60,6 @@ namespace Light.Serialization.Json
             return this;
         }
 
-        public JsonDeserializerBuilder ConfigureJsonReaderSymbols(Action<JsonReaderSymbols> configureSymbols)
-        {
-            configureSymbols(JsonReaderSymbols);
-            return this;
-        }
-
         public JsonDeserializerBuilder WithCollectionFactory(ICollectionFactory collectionFactory)
         {
             _collectionFactory = collectionFactory;
@@ -78,8 +70,7 @@ namespace Light.Serialization.Json
         {
             if (_jsonTokenParsers == null)
             {
-                _jsonTokenParsers = new List<IJsonTokenParser>().AddDefaultTokenParsers(JsonReaderSymbols,
-                                                                                        _collectionFactory,
+                _jsonTokenParsers = new List<IJsonTokenParser>().AddDefaultTokenParsers(_collectionFactory,
                                                                                         _objectFactory,
                                                                                         _nameToTypeMapping,
                                                                                         _nameNormalizer,

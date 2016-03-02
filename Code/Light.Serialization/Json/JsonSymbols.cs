@@ -1,4 +1,7 @@
-﻿namespace Light.Serialization.Json
+﻿using System.Collections.Generic;
+using Light.Serialization.Json.LowLevelReading;
+
+namespace Light.Serialization.Json
 {
     public static class JsonSymbols
     {
@@ -19,8 +22,27 @@
         public const char PairDelimiter = ':';
         public const char ValueDelimiter = ',';
         public const char DecimalPoint = '.';
-        public const char Positive = '+';
-        public const char Negative = '-';
+        public const char Plus = '+';
+        public const char Minus = '-';
         public const char StringEscapeCharacter = '\\';
+        public const char HexadecimalEscapeIndicator = 'u';
+
+        public static readonly IReadOnlyList<SingleEscapedCharacter> SingleEscapedCharacters =
+            new[]
+            {
+                new SingleEscapedCharacter('"', '"'),
+                new SingleEscapedCharacter('\\', '\\'),
+                new SingleEscapedCharacter('/', '/'),
+                new SingleEscapedCharacter('\b', 'b'),
+                new SingleEscapedCharacter('\f', 'f'),
+                new SingleEscapedCharacter('\n', 'n'),
+                new SingleEscapedCharacter('\r', 'r'),
+                new SingleEscapedCharacter('\t', 't')
+            };
+
+        public static bool IsExponentialSymbol(this char character)
+        {
+            return character == LowercaseExponential || character == UppercaseExponential;
+        }
     }
 }

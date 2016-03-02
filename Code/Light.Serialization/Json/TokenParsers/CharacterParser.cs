@@ -1,21 +1,11 @@
-﻿using Light.GuardClauses;
-using Light.Serialization.Json.LowLevelReading;
-using System;
+﻿using System;
 using System.Globalization;
 
 namespace Light.Serialization.Json.TokenParsers
 {
     public sealed class CharacterParser : IJsonTokenParser
     {
-        private readonly JsonReaderSymbols _jsonReaderSymbols;
         private readonly Type _charType = typeof (char);
-
-        public CharacterParser(JsonReaderSymbols jsonReaderSymbols)
-        {
-            jsonReaderSymbols.MustNotBeNull(nameof(jsonReaderSymbols));
-
-            _jsonReaderSymbols = jsonReaderSymbols;
-        }
 
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
@@ -28,10 +18,10 @@ namespace Light.Serialization.Json.TokenParsers
             // The token has at least two elements because it is a JSON string, thus accessing the second one is safe
             var currentCharacter = token[1];
             // Check if the JSON string is an empty string
-            if (currentCharacter == _jsonReaderSymbols.StringDelimiter)
+            if (currentCharacter == JsonSymbols.StringDelimiter)
                 throw CreateException(token);
             // If not then check if it is an escape sequence
-            if (currentCharacter == _jsonReaderSymbols.StringEscapeCharacter)
+            if (currentCharacter == JsonSymbols.StringEscapeCharacter)
                 return ReadEscapeSequence(token);
 
             // If it's not an escape sequence, the token size must be three to be a single character (e.g. "a")
@@ -40,18 +30,18 @@ namespace Light.Serialization.Json.TokenParsers
             return currentCharacter;
         }
 
-        private char ReadEscapeSequence(JsonToken token)
+        private static char ReadEscapeSequence(JsonToken token)
         {
             var currentCharacter = token[2];
             // Check if the current character indicates a hexadecimal escape sequence
-            if (currentCharacter == _jsonReaderSymbols.HexadecimalEscapeIndicator)
+            if (currentCharacter == JsonSymbols.HexadecimalEscapeIndicator)
                 return ReadHexadimalEscapeSequence(token);
 
             // If it is not hexadecimal, then it must be a special escape sequence with only a single character
             if (token.Length != 4)
                 throw CreateException(token);
 
-            foreach (var singleEscapedCharacter in _jsonReaderSymbols.SingleEscapedCharacters)
+            foreach (var singleEscapedCharacter in JsonSymbols.SingleEscapedCharacters)
             {
                 if (singleEscapedCharacter.ValueAfterEscapeCharacter == currentCharacter)
                     return singleEscapedCharacter.EscapedCharacter;

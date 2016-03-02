@@ -96,7 +96,6 @@
     <Compile Include="Json\TokenParsers\NullParser.cs" />
     <Compile Include="Json\TokenParsers\ParseResult.cs" />
     <Compile Include="Json\TokenParsers\StringParser.cs" />
-    <Compile Include="Json\LowLevelReading\JsonReaderSymbols.cs" />
     <Compile Include="Json\LowLevelReading\SingleBufferJsonReader.cs" />
     <Compile Include="Json\IJsonWriterInstructor.cs" />
     <Compile Include="Json\ComplexTypeDecomposition\IValueProviderFactory.cs" />

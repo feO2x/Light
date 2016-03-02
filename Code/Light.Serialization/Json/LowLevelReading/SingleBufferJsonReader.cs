@@ -6,16 +6,13 @@ namespace Light.Serialization.Json.LowLevelReading
     public sealed class SingleBufferJsonReader : IJsonReader
     {
         private readonly char[] _buffer;
-        private readonly JsonReaderSymbols _jsonReaderSymbols;
         private int _currentIndex;
 
-        public SingleBufferJsonReader(char[] buffer, JsonReaderSymbols jsonReaderSymbols)
+        public SingleBufferJsonReader(char[] buffer)
         {
             buffer.MustNotBeNull(nameof(buffer));
-            jsonReaderSymbols.MustNotBeNull(nameof(jsonReaderSymbols));
 
             _buffer = buffer;
-            _jsonReaderSymbols = jsonReaderSymbols;
         }
 
         public JsonToken ReadNextToken()
@@ -29,27 +26,27 @@ namespace Light.Serialization.Json.LowLevelReading
 
             if (char.IsDigit(firstCharacter))
                 return ReadPositiveNumber(firstCharacter);
-            if (firstCharacter == _jsonReaderSymbols.NegativeSign)
+            if (firstCharacter == JsonSymbols.Minus)
                 return ReadNegativeNumber();
-            if (firstCharacter == _jsonReaderSymbols.StringDelimiter)
+            if (firstCharacter == JsonSymbols.StringDelimiter)
                 return ReadString();
-            if (firstCharacter == _jsonReaderSymbols.False[0])
-                return ReadConstantToken(_jsonReaderSymbols.False, JsonTokenType.False);
-            if (firstCharacter == _jsonReaderSymbols.True[0])
-                return ReadConstantToken(_jsonReaderSymbols.True, JsonTokenType.True);
-            if (firstCharacter == _jsonReaderSymbols.Null[0])
-                return ReadConstantToken(_jsonReaderSymbols.Null, JsonTokenType.Null);
-            if (firstCharacter == _jsonReaderSymbols.BeginOfArray)
+            if (firstCharacter == JsonSymbols.False[0])
+                return ReadConstantToken(JsonSymbols.False, JsonTokenType.False);
+            if (firstCharacter == JsonSymbols.True[0])
+                return ReadConstantToken(JsonSymbols.True, JsonTokenType.True);
+            if (firstCharacter == JsonSymbols.Null[0])
+                return ReadConstantToken(JsonSymbols.Null, JsonTokenType.Null);
+            if (firstCharacter == JsonSymbols.BeginOfArray)
                 return ReadSingleCharacterAndCreateToken(JsonTokenType.BeginOfArray);
-            if (firstCharacter == _jsonReaderSymbols.EndOfArray)
+            if (firstCharacter == JsonSymbols.EndOfArray)
                 return ReadSingleCharacterAndCreateToken(JsonTokenType.EndOfArray);
-            if (firstCharacter == _jsonReaderSymbols.BeginOfObject)
+            if (firstCharacter == JsonSymbols.BeginOfObject)
                 return ReadSingleCharacterAndCreateToken(JsonTokenType.BeginOfObject);
-            if (firstCharacter == _jsonReaderSymbols.EndOfObject)
+            if (firstCharacter == JsonSymbols.EndOfObject)
                 return ReadSingleCharacterAndCreateToken(JsonTokenType.EndOfObject);
-            if (firstCharacter == _jsonReaderSymbols.PairDelimiter)
+            if (firstCharacter == JsonSymbols.PairDelimiter)
                 return ReadSingleCharacterAndCreateToken(JsonTokenType.PairDelimiter);
-            if (firstCharacter == _jsonReaderSymbols.ValueDelimiter)
+            if (firstCharacter == JsonSymbols.ValueDelimiter)
                 return ReadSingleCharacterAndCreateToken(JsonTokenType.ValueDelimiter);
 
             var startIndex = _currentIndex;
@@ -139,7 +136,7 @@ namespace Light.Serialization.Json.LowLevelReading
         private JsonTokenType CheckDecimalPart(char currentCharacter)
         {
             // Check if there's a decimal point
-            if (currentCharacter != _jsonReaderSymbols.DecimalPoint)
+            if (currentCharacter != JsonSymbols.DecimalPoint)
                 return CheckExponentialPart(currentCharacter);
 
             // If yes then there must be at least one digit
@@ -169,7 +166,7 @@ namespace Light.Serialization.Json.LowLevelReading
         private JsonTokenType CheckExponentialPart(char currentCharacter)
         {
             // The exponential part has to begin with an appropriate sign
-            if (_jsonReaderSymbols.ExponentialSymbols.Contains(currentCharacter) == false)
+            if (currentCharacter.IsExponentialSymbol() == false)
                 return JsonTokenType.Error;
 
             // If it is an appropriate exponential sign, check if the next character is a possible plus or minus sign
@@ -178,7 +175,7 @@ namespace Light.Serialization.Json.LowLevelReading
                 return JsonTokenType.Error;
 
             currentCharacter = _buffer[_currentIndex];
-            if (currentCharacter == _jsonReaderSymbols.PositiveSign || currentCharacter == _jsonReaderSymbols.NegativeSign)
+            if (currentCharacter == JsonSymbols.Plus || currentCharacter == JsonSymbols.Minus)
             {
                 _currentIndex++;
                 if (IsEndOfToken())
@@ -228,7 +225,7 @@ namespace Light.Serialization.Json.LowLevelReading
                 if (isPreviousCharacterEscapeCharacter)
                 {
                     // If yes then check if the current character is a specially escaped character that only has one letter
-                    foreach (var singleEscapedCharacter in _jsonReaderSymbols.SingleEscapedCharacters)
+                    foreach (var singleEscapedCharacter in JsonSymbols.SingleEscapedCharacters)
                     {
                         if (singleEscapedCharacter.ValueAfterEscapeCharacter != currentCharacter) continue;
 
@@ -237,7 +234,7 @@ namespace Light.Serialization.Json.LowLevelReading
                     }
 
                     // Otherwise check if this is an escape sequence of four hexadecimal digits
-                    if (currentCharacter == _jsonReaderSymbols.HexadecimalEscapeIndicator)
+                    if (currentCharacter == JsonSymbols.HexadecimalEscapeIndicator)
                     {
                         if (CheckFourHexadecimalDigitsOfJsonEscapeSequence() == false)
                             throw ReadToEndOfStringTokenAndCreateJsonDocumentException(startIndex);
@@ -247,11 +244,11 @@ namespace Light.Serialization.Json.LowLevelReading
                 }
 
                 // If not, then treat this character as a normal one
-                else if (currentCharacter == _jsonReaderSymbols.StringDelimiter)
+                else if (currentCharacter == JsonSymbols.StringDelimiter)
                     return ReadSingleCharacterAndCreateToken(startIndex, JsonTokenType.String);
 
                 // Set the boolean value indicating that the next character is part of an escape sequence
-                else if (currentCharacter == _jsonReaderSymbols.StringEscapeCharacter)
+                else if (currentCharacter == JsonSymbols.StringEscapeCharacter)
                     isPreviousCharacterEscapeCharacter = true;
             }
         }
@@ -279,10 +276,10 @@ namespace Light.Serialization.Json.LowLevelReading
                 return true;
             var currentCharacter = _buffer[_currentIndex];
             return char.IsWhiteSpace(currentCharacter) ||
-                   currentCharacter == _jsonReaderSymbols.ValueDelimiter ||
-                   currentCharacter == _jsonReaderSymbols.EndOfArray ||
-                   currentCharacter == _jsonReaderSymbols.EndOfObject ||
-                   currentCharacter == _jsonReaderSymbols.PairDelimiter;
+                   currentCharacter == JsonSymbols.ValueDelimiter ||
+                   currentCharacter == JsonSymbols.EndOfArray ||
+                   currentCharacter == JsonSymbols.EndOfObject ||
+                   currentCharacter == JsonSymbols.PairDelimiter;
         }
 
         private bool IsEndOfBuffer()
@@ -353,7 +350,7 @@ namespace Light.Serialization.Json.LowLevelReading
                 _currentIndex++;
                 if (IsEndOfBuffer())
                     break;
-                if (_buffer[_currentIndex] != _jsonReaderSymbols.StringDelimiter)
+                if (_buffer[_currentIndex] != JsonSymbols.StringDelimiter)
                     continue;
 
                 _currentIndex++;

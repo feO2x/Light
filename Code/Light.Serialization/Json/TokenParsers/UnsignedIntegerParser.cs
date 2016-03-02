@@ -27,7 +27,7 @@ namespace Light.Serialization.Json.TokenParsers
         public object ParseValue(JsonDeserializationContext context)
         {
             var token = context.Token;
-            if (token[0] == JsonSymbols.Negative && (token[1] != 0 || token.Length > 2))
+            if (token[0] == JsonSymbols.Minus && (token[1] != 0 || token.Length > 2))
                 throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type {context.RequestedType}.");
 
             var digitsLeftToRead = token.Length;

@@ -45,7 +45,7 @@ namespace Light.Serialization.Json.TokenParsers
             if (_signedIntegerTypes.IntegerTypeInfos.TryGetValue(context.RequestedType, out integerInfo) == false)
                 integerInfo = _signedIntegerTypes.DefaultType;
 
-            if (token[0] == JsonSymbols.Negative)
+            if (token[0] == JsonSymbols.Minus)
             {
                 if (digitsLeftToRead > integerInfo.MinimumAsString.Length)
                     throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type {integerInfo.Type}.");
