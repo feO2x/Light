@@ -23,13 +23,13 @@ namespace Light.Serialization.UnityContainerIntegration.Tests
             var deserializer = diContainer.Resolve<IDeserializer>();
             const string json = @"{
                                       ""$type"": ""AddCargoEvent"",
-                                      ""cargoName"": ""Cargo From Germany""
+                                      ""cargoName"": ""Excellent beer from Regensburg""
                                   }";
 
             var @event = deserializer.Deserialize<IEvent<Ship>>(json);
             @event.Play(ship);
 
-            ship.Cargo.Should().ContainSingle(cargoItem => cargoItem == "Cargo From Germany");
+            ship.Cargo.Should().ContainSingle(cargoItem => cargoItem == "Excellent beer from Regensburg");
         }
     }
 }
@@ -77,7 +77,7 @@ namespace Domain
     {
         private readonly string _cargoName;
         private readonly IClock _clock;
-        private DateTime? _exectucutedOn;
+        private DateTime? _executedOn;
 
         public AddCargoEvent(string cargoName, IClock clock)
         {
@@ -88,13 +88,13 @@ namespace Domain
             _clock = clock;
         }
 
-        public bool HasExecuted => _exectucutedOn.HasValue;
-        public DateTime? ExecutedOn => _exectucutedOn;
+        public bool HasExecuted => _executedOn.HasValue;
+        public DateTime? ExecutedOn => _executedOn;
 
         public void Play(Ship ship)
         {
-            if (_exectucutedOn == null)
-                _exectucutedOn = _clock.GetTime();
+            if (_executedOn == null)
+                _executedOn = _clock.GetTime();
 
             ship.AddCargo(_cargoName);
         }
