@@ -11,6 +11,7 @@ namespace Light.Serialization.Tests
         [InlineData(int.MaxValue, int.MaxValue)]
         [InlineData(int.MinValue, int.MinValue)]
         [InlineData("0", 0)]
+        [InlineData("-0", 0)]
         [InlineData(int.MinValue + int.MaxValue / 2, int.MinValue + int.MaxValue / 2)]
         public void IntValueCanBeDeserializedCorrectly(string json, int expected)
         {
@@ -34,6 +35,7 @@ namespace Light.Serialization.Tests
         [InlineData("2147483647.0000", int.MaxValue)]
         [InlineData("-2147483648.00000", int.MinValue)]
         [InlineData("0.0", 0)]
+        [InlineData("-0.0", 0)]
         public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, int expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
@@ -55,10 +57,11 @@ namespace Light.Serialization.Tests
     {
         [Theory]
         [InlineData("42", 42u)]
-        [InlineData(uint.MaxValue / 2, uint.MaxValue / 2)]
+        [InlineData(uint.MaxValue / 2u, uint.MaxValue / 2u)]
         [InlineData("3394967295", 3394967295u)]
         [InlineData(uint.MaxValue, uint.MaxValue)]
         [InlineData(uint.MinValue, uint.MinValue)]
+        [InlineData("-0", 0u)]
         public void IntValueCanBeDeserializedCorrectly(string json, uint expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
@@ -80,6 +83,7 @@ namespace Light.Serialization.Tests
         [InlineData("3394967295.000", 3394967295u)]
         [InlineData("4294967295.0000", uint.MaxValue)]
         [InlineData("0.00000", uint.MinValue)]
+        [InlineData("-0.00000", uint.MinValue)]
         public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, uint expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
@@ -106,6 +110,7 @@ namespace Light.Serialization.Tests
         [InlineData(short.MaxValue, short.MaxValue)]
         [InlineData(short.MinValue, short.MinValue)]
         [InlineData("0", 0)]
+        [InlineData("-0", 0)]
         [InlineData(short.MinValue + short.MaxValue / 2, short.MinValue + short.MaxValue / 2)]
         public void IntValueCanBeDeserializedCorrectly(string json, short expected)
         {
@@ -129,6 +134,7 @@ namespace Light.Serialization.Tests
         [InlineData("32767.0000", short.MaxValue)]
         [InlineData("-32768.00000", short.MinValue)]
         [InlineData("0.0", 0)]
+        [InlineData("-0.0", 0)]
         public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, short expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
@@ -155,6 +161,7 @@ namespace Light.Serialization.Tests
         [InlineData(ushort.MaxValue, ushort.MaxValue)]
         [InlineData(ushort.MinValue, ushort.MinValue)]
         [InlineData("0", 0)]
+        [InlineData("-0", 0)]
         [InlineData(ushort.MinValue + ushort.MaxValue / 2, ushort.MinValue + ushort.MaxValue / 2)]
         public void IntValueCanBeDeserializedCorrectly(string json, ushort expected)
         {
@@ -178,6 +185,7 @@ namespace Light.Serialization.Tests
         [InlineData("65535.0000", ushort.MaxValue)]
         [InlineData("0.00000", ushort.MinValue)]
         [InlineData("0.0", 0)]
+        [InlineData("-0.0", 0)]
         public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, ushort expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
@@ -204,6 +212,7 @@ namespace Light.Serialization.Tests
         [InlineData(byte.MaxValue, byte.MaxValue)]
         [InlineData(byte.MinValue, byte.MinValue)]
         [InlineData("0", 0)]
+        [InlineData("-0", 0)]
         [InlineData(byte.MinValue + byte.MaxValue / 2, byte.MinValue + byte.MaxValue / 2)]
         public void IntValueCanBeDeserializedCorrectly(string json, byte expected)
         {
@@ -227,6 +236,7 @@ namespace Light.Serialization.Tests
         [InlineData("255.0000", byte.MaxValue)]
         [InlineData("0.00000", byte.MinValue)]
         [InlineData("0.0", 0)]
+        [InlineData("-0.0", 0)]
         public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, byte expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
@@ -253,6 +263,7 @@ namespace Light.Serialization.Tests
         [InlineData(sbyte.MaxValue, sbyte.MaxValue)]
         [InlineData(sbyte.MinValue, sbyte.MinValue)]
         [InlineData("0", 0)]
+        [InlineData("-0", 0)]
         [InlineData(sbyte.MinValue + sbyte.MaxValue / 2, sbyte.MinValue + sbyte.MaxValue / 2)]
         public void IntValueCanBeDeserializedCorrectly(string json, sbyte expected)
         {
@@ -276,6 +287,7 @@ namespace Light.Serialization.Tests
         [InlineData("127.0000", sbyte.MaxValue)]
         [InlineData("-128.00000", sbyte.MinValue)]
         [InlineData("0.0", 0)]
+        [InlineData("-0.0", 0)]
         public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, sbyte expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
@@ -296,13 +308,14 @@ namespace Light.Serialization.Tests
     public sealed class JsonLongDeserializationTests : BaseDefaultJsonDeserializationTest
     {
         [Theory]
-        [InlineData("42", 42)]
-        [InlineData(long.MaxValue / 2, long.MaxValue / 2)]
+        [InlineData("42", 42L)]
+        [InlineData(long.MaxValue / 2L, long.MaxValue / 2L)]
         [InlineData("8323372036854775807", 8323372036854775807)]
         [InlineData(long.MaxValue, long.MaxValue)]
         [InlineData(long.MinValue, long.MinValue)]
-        [InlineData("0", 0)]
-        [InlineData(long.MinValue + long.MaxValue / 2, long.MinValue + long.MaxValue / 2)]
+        [InlineData("0", 0L)]
+        [InlineData("-0", 0L)]
+        [InlineData(long.MinValue + long.MaxValue / 2L, long.MinValue + long.MaxValue / 2L)]
         public void IntValueCanBeDeserializedCorrectly(string json, long expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
@@ -320,11 +333,12 @@ namespace Light.Serialization.Tests
         }
 
         [Theory]
-        [InlineData("42.0", 42)]
+        [InlineData("42.0", 42L)]
         [InlineData("8323372036854775807.000", 8323372036854775807)]
         [InlineData("9223372036854775807.0000", long.MaxValue)]
         [InlineData("-9223372036854775808.00000", long.MinValue)]
-        [InlineData("0.0", 0)]
+        [InlineData("0.0", 0L)]
+        [InlineData("-0.0", 0L)]
         public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, long expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
@@ -350,6 +364,7 @@ namespace Light.Serialization.Tests
         [InlineData("8323372036854775807", 8323372036854775807ul)]
         [InlineData(ulong.MaxValue, ulong.MaxValue)]
         [InlineData("0", 0ul)]
+        [InlineData("-0", 0ul)]
         public void IntValueCanBeDeserializedCorrectly(string json, ulong expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
@@ -371,6 +386,7 @@ namespace Light.Serialization.Tests
         [InlineData("8323372036854775807.000", 8323372036854775807ul)]
         [InlineData("18446744073709551615.0000", ulong.MaxValue)]
         [InlineData("0.0", 0ul)]
+        [InlineData("-0.0", 0ul)]
         public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, ulong expected)
         {
             CompareDeserializedJsonToExpected(json, expected);

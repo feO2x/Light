@@ -27,10 +27,24 @@ namespace Light.Serialization.Json.TokenParsers
         public object ParseValue(JsonDeserializationContext context)
         {
             var token = context.Token;
-            if (token[0] == JsonSymbols.Minus && (token[1] != 0 || token.Length > 2))
-                throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type {context.RequestedType}.");
-
+            var currentIndex = 0;
             var digitsLeftToRead = token.Length;
+
+            if (token[0] == JsonSymbols.Minus)
+            {
+                if (token[1] != '0')
+                    throw new DeserializationException($"Could not deserialize value {token} because it produces an overflow for type {context.RequestedType}.");
+
+                if (token.JsonType == JsonTokenType.FloatingPointNumber)
+                {
+                    var decimalPartInfo = DecimalPartInfo.FromNumericJsonToken(token);
+                    if (decimalPartInfo.AreTrailingDigitsOnlyZeros == false)
+                        throw new DeserializationException($"Could not deserialize value {token} because it is no integer, but a real number.");
+                }
+
+                var info = _unsignedIntegerTypes[context.RequestedType];
+                return info.Type == typeof(ulong) ? 0UL : info.DowncastValue(0UL);
+            }
 
             if (token.JsonType == JsonTokenType.FloatingPointNumber)
             {
@@ -50,7 +64,6 @@ namespace Light.Serialization.Json.TokenParsers
 
             var result = 0ul;
             var isDefinitelyInRange = false;
-            var currentIndex = 0;
             while (digitsLeftToRead > 0)
             {
                 var digit = token[currentIndex] - '0';
