@@ -2,8 +2,8 @@
 using System.Linq;
 using Light.GuardClauses;
 using Light.Serialization.Json.ComplexTypeConstruction;
-using Light.Serialization.Json.LowLevelReading;
 using Light.Serialization.Json.TokenParsers;
+using Light.Serialization.Json.TypeNaming;
 
 namespace Light.Serialization.Json
 {
@@ -12,7 +12,7 @@ namespace Light.Serialization.Json
         public static TCollection AddDefaultTokenParsers<TCollection>(this TCollection targetList,
                                                                       ICollectionFactory collectionFactory,
                                                                       IObjectFactory objectFactory,
-                                                                      INameToTypeMapping nameToTypeMapping,
+                                                                      ITypeSectionParser typeSectionParser,
                                                                       IInjectableValueNameNormalizer nameNormalizer,
                                                                       ITypeDescriptionProvider typeDescriptionProvider)
             where TCollection : IList<IJsonTokenParser>
@@ -34,7 +34,7 @@ namespace Light.Serialization.Json
             targetList.Add(stringParser);
             targetList.Add(new JsonStringParserOrchestrator(targetList.OfType<IJsonStringToPrimitiveParser>().ToList(), stringParser));
             targetList.Add(new ArrayToGenericCollectionParser(collectionFactory));
-            targetList.Add(new ComplexTypeParser(objectFactory, nameToTypeMapping, nameNormalizer, typeDescriptionProvider));
+            targetList.Add(new ComplexTypeParser(objectFactory, nameNormalizer, typeDescriptionProvider, typeSectionParser));
 
             return targetList;
         }

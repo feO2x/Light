@@ -5,6 +5,7 @@ using Light.GuardClauses;
 
 namespace Light.Serialization.Json.TokenParsers
 {
+    // TODO: We maybe should rename this class because it is only used when the requested type is a base type of the string to be deserialized
     public sealed class JsonStringParserOrchestrator : IJsonTokenParser
     {
         private readonly StringParser _stringParser;

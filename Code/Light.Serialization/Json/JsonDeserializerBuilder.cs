@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Light.Serialization.Json.Caching;
 using Light.Serialization.Json.ComplexTypeConstruction;
 using Light.Serialization.Json.LowLevelReading;
-using Light.Serialization.Json.TokenParsers;
 using Light.Serialization.Json.TypeNaming;
 
 namespace Light.Serialization.Json
@@ -15,9 +14,9 @@ namespace Light.Serialization.Json
 
         private IReadOnlyList<IJsonTokenParser> _jsonTokenParsers;
         private IInjectableValueNameNormalizer _nameNormalizer = new ToLowerWithoutSpecialCharactersNormalizer();
-        private INameToTypeMapping _nameToTypeMapping = new SimpleNameToTypeMapping();
         private IObjectFactory _objectFactory = new DefaultObjectFactory();
         private ITypeDescriptionProvider _typeDescriptionProvider;
+        private ITypeSectionParser _typeSectionParser = new DefaultTypeSectionParser(new SimpleNameToTypeMapping());
 
         public JsonDeserializerBuilder()
         {
@@ -48,9 +47,9 @@ namespace Light.Serialization.Json
             return this;
         }
 
-        public JsonDeserializerBuilder WithNameToTypeMapping(INameToTypeMapping mapping)
+        public JsonDeserializerBuilder WithTypeSectionParser(ITypeSectionParser parser)
         {
-            _nameToTypeMapping = mapping;
+            _typeSectionParser = parser;
             return this;
         }
 
@@ -72,7 +71,7 @@ namespace Light.Serialization.Json
             {
                 _jsonTokenParsers = new List<IJsonTokenParser>().AddDefaultTokenParsers(_collectionFactory,
                                                                                         _objectFactory,
-                                                                                        _nameToTypeMapping,
+                                                                                        _typeSectionParser,
                                                                                         _nameNormalizer,
                                                                                         _typeDescriptionProvider);
             }

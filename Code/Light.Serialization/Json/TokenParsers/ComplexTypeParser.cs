@@ -2,44 +2,34 @@
 using System.Collections.Generic;
 using Light.GuardClauses;
 using Light.Serialization.Json.ComplexTypeConstruction;
+using Light.Serialization.Json.TypeNaming;
 
 namespace Light.Serialization.Json.TokenParsers
 {
     public sealed class ComplexTypeParser : IJsonTokenParser
     {
         private readonly IInjectableValueNameNormalizer _nameNormalizer;
-        private readonly INameToTypeMapping _nameToTypeMapping;
         private readonly IObjectFactory _objectFactory;
         private readonly Type _objectType = typeof (object);
         private readonly Type _stringType = typeof (string);
         private readonly ITypeDescriptionProvider _typeDescriptionProvider;
-        private string _actualTypeSymbol = "$type";
+        private readonly ITypeSectionParser _typeSectionParser;
 
 
         public ComplexTypeParser(IObjectFactory objectFactory,
-                                 INameToTypeMapping nameToTypeMapping,
                                  IInjectableValueNameNormalizer nameNormalizer,
-                                 ITypeDescriptionProvider typeDescriptionProvider)
+                                 ITypeDescriptionProvider typeDescriptionProvider,
+                                 ITypeSectionParser typeSectionParser)
         {
             objectFactory.MustNotBeNull(nameof(objectFactory));
-            nameToTypeMapping.MustNotBeNull(nameof(nameToTypeMapping));
             nameNormalizer.MustNotBeNull(nameof(nameNormalizer));
             typeDescriptionProvider.MustNotBeNull(nameof(typeDescriptionProvider));
+            typeSectionParser.MustNotBeNull(nameof(typeSectionParser));
 
             _objectFactory = objectFactory;
-            _nameToTypeMapping = nameToTypeMapping;
             _nameNormalizer = nameNormalizer;
             _typeDescriptionProvider = typeDescriptionProvider;
-        }
-
-        public string ActualTypeSymbol
-        {
-            get { return _actualTypeSymbol; }
-            set
-            {
-                value.MustNotBeNullOrEmpty(nameof(value));
-                _actualTypeSymbol = value;
-            }
+            _typeSectionParser = typeSectionParser;
         }
 
         public bool IsSuitableFor(JsonToken token, Type requestedType)
@@ -65,16 +55,14 @@ namespace Light.Serialization.Json.TokenParsers
             TypeCreationDescription typeCreationDescription;
 
             // Check if the first string marks the actual type that should be used for deserializing
-            if (firstTokenString == _actualTypeSymbol)
+            if (firstTokenString == _typeSectionParser.ActualTypeSymbol)
             {
                 ReadAndExpectPairDelimiterToken(jsonReader);
 
-                var typeStringToken = jsonReader.ReadNextToken();
-                if (typeStringToken.JsonType != JsonTokenType.String)
-                    throw new JsonDocumentException($"Expected JSON string containing the type name for deserialization, but found {typeStringToken}", typeStringToken);
-
-                var typeToConstruct = _nameToTypeMapping.Map((string) context.DeserializeToken(typeStringToken, _stringType));
-                typeCreationDescription = _typeDescriptionProvider.GetTypeCreationDescription(typeToConstruct);
+                var targetType = _typeSectionParser.ParseTypeSection(context);
+                typeCreationDescription = _typeDescriptionProvider.GetTypeCreationDescription(targetType);
+                // TODO: here we might have to switch to to a DictionaryParser if we read a corresponding type
+                // It might be useful to return a more complex type than just type
 
                 // If the complex object ends here, then just create the target object using the factory
                 // There are no more label value pairs in this object to be deserialized
@@ -92,16 +80,16 @@ namespace Light.Serialization.Json.TokenParsers
                 var typeToConstruct = context.RequestedType;
                 typeCreationDescription = _typeDescriptionProvider.GetTypeCreationDescription(typeToConstruct);
 
-                goto DeserializeAfterReadingLabel;
+                goto DeserializeAfterReadingKey;
             }
 
             // At this point, there must be definitely another label value pair in the complex JSON object
-            DeserializeLabelValuePair:
+            DeserializeKeyValuePair:
             currentLabelToken = jsonReader.ReadNextToken();
             if (currentLabelToken.JsonType != JsonTokenType.String)
                 throw new JsonDocumentException($"Expected JSON string or end of complex JSON object, but found {currentLabelToken}", currentLabelToken);
 
-            DeserializeAfterReadingLabel:
+            DeserializeAfterReadingKey:
             var label = (string) context.DeserializeToken(currentLabelToken, _stringType);
             var normalizedLabel = _nameNormalizer.Normalize(label);
             var injectableValueInfo = typeCreationDescription.GetInjectableValueDescriptionFromNormalizedName(normalizedLabel) ??
@@ -117,7 +105,7 @@ namespace Light.Serialization.Json.TokenParsers
             if (ReadAndExpectEndOfObjectOrValueDelimiter(jsonReader) == JsonTokenType.EndOfObject)
                 return _objectFactory.Create(typeCreationDescription, deserializedChildValues);
 
-            goto DeserializeLabelValuePair;
+            goto DeserializeKeyValuePair;
         }
 
         private static void ReadAndExpectPairDelimiterToken(IJsonReader reader)
