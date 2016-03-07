@@ -5,7 +5,7 @@ namespace Light.Serialization.Tests
 {
     public abstract class BaseDefaultJsonSerializerTest
     {
-        protected readonly ISerializer JsonSerializer;
+        protected ISerializer JsonSerializer;
 
         protected BaseDefaultJsonSerializerTest()
         {

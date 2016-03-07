@@ -6,18 +6,15 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
 {
     public sealed class TimeSpanFormatter : BasePrimitiveTypeFormatter<TimeSpan>, IPrimitiveTypeFormatter
     {
-        private readonly StringBuilder _stringBuilder = new StringBuilder();
-
-        public TimeSpanFormatter() : base(false)
-        {
-        }
+        public TimeSpanFormatter() : base(false) { }
 
         public string FormatPrimitiveType(object @object)
         {
             var timeSpan = (TimeSpan) @object;
 
-            _stringBuilder.Append('"');
-            _stringBuilder.Append('P');
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append('"');
+            stringBuilder.Append('P');
 
             bool isDaysZero = timeSpan.Days == 0,
                  isHoursZero = timeSpan.Hours == 0,
@@ -29,44 +26,44 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
             if (isDaysZero == false ||
                 isHoursZero && isMinutesZero && isSecondsZero && isMillisecondsZero)
             {
-                AppendDurationSection('D', timeSpan.Days);
+                AppendDurationSection(stringBuilder, 'D', timeSpan.Days);
                 if (isHoursZero && isMinutesZero && isSecondsZero && isMillisecondsZero)
-                    return _stringBuilder.CompleteJsonStringWithQuotationMarkAndClearBuilder();
+                    return stringBuilder.CompleteJsonStringWithQuotationMark();
             }
 
             // Append identifier for time part of the duration
-            _stringBuilder.Append('T');
+            stringBuilder.Append('T');
 
             // Append hours and minutes if necessary
-            AppendTimespanSectionIfNecessary('H', timeSpan.Hours);
-            AppendTimespanSectionIfNecessary('M', timeSpan.Minutes);
+            AppendTimespanSectionIfNecessary(stringBuilder, 'H', timeSpan.Hours);
+            AppendTimespanSectionIfNecessary(stringBuilder, 'M', timeSpan.Minutes);
 
             // Append seconds and milliseconds if necessary
             if (isSecondsZero == false || isMillisecondsZero == false)
             {
-                _stringBuilder.Append(timeSpan.Seconds);
+                stringBuilder.Append(timeSpan.Seconds);
                 if (isMillisecondsZero == false)
                 {
-                    _stringBuilder.Append('.');
-                    _stringBuilder.Append(timeSpan.Milliseconds.ToString("D3"));
+                    stringBuilder.Append('.');
+                    stringBuilder.Append(timeSpan.Milliseconds.ToString("D3"));
                 }
-                _stringBuilder.Append('S');
+                stringBuilder.Append('S');
             }
-            return _stringBuilder.CompleteJsonStringWithQuotationMarkAndClearBuilder();
+            return stringBuilder.CompleteJsonStringWithQuotationMark();
         }
 
-        private void AppendTimespanSectionIfNecessary(char identifier, int duration)
+        private static void AppendTimespanSectionIfNecessary(StringBuilder stringBuilder, char identifier, int duration)
         {
             if (duration == 0)
                 return;
 
-            AppendDurationSection(identifier, duration);
+            AppendDurationSection(stringBuilder, identifier, duration);
         }
 
-        private void AppendDurationSection(char identifier, int duration)
+        private static void AppendDurationSection(StringBuilder stringBuilder, char identifier, int duration)
         {
-            _stringBuilder.Append(duration);
-            _stringBuilder.Append(identifier);
+            stringBuilder.Append(duration);
+            stringBuilder.Append(identifier);
         }
     }
 }
