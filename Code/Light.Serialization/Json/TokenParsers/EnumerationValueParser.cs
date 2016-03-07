@@ -5,8 +5,6 @@ namespace Light.Serialization.Json.TokenParsers
 {
     public sealed class EnumerationValueParser : IJsonTokenParser
     {
-        private readonly Type _stringType = typeof (string);
-
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
             return token.JsonType == JsonTokenType.String && requestedType.GetTypeInfo().IsEnum;
@@ -14,7 +12,7 @@ namespace Light.Serialization.Json.TokenParsers
 
         public object ParseValue(JsonDeserializationContext context)
         {
-            var @string = (string)context.DeserializeToken(context.Token, _stringType);
+            var @string = context.DeserializeToken<string>(context.Token);
 
             return Enum.Parse(context.RequestedType, @string, true);
         }

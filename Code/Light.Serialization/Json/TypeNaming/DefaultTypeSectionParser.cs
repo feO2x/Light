@@ -1,5 +1,7 @@
 using System;
+using System.Reflection;
 using Light.GuardClauses;
+using Light.Serialization.Json.LowLevelReading;
 using Light.Serialization.Json.TokenParsers;
 
 namespace Light.Serialization.Json.TypeNaming
@@ -7,7 +9,9 @@ namespace Light.Serialization.Json.TypeNaming
     public sealed class DefaultTypeSectionParser : ITypeSectionParser
     {
         private readonly INameToTypeMapping _nameToTypeMapping;
-        private string _actualTypeSymbol = "$type";
+        private string _concreteTypeSymbol = "$type";
+        private string _typeArgumentsSymbol = "typeArguments";
+        private string _typeNameSymbol = "name";
 
         public DefaultTypeSectionParser(INameToTypeMapping nameToTypeMapping)
         {
@@ -16,26 +20,75 @@ namespace Light.Serialization.Json.TypeNaming
             _nameToTypeMapping = nameToTypeMapping;
         }
 
-        public string ActualTypeSymbol
+        public string TypeNameSymbol
         {
-            get { return _actualTypeSymbol; }
+            get { return _typeNameSymbol; }
             set
             {
                 value.MustNotBeNullOrWhiteSpace(nameof(value));
-                _actualTypeSymbol = value;
+                _typeNameSymbol = value;
             }
         }
+
+        public string TypeArgumentsSymbol
+        {
+            get { return _typeArgumentsSymbol; }
+            set
+            {
+                value.MustNotBeNullOrWhiteSpace(nameof(value));
+                _typeArgumentsSymbol = value;
+            }
+        }
+
+        public string ConcreteTypeSymbol
+        {
+            get { return _concreteTypeSymbol; }
+            set
+            {
+                value.MustNotBeNullOrWhiteSpace(nameof(value));
+                _concreteTypeSymbol = value;
+            }
+        }
+
         public Type ParseTypeSection(JsonDeserializationContext context)
         {
-            var token = context.JsonReader.ReadNextToken();
+            var nextToken = context.JsonReader.ReadNextToken();
+            string typeName;
 
-            if (token.JsonType == JsonTokenType.String)
+            if (nextToken.JsonType == JsonTokenType.String)
             {
-                var typeName = (string) context.DeserializeToken(token, typeof (string));
+                typeName = context.DeserializeToken<string>(nextToken);
                 return _nameToTypeMapping.Map(typeName);
             }
 
-            throw new NotImplementedException("We have to be able to deserialize generic types");
+            if (nextToken.JsonType != JsonTokenType.BeginOfObject)
+                throw new JsonDocumentException($"Expected JSON string or begin of object to parse actual type, but found {nextToken}.", nextToken);
+
+            nextToken = context.JsonReader.ReadNextToken();
+            if (nextToken.JsonType != JsonTokenType.String)
+                throw new JsonDocumentException($"Expected name of generic type in JSON document, but found {nextToken}.", nextToken);
+
+            typeName = context.DeserializeToken<string>(nextToken);
+            var genericType = _nameToTypeMapping.Map(typeName);
+            var genericTypeInfo = genericType.GetTypeInfo();
+            if (genericTypeInfo.IsGenericTypeDefinition == false)
+                throw new InvalidOperationException($"The specified type {genericType} should be a generic type definition, but is not.");
+
+            context.JsonReader.ReadAndExpectValueDelimiterToken();
+            var genericTypeParameters = genericTypeInfo.GenericTypeParameters;
+            var typeArguments = new Type[genericTypeParameters.Length];
+
+            context.JsonReader.ReadAndExpectBeginOfArray();
+            for (var i = 0; i < genericTypeParameters.Length; i++)
+            {
+                typeArguments[i] = ParseTypeSection(context);
+                if (i < genericTypeParameters.Length - 1)
+                    context.JsonReader.ReadAndExpectValueDelimiterToken();
+                else
+                    context.JsonReader.ReadAndExpectedEndOfArray();
+            }
+
+            return genericTypeInfo.MakeGenericType(typeArguments);
         }
     }
 }

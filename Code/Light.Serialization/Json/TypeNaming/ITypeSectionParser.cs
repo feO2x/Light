@@ -4,7 +4,7 @@ namespace Light.Serialization.Json.TypeNaming
 {
     public interface ITypeSectionParser
     {
-        string ActualTypeSymbol { get; }
+        string ConcreteTypeSymbol { get; }
         Type ParseTypeSection(JsonDeserializationContext context);
     }
 }

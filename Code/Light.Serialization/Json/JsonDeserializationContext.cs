@@ -1,4 +1,5 @@
 using System;
+using Light.GuardClauses;
 
 namespace Light.Serialization.Json
 {
@@ -7,21 +8,31 @@ namespace Light.Serialization.Json
         public readonly JsonToken Token;
         public readonly Type RequestedType;
         public readonly IJsonReader JsonReader;
-        public readonly Func<JsonToken, Type, object> DeserializeToken;
+        private readonly Func<JsonToken, Type, object> _deserializeToken;
 
         public JsonDeserializationContext(JsonToken token,
                                           Type requestedType,
                                           IJsonReader jsonReader,
                                           Func<JsonToken, Type, object> deserializeToken)
         {
-            if (requestedType == null) throw new ArgumentNullException(nameof(requestedType));
-            if (jsonReader == null) throw new ArgumentNullException(nameof(jsonReader));
-            if (deserializeToken == null) throw new ArgumentNullException(nameof(deserializeToken));
+            requestedType.MustNotBeNull(nameof(requestedType));
+            jsonReader.MustNotBeNull(nameof(jsonReader));
+            deserializeToken.MustNotBeNull(nameof(deserializeToken));
 
             Token = token;
             RequestedType = requestedType;
             JsonReader = jsonReader;
-            DeserializeToken = deserializeToken;
+            _deserializeToken = deserializeToken;
+        }
+
+        public T DeserializeToken<T>(JsonToken token)
+        {
+            return (T)_deserializeToken(token, typeof (T));
+        }
+
+        public object DeserializeToken(JsonToken token, Type requestedType)
+        {
+            return _deserializeToken(token, requestedType);
         }
     }
 }

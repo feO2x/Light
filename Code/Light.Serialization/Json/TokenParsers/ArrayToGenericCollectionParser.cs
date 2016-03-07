@@ -50,11 +50,9 @@ namespace Light.Serialization.Json.TokenParsers
 
         private static void PopulateGenericCollection<T>(JsonToken nextToken, ICollection<T> collection, JsonDeserializationContext context)
         {
-            var itemType = typeof (T);
-
             while (true)
             {
-                var nextValue = (T) context.DeserializeToken(nextToken, itemType);
+                var nextValue = context.DeserializeToken<T>(nextToken);
                 collection.Add(nextValue);
 
                 nextToken = context.JsonReader.ReadNextToken();

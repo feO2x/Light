@@ -45,6 +45,7 @@
     <Compile Include="Json\ComplexTypeConstruction\DefaultObjectFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\InjectableValueKind.cs" />
     <Compile Include="Json\IntegerMetadata\DecimalPartInfo.cs" />
+    <Compile Include="Json\LowLevelReading\JsonReaderExtensions.cs" />
     <Compile Include="Json\TypeNaming\DefaultTypeSectionParser.cs" />
     <Compile Include="Json\TypeNaming\ITypeSectionParser.cs" />
     <Compile Include="Json\TokenParsers\SignedIntegerParser.cs" />

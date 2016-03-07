@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Light.GuardClauses;
 using Light.Serialization.Json.ComplexTypeConstruction;
+using Light.Serialization.Json.LowLevelReading;
 using Light.Serialization.Json.TypeNaming;
 
 namespace Light.Serialization.Json.TokenParsers
@@ -10,8 +11,6 @@ namespace Light.Serialization.Json.TokenParsers
     {
         private readonly IInjectableValueNameNormalizer _nameNormalizer;
         private readonly IObjectFactory _objectFactory;
-        private readonly Type _objectType = typeof (object);
-        private readonly Type _stringType = typeof (string);
         private readonly ITypeDescriptionProvider _typeDescriptionProvider;
         private readonly ITypeSectionParser _typeSectionParser;
 
@@ -50,14 +49,14 @@ namespace Light.Serialization.Json.TokenParsers
             if (currentLabelToken.JsonType != JsonTokenType.String)
                 throw new JsonDocumentException($"Expected JSON string or end of complex JSON object, but found {currentLabelToken}", currentLabelToken);
 
-            var firstTokenString = (string) context.DeserializeToken(currentLabelToken, _stringType);
+            var firstTokenString = context.DeserializeToken<string>(currentLabelToken);
             Dictionary<InjectableValueDescription, object> deserializedChildValues;
             TypeCreationDescription typeCreationDescription;
 
             // Check if the first string marks the actual type that should be used for deserializing
-            if (firstTokenString == _typeSectionParser.ActualTypeSymbol)
+            if (firstTokenString == _typeSectionParser.ConcreteTypeSymbol)
             {
-                ReadAndExpectPairDelimiterToken(jsonReader);
+                jsonReader.ReadAndExpectPairDelimiterToken();
 
                 var targetType = _typeSectionParser.ParseTypeSection(context);
                 typeCreationDescription = _typeDescriptionProvider.GetTypeCreationDescription(targetType);
@@ -66,7 +65,7 @@ namespace Light.Serialization.Json.TokenParsers
 
                 // If the complex object ends here, then just create the target object using the factory
                 // There are no more label value pairs in this object to be deserialized
-                if (ReadAndExpectEndOfObjectOrValueDelimiter(jsonReader) == JsonTokenType.EndOfObject)
+                if (jsonReader.ReadAndExpectEndOfObjectOrValueDelimiter() == JsonTokenType.EndOfObject)
                     return _objectFactory.Create(typeCreationDescription, null);
 
                 // Otherwise create a dictionary for the child values
@@ -90,41 +89,22 @@ namespace Light.Serialization.Json.TokenParsers
                 throw new JsonDocumentException($"Expected JSON string or end of complex JSON object, but found {currentLabelToken}", currentLabelToken);
 
             DeserializeAfterReadingKey:
-            var label = (string) context.DeserializeToken(currentLabelToken, _stringType);
+            var label = context.DeserializeToken<string>(currentLabelToken);
             var normalizedLabel = _nameNormalizer.Normalize(label);
             var injectableValueInfo = typeCreationDescription.GetInjectableValueDescriptionFromNormalizedName(normalizedLabel) ??
-                                      InjectableValueDescription.FromUnknownValue(normalizedLabel, _objectType);
+                                      InjectableValueDescription.FromUnknownValue(normalizedLabel, typeof(object));
 
-            ReadAndExpectPairDelimiterToken(jsonReader);
+            jsonReader.ReadAndExpectPairDelimiterToken();
 
             var valueToken = jsonReader.ReadNextToken();
             var value = context.DeserializeToken(valueToken, injectableValueInfo.Type);
 
             deserializedChildValues.Add(injectableValueInfo, value);
 
-            if (ReadAndExpectEndOfObjectOrValueDelimiter(jsonReader) == JsonTokenType.EndOfObject)
+            if (jsonReader.ReadAndExpectEndOfObjectOrValueDelimiter() == JsonTokenType.EndOfObject)
                 return _objectFactory.Create(typeCreationDescription, deserializedChildValues);
 
             goto DeserializeKeyValuePair;
-        }
-
-        private static void ReadAndExpectPairDelimiterToken(IJsonReader reader)
-        {
-            var pairDelimiterToken = reader.ReadNextToken();
-            if (pairDelimiterToken.JsonType != JsonTokenType.PairDelimiter)
-                throw new JsonDocumentException($"Expected delimiter between label and value in complex JSON object, but found {pairDelimiterToken}", pairDelimiterToken);
-        }
-
-        private static JsonTokenType ReadAndExpectEndOfObjectOrValueDelimiter(IJsonReader reader)
-        {
-            var valueDelimiterOrEndOfObjectToken = reader.ReadNextToken();
-            if (valueDelimiterOrEndOfObjectToken.JsonType == JsonTokenType.EndOfObject)
-                return JsonTokenType.EndOfObject;
-
-            if (valueDelimiterOrEndOfObjectToken.JsonType != JsonTokenType.ValueDelimiter)
-                throw new JsonDocumentException($"Expected value delimiter or end of complex JSON object, but found {valueDelimiterOrEndOfObjectToken}", valueDelimiterOrEndOfObjectToken);
-
-            return JsonTokenType.ValueDelimiter;
         }
     }
 }
