@@ -62,7 +62,7 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
                     break;
                 // For local DateTimes, the offset is appended
                 case DateTimeKind.Local:
-                    var offset = TimeZoneInfo.Local.GetUtcOffset(dateTime);
+                    var offset = _timeZoneInfo.GetUtcOffset(dateTime);
                     if (offset.Hours >= 0)
                         stringBuilder.Append('+');
                     stringBuilder.Append(offset.Hours.ToString("D2"));
