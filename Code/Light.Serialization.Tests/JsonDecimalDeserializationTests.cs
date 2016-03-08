@@ -11,8 +11,7 @@ namespace Light.Serialization.Tests
         [MemberData("DecimalTestData")]
         public void DecimalValuesCanBeDeserializedCorrectly(string json, decimal expected, decimal tolerance)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var actual = testTarget.Deserialize<decimal>(json);
+            var actual = GetDeserializedJson<decimal>(json);
             actual.Should().BeApproximately((decimal)expected, tolerance);
         }
 
