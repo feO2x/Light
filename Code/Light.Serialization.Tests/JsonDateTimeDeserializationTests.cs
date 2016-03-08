@@ -52,7 +52,13 @@ namespace Light.Serialization.Tests
                 new object[] { "\"2001-04-17T03:15+1\"" },
                 new object[] { "\"2001-04-17T03:15-1\"" },
                 new object[] { "\"2010-09-20T05:14+01:1\"" },
-                new object[] { "\"2010-09-20T05:14-01:7\"" }
+                new object[] { "\"2010-09-20T05:14-01:7\"" },
+                new object[] { "\"2016-03-08T05:14K01:00\"" },
+                new object[] { "\"2016-03-08T05:14K10\"" },
+                new object[] { "\"2016-03-08U05:14Z\"" },
+                new object[] { "\"2016-03-08T05:14:30.889Zabc\"" },
+                new object[] { "\"2016-03-08T05:14:30.889+011\"" },
+                new object[] { "\"2016-03-08T05:14:30.889+10:300303\"" }
             };
 
         [Theory(DisplayName = "A JSON string containing a valid ISO 8601 date time value must be parsed to a DateTime even when the requested type is a base type of DateTime.")]

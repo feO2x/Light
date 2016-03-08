@@ -46,6 +46,8 @@
     <Compile Include="Json\ComplexTypeConstruction\InjectableValueKind.cs" />
     <Compile Include="Json\IntegerMetadata\DecimalPartInfo.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\DateTimeOffsetFormatter.cs" />
+    <Compile Include="Json\TokenParsers\BaseIso8601DateTimeParser.cs" />
+    <Compile Include="Json\TokenParsers\DateTimeOffsetParser.cs" />
     <Compile Include="Json\TokenParsers\SignedIntegerParser.cs" />
     <Compile Include="Json\IntegerMetadata\SignedIntegerTypes.cs" />
     <Compile Include="Json\IntegerMetadata\UnsignedIntegerTypeInfo.cs" />
