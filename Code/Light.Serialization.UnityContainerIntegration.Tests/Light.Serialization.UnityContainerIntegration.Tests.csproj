@@ -163,9 +163,6 @@
     <Compile Include="..\Light.Serialization.Tests\MoreComplexDummyClass.cs">
       <Link>MoreComplexDummyClass.cs</Link>
     </Compile>
-    <Compile Include="..\Light.Serialization.Tests\StringExtensionsTests.cs">
-      <Link>StringExtensionsTests.cs</Link>
-    </Compile>
     <Compile Include="BaseDefaultJsonDeserializationTest.cs" />
     <Compile Include="BaseDefaultJsonSerializerTest.cs" />
     <Compile Include="RulesSupportTests.cs" />
