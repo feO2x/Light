@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using Light.Serialization.Json;
 using Xunit;
 
 namespace Light.Serialization.Tests
@@ -16,8 +15,7 @@ namespace Light.Serialization.Tests
         [InlineData("-2.0e38", -2.0e38, 0.1f)]
         public void FloatValuesCanBeDeserializedCorrectly(string json, float expected, float tolerance)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var actual = testTarget.Deserialize<float>(json);
+            var actual = GetDeserializedJson<float>(json);
             actual.Should().BeApproximately(expected, tolerance);
         }
 
