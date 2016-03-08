@@ -15,8 +15,7 @@ namespace Light.Serialization.Tests
         public void NullValuesAreParsedCorrectly(Type requestedType)
         {
             const string json = "null";
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var result = testTarget.Deserialize(json, requestedType);
+            var result = GetDeserializedJson(json, requestedType);
             result.Should().BeNull();
         }
 
