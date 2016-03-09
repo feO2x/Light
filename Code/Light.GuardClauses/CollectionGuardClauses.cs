@@ -56,5 +56,15 @@ namespace Light.GuardClauses
                 }
             }
         }
+
+        [Conditional(Guard.PreconditionSymbol)]
+        public static void MustBeKeyOf<TKey, TValue>(this TKey parameter, IDictionary<TKey, TValue> dictionary, string parameterName)
+        {
+            if (dictionary.ContainsKey(parameter))
+                return;
+
+            var stringBuilder = new StringBuilder().AppendItems(dictionary.Keys.ToList());
+            throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must be one of the dictionary keys ({stringBuilder}), but you specified {parameter}.");
+        }
     }
 }
