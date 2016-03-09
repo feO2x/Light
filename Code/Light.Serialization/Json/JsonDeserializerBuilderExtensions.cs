@@ -23,6 +23,7 @@ namespace Light.Serialization.Json
             targetList.Add(new SignedIntegerParser());
             targetList.Add(new DateTimeParser());
             targetList.Add(new TimeSpanParser());
+            targetList.Add(new DateTimeOffsetParser());
             targetList.Add(new FloatParser());
             targetList.Add(new DecimalParser());
             targetList.Add(new DoubleParser());

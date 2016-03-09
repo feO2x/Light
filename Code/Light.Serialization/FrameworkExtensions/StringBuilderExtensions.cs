@@ -1,16 +1,16 @@
 ﻿using System.Text;
+using Light.GuardClauses;
 
 namespace Light.Serialization.FrameworkExtensions
 {
     public static class StringBuilderExtensions
     {
-        public static string CompleteJsonStringWithQuotationMarkAndClearBuilder(this StringBuilder stringBuilder)
+        public static string CompleteJsonStringWithQuotationMark(this StringBuilder stringBuilder)
         {
-            stringBuilder.Append('"');
+            stringBuilder.MustNotBeNull(nameof(stringBuilder));
 
-            var result = stringBuilder.ToString();
-            stringBuilder.Clear();
-            return result;
+            stringBuilder.Append('"');
+            return stringBuilder.ToString();
         }
     }
 }

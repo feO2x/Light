@@ -16,8 +16,7 @@ namespace Light.Serialization.Tests
         [InlineData("3.141E-3", 3.141E-3, 0.1E-7)]
         public void DoubleValuesCanBeDeserializedCorrectly(string json, double expected, double tolerance)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var actual = testTarget.Deserialize<double>(json);
+            var actual = GetDeserializedJson<double>(json);
             actual.Should().BeApproximately(expected, tolerance);
         }
 
