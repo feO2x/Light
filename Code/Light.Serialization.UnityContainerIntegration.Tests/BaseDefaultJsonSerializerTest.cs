@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using Light.Serialization.Json;
+using Light.Serialization.Json.PrimitiveTypeFormatters;
 using Light.Serialization.Json.SerializationRules;
 using Light.Serialization.UnityContainerIntegration;
 using Microsoft.Practices.Unity;
 
 // ReSharper disable once CheckNamespace
+
 namespace Light.Serialization.Tests
 {
     public abstract class BaseDefaultJsonSerializerTest
@@ -31,9 +33,13 @@ namespace Light.Serialization.Tests
             Container.WithSerializationRuleFor(rule);
         }
 
-        protected void AddWriterInstructors(IList<IJsonWriterInstructor> writerInstructors)
+        protected void ReplaceTimeZoneInfoInDateTimeFormatter(TimeZoneInfo timeZoneInfo)
         {
-            //todo: implement WithWriterInstructors on IUnityContainer
+            Container.RegisterType<IPrimitiveTypeFormatter, DateTimeFormatter>(typeof (DateTimeFormatter).Name,
+                new ContainerControlledLifetimeManager(), new InjectionFactory(c => new DateTimeFormatter
+                {
+                    TimeZoneInfo = timeZoneInfo
+                }));
         }
     }
 }

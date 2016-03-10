@@ -61,14 +61,7 @@ namespace Light.Serialization.Tests
         [MemberData(nameof(LocalTestData))]
         public void LocalDateTime(DateTime dateTime, string expectedJson)
         {
-            var primitiveFormatters =
-                new List<IPrimitiveTypeFormatter>().AddDefaultPrimitiveTypeFormatters(new DefaultCharacterEscaper());
-            primitiveFormatters.OfType<DateTimeFormatter>().Single().TimeZoneInfo =
-                TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-            AddWriterInstructors(new List<IJsonWriterInstructor>().AddDefaultWriterInstructors(
-                    primitiveFormatters.ToDictionary(f => f.TargetType),
-                    new ValueProvidersCacheDecorator(new PublicPropertiesAndFieldsAnalyzer(),
-                        new Dictionary<Type, IList<IValueProvider>>())));
+            ReplaceTimeZoneInfoInDateTimeFormatter(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 
             CompareJsonToExpected(dateTime, expectedJson);
         }
