@@ -22,12 +22,14 @@ namespace Light.Serialization.Json.Caching
         {
             jsonToken.MustNotBeNull(nameof(jsonToken));
             type.MustNotBeNull(nameof(type));
-            CheckJsonTokenTypeCombinationForBlacklist(new JsonTokenTypeCombination(jsonToken, type));
+            return CheckJsonTokenTypeCombinationForBlacklist(new JsonTokenTypeCombination(jsonToken, type));
         }
 
         public bool CheckJsonTokenTypeCombinationForBlacklist(JsonTokenTypeCombination jsonTokenTypeCombination)
         {
-            
+            jsonTokenTypeCombination.MustNotBeNull(nameof(jsonTokenTypeCombination));
+
+            return _jsonTokenTypeCombinationCacheBlackList.Contains(jsonTokenTypeCombination);
         }
     }
 }
