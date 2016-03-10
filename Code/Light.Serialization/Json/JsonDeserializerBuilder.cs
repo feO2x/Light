@@ -87,7 +87,7 @@ namespace Light.Serialization.Json
             }
 
             if (_jsonTokenTypeCombinations == null)
-                _jsonTokenTypeCombinations.AddDefaultJsonTokenAndTypeCombinationsToBlacklist();
+                _jsonTokenTypeCombinations = new List<JsonTokenTypeCombination>().AddDefaultJsonTokenAndTypeCombinationsToBlacklist();
 
             return new JsonDeserializer(_jsonReaderFactory, _jsonTokenParsers, new JsonTokenParserCache(_jsonTokenTypeCombinations));
         }

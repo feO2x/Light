@@ -15,7 +15,7 @@ namespace Light.Serialization.Json.Caching
         {
             blackList.MustNotBeNull(nameof(blackList));
 
-            blackList.Add(new JsonTokenTypeCombination(new JsonToken(), ));
+            //blackList.Add(new JsonTokenTypeCombination(new JsonToken().JsonType., ));
 
             return blackList;
         }
