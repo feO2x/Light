@@ -150,5 +150,55 @@ namespace Light.Serialization.Tests
             //assert
             result.ShouldBeEquivalentTo(false);
         }
+
+        [Fact(DisplayName = "Validate that non-blacklisted JsonToken and Type are added to cache properly.")]
+        public void NonBlacklistedJsonTokenAndTypeAddedToCacheProperly()
+        {
+            //arrange
+            var jsonTokenForBlacklist = new JsonToken(new char[1], 0, 0, JsonTokenType.BeginOfArray);
+            var typeInt = typeof(int);
+            var jsonTokenTypeCombinationForBlacklist = new JsonTokenTypeCombination(jsonTokenForBlacklist, typeInt);
+
+            var typeChar = typeof(char);
+            var jsonTokenToCompare = new JsonToken(new char[2], 1, 1, JsonTokenType.BeginOfObject);
+            var jsonTokenTypeCombinationForCache = new JsonTokenTypeCombination(jsonTokenToCompare, typeChar);
+
+            var jsonTokenParser = new SignedIntegerParser();
+            IJsonTokenParser jsonTokenParserFromCache;
+
+            var cache = new JsonTokenParserCache(new List<JsonTokenTypeCombination> { jsonTokenTypeCombinationForBlacklist });
+
+            //act
+            cache.TryAddJsonTokenParserToCache(jsonTokenTypeCombinationForCache, jsonTokenParser);
+            cache.TryGetJsonTokenParser(jsonTokenTypeCombinationForCache, out jsonTokenParserFromCache);
+            
+            //assert
+            jsonTokenParser.ShouldBeEquivalentTo(jsonTokenParser);
+        }
+
+        [Fact(DisplayName = "Validate that non-blacklisted JsonToken and Type are not added to cache multiple times.")]
+        public void NonBlacklistedJsonTokenAndTypeNotAddedToCacheMultipleTimes()
+        {
+            //arrange
+            var jsonTokenForBlacklist = new JsonToken(new char[1], 0, 0, JsonTokenType.BeginOfArray);
+            var typeInt = typeof(int);
+            var jsonTokenTypeCombinationForBlacklist = new JsonTokenTypeCombination(jsonTokenForBlacklist, typeInt);
+
+            var typeChar = typeof(char);
+            var jsonTokenToCompare = new JsonToken(new char[2], 1, 1, JsonTokenType.BeginOfObject);
+            var jsonTokenTypeCombinationForCache = new JsonTokenTypeCombination(jsonTokenToCompare, typeChar);
+
+            var jsonTokenParser = new SignedIntegerParser();
+
+            var cache = new JsonTokenParserCache(new List<JsonTokenTypeCombination> { jsonTokenTypeCombinationForBlacklist });
+
+            //act
+            cache.TryAddJsonTokenParserToCache(jsonTokenTypeCombinationForCache, jsonTokenParser);
+            var result = cache.TryAddJsonTokenParserToCache(jsonTokenTypeCombinationForCache, jsonTokenParser);
+
+            //assert
+            result.ShouldBeEquivalentTo(true);
+        }
+
     }
 }
