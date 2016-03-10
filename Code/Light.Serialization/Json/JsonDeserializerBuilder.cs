@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Light.GuardClauses;
 using Light.Serialization.Json.Caching;
 using Light.Serialization.Json.ComplexTypeConstruction;
 using Light.Serialization.Json.LowLevelReading;
@@ -18,6 +19,7 @@ namespace Light.Serialization.Json
         private INameToTypeMapping _nameToTypeMapping = new SimpleNameToTypeMapping();
         private IObjectFactory _objectFactory = new DefaultObjectFactory();
         private ITypeDescriptionProvider _typeDescriptionProvider;
+        private JsonTokenParserCache _jsonTokenParserCache = new JsonTokenParserCache(new List<JsonTokenTypeCombination>());
 
         public JsonDeserializerBuilder()
         {
@@ -66,6 +68,13 @@ namespace Light.Serialization.Json
             return this;
         }
 
+        public JsonDeserializerBuilder WithJsonTokenParserCache(JsonTokenParserCache jsonTokenParserCache)
+        {
+            jsonTokenParserCache.MustNotBeNull(nameof(jsonTokenParserCache));
+            _jsonTokenParserCache = jsonTokenParserCache;
+            return this;
+        }
+
         public JsonDeserializer Build()
         {
             if (_jsonTokenParsers == null)
@@ -77,7 +86,7 @@ namespace Light.Serialization.Json
                                                                                         _typeDescriptionProvider);
             }
 
-            return new JsonDeserializer(_jsonReaderFactory, _jsonTokenParsers);
+            return new JsonDeserializer(_jsonReaderFactory, _jsonTokenParsers, _jsonTokenParserCache);
         }
     }
 }

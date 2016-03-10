@@ -33,6 +33,16 @@ namespace Light.Serialization.Json.Caching
             return _jsonTokenTypeCombinationCacheBlackList.Contains(jsonTokenTypeCombination);
         }
 
+        public bool TryGetJsonTokenParser(JsonToken jsonToken, Type type, out IJsonTokenParser jsonTokenParser)
+        {
+            jsonToken.MustNotBeNull(nameof(jsonToken));
+            type.MustNotBeNull(nameof(type));
+
+            var jsonTokenTypeCombination = new JsonTokenTypeCombination(jsonToken, type);
+
+            return TryGetJsonTokenParser(jsonTokenTypeCombination, out jsonTokenParser);
+        }
+
         public bool TryGetJsonTokenParser(JsonTokenTypeCombination jsonTokenTypeCombination, out IJsonTokenParser jsonTokenParser)
         {
             jsonTokenTypeCombination.MustNotBeNull(nameof(jsonTokenTypeCombination));
