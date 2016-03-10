@@ -2,7 +2,7 @@
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonBooleanDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonBooleanDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory]
         [InlineData("true", true)]

@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonDoubleDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonDoubleDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory]
         [InlineData("42.0", 42.0, 0.1)]

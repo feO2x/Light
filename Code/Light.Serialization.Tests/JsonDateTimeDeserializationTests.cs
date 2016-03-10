@@ -5,7 +5,7 @@ using TestData = System.Collections.Generic.IEnumerable<object[]>;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonDateTimeDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonDateTimeDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory(DisplayName = "JSON strings that represent date times are correctly parsed according to ISO 8601.")]
         [MemberData(nameof(ValidDateTimesData))]

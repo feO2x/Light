@@ -5,7 +5,7 @@ using TestData = System.Collections.Generic.IEnumerable<object[]>;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonPrimitiveTypesSerializationTests : BaseDefaultJsonSerializerTest
+    public sealed class JsonPrimitiveTypesSerializationTests : BaseJsonSerializerTest
     {
         [Theory]
         [InlineData(42)]

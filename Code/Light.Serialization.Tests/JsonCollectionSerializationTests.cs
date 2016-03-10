@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonCollectionSerializationTests : BaseDefaultJsonSerializerTest
+    public sealed class JsonCollectionSerializationTests : BaseJsonSerializerTest
     {
         public static readonly IEnumerable<object[]> CollectionTestData =
             new[]

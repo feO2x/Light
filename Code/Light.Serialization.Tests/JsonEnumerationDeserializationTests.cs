@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonEnumerationDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonEnumerationDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory]
         [InlineData("\"black\"", ConsoleColor.Black)]

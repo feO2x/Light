@@ -76,6 +76,98 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Light.Serialization.Tests\ClassWithPublicFieldAndPublicAndPrivateProperties.cs">
+      <Link>ClassWithPublicFieldAndPublicAndPrivateProperties.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\ClassWithPublicPropertiesAndPrivateFields.cs">
+      <Link>ClassWithPublicPropertiesAndPrivateFields.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\ComplexTypeDeserializationTests.cs">
+      <Link>ComplexTypeDeserializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\DummyPerson.cs">
+      <Link>DummyPerson.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\IDummyPerson.cs">
+      <Link>IDummyPerson.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonBooleanDeserializationTests.cs">
+      <Link>JsonBooleanDeserializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonCharacterDeserializationTests.cs">
+      <Link>JsonCharacterDeserializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonCollectionDeserializationTests.cs">
+      <Link>JsonCollectionDeserializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonCollectionSerializationTests.cs">
+      <Link>JsonCollectionSerializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonComplexTypesSerializationTests.cs">
+      <Link>JsonComplexTypesSerializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonCustomRuleSerializationTest.cs">
+      <Link>JsonCustomRuleSerializationTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonDateTimeDeserializationTests.cs">
+      <Link>JsonDateTimeDeserializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonDateTimeOffsetDeserializationTests.cs">
+      <Link>JsonDateTimeOffsetDeserializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonDateTimeOffsetSerializationTests.cs">
+      <Link>JsonDateTimeOffsetSerializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonDateTimeSerializationTests.cs">
+      <Link>JsonDateTimeSerializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonDecimalDeserializationTests.cs">
+      <Link>JsonDecimalDeserializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonDelegateSerializationTests.cs">
+      <Link>JsonDelegateSerializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonDictionarySerializationTests.cs">
+      <Link>JsonDictionarySerializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonDoubleDeserializationTests.cs">
+      <Link>JsonDoubleDeserializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonEnumerationDeserializationTests.cs">
+      <Link>JsonEnumerationDeserializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonFloatDeserializationTests.cs">
+      <Link>JsonFloatDeserializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonIntegerDeserializationTests.cs">
+      <Link>JsonIntegerDeserializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonNormalizedKeysTests.cs">
+      <Link>JsonNormalizedKeysTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonNullDeserializationTests.cs">
+      <Link>JsonNullDeserializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonPrimitiveTypesSerializationTests.cs">
+      <Link>JsonPrimitiveTypesSerializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonStringDeserializationTests.cs">
+      <Link>JsonStringDeserializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonTimeSpanDeserializationTests.cs">
+      <Link>JsonTimeSpanDeserializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonTimeSpanSerializationTests.cs">
+      <Link>JsonTimeSpanSerializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonWhitespaceDeserializationTests.cs">
+      <Link>JsonWhitespaceDeserializationTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Light.Serialization.Tests\MoreComplexDummyClass.cs">
+      <Link>MoreComplexDummyClass.cs</Link>
+    </Compile>
+    <Compile Include="BaseJsonDeserializationTest.cs" />
+    <Compile Include="BaseJsonSerializerTest.cs" />
     <Compile Include="RulesSupportTests.cs" />
     <Compile Include="SerializerResolveTests.cs" />
     <Compile Include="UnityObjectFactoryTests.cs" />
@@ -85,10 +177,6 @@
     <ProjectReference Include="..\Light.GuardClauses\Light.GuardClauses.csproj">
       <Project>{65bb1768-e9a0-46ed-b698-b92de2bb8504}</Project>
       <Name>Light.GuardClauses</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Light.Serialization.Tests\Light.Serialization.Tests.csproj">
-      <Project>{c5b65a88-58c1-474a-80d2-3dc86e94c455}</Project>
-      <Name>Light.Serialization.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\Light.Serialization.UnityContainerIntegration\Light.Serialization.UnityContainerIntegration.csproj">
       <Project>{5c392074-de04-4574-b4e3-5131c5e30589}</Project>
@@ -101,6 +189,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

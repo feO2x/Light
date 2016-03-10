@@ -4,7 +4,7 @@ using TestData = System.Collections.Generic.IEnumerable<object[]>;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonDateTimeOffsetSerializationTests : BaseDefaultJsonSerializerTest
+    public sealed class JsonDateTimeOffsetSerializationTests : BaseJsonSerializerTest
     {
         //https://en.wikipedia.org/wiki/ISO_8601
 

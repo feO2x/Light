@@ -1,10 +1,9 @@
 ﻿using FluentAssertions;
-using Light.Serialization.Json;
 using Xunit;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonFloatDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonFloatDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory (DisplayName = "JSON strings that represent floating point numbers are correctly parsed to float.")]
         [InlineData("3.402823e38", 3.402823e38f, 0.000001f)]
@@ -16,8 +15,7 @@ namespace Light.Serialization.Tests
         [InlineData("-2.0e38", -2.0e38, 0.1f)]
         public void FloatValuesCanBeDeserializedCorrectly(string json, float expected, float tolerance)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var actual = testTarget.Deserialize<float>(json);
+            var actual = GetDeserializedJson<float>(json);
             actual.Should().BeApproximately(expected, tolerance);
         }
 
