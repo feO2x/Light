@@ -7,11 +7,11 @@ using Light.GuardClauses;
 
 namespace Light.Serialization.Json.Caching
 {
-    public class TokenParserCacheDecorator
+    public class JsonTokenParserCache
     {
         private IList<JsonTokenTypeCombination> _jsonTokenTypeCombinationCacheBlackList; 
 
-        public TokenParserCacheDecorator(IList<JsonTokenTypeCombination> jsonTokenTypeCombinationCacheBlackList)
+        public JsonTokenParserCache(IList<JsonTokenTypeCombination> jsonTokenTypeCombinationCacheBlackList)
         {
             jsonTokenTypeCombinationCacheBlackList.MustNotBeNull(nameof(jsonTokenTypeCombinationCacheBlackList));
 
@@ -31,5 +31,7 @@ namespace Light.Serialization.Json.Caching
 
             return _jsonTokenTypeCombinationCacheBlackList.Contains(jsonTokenTypeCombination);
         }
+
+
     }
 }

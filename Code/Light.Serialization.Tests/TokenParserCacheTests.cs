@@ -15,7 +15,7 @@ namespace Light.Serialization.Tests
             var jsonToken = new JsonToken(new char[1], 0, 0, JsonTokenType.BeginOfArray);
             var type = typeof (int);
             var jsonTokenTypeCombination = new JsonTokenTypeCombination(jsonToken, type);
-            var cache = new TokenParserCacheDecorator(new List<JsonTokenTypeCombination> {jsonTokenTypeCombination });
+            var cache = new JsonTokenParserCache(new List<JsonTokenTypeCombination> {jsonTokenTypeCombination });
 
             var result = cache.CheckJsonTokenTypeCombinationForBlacklist(jsonTokenTypeCombination);
 
@@ -28,7 +28,7 @@ namespace Light.Serialization.Tests
             var jsonToken = new JsonToken(new char[1], 0, 0, JsonTokenType.BeginOfArray);
             var type = typeof(int);
             var jsonTokenTypeCombination = new JsonTokenTypeCombination(jsonToken, type);
-            var cache = new TokenParserCacheDecorator(new List<JsonTokenTypeCombination> { jsonTokenTypeCombination });
+            var cache = new JsonTokenParserCache(new List<JsonTokenTypeCombination> { jsonTokenTypeCombination });
 
             var result = cache.CheckJsonTokenTypeForBlacklist(jsonToken, type);
 
@@ -42,7 +42,7 @@ namespace Light.Serialization.Tests
             var jsonToken = new JsonToken(new char[1], 0, 0, JsonTokenType.BeginOfArray);
             var typeInt = typeof(int);
             var jsonTokenTypeCombination = new JsonTokenTypeCombination(jsonToken, typeInt);
-            var cache = new TokenParserCacheDecorator(new List<JsonTokenTypeCombination> { jsonTokenTypeCombination });
+            var cache = new JsonTokenParserCache(new List<JsonTokenTypeCombination> { jsonTokenTypeCombination });
 
             var typeLong = typeof (long);
 
@@ -60,7 +60,7 @@ namespace Light.Serialization.Tests
             var jsonTokenForCombination = new JsonToken(new char[1], 0, 0, JsonTokenType.BeginOfArray);
             var typeInt = typeof(int);
             var jsonTokenTypeCombination = new JsonTokenTypeCombination(jsonTokenForCombination, typeInt);
-            var cache = new TokenParserCacheDecorator(new List<JsonTokenTypeCombination> { jsonTokenTypeCombination });
+            var cache = new JsonTokenParserCache(new List<JsonTokenTypeCombination> { jsonTokenTypeCombination });
 
             var jsonTokenToCompare = new JsonToken(new char[2], 1, 2, JsonTokenType.EndOfArray);
 
@@ -83,7 +83,7 @@ namespace Light.Serialization.Tests
             var jsonTokenToCompare = new JsonToken(new char[2], 1, 1, JsonTokenType.BeginOfObject);
             var jsonTokenTypeCombinationToCompare = new JsonTokenTypeCombination(jsonTokenToCompare, typeChar);
 
-            var cache = new TokenParserCacheDecorator(new List<JsonTokenTypeCombination> { jsonTokenTypeCombinationForBlacklist });
+            var cache = new JsonTokenParserCache(new List<JsonTokenTypeCombination> { jsonTokenTypeCombinationForBlacklist });
 
             //act
             var result = cache.CheckJsonTokenTypeCombinationForBlacklist(jsonTokenTypeCombinationToCompare);
@@ -103,7 +103,7 @@ namespace Light.Serialization.Tests
             var typeChar = typeof(char);
             var jsonTokenToCompare = new JsonToken(new char[2], 1, 1, JsonTokenType.BeginOfObject);
 
-            var cache = new TokenParserCacheDecorator(new List<JsonTokenTypeCombination> { jsonTokenTypeCombinationForBlacklist });
+            var cache = new JsonTokenParserCache(new List<JsonTokenTypeCombination> { jsonTokenTypeCombinationForBlacklist });
 
             //act
             var result = cache.CheckJsonTokenTypeForBlacklist(jsonTokenToCompare, typeChar);
