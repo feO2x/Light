@@ -41,6 +41,7 @@
     <Compile Include="FrameworkExtensions\StringBuilderExtensions.cs" />
     <Compile Include="FrameworkExtensions\StringExtensions.cs" />
     <Compile Include="IDeserializer.cs" />
+    <Compile Include="Json\Caching\ITokenParserCache.cs" />
     <Compile Include="Json\Caching\JsonTokenTypeCombination.cs" />
     <Compile Include="Json\Caching\JsonTokenParserCache.cs" />
     <Compile Include="Json\ComplexTypeConstruction\ConstructorDescription.cs" />

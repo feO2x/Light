@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Light.GuardClauses;
@@ -25,6 +26,8 @@ namespace Light.Serialization.UnityContainerIntegration
             return container.RegisterType<IDeserializer, JsonDeserializer>()
                             .RegisterType<IJsonReaderFactory, SingleBufferJsonReaderFactory>(new ContainerControlledLifetimeManager())
                             .RegisterType<IReadOnlyList<IJsonTokenParser>, IJsonTokenParser[]>()
+                            .RegisterType<ITokenParserCache, JsonTokenParserCache>()
+                            .RegisterType<IList<JsonTokenTypeCombination>, JsonTokenTypeCombination[]>()
                             .RegisterTypeWithTypeName<IJsonTokenParser, UnsignedIntegerParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, SignedIntegerParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, DateTimeParser>(new ContainerControlledLifetimeManager())

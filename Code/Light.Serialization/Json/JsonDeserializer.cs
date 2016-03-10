@@ -9,18 +9,18 @@ namespace Light.Serialization.Json
     {
         private readonly IJsonReaderFactory _jsonReaderFactory;
         private readonly IReadOnlyList<IJsonTokenParser> _tokenParsers;
-        private readonly JsonTokenParserCache _jsonTokenParserCache;
+        private readonly ITokenParserCache _tokenParserCache;
         private IJsonReader _jsonReader;
 
-        public JsonDeserializer(IJsonReaderFactory jsonReaderFactory, IReadOnlyList<IJsonTokenParser> tokenParsers, JsonTokenParserCache jsonTokenParserCache)
+        public JsonDeserializer(IJsonReaderFactory jsonReaderFactory, IReadOnlyList<IJsonTokenParser> tokenParsers, ITokenParserCache tokenParserCache)
         {
             jsonReaderFactory.MustNotBeNull(nameof(jsonReaderFactory));
             tokenParsers.MustNotBeNull(nameof(tokenParsers));
-            jsonTokenParserCache.MustNotBeNull(nameof(jsonTokenParserCache));
+            tokenParserCache.MustNotBeNull(nameof(tokenParserCache));
 
             _jsonReaderFactory = jsonReaderFactory;
             _tokenParsers = tokenParsers;
-            _jsonTokenParserCache = jsonTokenParserCache;
+            _tokenParserCache = tokenParserCache;
         }
 
 
@@ -48,9 +48,9 @@ namespace Light.Serialization.Json
         {
             IJsonTokenParser parser = null;
 
-            if (_jsonTokenParserCache.CheckJsonTokenTypeForBlacklist(token, requestedType) == false)
+            if (_tokenParserCache.CheckTokenTypeForBlacklist(token, requestedType) == false)
             {
-                _jsonTokenParserCache.TryGetJsonTokenParser(token, requestedType, out parser);
+                _tokenParserCache.TryGetTokenParser(token, requestedType, out parser);
             }
             
             if(parser == null)
