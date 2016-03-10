@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Light.Serialization.Json;
 using Light.Serialization.Json.Caching;
+using Light.Serialization.Json.TokenParsers;
 using Xunit;
 
 namespace Light.Serialization.Tests
@@ -112,5 +113,42 @@ namespace Light.Serialization.Tests
             result.ShouldBeEquivalentTo(false);
         }
 
+        [Fact(DisplayName = "Validate that non-blacklisted JsonToken and Type can be added to cache.")]
+        public void NonBlacklistedJsonTokenAndTypeCanAddedToCache()
+        {
+            //arrange
+            var jsonTokenForBlacklist = new JsonToken(new char[1], 0, 0, JsonTokenType.BeginOfArray);
+            var typeInt = typeof(int);
+            var jsonTokenTypeCombinationForBlacklist = new JsonTokenTypeCombination(jsonTokenForBlacklist, typeInt);
+
+            var typeChar = typeof(char);
+            var jsonTokenToCompare = new JsonToken(new char[2], 1, 1, JsonTokenType.BeginOfObject);
+            var jsonTokenTypeCombinationForCache = new JsonTokenTypeCombination(jsonTokenToCompare, typeChar);
+
+            var cache = new JsonTokenParserCache(new List<JsonTokenTypeCombination> { jsonTokenTypeCombinationForBlacklist });
+
+            //act
+            var result = cache.TryAddJsonTokenParserToCache(jsonTokenTypeCombinationForCache, new UnsignedIntegerParser());
+
+            //assert
+            result.ShouldBeEquivalentTo(true);
+        }
+
+        [Fact(DisplayName = "Validate that blacklisted JsonToken and Type cannot be added to cache.")]
+        public void ValidateBlacklistedJsonTokenAndTypeCannotAddedToCache()
+        {
+            //arrange
+            var jsonTokenForBlacklist = new JsonToken(new char[1], 0, 0, JsonTokenType.BeginOfArray);
+            var typeInt = typeof(int);
+            var jsonTokenTypeCombinationForBlacklist = new JsonTokenTypeCombination(jsonTokenForBlacklist, typeInt);
+
+            var cache = new JsonTokenParserCache(new List<JsonTokenTypeCombination> { jsonTokenTypeCombinationForBlacklist });
+
+            //act
+            var result = cache.TryAddJsonTokenParserToCache(jsonTokenTypeCombinationForBlacklist, new UnsignedIntegerParser());
+
+            //assert
+            result.ShouldBeEquivalentTo(false);
+        }
     }
 }
