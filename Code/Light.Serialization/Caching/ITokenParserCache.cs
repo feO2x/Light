@@ -1,6 +1,8 @@
 ﻿using System;
+using Light.Serialization.Json;
+using Light.Serialization.Json.Caching;
 
-namespace Light.Serialization.Json.Caching
+namespace Light.Serialization.Caching
 {
     public interface ITokenParserCache
     {

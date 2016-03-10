@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Light.GuardClauses;
+using Light.Serialization.Caching;
 using Light.Serialization.Json;
 using Light.Serialization.Json.Caching;
 using Light.Serialization.Json.ComplexTypeConstruction;

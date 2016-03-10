@@ -19,7 +19,7 @@ namespace Light.Serialization.Json
         private INameToTypeMapping _nameToTypeMapping = new SimpleNameToTypeMapping();
         private IObjectFactory _objectFactory = new DefaultObjectFactory();
         private ITypeDescriptionProvider _typeDescriptionProvider;
-        private JsonTokenParserCache _jsonTokenParserCache = new JsonTokenParserCache(new List<JsonTokenTypeCombination>());
+        private IList<JsonTokenTypeCombination> _jsonTokenTypeCombinations;
 
         public JsonDeserializerBuilder()
         {
@@ -68,10 +68,10 @@ namespace Light.Serialization.Json
             return this;
         }
 
-        public JsonDeserializerBuilder WithJsonTokenParserCache(JsonTokenParserCache jsonTokenParserCache)
+        public JsonDeserializerBuilder WithJsonTokenTypeCombinationBlacklist(IList<JsonTokenTypeCombination> jsonTokenTypeCombinations)
         {
-            jsonTokenParserCache.MustNotBeNull(nameof(jsonTokenParserCache));
-            _jsonTokenParserCache = jsonTokenParserCache;
+            jsonTokenTypeCombinations.MustNotBeNull(nameof(jsonTokenTypeCombinations));
+            _jsonTokenTypeCombinations = jsonTokenTypeCombinations;
             return this;
         }
 
@@ -86,7 +86,10 @@ namespace Light.Serialization.Json
                                                                                         _typeDescriptionProvider);
             }
 
-            return new JsonDeserializer(_jsonReaderFactory, _jsonTokenParsers, _jsonTokenParserCache);
+            if (_jsonTokenTypeCombinations == null)
+                _jsonTokenTypeCombinations.AddDefaultJsonTokenAndTypeCombinationsToBlacklist();
+
+            return new JsonDeserializer(_jsonReaderFactory, _jsonTokenParsers, new JsonTokenParserCache(_jsonTokenTypeCombinations));
         }
     }
 }

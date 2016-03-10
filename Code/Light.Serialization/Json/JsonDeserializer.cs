@@ -1,7 +1,7 @@
 using Light.GuardClauses;
 using System;
 using System.Collections.Generic;
-using Light.Serialization.Json.Caching;
+using Light.Serialization.Caching;
 
 namespace Light.Serialization.Json
 {
