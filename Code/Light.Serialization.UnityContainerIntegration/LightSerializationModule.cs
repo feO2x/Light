@@ -26,7 +26,7 @@ namespace Light.Serialization.UnityContainerIntegration
             return container.RegisterType<IDeserializer, JsonDeserializer>()
                             .RegisterType<IJsonReaderFactory, SingleBufferJsonReaderFactory>(new ContainerControlledLifetimeManager())
                             .RegisterType<IReadOnlyList<IJsonTokenParser>, IJsonTokenParser[]>()
-                            .RegisterType<ITokenParserCache, JsonTokenParserCache>()
+                            .RegisterType<ITokenParserCache, JsonTokenParserCache>(new ContainerControlledLifetimeManager())
                             .RegisterType<IList<JsonTokenTypeCombination>, JsonTokenTypeCombination[]>()
                             .RegisterTypeWithTypeName<IJsonTokenParser, UnsignedIntegerParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, SignedIntegerParser>(new ContainerControlledLifetimeManager())

@@ -10,7 +10,7 @@ namespace Light.Serialization.Json.Caching
     public class JsonTokenParserCache : ITokenParserCache
     {
         private readonly IList<JsonTokenTypeCombination> _jsonTokenTypeCombinationCacheBlackList;
-        private IDictionary<JsonTokenTypeCombination, IJsonTokenParser> _jsonTokenParsers = new Dictionary<JsonTokenTypeCombination, IJsonTokenParser>(); 
+        private readonly IDictionary<JsonTokenTypeCombination, IJsonTokenParser> _jsonTokenParsers = new Dictionary<JsonTokenTypeCombination, IJsonTokenParser>(); 
 
         public JsonTokenParserCache(IList<JsonTokenTypeCombination> jsonTokenTypeCombinationCacheBlackList)
         {
