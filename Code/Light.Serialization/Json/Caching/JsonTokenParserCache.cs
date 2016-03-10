@@ -9,7 +9,8 @@ namespace Light.Serialization.Json.Caching
 {
     public class JsonTokenParserCache
     {
-        private IList<JsonTokenTypeCombination> _jsonTokenTypeCombinationCacheBlackList; 
+        private readonly IList<JsonTokenTypeCombination> _jsonTokenTypeCombinationCacheBlackList;
+        private IDictionary<JsonTokenTypeCombination, IJsonTokenParser> _jsonTokenParsers = new Dictionary<JsonTokenTypeCombination, IJsonTokenParser>(); 
 
         public JsonTokenParserCache(IList<JsonTokenTypeCombination> jsonTokenTypeCombinationCacheBlackList)
         {
@@ -32,6 +33,33 @@ namespace Light.Serialization.Json.Caching
             return _jsonTokenTypeCombinationCacheBlackList.Contains(jsonTokenTypeCombination);
         }
 
+        public bool TryGetJsonTokenParser(JsonTokenTypeCombination jsonTokenTypeCombination, out IJsonTokenParser jsonTokenParser)
+        {
+            jsonTokenTypeCombination.MustNotBeNull(nameof(jsonTokenTypeCombination));
 
+            jsonTokenParser = null;
+
+            if (CheckJsonTokenTypeCombinationForBlacklist(jsonTokenTypeCombination) || _jsonTokenParsers.ContainsKey(jsonTokenTypeCombination) == false)
+                return false;
+                
+            if(_jsonTokenParsers.TryGetValue(jsonTokenTypeCombination, out jsonTokenParser) == false)
+                throw new KeyNotFoundException($"Combination JsonToken {nameof(jsonTokenTypeCombination.JsonToken)} and Type {nameof(jsonTokenTypeCombination.Type)} not cached.");
+
+            return true;
+        }
+
+        public bool TryAddJsonTokenParserToCache(JsonTokenTypeCombination jsonTokenTypeCombination,
+            IJsonTokenParser jsonTokenParser)
+        {
+            jsonTokenTypeCombination.MustNotBeNull(nameof(jsonTokenTypeCombination));
+            jsonTokenParser.MustNotBeNull(nameof(jsonTokenParser));
+
+            if (CheckJsonTokenTypeCombinationForBlacklist(jsonTokenTypeCombination) || _jsonTokenParsers.ContainsKey(jsonTokenTypeCombination))
+                return false;
+
+            _jsonTokenParsers.Add(jsonTokenTypeCombination, jsonTokenParser);
+
+            return true;
+        }
     }
 }
