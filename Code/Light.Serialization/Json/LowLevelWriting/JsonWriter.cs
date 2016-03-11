@@ -48,7 +48,7 @@ namespace Light.Serialization.Json.LowLevelWriting
 
         public void WriteKey(string key, bool shouldNormalizeKey)
         {
-            if (shouldNormalizeKey)
+            if (_jsonKeyNormalizer.ShouldNormalizeKey)
                 key = _jsonKeyNormalizer.Normalize(key);
 
             if (key.IsSurroundedByQuotationMarks() == false)

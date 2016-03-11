@@ -9,5 +9,6 @@ namespace Light.Serialization.Json.LowLevelWriting.KeyNormalization
     public interface IJsonKeyNormalizer
     {
         string Normalize(string key);
+        bool ShouldNormalizeKey { get; }
     }
 }
