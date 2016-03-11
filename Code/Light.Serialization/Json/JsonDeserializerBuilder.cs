@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Light.GuardClauses;
 using Light.Serialization.Json.Caching;
 using Light.Serialization.Json.ComplexTypeConstruction;
 using Light.Serialization.Json.LowLevelReading;
@@ -18,8 +17,8 @@ namespace Light.Serialization.Json
         private IInjectableValueNameNormalizer _nameNormalizer = new ToLowerWithoutSpecialCharactersNormalizer();
         private INameToTypeMapping _nameToTypeMapping = new SimpleNameToTypeMapping();
         private IObjectFactory _objectFactory = new DefaultObjectFactory();
+        private Dictionary<JsonTokenTypeCombination, IJsonTokenParser> _tokenParserCache = new Dictionary<JsonTokenTypeCombination, IJsonTokenParser>();
         private ITypeDescriptionProvider _typeDescriptionProvider;
-        private IList<JsonTokenTypeCombination> _jsonTokenTypeCombinations;
 
         public JsonDeserializerBuilder()
         {
@@ -35,6 +34,12 @@ namespace Light.Serialization.Json
         public JsonDeserializerBuilder WithTokenParsers(IReadOnlyList<IJsonTokenParser> tokenParsers)
         {
             _jsonTokenParsers = tokenParsers;
+            return this;
+        }
+
+        public JsonDeserializerBuilder WithTokenParserCache(Dictionary<JsonTokenTypeCombination, IJsonTokenParser> cache)
+        {
+            _tokenParserCache = cache;
             return this;
         }
 
@@ -68,13 +73,6 @@ namespace Light.Serialization.Json
             return this;
         }
 
-        public JsonDeserializerBuilder WithJsonTokenTypeCombinationBlacklist(IList<JsonTokenTypeCombination> jsonTokenTypeCombinations)
-        {
-            jsonTokenTypeCombinations.MustNotBeNull(nameof(jsonTokenTypeCombinations));
-            _jsonTokenTypeCombinations = jsonTokenTypeCombinations;
-            return this;
-        }
-
         public JsonDeserializer Build()
         {
             if (_jsonTokenParsers == null)
@@ -86,10 +84,7 @@ namespace Light.Serialization.Json
                                                                                         _typeDescriptionProvider);
             }
 
-            if (_jsonTokenTypeCombinations == null)
-                _jsonTokenTypeCombinations = new List<JsonTokenTypeCombination>().AddDefaultJsonTokenAndTypeCombinationsToBlacklist();
-
-            return new JsonDeserializer(_jsonReaderFactory, _jsonTokenParsers, new JsonTokenParserCache(_jsonTokenTypeCombinations));
+            return new JsonDeserializer(_jsonReaderFactory, _jsonTokenParsers, _tokenParserCache);
         }
     }
 }

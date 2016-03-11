@@ -9,6 +9,8 @@ namespace Light.Serialization.Json.TokenParsers
     {
         private Dictionary<Type, UnsignedIntegerTypeInfo> _unsignedIntegerTypes = UnsignedIntegerTypeInfo.CreateDefaultUnsignedIntegerTypes();
 
+        public bool CanBeCached => true;
+
         public Dictionary<Type, UnsignedIntegerTypeInfo> UnsignedIntegerTypes
         {
             get { return _unsignedIntegerTypes; }

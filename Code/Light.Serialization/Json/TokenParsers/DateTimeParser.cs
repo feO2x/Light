@@ -8,6 +8,8 @@ namespace Light.Serialization.Json.TokenParsers
 
         public DateTimeKind DefaultDateTimeKind = DateTimeKind.Utc;
 
+        public bool CanBeCached => true;
+
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
             return token.JsonType == JsonTokenType.String && requestedType == _dateTimeType;

@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Light.GuardClauses;
+using Light.GuardClauses.FrameworkExtensions;
 
 namespace Light.Serialization.Json.Caching
 {
-    public struct JsonTokenTypeCombination
+    public struct JsonTokenTypeCombination : IEquatable<JsonTokenTypeCombination>
     {
+        private readonly int _hashCode;
+        public readonly JsonTokenType JsonTokenType;
+        public readonly Type Type;
+
         public JsonTokenTypeCombination(JsonTokenType jsonTokenType, Type type)
         {
             jsonTokenType.MustNotBeNull(nameof(jsonTokenType));
@@ -16,9 +17,31 @@ namespace Light.Serialization.Json.Caching
 
             JsonTokenType = jsonTokenType;
             Type = type;
+
+            _hashCode = EqualityHelper.CreateHashCode(jsonTokenType, type);
         }
 
-        public JsonTokenType JsonTokenType { get; }
-        public Type Type { get; }
+        public bool Equals(JsonTokenTypeCombination other)
+        {
+            return JsonTokenType == other.JsonTokenType &&
+                   Type == other.Type;
+        }
+
+        public override bool Equals(object obj)
+        {
+            try
+            {
+                return base.Equals((JsonTokenTypeCombination) obj);
+            }
+            catch (InvalidCastException)
+            {
+                return false;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return _hashCode;
+        }
     }
 }

@@ -1,26 +1,29 @@
-using Light.GuardClauses;
 using System;
 using System.Collections.Generic;
+using Light.GuardClauses;
 using Light.Serialization.Caching;
+using Light.Serialization.Json.Caching;
 
 namespace Light.Serialization.Json
 {
     public sealed class JsonDeserializer : IDeserializer
     {
         private readonly IJsonReaderFactory _jsonReaderFactory;
+        private readonly Dictionary<JsonTokenTypeCombination, IJsonTokenParser> _cache;
         private readonly IReadOnlyList<IJsonTokenParser> _tokenParsers;
-        private readonly ITokenParserCache _tokenParserCache;
         private IJsonReader _jsonReader;
 
-        public JsonDeserializer(IJsonReaderFactory jsonReaderFactory, IReadOnlyList<IJsonTokenParser> tokenParsers, ITokenParserCache tokenParserCache)
+        public JsonDeserializer(IJsonReaderFactory jsonReaderFactory,
+                                IReadOnlyList<IJsonTokenParser> tokenParsers,
+                                Dictionary<JsonTokenTypeCombination, IJsonTokenParser> cache)
         {
             jsonReaderFactory.MustNotBeNull(nameof(jsonReaderFactory));
             tokenParsers.MustNotBeNull(nameof(tokenParsers));
-            tokenParserCache.MustNotBeNull(nameof(tokenParserCache));
+            cache.MustNotBeNull(nameof(cache));
 
             _jsonReaderFactory = jsonReaderFactory;
             _tokenParsers = tokenParsers;
-            _tokenParserCache = tokenParserCache;
+            _cache = cache;
         }
 
 
@@ -46,27 +49,26 @@ namespace Light.Serialization.Json
 
         private object DeserializeJsonToken(JsonToken token, Type requestedType)
         {
-            IJsonTokenParser parser = null;
+            IJsonTokenParser parser;
 
-            _tokenParserCache.TryGetTokenParser(token, requestedType, out parser);
-            
-            if(parser == null)
-            { 
-                for(int i = 0; i < _tokenParsers.Count; i++)
+            var tokenTypeCombination = new JsonTokenTypeCombination(token.JsonType, requestedType);
+            if (_cache.TryGetValue(tokenTypeCombination, out parser) == false)
+            {
+                foreach (var tokenParser in _tokenParsers)
                 {
-                    var tokenParser = _tokenParsers[i];
-                    if (tokenParser.IsSuitableFor(token, requestedType))
-                    { 
-                        parser = tokenParser;
-                        i = _tokenParsers.Count;
-                    }
+                    if (tokenParser.IsSuitableFor(token, requestedType) == false)
+                        continue;
+
+                    parser = tokenParser;
+                    break;
                 }
+
+                if (parser == null)
+                    throw new DeserializationException($"Cannot deserialize value {token} with requested type {requestedType.FullName} because there is no parser that is suitable for this context.");
+
+                if (parser.CanBeCached)
+                    _cache.Add(tokenTypeCombination, parser);
             }
-
-            if(parser == null)
-                throw new DeserializationException($"Cannot deserialize value {token} with requested type {requestedType.FullName} because there is no parser that is suitable for this context.");
-
-            _tokenParserCache.TryAddTokenParserToCache(token, requestedType, parser); //todo: if wrong parser choosen from _tokenParsers, wrong one will be added to cache
 
             return parser.ParseValue(new JsonDeserializationContext(token, requestedType, _jsonReader, DeserializeJsonToken));
         }

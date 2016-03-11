@@ -5,6 +5,8 @@ namespace Light.Serialization.Json.TokenParsers
 {
     public sealed class NullParser : IJsonTokenParser
     {
+        public bool CanBeCached => true;
+
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
             var typeInfo = requestedType.GetTypeInfo();

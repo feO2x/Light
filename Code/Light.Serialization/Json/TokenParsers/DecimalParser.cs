@@ -11,6 +11,8 @@ namespace Light.Serialization.Json.TokenParsers
     {
         private readonly Type _decimalType = typeof(decimal);
 
+        public bool CanBeCached => true;
+
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
             return (token.JsonType == JsonTokenType.FloatingPointNumber || token.JsonType == JsonTokenType.IntegerNumber) && requestedType == _decimalType;
