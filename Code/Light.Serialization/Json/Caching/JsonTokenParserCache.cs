@@ -21,7 +21,7 @@ namespace Light.Serialization.Json.Caching
         {
             jsonToken.MustNotBeNull(nameof(jsonToken));
             type.MustNotBeNull(nameof(type));
-            return CheckTokenTypeCombinationForBlacklist(new JsonTokenTypeCombination(jsonToken, type));
+            return CheckTokenTypeCombinationForBlacklist(new JsonTokenTypeCombination(jsonToken.JsonType, type));
         }
 
         public bool CheckTokenTypeCombinationForBlacklist(JsonTokenTypeCombination jsonTokenTypeCombination)
@@ -36,7 +36,7 @@ namespace Light.Serialization.Json.Caching
             jsonToken.MustNotBeNull(nameof(jsonToken));
             type.MustNotBeNull(nameof(type));
 
-            var jsonTokenTypeCombination = new JsonTokenTypeCombination(jsonToken, type);
+            var jsonTokenTypeCombination = new JsonTokenTypeCombination(jsonToken.JsonType, type);
 
             return TryGetTokenParser(jsonTokenTypeCombination, out jsonTokenParser);
         }
@@ -51,9 +51,21 @@ namespace Light.Serialization.Json.Caching
                 return false;
                 
             if(_jsonTokenParsers.TryGetValue(jsonTokenTypeCombination, out jsonTokenParser) == false)
-                throw new KeyNotFoundException($"Combination JsonToken {nameof(jsonTokenTypeCombination.JsonToken)} and Type {nameof(jsonTokenTypeCombination.Type)} not cached.");
+                throw new KeyNotFoundException($"Combination JsonToken {nameof(jsonTokenTypeCombination.JsonTokenType)} and Type {nameof(jsonTokenTypeCombination.Type)} not cached.");
 
             return true;
+        }
+
+        public bool TryAddTokenParserToCache(JsonToken jsonToken, Type type,
+            IJsonTokenParser jsonTokenParser)
+        {
+            jsonToken.MustNotBeNull(nameof(jsonToken));
+            type.MustNotBeNull(nameof(type));
+            jsonTokenParser.MustNotBeNull(nameof(jsonTokenParser));
+
+            var jsonTokenTypeCombination = new JsonTokenTypeCombination(jsonToken.JsonType, type);
+
+            return TryAddTokenParserToCache(jsonTokenTypeCombination, jsonTokenParser);
         }
 
         public bool TryAddTokenParserToCache(JsonTokenTypeCombination jsonTokenTypeCombination,

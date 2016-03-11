@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Light.GuardClauses;
+using Light.Serialization.Json.TokenParsers;
 
 namespace Light.Serialization.Json.Caching
 {
@@ -15,7 +16,8 @@ namespace Light.Serialization.Json.Caching
         {
             blackList.MustNotBeNull(nameof(blackList));
 
-            //blackList.Add(new JsonTokenTypeCombination(new JsonToken().JsonType., ));
+            blackList.Add(new JsonTokenTypeCombination(JsonTokenType.String, typeof(object)));
+            blackList.Add(new JsonTokenTypeCombination(JsonTokenType.String, typeof(JsonStringParserOrchestrator)));
 
             return blackList;
         }

@@ -9,16 +9,16 @@ namespace Light.Serialization.Json.Caching
 {
     public struct JsonTokenTypeCombination
     {
-        public JsonTokenTypeCombination(JsonToken jsonToken, Type type)
+        public JsonTokenTypeCombination(JsonTokenType jsonTokenType, Type type)
         {
-            jsonToken.MustNotBeNull(nameof(jsonToken));
+            jsonTokenType.MustNotBeNull(nameof(jsonTokenType));
             type.MustNotBeNull(nameof(type));
 
-            JsonToken = jsonToken;
+            JsonTokenType = jsonTokenType;
             Type = type;
         }
 
-        public JsonToken JsonToken { get; }
+        public JsonTokenType JsonTokenType { get; }
         public Type Type { get; }
     }
 }

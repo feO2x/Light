@@ -69,6 +69,8 @@ namespace Light.Serialization.Json
             if(parser == null)
                 throw new DeserializationException($"Cannot deserialize value {token} with requested type {requestedType.FullName} because there is no parser that is suitable for this context.");
 
+            _tokenParserCache.TryAddTokenParserToCache(token, requestedType, parser); //todo: if wrong parser choosen from _tokenParsers, wrong one will be added to cache
+
             return parser.ParseValue(new JsonDeserializationContext(token, requestedType, _jsonReader, DeserializeJsonToken));
         }
     }
