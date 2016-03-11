@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Light.GuardClauses;
+using Light.Serialization.Json.LowLevelWriting.KeyNormalization;
 
 namespace Light.Serialization.Json.LowLevelWriting
 {
@@ -27,7 +28,8 @@ namespace Light.Serialization.Json.LowLevelWriting
         {
             _stringBuilder = new StringBuilder();
             _stringWriter = new StringWriter(_stringBuilder);
-            IJsonWriter returnValue = new JsonWriter(_stringWriter, _jsonFormatter);
+            var jsonKeyNormalizer = new JsonKeyNormalizer();
+            IJsonWriter returnValue = new JsonWriter(_stringWriter, _jsonFormatter, jsonKeyNormalizer);
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var decorateFunction in _decorateFunctions)
             {

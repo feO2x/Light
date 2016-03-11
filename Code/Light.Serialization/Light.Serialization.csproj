@@ -47,6 +47,8 @@
     <Compile Include="Json\ComplexTypeConstruction\DefaultObjectFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\InjectableValueKind.cs" />
     <Compile Include="Json\IntegerMetadata\DecimalPartInfo.cs" />
+    <Compile Include="Json\LowLevelWriting\KeyNormalization\IJsonKeyNormalizer.cs" />
+    <Compile Include="Json\LowLevelWriting\KeyNormalization\JsonKeyNormalizer.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\DateTimeOffsetFormatter.cs" />
     <Compile Include="Json\TokenParsers\SignedIntegerParser.cs" />
     <Compile Include="Json\IntegerMetadata\SignedIntegerTypes.cs" />
