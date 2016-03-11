@@ -10,19 +10,6 @@ namespace Light.Serialization.Tests
 {
     public sealed class TokenParserCacheTests
     {
-        [Fact(DisplayName = "Validate that blacklisted JsonToken and Type combinations are found in the blacklist.")]
-        public void ValidateBlacklistedCombinations()
-        {
-            var jsonToken = new JsonToken(new char[1], 0, 0, JsonTokenType.BeginOfArray);
-            var type = typeof (int);
-            var jsonTokenTypeCombination = new JsonTokenTypeCombination(jsonToken.JsonType, type);
-            var cache = new JsonTokenParserCache(new List<JsonTokenTypeCombination> {jsonTokenTypeCombination });
-
-            var result = cache.CheckTokenTypeCombinationForBlacklist(jsonTokenTypeCombination);
-
-            result.ShouldBeEquivalentTo(true);
-        }
-
         [Fact(DisplayName = "Validate that blacklisted JsonToken and Type are found in the blacklist.")]
         public void ValidateBlacklistedJsonTokenAndType()
         {
@@ -72,27 +59,6 @@ namespace Light.Serialization.Tests
             result.ShouldBeEquivalentTo(false);
         }
 
-        [Fact(DisplayName = "Validate that non-blacklisted JsonToken and Type combinations are not found in the blacklist.")]
-        public void ValidateNonBlacklistedCombinations()
-        {
-            //arrange
-            var jsonTokenForBlacklist = new JsonToken(new char[1], 0, 0, JsonTokenType.BeginOfArray);
-            var typeInt = typeof(int);
-            var jsonTokenTypeCombinationForBlacklist = new JsonTokenTypeCombination(jsonTokenForBlacklist.JsonType, typeInt);
-
-            var typeChar = typeof(char);
-            var jsonTokenToCompare = new JsonToken(new char[2], 1, 1, JsonTokenType.BeginOfObject);
-            var jsonTokenTypeCombinationToCompare = new JsonTokenTypeCombination(jsonTokenToCompare.JsonType, typeChar);
-
-            var cache = new JsonTokenParserCache(new List<JsonTokenTypeCombination> { jsonTokenTypeCombinationForBlacklist });
-
-            //act
-            var result = cache.CheckTokenTypeCombinationForBlacklist(jsonTokenTypeCombinationToCompare);
-
-            //assert
-            result.ShouldBeEquivalentTo(false);
-        }
-
         [Fact(DisplayName = "Validate that non-blacklisted JsonToken and Type are not found in the blacklist.")]
         public void ValidateNonBlacklistedJsonTokenAndType()
         {
@@ -123,12 +89,11 @@ namespace Light.Serialization.Tests
 
             var typeChar = typeof(char);
             var jsonTokenToCompare = new JsonToken(new char[2], 1, 1, JsonTokenType.BeginOfObject);
-            var jsonTokenTypeCombinationForCache = new JsonTokenTypeCombination(jsonTokenToCompare.JsonType, typeChar);
 
             var cache = new JsonTokenParserCache(new List<JsonTokenTypeCombination> { jsonTokenTypeCombinationForBlacklist });
 
             //act
-            var result = cache.TryAddTokenParserToCache(jsonTokenTypeCombinationForCache, new UnsignedIntegerParser());
+            var result = cache.TryAddTokenParserToCache(jsonTokenToCompare, typeChar, new UnsignedIntegerParser());
 
             //assert
             result.ShouldBeEquivalentTo(true);
@@ -145,7 +110,7 @@ namespace Light.Serialization.Tests
             var cache = new JsonTokenParserCache(new List<JsonTokenTypeCombination> { jsonTokenTypeCombinationForBlacklist });
 
             //act
-            var result = cache.TryAddTokenParserToCache(jsonTokenTypeCombinationForBlacklist, new UnsignedIntegerParser());
+            var result = cache.TryAddTokenParserToCache(jsonTokenForBlacklist, typeInt, new UnsignedIntegerParser());
 
             //assert
             result.ShouldBeEquivalentTo(false);
@@ -161,7 +126,6 @@ namespace Light.Serialization.Tests
 
             var typeChar = typeof(char);
             var jsonTokenToCompare = new JsonToken(new char[2], 1, 1, JsonTokenType.BeginOfObject);
-            var jsonTokenTypeCombinationForCache = new JsonTokenTypeCombination(jsonTokenToCompare.JsonType, typeChar);
 
             var jsonTokenParser = new SignedIntegerParser();
             IJsonTokenParser jsonTokenParserFromCache;
@@ -169,8 +133,8 @@ namespace Light.Serialization.Tests
             var cache = new JsonTokenParserCache(new List<JsonTokenTypeCombination> { jsonTokenTypeCombinationForBlacklist });
 
             //act
-            cache.TryAddTokenParserToCache(jsonTokenTypeCombinationForCache, jsonTokenParser);
-            cache.TryGetTokenParser(jsonTokenTypeCombinationForCache, out jsonTokenParserFromCache);
+            cache.TryAddTokenParserToCache(jsonTokenToCompare, typeChar, jsonTokenParser);
+            cache.TryGetTokenParser(jsonTokenToCompare, typeChar, out jsonTokenParserFromCache);
             
             //assert
             jsonTokenParser.ShouldBeEquivalentTo(jsonTokenParser);
@@ -186,15 +150,14 @@ namespace Light.Serialization.Tests
 
             var typeChar = typeof(char);
             var jsonTokenToCompare = new JsonToken(new char[2], 1, 1, JsonTokenType.BeginOfObject);
-            var jsonTokenTypeCombinationForCache = new JsonTokenTypeCombination(jsonTokenToCompare.JsonType, typeChar);
 
             var jsonTokenParser = new SignedIntegerParser();
 
             var cache = new JsonTokenParserCache(new List<JsonTokenTypeCombination> { jsonTokenTypeCombinationForBlacklist });
 
             //act
-            cache.TryAddTokenParserToCache(jsonTokenTypeCombinationForCache, jsonTokenParser);
-            var result = cache.TryAddTokenParserToCache(jsonTokenTypeCombinationForCache, jsonTokenParser);
+            cache.TryAddTokenParserToCache(jsonTokenToCompare, typeChar, jsonTokenParser);
+            var result = cache.TryAddTokenParserToCache(jsonTokenToCompare, typeChar, jsonTokenParser);
 
             //assert
             result.ShouldBeEquivalentTo(false);

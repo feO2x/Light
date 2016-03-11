@@ -48,10 +48,7 @@ namespace Light.Serialization.Json
         {
             IJsonTokenParser parser = null;
 
-            if (_tokenParserCache.CheckTokenTypeForBlacklist(token, requestedType) == false)
-            {
-                _tokenParserCache.TryGetTokenParser(token, requestedType, out parser);
-            }
+            _tokenParserCache.TryGetTokenParser(token, requestedType, out parser);
             
             if(parser == null)
             { 

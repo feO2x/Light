@@ -21,14 +21,8 @@ namespace Light.Serialization.Json.Caching
         {
             jsonToken.MustNotBeNull(nameof(jsonToken));
             type.MustNotBeNull(nameof(type));
-            return CheckTokenTypeCombinationForBlacklist(new JsonTokenTypeCombination(jsonToken.JsonType, type));
-        }
 
-        public bool CheckTokenTypeCombinationForBlacklist(JsonTokenTypeCombination jsonTokenTypeCombination)
-        {
-            jsonTokenTypeCombination.MustNotBeNull(nameof(jsonTokenTypeCombination));
-
-            return _jsonTokenTypeCombinationCacheBlackList.Contains(jsonTokenTypeCombination);
+            return _jsonTokenTypeCombinationCacheBlackList.Contains(new JsonTokenTypeCombination(jsonToken.JsonType, type));
         }
 
         public bool TryGetTokenParser(JsonToken jsonToken, Type type, out IJsonTokenParser jsonTokenParser)
@@ -36,18 +30,10 @@ namespace Light.Serialization.Json.Caching
             jsonToken.MustNotBeNull(nameof(jsonToken));
             type.MustNotBeNull(nameof(type));
 
+            jsonTokenParser = null;
             var jsonTokenTypeCombination = new JsonTokenTypeCombination(jsonToken.JsonType, type);
 
-            return TryGetTokenParser(jsonTokenTypeCombination, out jsonTokenParser);
-        }
-
-        public bool TryGetTokenParser(JsonTokenTypeCombination jsonTokenTypeCombination, out IJsonTokenParser jsonTokenParser)
-        {
-            jsonTokenTypeCombination.MustNotBeNull(nameof(jsonTokenTypeCombination));
-
-            jsonTokenParser = null;
-
-            if (CheckTokenTypeCombinationForBlacklist(jsonTokenTypeCombination) || _jsonTokenParsers.ContainsKey(jsonTokenTypeCombination) == false)
+            if (CheckTokenTypeForBlacklist(jsonToken, type) || _jsonTokenParsers.ContainsKey(jsonTokenTypeCombination) == false)
                 return false;
                 
             if(_jsonTokenParsers.TryGetValue(jsonTokenTypeCombination, out jsonTokenParser) == false)
@@ -65,16 +51,7 @@ namespace Light.Serialization.Json.Caching
 
             var jsonTokenTypeCombination = new JsonTokenTypeCombination(jsonToken.JsonType, type);
 
-            return TryAddTokenParserToCache(jsonTokenTypeCombination, jsonTokenParser);
-        }
-
-        public bool TryAddTokenParserToCache(JsonTokenTypeCombination jsonTokenTypeCombination,
-            IJsonTokenParser jsonTokenParser)
-        {
-            jsonTokenTypeCombination.MustNotBeNull(nameof(jsonTokenTypeCombination));
-            jsonTokenParser.MustNotBeNull(nameof(jsonTokenParser));
-
-            if (CheckTokenTypeCombinationForBlacklist(jsonTokenTypeCombination) || _jsonTokenParsers.ContainsKey(jsonTokenTypeCombination))
+            if (CheckTokenTypeForBlacklist(jsonToken, type) || _jsonTokenParsers.ContainsKey(jsonTokenTypeCombination))
                 return false;
 
             _jsonTokenParsers.Add(jsonTokenTypeCombination, jsonTokenParser);
