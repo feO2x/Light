@@ -26,7 +26,7 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterType<IJsonReaderFactory, SingleBufferJsonReaderFactory>(new ContainerControlledLifetimeManager())
                             .RegisterType<IReadOnlyList<IJsonTokenParser>, IJsonTokenParser[]>()
                             .RegisterType<Dictionary<JsonTokenTypeCombination, IJsonTokenParser>>(new ContainerControlledLifetimeManager(),
-                                                                                                  new InjectionFactory(c => new Dictionary<JsonTokenTypeCombination, IJsonTokenParser>().AddDefaultTokenParsersToCache()))
+                                                                                                  new InjectionFactory(c => new Dictionary<JsonTokenTypeCombination, IJsonTokenParser>()))
                             .RegisterTypeWithTypeName<IJsonTokenParser, UnsignedIntegerParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, SignedIntegerParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, DateTimeParser>(new ContainerControlledLifetimeManager())
@@ -42,10 +42,8 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterTypeWithTypeName<IJsonTokenParser, EnumerationValueParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, StringParser>(new ContainerControlledLifetimeManager())
                             .RegisterType<IJsonTokenParser>(KnownNames.JsonStringParserOrchestrator,
-                                                            new InjectionFactory(
-                                                                c =>
-                                                                new JsonStringParserOrchestrator(c.Resolve<IJsonStringToPrimitiveParser[]>(),
-                                                                                                 c.Resolve<StringParser>())))
+                                                            new InjectionFactory(c => new JsonStringParserOrchestrator(c.Resolve<IJsonStringToPrimitiveParser[]>(),
+                                                                                                                       c.Resolve<StringParser>())))
                             .RegisterTypeWithTypeName<IJsonTokenParser, ArrayToGenericCollectionParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, ComplexTypeParser>(new ContainerControlledLifetimeManager())
                             .RegisterType<ICollectionFactory, DefaultGenericCollectionFactory>(new ContainerControlledLifetimeManager())
@@ -64,44 +62,30 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterType<IDictionary<Type, IJsonWriterInstructor>>(new ContainerControlledLifetimeManager(),
                                                                                     new InjectionFactory(c => new Dictionary<Type, IJsonWriterInstructor>()))
                             .RegisterType<IReadOnlyList<IJsonWriterInstructor>, IJsonWriterInstructor[]>()
-                            .RegisterTypeWithTypeName<IJsonWriterInstructor, PrimitiveWriterInstructor>(
-                                                                                                        new ContainerControlledLifetimeManager())
-                            .RegisterTypeWithTypeName<IJsonWriterInstructor, EnumerationToStringInstructor>(
-                                                                                                            new ContainerControlledLifetimeManager())
-                            .RegisterTypeWithTypeName<IJsonWriterInstructor, DictionaryInstructor>(
-                                                                                                   new ContainerControlledLifetimeManager())
-                            .RegisterTypeWithTypeName<IJsonWriterInstructor, CollectionInstructor>(
-                                                                                                   new ContainerControlledLifetimeManager())
-                            .RegisterTypeWithTypeName<IJsonWriterInstructor, ComplexObjectInstructor>(
-                                                                                                      new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IJsonWriterInstructor, PrimitiveWriterInstructor>(new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IJsonWriterInstructor, EnumerationToStringInstructor>(new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IJsonWriterInstructor, DictionaryInstructor>(new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IJsonWriterInstructor, CollectionInstructor>(new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IJsonWriterInstructor, ComplexObjectInstructor>(new ContainerControlledLifetimeManager())
                             .RegisterType<IDictionary<Type, IPrimitiveTypeFormatter>>(new ContainerControlledLifetimeManager(),
                                                                                       new InjectionFactory(c => c.ResolveAll<IPrimitiveTypeFormatter>().ToDictionary(f => f.TargetType)))
                             .RegisterType<IPrimitiveTypeFormatter>(KnownNames.IntFormatter, new ContainerControlledLifetimeManager(),
                                                                    new InjectionFactory(c => new ToStringPrimitiveTypeFormatter<int>(false)))
-                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, StringFormatter>(
-                                                                                                new ContainerControlledLifetimeManager())
-                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, DoubleFormatter>(
-                                                                                                new ContainerControlledLifetimeManager())
-                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, DateTimeFormatter>(
-                                                                                                  new ContainerControlledLifetimeManager())
-                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, DateTimeOffsetFormatter>(
-                                                                                                        new ContainerControlledLifetimeManager())
-                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, TimeSpanFormatter>(
-                                                                                                  new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, StringFormatter>(new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, DoubleFormatter>(new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, DateTimeFormatter>(new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, DateTimeOffsetFormatter>(new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, TimeSpanFormatter>(new ContainerControlledLifetimeManager())
                             .RegisterType<IPrimitiveTypeFormatter>(KnownNames.GuidFormatter,
                                                                    new ContainerControlledLifetimeManager(),
                                                                    new InjectionFactory(c => new ToStringWithQuotationMarksFormatter<Guid>(false)))
-                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, BooleanFormatter>(
-                                                                                                 new ContainerControlledLifetimeManager())
-                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, DecimalFormatter>(
-                                                                                                 new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, BooleanFormatter>(new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, DecimalFormatter>(new ContainerControlledLifetimeManager())
                             .RegisterType<IPrimitiveTypeFormatter>(KnownNames.LongFormatter,
                                                                    new ContainerControlledLifetimeManager(),
                                                                    new InjectionFactory(c => new ToStringPrimitiveTypeFormatter<long>(false)))
-                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, FloatFormatter>(
-                                                                                               new ContainerControlledLifetimeManager())
-                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, CharFormatter>(
-                                                                                              new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, FloatFormatter>(new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IPrimitiveTypeFormatter, CharFormatter>(new ContainerControlledLifetimeManager())
                             .RegisterType<IPrimitiveTypeFormatter>(KnownNames.ShortFormatter,
                                                                    new ContainerControlledLifetimeManager(),
                                                                    new InjectionFactory(c => new ToStringPrimitiveTypeFormatter<short>(false)))
@@ -123,10 +107,8 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterType<ICharacterEscaper>(new ContainerControlledLifetimeManager(),
                                                              new InjectionFactory(c => new DefaultCharacterEscaper()))
                             .RegisterType<IReadableValuesTypeAnalyzer>(new ContainerControlledLifetimeManager(),
-                                                                       new InjectionFactory(
-                                                                           c =>
-                                                                           new ValueProvidersCacheDecorator(new PublicPropertiesAndFieldsAnalyzer(),
-                                                                                                            new Dictionary<Type, IList<IValueProvider>>())));
+                                                                       new InjectionFactory(c => new ValueProvidersCacheDecorator(new PublicPropertiesAndFieldsAnalyzer(),
+                                                                                                                                  new Dictionary<Type, IList<IValueProvider>>())));
         }
 
         public static IUnityContainer RegisterTypeWithTypeName<TFrom, TTo>(this IUnityContainer container,
