@@ -6,6 +6,8 @@ namespace Light.Serialization.Json.TokenParsers
     {
         private readonly Type _timeSpanType = typeof (TimeSpan);
 
+        public bool CanBeCached => true;
+
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
             return token.JsonType == JsonTokenType.String && requestedType == _timeSpanType;

@@ -7,6 +7,8 @@ namespace Light.Serialization.Json.TokenParsers
     {
         private readonly Type _stringType = typeof (string);
 
+        public bool CanBeCached => true;
+
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
             return token.JsonType == JsonTokenType.String && requestedType == _stringType;

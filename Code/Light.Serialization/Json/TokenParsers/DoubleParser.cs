@@ -7,6 +7,8 @@ namespace Light.Serialization.Json.TokenParsers
     {
         private readonly Type _doubleType = typeof (double);
 
+        public bool CanBeCached => true;
+
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
             return token.JsonType == JsonTokenType.FloatingPointNumber || token.JsonType == JsonTokenType.IntegerNumber && requestedType == _doubleType;

@@ -1,22 +1,28 @@
-using Light.GuardClauses;
 using System;
 using System.Collections.Generic;
+using Light.GuardClauses;
+using Light.Serialization.Json.Caching;
 
 namespace Light.Serialization.Json
 {
     public sealed class JsonDeserializer : IDeserializer
     {
+        private readonly Dictionary<JsonTokenTypeCombination, IJsonTokenParser> _cache;
         private readonly IJsonReaderFactory _jsonReaderFactory;
         private readonly IReadOnlyList<IJsonTokenParser> _tokenParsers;
         private IJsonReader _jsonReader;
 
-        public JsonDeserializer(IJsonReaderFactory jsonReaderFactory, IReadOnlyList<IJsonTokenParser> tokenParsers)
+        public JsonDeserializer(IJsonReaderFactory jsonReaderFactory,
+                                IReadOnlyList<IJsonTokenParser> tokenParsers,
+                                Dictionary<JsonTokenTypeCombination, IJsonTokenParser> cache)
         {
             jsonReaderFactory.MustNotBeNull(nameof(jsonReaderFactory));
             tokenParsers.MustNotBeNull(nameof(tokenParsers));
+            cache.MustNotBeNull(nameof(cache));
 
             _jsonReaderFactory = jsonReaderFactory;
             _tokenParsers = tokenParsers;
+            _cache = cache;
         }
 
 
@@ -42,13 +48,28 @@ namespace Light.Serialization.Json
 
         private object DeserializeJsonToken(JsonToken token, Type requestedType)
         {
-            foreach (var parser in _tokenParsers)
+            IJsonTokenParser parser;
+
+            var tokenTypeCombination = new JsonTokenTypeCombination(token.JsonType, requestedType);
+            if (_cache.TryGetValue(tokenTypeCombination, out parser) == false)
             {
-                if (parser.IsSuitableFor(token, requestedType))
-                    return parser.ParseValue(new JsonDeserializationContext(token, requestedType, _jsonReader, DeserializeJsonToken));
+                foreach (var tokenParser in _tokenParsers)
+                {
+                    if (tokenParser.IsSuitableFor(token, requestedType) == false)
+                        continue;
+
+                    parser = tokenParser;
+                    break;
+                }
+
+                if (parser == null)
+                    throw new DeserializationException($"Cannot deserialize value {token} with requested type {requestedType.FullName} because there is no parser that is suitable for this context.");
+
+                if (parser.CanBeCached)
+                    _cache.Add(tokenTypeCombination, parser);
             }
 
-            throw new DeserializationException($"Cannot deserialize value {token} with requested type {requestedType.FullName} because there is no parser that is suitable for this context.");
+            return parser.ParseValue(new JsonDeserializationContext(token, requestedType, _jsonReader, DeserializeJsonToken));
         }
     }
 }

@@ -17,6 +17,7 @@ namespace Light.Serialization.Json
         private IInjectableValueNameNormalizer _nameNormalizer = new ToLowerWithoutSpecialCharactersNormalizer();
         private INameToTypeMapping _nameToTypeMapping = new SimpleNameToTypeMapping();
         private IObjectFactory _objectFactory = new DefaultObjectFactory();
+        private Dictionary<JsonTokenTypeCombination, IJsonTokenParser> _tokenParserCache = new Dictionary<JsonTokenTypeCombination, IJsonTokenParser>();
         private ITypeDescriptionProvider _typeDescriptionProvider;
 
         public JsonDeserializerBuilder()
@@ -33,6 +34,12 @@ namespace Light.Serialization.Json
         public JsonDeserializerBuilder WithTokenParsers(IReadOnlyList<IJsonTokenParser> tokenParsers)
         {
             _jsonTokenParsers = tokenParsers;
+            return this;
+        }
+
+        public JsonDeserializerBuilder WithTokenParserCache(Dictionary<JsonTokenTypeCombination, IJsonTokenParser> cache)
+        {
+            _tokenParserCache = cache;
             return this;
         }
 
@@ -77,7 +84,7 @@ namespace Light.Serialization.Json
                                                                                         _typeDescriptionProvider);
             }
 
-            return new JsonDeserializer(_jsonReaderFactory, _jsonTokenParsers);
+            return new JsonDeserializer(_jsonReaderFactory, _jsonTokenParsers, _tokenParserCache);
         }
     }
 }

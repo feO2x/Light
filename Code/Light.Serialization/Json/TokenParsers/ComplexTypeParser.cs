@@ -42,6 +42,8 @@ namespace Light.Serialization.Json.TokenParsers
             }
         }
 
+        public bool CanBeCached => false;
+
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
             return token.JsonType == JsonTokenType.BeginOfObject;

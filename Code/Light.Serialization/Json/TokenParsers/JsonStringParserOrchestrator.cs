@@ -7,6 +7,8 @@ namespace Light.Serialization.Json.TokenParsers
 {
     public sealed class JsonStringParserOrchestrator : IJsonTokenParser
     {
+        public bool CanBeCached => false;
+
         private readonly StringParser _stringParser;
         private readonly IReadOnlyList<IJsonStringToPrimitiveParser> _stringToPrimitiveParsers;
         private object _lastParsedValue;

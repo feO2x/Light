@@ -6,6 +6,8 @@ namespace Light.Serialization.Json.TokenParsers
     {
         public DateTimeKind DefaultDateTimeKind = DateTimeKind.Utc;
 
+        public bool CanBeCached => true;
+
         public object ParseValue(JsonDeserializationContext context)
         {
             return Parse(context.Token);
@@ -100,7 +102,7 @@ namespace Light.Serialization.Json.TokenParsers
             catch (ArgumentOutOfRangeException ex)
             {
                 throw CreateException(token, ex);
-            }
+        }
         }
     }
 }
