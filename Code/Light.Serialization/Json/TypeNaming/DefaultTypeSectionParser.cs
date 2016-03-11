@@ -9,9 +9,9 @@ namespace Light.Serialization.Json.TypeNaming
     public sealed class DefaultTypeSectionParser : ITypeSectionParser
     {
         private readonly INameToTypeMapping _nameToTypeMapping;
-        private string _concreteTypeSymbol = "$type";
-        private string _typeArgumentsSymbol = "typeArguments";
-        private string _typeNameSymbol = "name";
+        private string _concreteTypeSymbol = JsonSymbols.DefaultConcreteTypeSymbol;
+        private string _typeArgumentsSymbol = JsonSymbols.DefaultTypeArgumentSymbol;
+        private string _typeNameSymbol = JsonSymbols.DefaultTypeNameSymbol;
 
         public DefaultTypeSectionParser(INameToTypeMapping nameToTypeMapping)
         {
