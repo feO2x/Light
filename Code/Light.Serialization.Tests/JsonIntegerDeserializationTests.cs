@@ -2,7 +2,7 @@
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonIntDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonIntDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory]
         [InlineData("42", 42)]
@@ -53,7 +53,7 @@ namespace Light.Serialization.Tests
         }
     }
 
-    public sealed class JsonUIntDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonUIntDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory]
         [InlineData("42", 42u)]
@@ -101,7 +101,7 @@ namespace Light.Serialization.Tests
         }
     }
 
-    public sealed class JsonShortDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonShortDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory]
         [InlineData("42", 42)]
@@ -152,7 +152,7 @@ namespace Light.Serialization.Tests
         }
     }
 
-    public sealed class JsonUShortDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonUShortDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory]
         [InlineData("42", 42)]
@@ -203,7 +203,7 @@ namespace Light.Serialization.Tests
         }
     }
 
-    public sealed class JsonByteDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonByteDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory]
         [InlineData("42", 42)]
@@ -254,7 +254,7 @@ namespace Light.Serialization.Tests
         }
     }
 
-    public sealed class JsonSByteDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonSByteDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory]
         [InlineData("42", 42)]
@@ -305,7 +305,7 @@ namespace Light.Serialization.Tests
         }
     }
 
-    public sealed class JsonLongDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonLongDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory]
         [InlineData("42", 42L)]
@@ -356,7 +356,7 @@ namespace Light.Serialization.Tests
         }
     }
 
-    public sealed class JsonULongDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonULongDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory]
         [InlineData("42", 42ul)]

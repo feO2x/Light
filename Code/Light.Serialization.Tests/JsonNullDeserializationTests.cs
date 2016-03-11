@@ -1,22 +1,21 @@
-﻿using FluentAssertions;
-using Light.Serialization.Json;
-using System;
+﻿using System;
 using System.IO;
+using FluentAssertions;
+using Light.Serialization.Json;
 using Xunit;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonNullDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonNullDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory]
-        [InlineData(typeof(object))]    // Normal class
-        [InlineData(typeof(IComparable))]   // Interface
-        [InlineData(typeof(Stream))]    // Abstract base class
+        [InlineData(typeof (object))] // Normal class
+        [InlineData(typeof (IComparable))] // Interface
+        [InlineData(typeof (Stream))] // Abstract base class
         public void NullValuesAreParsedCorrectly(Type requestedType)
         {
             const string json = "null";
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var result = testTarget.Deserialize(json, requestedType);
+            var result = GetDeserializedJson(json, requestedType);
             result.Should().BeNull();
         }
 

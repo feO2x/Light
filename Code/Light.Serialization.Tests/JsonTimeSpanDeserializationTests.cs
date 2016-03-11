@@ -5,7 +5,7 @@ using TestData = System.Collections.Generic.IEnumerable<object[]>;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonTimeSpanDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonTimeSpanDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory(DisplayName = "JSON strings that represent valid ISO 8601 durations must be deserialized to time spans.")]
         [MemberData(nameof(ValidTimeSpansData))]

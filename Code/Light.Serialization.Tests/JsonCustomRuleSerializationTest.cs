@@ -1,97 +1,74 @@
 ﻿using System;
-using FluentAssertions;
-using Light.Serialization.Json;
 using Xunit;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonCustomRuleSerializationTest
+    public sealed class JsonCustomRuleSerializationTest : BaseJsonSerializerTest
     {
         [Fact(DisplayName = "Specific properties can be added to a blacklist so that the serializer must ignore them.")]
         public void CustomObjectIngoreProperty()
         {
             var dummyObject = CreateDummyObject();
-            var serializer = new JsonSerializerBuilder().WithRuleFor<DummyClass>(r => r.IgnoreProperty(o => o.PublicProperty))
-                                                        .Build();
+            AddRule<DummyClass>(r => r.IgnoreProperty(o => o.PublicProperty));
 
-            var json = serializer.Serialize(dummyObject);
-
-            json.Should().Be("{\"publicField\":42}");
+            CompareJsonToExpected(dummyObject, "{\"publicField\":42}");
         }
 
         [Fact(DisplayName = "Specific fields can be added to a blacklist so that the serializer must ignore them.")]
         public void CustomObjectIgnoreField()
         {
             var dummyObject = CreateDummyObject();
-            var serializer = new JsonSerializerBuilder().WithRuleFor<DummyClass>(r => r.IgnoreField(o => o.PublicField))
-                                                        .Build();
+            AddRule<DummyClass>(r => r.IgnoreField(o => o.PublicField));
 
-            var json = serializer.Serialize(dummyObject);
-
-            json.Should().Be("{\"publicProperty\":\"2016-02-09\"}");
+            CompareJsonToExpected(dummyObject, "{\"publicProperty\":\"2016-02-09\"}");
         }
 
         [Fact(DisplayName = "All public properties and fields can be ignored with an empty white list.")]
         public void CustomObjectIgnoreAll()
         {
             var dummyObject = CreateDummyObject();
-            var serializer = new JsonSerializerBuilder().WithRuleFor<DummyClass>(r => r.IgnoreAll())
-                                                        .Build();
+            AddRule<DummyClass>(r => r.IgnoreAll());
 
-            var json = serializer.Serialize(dummyObject);
-
-            json.Should().Be("{}");
+            CompareJsonToExpected(dummyObject, "{}");
         }
 
         [Fact(DisplayName = "Specific properties can be added to a white list that gets serialized only.")]
         public void CustomObjectIgnoreAllButProperty()
         {
             var dummyObject = CreateDummyObject();
-            var serializer = new JsonSerializerBuilder().WithRuleFor<DummyClass>(r => r.IgnoreAll().ButProperty(o => o.PublicProperty))
-                                                        .Build();
+            AddRule<DummyClass>(r => r.IgnoreAll().ButProperty(o => o.PublicProperty));
 
-            var json = serializer.Serialize(dummyObject);
-
-            json.Should().Be("{\"publicProperty\":\"2016-02-09\"}");
+            CompareJsonToExpected(dummyObject, "{\"publicProperty\":\"2016-02-09\"}");
         }
 
         [Fact(DisplayName = "Specific fields can be added to a white list that gets serialized only.")]
         public void CustomObjectIgnoreAllButField()
         {
             var dummyObject = CreateDummyObject();
-            var serializer = new JsonSerializerBuilder().WithRuleFor<DummyClass>(r => r.IgnoreAll().ButField(o => o.PublicField))
-                                                        .Build();
+            AddRule<DummyClass>(r => r.IgnoreAll().ButField(o => o.PublicField));
 
-            var json = serializer.Serialize(dummyObject);
-
-            json.Should().Be("{\"publicField\":42}");
+            CompareJsonToExpected(dummyObject, "{\"publicField\":42}");
         }
 
         [Fact(DisplayName = "Specific properties can be added to a blacklist so that the serializer must ignore them.")]
         public void CustomObjectIngoreProperties()
         {
             var moreComplexDummyObject = MoreComplexDummyClass.CreateDefault();
-            var serializer = new JsonSerializerBuilder().WithRuleFor<MoreComplexDummyClass>(r => r.IgnoreProperty(o => o.PublicProperty)
-                                                                                                  .IgnoreProperty(o => o.PublicDoubleProperty))
-                                                        .Build();
+            AddRule<MoreComplexDummyClass>(r => r.IgnoreProperty(o => o.PublicProperty)
+                                                 .IgnoreProperty(o => o.PublicDoubleProperty));
 
-            var json = serializer.Serialize(moreComplexDummyObject);
-
-            json.Should().Be("{\"publicStringProperty\":\"works\",\"publicField\":42}");
+            CompareJsonToExpected(moreComplexDummyObject, "{\"publicStringProperty\":\"works\",\"publicField\":42}");
         }
 
         [Fact(DisplayName = "Specific properties can be added to a white so that the serializer must serialize them.")]
         public void CustomObjectIngoreAllButProperties()
         {
             var moreComplexDummyObject = MoreComplexDummyClass.CreateDefault();
-            var serializer = new JsonSerializerBuilder().WithRuleFor<MoreComplexDummyClass>(r => r.IgnoreAll()
-                                                                                                  .ButProperty(o => o.PublicStringProperty)
-                                                                                                  .AndField(o => o.PublicField))
-                                                        .Build();
+            AddRule<MoreComplexDummyClass>(r => r.IgnoreAll()
+                                                    .ButProperty(o => o.PublicStringProperty)
+                                                    .AndField(o => o.PublicField));
 
-            var json = serializer.Serialize(moreComplexDummyObject);
-
-            json.Should().Be("{\"publicStringProperty\":\"works\",\"publicField\":42}");
+            CompareJsonToExpected(moreComplexDummyObject, "{\"publicStringProperty\":\"works\",\"publicField\":42}");
         }
 
         private static DummyClass CreateDummyObject()

@@ -33,7 +33,7 @@ namespace Light.Serialization.Json
             targetList.Add(new EnumerationValueParser());
             var stringParser = new StringParser();
             targetList.Add(stringParser);
-            targetList.Add(new JsonStringParserOrchestrator(targetList.OfType<IJsonStringToPrimitiveParser>().ToList(), stringParser));
+            targetList.Add(new JsonStringInheritenceParser(targetList.OfType<IJsonStringToPrimitiveParser>().ToList(), stringParser));
             targetList.Add(new ArrayToGenericCollectionParser(collectionFactory));
             targetList.Add(new ComplexTypeParser(objectFactory, nameNormalizer, typeDescriptionProvider, typeSectionParser));
 

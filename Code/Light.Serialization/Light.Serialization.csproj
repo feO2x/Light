@@ -41,6 +41,7 @@
     <Compile Include="FrameworkExtensions\StringBuilderExtensions.cs" />
     <Compile Include="FrameworkExtensions\StringExtensions.cs" />
     <Compile Include="IDeserializer.cs" />
+    <Compile Include="Json\Caching\JsonTokenTypeCombination.cs" />
     <Compile Include="Json\ComplexTypeConstruction\ConstructorDescription.cs" />
     <Compile Include="Json\ComplexTypeConstruction\DefaultObjectFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\InjectableValueKind.cs" />
@@ -98,7 +99,7 @@
     <Compile Include="Json\ComplexTypeConstruction\ITypeDescriptionProvider.cs" />
     <Compile Include="Json\TokenParsers\IJsonStringToPrimitiveParser.cs" />
     <Compile Include="Json\TokenParsers\Iso8601DurationParser.cs" />
-    <Compile Include="Json\TokenParsers\JsonStringParserOrchestrator.cs" />
+    <Compile Include="Json\TokenParsers\JsonStringInheritenceParser.cs" />
     <Compile Include="Json\TokenParsers\NullParser.cs" />
     <Compile Include="Json\TokenParsers\ParseResult.cs" />
     <Compile Include="Json\TokenParsers\StringParser.cs" />

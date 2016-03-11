@@ -5,11 +5,11 @@ namespace Light.Serialization.Json.TokenParsers
 {
     public sealed class StringParser : IJsonTokenParser
     {
-        private readonly Type _stringType = typeof (string);
+        public bool CanBeCached => true;
 
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
-            return token.JsonType == JsonTokenType.String && requestedType == _stringType;
+            return token.JsonType == JsonTokenType.String && requestedType == typeof(string);
         }
 
         public object ParseValue(JsonDeserializationContext context)

@@ -2,7 +2,7 @@
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonStringDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonStringDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory]
         [InlineData("\"Hello\"", "Hello")]

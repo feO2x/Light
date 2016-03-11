@@ -1,19 +1,17 @@
 ﻿using FluentAssertions;
-using Light.Serialization.Json;
 using System.Collections.Generic;
 using Xunit;
 using TestData = System.Collections.Generic.IEnumerable<object[]>;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonCollectionDeserializationTests
+    public sealed class JsonCollectionDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory]
         [MemberData(nameof(IntegerCollections))]
         public void IntegerCollectionsCanBeDeserialized(string json, int[] expected)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var actual = testTarget.Deserialize<List<int>>(json);
+            var actual = GetDeserializedJson<List<int>>(json);
             actual.ShouldAllBeEquivalentTo(expected);
         }
 
@@ -30,8 +28,7 @@ namespace Light.Serialization.Tests
         [MemberData(nameof(StringCollections))]
         public void StringCollectionsCanBeDeserializedCorrectly(string json, string[] expected)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var actual = testTarget.Deserialize<List<string>>(json);
+            var actual = GetDeserializedJson<List<string>>(json);
             actual.ShouldAllBeEquivalentTo(expected);
         }
 
@@ -48,8 +45,7 @@ namespace Light.Serialization.Tests
         [MemberData(nameof(DoubleCollections))]
         public void DoubleCollectionsCanBeDeserializedCorrectly(string json, double[] expected, double tolerance)
         {
-            var testTarget = new JsonDeserializerBuilder().Build();
-            var actual = testTarget.Deserialize<List<double>>(json);
+            var actual = GetDeserializedJson<List<double>>(json);
             actual.Should().HaveCount(expected.Length);
             for (var i = 0; i < expected.Length; i++)
             {

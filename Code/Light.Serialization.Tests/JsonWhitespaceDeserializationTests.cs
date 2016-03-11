@@ -2,7 +2,7 @@
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonWhitespaceDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonWhitespaceDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory]
         [InlineData(" 42", 42)]

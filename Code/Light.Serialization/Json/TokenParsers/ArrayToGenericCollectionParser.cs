@@ -22,6 +22,8 @@ namespace Light.Serialization.Json.TokenParsers
             _populateGenericCollectionMethodInfo = GetType().GetTypeInfo().GetDeclaredMethod(nameof(PopulateGenericCollection));
         }
 
+        public bool CanBeCached => false;
+
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
             return token.JsonType == JsonTokenType.BeginOfArray &&

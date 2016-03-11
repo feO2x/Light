@@ -30,6 +30,8 @@ namespace Light.Serialization.Json.TokenParsers
             _typeDescriptionProvider = typeDescriptionProvider;
             _typeSectionParser = typeSectionParser;
         }
+        
+        public bool CanBeCached => false;
 
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {

@@ -5,14 +5,15 @@ using Light.GuardClauses;
 
 namespace Light.Serialization.Json.TokenParsers
 {
-    // TODO: We maybe should rename this class because it is only used when the requested type is a base type of the string to be deserialized
-    public sealed class JsonStringParserOrchestrator : IJsonTokenParser
+    public sealed class JsonStringInheritenceParser : IJsonTokenParser
     {
+        public bool CanBeCached => false;
+
         private readonly StringParser _stringParser;
         private readonly IReadOnlyList<IJsonStringToPrimitiveParser> _stringToPrimitiveParsers;
         private object _lastParsedValue;
 
-        public JsonStringParserOrchestrator(IReadOnlyList<IJsonStringToPrimitiveParser> stringToPrimitiveParsers, StringParser stringParser)
+        public JsonStringInheritenceParser(IReadOnlyList<IJsonStringToPrimitiveParser> stringToPrimitiveParsers, StringParser stringParser)
         {
             stringToPrimitiveParsers.MustNotBeNull(nameof(stringToPrimitiveParsers));
             stringParser.MustNotBeNull(nameof(stringParser));

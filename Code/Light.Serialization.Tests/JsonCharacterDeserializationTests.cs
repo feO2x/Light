@@ -4,7 +4,7 @@ using TestData = System.Collections.Generic.IEnumerable<object[]>;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonCharacterDeserializationTests : BaseDefaultJsonDeserializationTest
+    public sealed class JsonCharacterDeserializationTests : BaseJsonDeserializerTest
     {
         [Theory]
         [InlineData("\"c\"", 'c')]

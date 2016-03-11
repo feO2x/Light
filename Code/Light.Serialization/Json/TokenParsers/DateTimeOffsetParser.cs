@@ -6,6 +6,8 @@ namespace Light.Serialization.Json.TokenParsers
     {
         public TimeSpan DefaultOffset = TimeSpan.Zero;
 
+        public bool CanBeCached => true;
+
         public object ParseValue(JsonDeserializationContext context)
         {
             return Parse(context.Token);

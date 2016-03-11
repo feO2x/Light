@@ -6,6 +6,8 @@ namespace Light.Serialization.Json.TokenParsers
 {
     public sealed class SignedIntegerParser : IJsonTokenParser
     {
+        public bool CanBeCached => true;
+
         private SignedIntegerTypes _signedIntegerTypes = SignedIntegerTypes.CreateDefaultSignedIntegerTypes();
 
         public SignedIntegerTypes SignedIntegerTypes

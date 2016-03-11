@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Light.Serialization.Tests
 {
-    public sealed class JsonDictionarySerializationTests : BaseDefaultJsonSerializerTest
+    public sealed class JsonDictionarySerializationTests : BaseJsonSerializerTest
     {
         [Theory]
         [MemberData("DictionaryTestData")]
