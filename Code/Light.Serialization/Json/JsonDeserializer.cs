@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Light.GuardClauses;
-using Light.Serialization.Caching;
 using Light.Serialization.Json.Caching;
 
 namespace Light.Serialization.Json
 {
     public sealed class JsonDeserializer : IDeserializer
     {
-        private readonly IJsonReaderFactory _jsonReaderFactory;
         private readonly Dictionary<JsonTokenTypeCombination, IJsonTokenParser> _cache;
+        private readonly IJsonReaderFactory _jsonReaderFactory;
         private readonly IReadOnlyList<IJsonTokenParser> _tokenParsers;
         private IJsonReader _jsonReader;
 
