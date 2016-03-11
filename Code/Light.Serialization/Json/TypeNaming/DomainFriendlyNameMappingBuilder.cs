@@ -57,11 +57,15 @@ namespace Light.Serialization.Json.TypeNaming
 
         public DomainFriendlyNameMapping Build()
         {
-            var domainFriendlyNameMappings = _assemblies.SelectMany(a => a.ExportedTypes)
-                                                        .Where(t => _usedNamespaces.Contains(t.Namespace))
-                                                        .ToDictionary(t => t.Name);
+            var domainFriendlyTypes = _assemblies.SelectMany(a => a.ExportedTypes)
+                                                 .Where(t => _usedNamespaces.Contains(t.Namespace));
 
-            return new DomainFriendlyNameMapping(domainFriendlyNameMappings);
+            var domainFriendlyNameMapping = new DomainFriendlyNameMapping(new Dictionary<string, List<Type>>(), new Dictionary<Type, string>());
+            foreach (var type in domainFriendlyTypes)
+            {
+                domainFriendlyNameMapping.AddMapping(type.Name, type);
+            }
+            return domainFriendlyNameMapping;
         }
 
         public interface IInitialMappingOptions
