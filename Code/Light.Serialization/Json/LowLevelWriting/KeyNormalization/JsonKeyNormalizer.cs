@@ -4,7 +4,8 @@ namespace Light.Serialization.Json.LowLevelWriting.KeyNormalization
 {
     public class JsonKeyNormalizer : IJsonKeyNormalizer
     {
-        public bool ShouldNormalizeKey { get; } = true;
+        public bool ForceNormalizeKey { get; } = false;
+        public bool ForceNotToNormalizeKey { get; } = false;
 
         public string Normalize(string key)
         {
