@@ -21,5 +21,20 @@ namespace Light.Serialization.Json.Caching
 
             return blackList;
         }
+
+        public static TCollection AddJsonTokenAndTypeCombinationToBlacklist<TCollection>(
+            this TCollection blackList, IList<JsonTokenTypeCombination> jsonTokenTypeCombinations)
+            where TCollection : IList<JsonTokenTypeCombination>
+        {
+            blackList.MustNotBeNull(nameof(blackList));
+            jsonTokenTypeCombinations.MustNotBeNull(nameof(jsonTokenTypeCombinations));
+
+            foreach (var jsonTokenTypeCombination in jsonTokenTypeCombinations)
+            {
+                blackList.Add(jsonTokenTypeCombination);
+            }
+
+            return blackList;
+        }
     }
 }
