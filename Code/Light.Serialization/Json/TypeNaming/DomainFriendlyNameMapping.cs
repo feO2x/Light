@@ -77,6 +77,22 @@ namespace Light.Serialization.Json.TypeNaming
             return this;
         }
 
+        public DomainFriendlyNameMapping SetDefaultType(string jsonName, Type newDefaultType)
+        {
+            jsonName.MustBeKeyOf(_nameToTypeMappings, nameof(jsonName));
+
+            var types = _nameToTypeMappings[jsonName];
+            var indexOfNewDefaultType = types.IndexOf(newDefaultType);
+            if (indexOfNewDefaultType == -1)
+                _typeToNameMappings.Add(newDefaultType, jsonName);
+            else
+                types.RemoveAt(indexOfNewDefaultType);
+
+            types.Insert(0, newDefaultType);
+
+            return this;
+        }
+
         public string Map(Type type)
         {
             return _typeToNameMappings[type];
