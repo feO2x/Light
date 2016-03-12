@@ -93,6 +93,13 @@ namespace Light.Serialization.Json.TypeNaming
             return this;
         }
 
+        public DomainFriendlyNameMapping ClearAllMappings()
+        {
+            _nameToTypeMappings.Clear();
+            _typeToNameMappings.Clear();
+            return this;
+        }
+
         public string Map(Type type)
         {
             return _typeToNameMappings[type];
