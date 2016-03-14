@@ -1,21 +1,24 @@
-﻿using Light.GuardClauses;
+﻿using System.IO;
+using Light.GuardClauses;
 using Light.Serialization.FrameworkExtensions;
-using System.IO;
 
 namespace Light.Serialization.Json.LowLevelWriting
 {
     public sealed class JsonWriter : IJsonWriter
     {
         private readonly IJsonFormatter _formatter;
+        private readonly IJsonKeyNormalizer _jsonKeyNormalizer;
         private readonly TextWriter _textWriter;
 
-        public JsonWriter(TextWriter textWriter, IJsonFormatter formatter)
+        public JsonWriter(TextWriter textWriter, IJsonFormatter formatter, IJsonKeyNormalizer jsonKeyNormalizer)
         {
             textWriter.MustNotBeNull(nameof(textWriter));
             formatter.MustNotBeNull(nameof(formatter));
+            jsonKeyNormalizer.MustNotBeNull(nameof(jsonKeyNormalizer));
 
             _textWriter = textWriter;
             _formatter = formatter;
+            _jsonKeyNormalizer = jsonKeyNormalizer;
         }
 
         public void BeginArray()
@@ -45,7 +48,7 @@ namespace Light.Serialization.Json.LowLevelWriting
         public void WriteKey(string key, bool shouldNormalizeKey)
         {
             if (shouldNormalizeKey)
-                key = NormalizeJsonKey(key);
+                key = _jsonKeyNormalizer.Normalize(key);
 
             if (key.IsSurroundedByQuotationMarks() == false)
                 key = key.SurroundWithQuotationMarks();
@@ -69,11 +72,6 @@ namespace Light.Serialization.Json.LowLevelWriting
         public void WriteNull()
         {
             _textWriter.Write(JsonSymbols.Null);
-        }
-
-        private static string NormalizeJsonKey(string key)
-        {
-            return key.FirstCharacterToLowerAndRemoveAllSpecialCharacters();
         }
     }
 }
