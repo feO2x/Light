@@ -10,6 +10,7 @@ namespace Light.Serialization.Json
     public class JsonDeserializerBuilder
     {
         private ICollectionFactory _collectionFactory = new DefaultGenericCollectionFactory();
+        private readonly IDictionaryFactory _dictionaryFactory = new DefaultGenericDictionaryFactory();
         private IJsonReaderFactory _jsonReaderFactory = new SingleBufferJsonReaderFactory();
 
         private IReadOnlyList<IJsonTokenParser> _jsonTokenParsers;
@@ -77,6 +78,7 @@ namespace Light.Serialization.Json
             if (_jsonTokenParsers == null)
             {
                 _jsonTokenParsers = new List<IJsonTokenParser>().AddDefaultTokenParsers(_collectionFactory,
+                                                                                        _dictionaryFactory,
                                                                                         _objectFactory,
                                                                                         _typeSectionParser,
                                                                                         _nameNormalizer,

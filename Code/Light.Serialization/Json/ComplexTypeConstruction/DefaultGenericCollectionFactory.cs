@@ -15,8 +15,11 @@ namespace Light.Serialization.Json.ComplexTypeConstruction
             if (typeInfo.IsClass &&
                 typeInfo.IsAbstract == false)
             {
-                var defaultConstructor = typeInfo.DeclaredConstructors.First(c => c.GetParameters().Length == 0);
-                return defaultConstructor.Invoke(null); // TODO: I have to throw a proper exception here if the call to First fails
+                var defaultConstructor = typeInfo.DeclaredConstructors.FirstOrDefault(c => c.GetParameters().Length == 0);
+                if (defaultConstructor != null)
+                    return defaultConstructor.Invoke(null);
+
+                throw new ArgumentException($"Could not instantiate collection type {requestedCollectionType} because this type has no default constructor.");
             }
             throw new NotImplementedException("What happens with collection that do not have a default constructor?");
         }

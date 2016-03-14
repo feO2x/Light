@@ -11,6 +11,7 @@ namespace Light.Serialization.Json
     {
         public static TCollection AddDefaultTokenParsers<TCollection>(this TCollection targetList,
                                                                       ICollectionFactory collectionFactory,
+                                                                      IDictionaryFactory dictionaryFactory,
                                                                       IObjectFactory objectFactory,
                                                                       ITypeSectionParser typeSectionParser,
                                                                       IInjectableValueNameNormalizer nameNormalizer,
@@ -35,7 +36,8 @@ namespace Light.Serialization.Json
             targetList.Add(stringParser);
             targetList.Add(new JsonStringInheritenceParser(targetList.OfType<IJsonStringToPrimitiveParser>().ToList(), stringParser));
             targetList.Add(new ArrayToGenericCollectionParser(collectionFactory));
-            targetList.Add(new ComplexTypeParser(objectFactory, nameNormalizer, typeDescriptionProvider, typeSectionParser));
+            targetList.Add(new GenericDictionaryParser(dictionaryFactory, typeSectionParser));
+            targetList.Add(new ComplexObjectParser(objectFactory, nameNormalizer, typeDescriptionProvider, typeSectionParser));
 
             return targetList;
         }

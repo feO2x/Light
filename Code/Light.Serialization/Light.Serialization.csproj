@@ -43,6 +43,7 @@
     <Compile Include="IDeserializer.cs" />
     <Compile Include="Json\Caching\JsonTokenTypeCombination.cs" />
     <Compile Include="Json\ComplexTypeConstruction\ConstructorDescription.cs" />
+    <Compile Include="Json\ComplexTypeConstruction\DefaultGenericDictionaryFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\DefaultObjectFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\InjectableValueKind.cs" />
     <Compile Include="Json\IntegerMetadata\DecimalPartInfo.cs" />
@@ -50,6 +51,8 @@
     <Compile Include="Json\TokenParsers\BaseIso8601DateTimeParser.cs" />
     <Compile Include="Json\TokenParsers\DateTimeOffsetParser.cs" />
     <Compile Include="Json\LowLevelReading\JsonReaderExtensions.cs" />
+    <Compile Include="Json\TokenParsers\GenericDictionaryParser.cs" />
+    <Compile Include="Json\ComplexTypeConstruction\IDictionaryFactory.cs" />
     <Compile Include="Json\TypeNaming\BasicNetTypeNames.cs" />
     <Compile Include="Json\TypeNaming\DefaultTypeSectionParser.cs" />
     <Compile Include="Json\TypeNaming\IAddOneToOneMapping.cs" />
@@ -81,7 +84,7 @@
     <Compile Include="Json\TokenParsers\BaseJsonStringToPrimitiveParser.cs" />
     <Compile Include="Json\TokenParsers\BooleanParser.cs" />
     <Compile Include="Json\TokenParsers\CharacterParser.cs" />
-    <Compile Include="Json\TokenParsers\ComplexTypeParser.cs" />
+    <Compile Include="Json\TokenParsers\ComplexObjectParser.cs" />
     <Compile Include="Json\ComplexTypeConstruction\DefaultGenericCollectionFactory.cs" />
     <Compile Include="Json\TokenParsers\DateTimeParser.cs" />
     <Compile Include="Json\TokenParsers\DecimalParser.cs" />
