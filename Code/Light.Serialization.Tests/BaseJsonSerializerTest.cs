@@ -5,6 +5,7 @@ using FluentAssertions;
 using Light.Serialization.Json;
 using Light.Serialization.Json.Caching;
 using Light.Serialization.Json.ComplexTypeDecomposition;
+using Light.Serialization.Json.LowLevelWriting;
 using Light.Serialization.Json.PrimitiveTypeFormatters;
 using Light.Serialization.Json.SerializationRules;
 
@@ -26,9 +27,24 @@ namespace Light.Serialization.Tests
             json.Should().Be(expected);
         }
 
+        protected void CompareHumanReadableJsonToExpected<T>(T value, string expected)
+        {
+            var json = GetSerializedHumanReadableJson(value);
+
+            json.Should().Be(expected);
+        }
+
         protected string GetSerializedJson<T>(T value)
         {
             var jsonSerializer = JsonSerializerBuilder.Build();
+
+            return jsonSerializer.Serialize(value);
+        }
+
+        protected string GetSerializedHumanReadableJson<T>(T value)
+        {
+            var writerFactory = new JsonWriterFactory {JsonWhitespaceFormatter = new IndentingWhitespaceFormatter()};
+            var jsonSerializer = JsonSerializerBuilder.WithWriterFactory(writerFactory).Build();
 
             return jsonSerializer.Serialize(value);
         }
