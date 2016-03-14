@@ -1,17 +1,24 @@
 ﻿using System;
 using Light.GuardClauses;
+using Light.Serialization.Json.WriterInstructors;
 
 namespace Light.Serialization.Json.ObjectReferencePreservation
 {
     public sealed class PreserveObjectReferencesDecorator : IJsonWriterInstructor
     {
         private readonly IJsonWriterInstructor _decoratedInstructor;
+        private readonly ObjectReferencePreserver _objectReferencePreserver;
+        private readonly IPreserverWriting _preserverWriting;
 
-        public PreserveObjectReferencesDecorator(IJsonWriterInstructor decoratedInstructor)
+        public PreserveObjectReferencesDecorator(IJsonWriterInstructor decoratedInstructor, ObjectReferencePreserver objectReferencePreserver, IPreserverWriting preserverWriting)
         {
             decoratedInstructor.MustNotBeNull(nameof(decoratedInstructor));
+            objectReferencePreserver.MustNotBeNull(nameof(objectReferencePreserver));
+            preserverWriting.MustNotBeNull(nameof(preserverWriting));
 
             _decoratedInstructor = decoratedInstructor;
+            _objectReferencePreserver = objectReferencePreserver;
+            _preserverWriting = preserverWriting;
         }
 
         public bool AppliesToObject(object @object, Type actualType, Type referencedType)
@@ -21,9 +28,15 @@ namespace Light.Serialization.Json.ObjectReferencePreservation
 
         public void Serialize(JsonSerializationContext serializationContext)
         {
-            // Check if the object to be serialized has been serialized in the document before
+            var objectReferenceInfo = _objectReferencePreserver.GetObjectReferenceInfo(serializationContext.ObjectToBeSerialized);
 
-            // if not, forward call to actual instructor
+            if (objectReferenceInfo.WasAlreadySerialized)
+            {
+                _preserverWriting.WriteReferenceKey(serializationContext, objectReferenceInfo.JsonObjectId.ToString());
+                return;
+            }
+
+            _preserverWriting.WriteIdentifierKey(serializationContext, objectReferenceInfo.JsonObjectId.ToString());
             _decoratedInstructor.Serialize(serializationContext);
         }
     }
