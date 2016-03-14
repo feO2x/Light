@@ -1,7 +1,7 @@
 ﻿
 namespace Light.Serialization.Json.LowLevelWriting
 {
-    public interface IJsonFormatter
+    public interface IJsonWhitespaceFormatter
     {
         int CurrentIndentationLevel { get; }
 

@@ -48,6 +48,7 @@
     <Compile Include="Json\IntegerMetadata\DecimalPartInfo.cs" />
     <Compile Include="Json\LowLevelWriting\IJsonKeyNormalizer.cs" />
     <Compile Include="Json\LowLevelWriting\FirstCharacterToLowerAndRemoveAllSpecialCharactersNormalizer.cs" />
+    <Compile Include="Json\LowLevelWriting\IndentingWhitespaceFormatter.cs" />
     <Compile Include="Json\LowLevelWriting\KeyNormalizerNullObject.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\DateTimeOffsetFormatter.cs" />
     <Compile Include="Json\TokenParsers\BaseIso8601DateTimeParser.cs" />
@@ -115,10 +116,10 @@
     <Compile Include="Json\IJsonWriterFactory.cs" />
     <Compile Include="Json\JsonSerializationContext.cs" />
     <Compile Include="Json\JsonSerializerBuilder.cs" />
-    <Compile Include="Json\LowLevelWriting\IJsonFormatter.cs" />
+    <Compile Include="Json\LowLevelWriting\IJsonWhitespaceFormatter.cs" />
     <Compile Include="Json\IJsonWriter.cs" />
     <Compile Include="Json\IPrimitiveTypeFormatter.cs" />
-    <Compile Include="Json\LowLevelWriting\JsonFormatterNullObject.cs" />
+    <Compile Include="Json\LowLevelWriting\WhitespaceFormatterNullObject.cs" />
     <Compile Include="Json\LowLevelWriting\JsonWriter.cs" />
     <Compile Include="Json\LowLevelWriting\JsonWriterFactory.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\BasePrimitiveTypeFormatter.cs" />

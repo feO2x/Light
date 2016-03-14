@@ -9,12 +9,12 @@ namespace Light.Serialization.Json.LowLevelWriting
     public sealed class JsonWriterFactory : IJsonWriterFactory
     {
         private readonly List<Func<IJsonWriter, IJsonWriter>> _decorateFunctions = new List<Func<IJsonWriter, IJsonWriter>>();
-        private IJsonFormatter _jsonFormatter = new JsonFormatterNullObject();
+        private IJsonWhitespaceFormatter _jsonFormatter = new WhitespaceFormatterNullObject();
         private StringBuilder _stringBuilder;
         private StringWriter _stringWriter;
         private IJsonKeyNormalizer _keyNormalizer = new FirstCharacterToLowerAndRemoveAllSpecialCharactersNormalizer();
 
-        public IJsonFormatter JsonFormatter
+        public IJsonWhitespaceFormatter JsonFormatter
         {
             get { return _jsonFormatter; }
             set
