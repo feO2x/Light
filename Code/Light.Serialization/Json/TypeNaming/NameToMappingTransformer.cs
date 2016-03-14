@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Light.GuardClauses;
 
 namespace Light.Serialization.Json.TypeNaming
 {
-    public sealed class DomainFriendlyNamesScanner
+    public sealed class NameToMappingTransformer
     {
         private readonly List<Type> _usedTypes = new List<Type>();
 
-        public DomainFriendlyNamesScanner AllTypesFromAssemblies(params Type[] assemblyMarkers)
+        public NameToMappingTransformer AllTypesFromAssemblies(params Type[] assemblyMarkers)
         {
             var allTypes = assemblyMarkers.Select(m => m.GetTypeInfo().Assembly)
                                           .SelectMany(a => a.ExportedTypes)
@@ -22,7 +23,7 @@ namespace Light.Serialization.Json.TypeNaming
             return this;
         }
 
-        public DomainFriendlyNamesScanner ExceptNamespaces(params string[] namespaces)
+        public NameToMappingTransformer ExceptNamespaces(params string[] namespaces)
         {
             var currentIndex = 0;
             while (currentIndex < _usedTypes.Count)
@@ -37,7 +38,7 @@ namespace Light.Serialization.Json.TypeNaming
             return this;
         }
 
-        public DomainFriendlyNamesScanner UseOnlyNamespaces(params string[] namespaces)
+        public NameToMappingTransformer UseOnlyNamespaces(params string[] namespaces)
         {
             var currentIndex = 0;
             while (currentIndex < _usedTypes.Count)
@@ -52,7 +53,7 @@ namespace Light.Serialization.Json.TypeNaming
             return this;
         }
 
-        public DomainFriendlyNamesScanner ExceptTypes(params Type[] types)
+        public NameToMappingTransformer ExceptTypes(params Type[] types)
         {
             var currentIndex = 0;
             while (currentIndex < _usedTypes.Count)
@@ -66,12 +67,24 @@ namespace Light.Serialization.Json.TypeNaming
             return this;
         }
 
-        public DomainFriendlyNamesScanner UseTypes(params Type[] types)
+        public NameToMappingTransformer UseTypes(params Type[] types)
         {
             _usedTypes.AddRange(types);
             return this;
         }
 
-          
+        public void CreateMappings(IAddOneToOneMapping mapping)
+        {
+            mapping.MustNotBeNull(nameof(mapping));
+
+            foreach (var type in _usedTypes)
+            {
+                var jsonName = type.Name;
+                if (type.GetTypeInfo().IsGenericType)
+                    jsonName = type.Name.Split('\'')[0];
+
+                mapping.AddMapping(jsonName, type);
+            }
+        }
     }
 }
