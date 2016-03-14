@@ -128,7 +128,7 @@ namespace Light.Serialization.UnityContainerIntegration
             container.MustNotBeNull(nameof(container));
             configureMappings.MustNotBeNull(nameof(configureMappings));
 
-            var builder = new DomainFriendlyNameMappingBuilder();
+            var builder = new ScanAssembliesOptions();
             configureMappings(builder);
             return container.RegisterInstance<INameToTypeMapping>(builder.Build());
         }

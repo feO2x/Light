@@ -139,7 +139,7 @@
     <Compile Include="Json\Caching\TypeDescriptionCacheDecorator.cs" />
     <Compile Include="Json\TokenParsers\TimeSpanParser.cs" />
     <Compile Include="Json\TypeNaming\DomainFriendlyNameMapping.cs" />
-    <Compile Include="Json\TypeNaming\DomainFriendlyNameMappingBuilder.cs" />
+    <Compile Include="Json\TypeNaming\ScanAssembliesOptions.cs" />
     <Compile Include="Json\WriterInstructors\CollectionInstructor.cs" />
     <Compile Include="Json\WriterInstructors\ComplexObjectInstructor.cs" />
     <Compile Include="Json\WriterInstructors\ComplexObjectWriting.cs" />
