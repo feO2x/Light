@@ -60,7 +60,6 @@ namespace Light.Serialization.UnityContainerIntegration
             container.MustNotBeNull(nameof(container));
 
             return container.RegisterType<ISerializer, JsonSerializer>()
-                            .RegisterType<IJsonWriterFactory, JsonWriterFactory>(new ContainerControlledLifetimeManager())
                             .RegisterType<IDictionary<Type, IJsonWriterInstructor>>(new ContainerControlledLifetimeManager(),
                                                                                     new InjectionFactory(c => new Dictionary<Type, IJsonWriterInstructor>()))
                             .RegisterType<IReadOnlyList<IJsonWriterInstructor>, IJsonWriterInstructor[]>()
@@ -111,6 +110,19 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterType<IReadableValuesTypeAnalyzer>(new ContainerControlledLifetimeManager(),
                                                                        new InjectionFactory(c => new ValueProvidersCacheDecorator(new PublicPropertiesAndFieldsAnalyzer(),
                                                                                                                                   new Dictionary<Type, IList<IValueProvider>>())));
+        }
+
+        public static IUnityContainer RegisterIndentingWhitespaceformatter(this IUnityContainer container)
+        {
+            container.MustNotBeNull(nameof(container));
+
+            return
+                container.RegisterType<IJsonWriterFactory, JsonWriterFactory>(new ContainerControlledLifetimeManager(),
+                    new InjectionFactory(
+                        c => new JsonWriterFactory
+                        {
+                            JsonWhitespaceFormatter = new IndentingWhitespaceFormatter()
+                        }));
         }
 
         public static IUnityContainer RegisterTypeWithTypeName<TFrom, TTo>(this IUnityContainer container,

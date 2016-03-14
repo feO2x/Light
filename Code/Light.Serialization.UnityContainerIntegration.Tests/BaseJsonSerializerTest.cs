@@ -26,8 +26,23 @@ namespace Light.Serialization.Tests
             json.Should().Be(expected);
         }
 
+        protected void CompareHumanReadableJsonToExpected<T>(T value, string expected)
+        {
+            var json = GetSerializedHumanReadableJson(value);
+
+            json.Should().Be(expected);
+        }
+
         protected string GetSerializedJson<T>(T value)
         {
+            var jsonSerializer = Container.Resolve<ISerializer>();
+
+            return jsonSerializer.Serialize(value);
+        }
+
+        protected string GetSerializedHumanReadableJson<T>(T value)
+        {
+            Container.RegisterIndentingWhitespaceformatter();
             var jsonSerializer = Container.Resolve<ISerializer>();
 
             return jsonSerializer.Serialize(value);
