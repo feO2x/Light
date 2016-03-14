@@ -6,24 +6,25 @@ using Light.GuardClauses;
 
 namespace Light.Serialization.Json.TypeNaming
 {
-    public sealed class NameToMappingTransformer
+    public sealed class NameToMappingTransformer : NameToMappingTransformer.IScanningOptions, NameToMappingTransformer.INamespaceOptions, NameToMappingTransformer.IExeptTypeOptions
     {
         private readonly List<Type> _usedTypes = new List<Type>();
 
-        public NameToMappingTransformer AllTypesFromAssemblies(params Type[] assemblyMarkers)
+        IScanningOptions IExeptTypeOptions.ExceptTypes(params Type[] types)
         {
-            var allTypes = assemblyMarkers.Select(m => m.GetTypeInfo().Assembly)
-                                          .SelectMany(a => a.ExportedTypes)
-                                          .Where(t => assemblyMarkers.Contains(t) == false);
-
-            foreach (var type in allTypes)
+            var currentIndex = 0;
+            while (currentIndex < _usedTypes.Count)
             {
-                _usedTypes.Add(type);
+                var type = _usedTypes[currentIndex];
+                if (types.Contains(type))
+                    _usedTypes.RemoveAt(currentIndex);
+                else
+                    currentIndex++;
             }
             return this;
         }
 
-        public NameToMappingTransformer ExceptNamespaces(params string[] namespaces)
+        IExeptTypeOptions INamespaceOptions.ExceptNamespaces(params string[] namespaces)
         {
             var currentIndex = 0;
             while (currentIndex < _usedTypes.Count)
@@ -34,11 +35,11 @@ namespace Light.Serialization.Json.TypeNaming
                 else
                     currentIndex++;
             }
-            
+
             return this;
         }
 
-        public NameToMappingTransformer UseOnlyNamespaces(params string[] namespaces)
+        IExeptTypeOptions INamespaceOptions.UseOnlyNamespaces(params string[] namespaces)
         {
             var currentIndex = 0;
             while (currentIndex < _usedTypes.Count)
@@ -53,21 +54,30 @@ namespace Light.Serialization.Json.TypeNaming
             return this;
         }
 
-        public NameToMappingTransformer ExceptTypes(params Type[] types)
+        INamespaceOptions IScanningOptions.AllTypesFromAssemblies(params Type[] assemblyMarkers)
         {
-            var currentIndex = 0;
-            while (currentIndex < _usedTypes.Count)
+            var allTypes = assemblyMarkers.Select(m => m.GetTypeInfo().Assembly)
+                                          .SelectMany(a => a.ExportedTypes)
+                                          .Where(t => assemblyMarkers.Contains(t) == false);
+
+            foreach (var type in allTypes)
             {
-                var type = _usedTypes[currentIndex];
-                if (types.Contains(type))
-                    _usedTypes.RemoveAt(currentIndex);
-                else
-                    currentIndex++;
+                _usedTypes.Add(type);
             }
             return this;
         }
 
-        public NameToMappingTransformer UseTypes(params Type[] types)
+        INamespaceOptions IScanningOptions.AllTypesFromAssemblies(params Assembly[] assemblies)
+        {
+            foreach (var type in assemblies.SelectMany(a => a.ExportedTypes))
+            {
+                _usedTypes.Add(type);
+            }
+
+            return this;
+        }
+
+        NameToMappingTransformer IScanningOptions.UseTypes(params Type[] types)
         {
             _usedTypes.AddRange(types);
             return this;
@@ -81,10 +91,28 @@ namespace Light.Serialization.Json.TypeNaming
             {
                 var jsonName = type.Name;
                 if (type.GetTypeInfo().IsGenericType)
-                    jsonName = type.Name.Split('\'')[0];
+                    jsonName = type.Name.Split('`')[0];
 
                 mapping.AddMapping(jsonName, type);
             }
+        }
+
+        public interface IScanningOptions
+        {
+            INamespaceOptions AllTypesFromAssemblies(params Type[] assemblyMarkers);
+            INamespaceOptions AllTypesFromAssemblies(params Assembly[] assemblies);
+            NameToMappingTransformer UseTypes(params Type[] types);
+        }
+
+        public interface INamespaceOptions
+        {
+            IExeptTypeOptions ExceptNamespaces(params string[] namespaces);
+            IExeptTypeOptions UseOnlyNamespaces(params string[] namespaces);
+        }
+
+        public interface IExeptTypeOptions
+        {
+            IScanningOptions ExceptTypes(params Type[] types);
         }
     }
 }

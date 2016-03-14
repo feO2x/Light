@@ -1,5 +1,4 @@
 ﻿using System;
-using Light.Serialization.Json.TokenParsers;
 
 namespace Light.Serialization.Json.TypeNaming
 {

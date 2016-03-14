@@ -59,6 +59,7 @@
     <Compile Include="Json\IntegerMetadata\UnsignedIntegerTypeInfo.cs" />
     <Compile Include="Json\IntegerMetadata\SignedIntegerTypeInfo.cs" />
     <Compile Include="Json\TokenParsers\UnsignedIntegerParser.cs" />
+    <Compile Include="Json\TypeNaming\ITypeToNameMapping.cs" />
     <Compile Include="Json\TypeNaming\SimpleNameToTypeMapping.cs" />
     <Compile Include="Json\Caching\ValueProvidersCacheDecorator.cs" />
     <Compile Include="Json\JsonDeserializerBuilderExtensions.cs" />
@@ -89,7 +90,7 @@
     <Compile Include="Json\ComplexTypeConstruction\IInjectableValueNameNormalizer.cs" />
     <Compile Include="Json\TokenParsers\EnumerationValueParser.cs" />
     <Compile Include="Json\TokenParsers\FloatParser.cs" />
-    <Compile Include="Json\TokenParsers\INameToTypeMapping.cs" />
+    <Compile Include="Json\TypeNaming\INameToTypeMapping.cs" />
     <Compile Include="Json\ComplexTypeConstruction\InjectableValueDescription.cs" />
     <Compile Include="Json\JsonToken.cs" />
     <Compile Include="ISerializer.cs" />

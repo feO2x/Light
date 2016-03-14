@@ -3,27 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using Light.GuardClauses;
 using Light.GuardClauses.Exceptions;
-using Light.Serialization.Json.TokenParsers;
 
 namespace Light.Serialization.Json.TypeNaming
 {
-    public sealed class DomainFriendlyNameMapping : INameToTypeMapping
+    public sealed class DomainFriendlyNameMapping : INameToTypeMapping, ITypeToNameMapping, IAddOneToOneMapping
     {
-        private readonly Dictionary<string, List<Type>> _nameToTypeMappings;
-        private readonly Dictionary<Type, string> _typeToNameMappings;
-
-        public DomainFriendlyNameMapping(Dictionary<string, List<Type>> nameToTypeMappings, Dictionary<Type, string> typeToNameMappings)
-        {
-            nameToTypeMappings.MustNotBeNull(nameof(nameToTypeMappings));
-            typeToNameMappings.MustNotBeNull(nameof(typeToNameMappings));
-
-            _nameToTypeMappings = nameToTypeMappings;
-            _typeToNameMappings = typeToNameMappings;
-        }
-
+        private readonly Dictionary<string, List<Type>> _nameToTypeMappings = new Dictionary<string, List<Type>>();
+        private readonly Dictionary<Type, string> _typeToNameMappings = new Dictionary<Type, string>();
         public Type Map(string typeName)
         {
             return _nameToTypeMappings[typeName][0];
+        }
+
+        public string Map(Type type)
+        {
+            return _typeToNameMappings[type];
         }
 
         public DomainFriendlyNameMapping AddMapping(string jsonName, Type defaultMappedType, params Type[] otherMappedTypes)
@@ -93,6 +87,15 @@ namespace Light.Serialization.Json.TypeNaming
             return this;
         }
 
+        public DomainFriendlyNameMapping AddTypes(Action<NameToMappingTransformer.IScanningOptions> configureOptions)
+        {
+            var transformer = new NameToMappingTransformer();
+            configureOptions(transformer);
+
+            transformer.CreateMappings(this);
+            return this;
+        }
+
         public DomainFriendlyNameMapping ClearAllMappings()
         {
             _nameToTypeMappings.Clear();
@@ -100,9 +103,11 @@ namespace Light.Serialization.Json.TypeNaming
             return this;
         }
 
-        public string Map(Type type)
+        void IAddOneToOneMapping.AddMapping(string jsonName, Type correspondingType)
         {
-            return _typeToNameMappings[type];
+            AddMapping(jsonName, correspondingType);
         }
     }
+
+    
 }
