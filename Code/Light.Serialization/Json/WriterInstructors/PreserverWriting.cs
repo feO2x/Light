@@ -26,7 +26,6 @@ namespace Light.Serialization.Json.WriterInstructors
 
             writer.WriteKey(_identifierKey);
             writer.WritePrimitiveValue(id);
-            writer.WriteDelimiter();
         }
     }
 }

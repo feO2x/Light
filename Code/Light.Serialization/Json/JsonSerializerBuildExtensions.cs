@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Light.GuardClauses;
 using Light.Serialization.Json.ComplexTypeDecomposition;
+using Light.Serialization.Json.ObjectReferencePreservation;
 using Light.Serialization.Json.PrimitiveTypeFormatters;
 using Light.Serialization.Json.WriterInstructors;
 
@@ -45,7 +46,9 @@ namespace Light.Serialization.Json
             targetList.Add(new EnumerationToStringInstructor());
             targetList.Add(new DictionaryInstructor(primitiveTypeToFormattersMapping));
             targetList.Add(new CollectionInstructor());
-            targetList.Add(new ComplexObjectInstructor(readableValuesTypeAnalyzer));
+            targetList.Add(new PreserveObjectReferencesDecorator(
+                new ComplexObjectInstructor(readableValuesTypeAnalyzer),
+                new ObjectReferencePreserver(new Dictionary<object, uint>()), new PreserverWriting()));
 
             return targetList;
         }
