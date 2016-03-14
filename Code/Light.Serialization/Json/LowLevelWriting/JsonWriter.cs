@@ -1,7 +1,6 @@
-﻿using Light.GuardClauses;
+﻿using System.IO;
+using Light.GuardClauses;
 using Light.Serialization.FrameworkExtensions;
-using System.IO;
-using Light.Serialization.Json.LowLevelWriting.KeyNormalization;
 
 namespace Light.Serialization.Json.LowLevelWriting
 {
@@ -48,7 +47,7 @@ namespace Light.Serialization.Json.LowLevelWriting
 
         public void WriteKey(string key, bool shouldNormalizeKey)
         {
-            if ((shouldNormalizeKey || _jsonKeyNormalizer.ForceNormalizeKey) && !_jsonKeyNormalizer.ForceNotToNormalizeKey)
+            if (shouldNormalizeKey)
                 key = _jsonKeyNormalizer.Normalize(key);
 
             if (key.IsSurroundedByQuotationMarks() == false)
