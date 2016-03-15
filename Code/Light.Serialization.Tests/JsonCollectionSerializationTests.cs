@@ -30,7 +30,7 @@ namespace Light.Serialization.Tests
                         new DummyPerson { Name = "Walter White", Age = 52 },
                         new DummyPerson { Name = "Jesse Pinkman", Age = 27 }
                     },
-                    "[{\"name\":\"Walter White\",\"age\":52},{\"name\":\"Jesse Pinkman\",\"age\":27}]"
+                    "[{\"$id\":0,\"name\":\"Walter White\",\"age\":52},{\"$id\":1,\"name\":\"Jesse Pinkman\",\"age\":27}]"
                 }
             };
 

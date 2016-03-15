@@ -15,7 +15,7 @@ namespace Light.Serialization.Tests
                                                  .AndField(o => o.PublicField));
             var moreComplexDummyObject = new MoreComplexDummyClass("PrivateFieldValue", 11, new DateTime(2016, 2, 10), 42.0, "PublicStringProperty", "publicStringPropertyTwo");
 
-            CompareJsonToExpected(moreComplexDummyObject, "{\"publicStringProperty\":\"PublicStringProperty\",\"publicField\":11}");
+            CompareJsonToExpected(moreComplexDummyObject, "{\"$id\":0,\"publicStringProperty\":\"PublicStringProperty\",\"publicField\":11}");
         }
 
         public class MoreComplexDummyClass

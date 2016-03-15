@@ -18,7 +18,7 @@ namespace Light.Serialization.Tests
                 new object[]
                 {
                     new Dictionary<int, int> { { 1, 87 }, { 2, 88 }, { 3, 89 } },
-                    "{\"1\":87,\"2\":88,\"3\":89}"
+                    "{\"$id\":0,\"1\":87,\"2\":88,\"3\":89}"
                 },
                 new object[]
                 {
@@ -27,7 +27,7 @@ namespace Light.Serialization.Tests
                         { "Walter", new DummyPerson { Name = "Walter White", Age = 52 } },
                         { "Jesse", new DummyPerson { Name = "Jesse Pinkman", Age = 27 } }
                     },
-                    "{\"walter\":{\"name\":\"Walter White\",\"age\":52},\"jesse\":{\"name\":\"Jesse Pinkman\",\"age\":27}}"
+                    "{\"$id\":0,\"walter\":{\"$id\":1,\"name\":\"Walter White\",\"age\":52},\"$id\":3,\"jesse\":{\"$id\":4,\"name\":\"Jesse Pinkman\",\"age\":27}}"
                 },
                 new object[]
                 {
@@ -36,7 +36,7 @@ namespace Light.Serialization.Tests
                         { new DummyPerson { Name = "Foo", Age = 34 }, "Bla" },
                         { new DummyPerson { Name = "Blubb", Age = 55 }, "Xoi" }
                     },
-                    string.Format("{{\"{0}\":\"Bla\",\"{0}\":\"Xoi\"}}",
+                    string.Format("{{\"$id\":0,\"{0}\":\"Bla\",\"{0}\":\"Xoi\"}}",
                                   typeof (DummyPerson).FullName)
                 }
             };

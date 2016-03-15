@@ -19,7 +19,7 @@ namespace Light.Serialization.UnityContainerIntegration.Tests
         {
             _container.WithSerializationRuleFor<MoreComplexDummyClass>(r => r.IgnoreProperty(o => o.PublicStringProperty));
 
-            SerializeAndCompareWithExpected("{\"publicProperty\":\"2016-02-09\",\"publicDoubleProperty\":42.75,\"publicField\":42}");
+            SerializeAndCompareWithExpected("{\"$id\":0,\"publicProperty\":\"2016-02-09\",\"publicDoubleProperty\":42.75,\"publicField\":42}");
         }
 
         [Fact(DisplayName = "Several properties can be added to a blacklist using the Unity container so that the serializer must ignore them.")]
@@ -28,7 +28,7 @@ namespace Light.Serialization.UnityContainerIntegration.Tests
             _container.WithSerializationRuleFor<MoreComplexDummyClass>(r => r.IgnoreProperty(o => o.PublicDoubleProperty)
                                                                              .IgnoreProperty(o => o.PublicProperty));
 
-            SerializeAndCompareWithExpected("{\"publicStringProperty\":\"works\",\"publicField\":42}");
+            SerializeAndCompareWithExpected("{\"$id\":0,\"publicStringProperty\":\"works\",\"publicField\":42}");
         }
 
         [Fact(DisplayName = "Fields can be added to a blacklist using the Unity container so that the serializer must ignore them.")]
@@ -36,7 +36,7 @@ namespace Light.Serialization.UnityContainerIntegration.Tests
         {
             _container.WithSerializationRuleFor<MoreComplexDummyClass>(r => r.IgnoreField(o => o.PublicField));
 
-            SerializeAndCompareWithExpected("{\"publicProperty\":\"2016-02-09\",\"publicDoubleProperty\":42.75,\"publicStringProperty\":\"works\"}");
+            SerializeAndCompareWithExpected("{\"$id\":0,\"publicProperty\":\"2016-02-09\",\"publicDoubleProperty\":42.75,\"publicStringProperty\":\"works\"}");
         }
 
         [Fact(DisplayName = "All public members can be set on a blacklist using the Unity container so that the serializer must ignore them all.")]
@@ -44,7 +44,7 @@ namespace Light.Serialization.UnityContainerIntegration.Tests
         {
             _container.WithSerializationRuleFor<MoreComplexDummyClass>(r => r.IgnoreAll());
 
-            SerializeAndCompareWithExpected("{}");
+            SerializeAndCompareWithExpected("{\"$id\":0}");
         }
 
         [Fact(DisplayName = "Properties can be added to a whitelist using the Unity container so that the serializer must only serialize them.")]
@@ -54,7 +54,7 @@ namespace Light.Serialization.UnityContainerIntegration.Tests
                                                                              .ButProperty(o => o.PublicProperty)
                                                                              .AndProperty(o => o.PublicDoubleProperty));
 
-            SerializeAndCompareWithExpected("{\"publicProperty\":\"2016-02-09\",\"publicDoubleProperty\":42.75}");
+            SerializeAndCompareWithExpected("{\"$id\":0,\"publicProperty\":\"2016-02-09\",\"publicDoubleProperty\":42.75}");
         }
 
         [Fact(DisplayName = "Fields can be added to a whitelist using  the Unity container so that the serializer must only serialize them.")]
@@ -63,7 +63,7 @@ namespace Light.Serialization.UnityContainerIntegration.Tests
             _container.WithSerializationRuleFor<MoreComplexDummyClass>(r => r.IgnoreAll()
                                                                              .ButField(o => o.PublicField));
 
-            SerializeAndCompareWithExpected("{\"publicField\":42}");
+            SerializeAndCompareWithExpected("{\"$id\":0,\"publicField\":42}");
         }
 
         private void SerializeAndCompareWithExpected(string expectedJson)

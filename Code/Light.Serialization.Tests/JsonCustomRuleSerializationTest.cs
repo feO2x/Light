@@ -11,7 +11,7 @@ namespace Light.Serialization.Tests
             var dummyObject = CreateDummyObject();
             AddRule<DummyClass>(r => r.IgnoreProperty(o => o.PublicProperty));
 
-            CompareJsonToExpected(dummyObject, "{\"publicField\":42}");
+            CompareJsonToExpected(dummyObject, "{\"$id\":0,\"publicField\":42}");
         }
 
         [Fact(DisplayName = "Specific fields can be added to a blacklist so that the serializer must ignore them.")]
@@ -20,7 +20,7 @@ namespace Light.Serialization.Tests
             var dummyObject = CreateDummyObject();
             AddRule<DummyClass>(r => r.IgnoreField(o => o.PublicField));
 
-            CompareJsonToExpected(dummyObject, "{\"publicProperty\":\"2016-02-09\"}");
+            CompareJsonToExpected(dummyObject, "{\"$id\":0,\"publicProperty\":\"2016-02-09\"}");
         }
 
         [Fact(DisplayName = "All public properties and fields can be ignored with an empty white list.")]
@@ -29,7 +29,7 @@ namespace Light.Serialization.Tests
             var dummyObject = CreateDummyObject();
             AddRule<DummyClass>(r => r.IgnoreAll());
 
-            CompareJsonToExpected(dummyObject, "{}");
+            CompareJsonToExpected(dummyObject, "{\"$id\":0}");
         }
 
         [Fact(DisplayName = "Specific properties can be added to a white list that gets serialized only.")]
@@ -38,7 +38,7 @@ namespace Light.Serialization.Tests
             var dummyObject = CreateDummyObject();
             AddRule<DummyClass>(r => r.IgnoreAll().ButProperty(o => o.PublicProperty));
 
-            CompareJsonToExpected(dummyObject, "{\"publicProperty\":\"2016-02-09\"}");
+            CompareJsonToExpected(dummyObject, "{\"$id\":0,\"publicProperty\":\"2016-02-09\"}");
         }
 
         [Fact(DisplayName = "Specific fields can be added to a white list that gets serialized only.")]
@@ -47,7 +47,7 @@ namespace Light.Serialization.Tests
             var dummyObject = CreateDummyObject();
             AddRule<DummyClass>(r => r.IgnoreAll().ButField(o => o.PublicField));
 
-            CompareJsonToExpected(dummyObject, "{\"publicField\":42}");
+            CompareJsonToExpected(dummyObject, "{\"$id\":0,\"publicField\":42}");
         }
 
         [Fact(DisplayName = "Specific properties can be added to a blacklist so that the serializer must ignore them.")]
@@ -57,7 +57,7 @@ namespace Light.Serialization.Tests
             AddRule<MoreComplexDummyClass>(r => r.IgnoreProperty(o => o.PublicProperty)
                                                  .IgnoreProperty(o => o.PublicDoubleProperty));
 
-            CompareJsonToExpected(moreComplexDummyObject, "{\"publicStringProperty\":\"works\",\"publicField\":42}");
+            CompareJsonToExpected(moreComplexDummyObject, "{\"$id\":0,\"publicStringProperty\":\"works\",\"publicField\":42}");
         }
 
         [Fact(DisplayName = "Specific properties can be added to a white so that the serializer must serialize them.")]
@@ -68,7 +68,7 @@ namespace Light.Serialization.Tests
                                                     .ButProperty(o => o.PublicStringProperty)
                                                     .AndField(o => o.PublicField));
 
-            CompareJsonToExpected(moreComplexDummyObject, "{\"publicStringProperty\":\"works\",\"publicField\":42}");
+            CompareJsonToExpected(moreComplexDummyObject, "{\"$id\":0,\"publicStringProperty\":\"works\",\"publicField\":42}");
         }
 
         private static DummyClass CreateDummyObject()

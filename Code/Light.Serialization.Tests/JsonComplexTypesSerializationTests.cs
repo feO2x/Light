@@ -19,12 +19,12 @@ namespace Light.Serialization.Tests
                 new object[]
                 {
                     new ClassWithPublicPropertiesAndPrivateFields(42, "Foo"),
-                    $"{{{"int".SurroundWithQuotationMarks()}:42,{"string".SurroundWithQuotationMarks()}:\"Foo\"}}"
+                    $"{{\"$id\":0,{"int".SurroundWithQuotationMarks()}:42,{"string".SurroundWithQuotationMarks()}:\"Foo\"}}"
                 },
                 new object[]
                 {
                     new ClassWithPublicFieldAndPublicAndPrivateProperties("Foo", 42.7),
-                    $"{{{"value".SurroundWithQuotationMarks()}:42.7,{"stringField".SurroundWithQuotationMarks()}:\"Foo\"}}"
+                    $"{{\"$id\":0,{"value".SurroundWithQuotationMarks()}:42.7,{"stringField".SurroundWithQuotationMarks()}:\"Foo\"}}"
                 }
             };
 
@@ -32,7 +32,7 @@ namespace Light.Serialization.Tests
         [MemberData(nameof(EmptyObjectData))]
         public void EmptyObject<T>(T emptyObject)
         {
-            CompareJsonToExpected(emptyObject, "{}");
+            CompareJsonToExpected(emptyObject, "{\"$id\":0}");
         }
 
         public static readonly TestData EmptyObjectData =
