@@ -5,17 +5,28 @@ namespace Light.Serialization.Json.LowLevelWriting
 {
     public sealed class IndentingWhitespaceFormatter : IJsonWhitespaceFormatter
     {
-        public int CurrentIndentationLevel { get; private set; }
+        private readonly string _whiteSpace = " ";
+        private int _currentIndentationLevel;
+        private string _indentCharacters = "  ";
 
-        public string IdentCharacters { get; set; } = "  ";
-        private string _whiteSpace = " ";
+        public int CurrentIndentationLevel => _currentIndentationLevel;
+
+        public string IdentCharacters
+        {
+            get { return _indentCharacters; }
+            set
+            {
+                value.MustNotBeNull(nameof(value));
+                _indentCharacters = value;
+            }
+        }
 
         public void NewlineAndIncreaseIndent(IJsonWriter writer)
         {
             writer.MustNotBeNull(nameof(writer));
 
             NewLineWithoutIntent(writer);
-            CurrentIndentationLevel++;
+            _currentIndentationLevel++;
             WriteIndent(writer);
         }
 
@@ -32,7 +43,7 @@ namespace Light.Serialization.Json.LowLevelWriting
             writer.MustNotBeNull(nameof(writer));
 
             NewLineWithoutIntent(writer);
-            CurrentIndentationLevel--;
+            _currentIndentationLevel--;
             WriteIndent(writer);
         }
 
@@ -45,20 +56,18 @@ namespace Light.Serialization.Json.LowLevelWriting
 
         public void ResetIndentationLevel()
         {
-            CurrentIndentationLevel = 0;
+            _currentIndentationLevel = 0;
         }
 
         private void WriteIndent(IJsonWriter writer)
         {
-            CurrentIndentationLevel.MustNotBeLessThan(0, nameof(CurrentIndentationLevel));
-
-            for (int i = 0; i < CurrentIndentationLevel; i++)
+            for (var i = 0; i < _currentIndentationLevel; i++)
             {
                 writer.WritePrimitiveValue(IdentCharacters);
             }
         }
 
-        private void NewLineWithoutIntent(IJsonWriter writer)
+        private static void NewLineWithoutIntent(IJsonWriter writer)
         {
             writer.WritePrimitiveValue(Environment.NewLine);
         }

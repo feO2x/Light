@@ -44,7 +44,7 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterTypeWithTypeName<IJsonTokenParser, StringParser>(new ContainerControlledLifetimeManager())
                             .RegisterType<IJsonTokenParser>(KnownNames.JsonStringParserOrchestrator,
                                                             new InjectionFactory(c => new JsonStringInheritenceParser(c.Resolve<IJsonStringToPrimitiveParser[]>(),
-                                                                                                                       c.Resolve<StringParser>())))
+                                                                                                                      c.Resolve<StringParser>())))
                             .RegisterTypeWithTypeName<IJsonTokenParser, ArrayToGenericCollectionParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, ComplexTypeParser>(new ContainerControlledLifetimeManager())
                             .RegisterType<ICollectionFactory, DefaultGenericCollectionFactory>(new ContainerControlledLifetimeManager())
@@ -109,20 +109,18 @@ namespace Light.Serialization.UnityContainerIntegration
                                                              new InjectionFactory(c => new DefaultCharacterEscaper()))
                             .RegisterType<IReadableValuesTypeAnalyzer>(new ContainerControlledLifetimeManager(),
                                                                        new InjectionFactory(c => new ValueProvidersCacheDecorator(new PublicPropertiesAndFieldsAnalyzer(),
-                                                                                                                                  new Dictionary<Type, IList<IValueProvider>>())));
+                                                                                                                                  new Dictionary<Type, IList<IValueProvider>>())))
+                            .RegisterType<IJsonWriterFactory, JsonWriterFactory>();
         }
 
         public static IUnityContainer RegisterIndentingWhitespaceformatter(this IUnityContainer container)
         {
             container.MustNotBeNull(nameof(container));
 
-            return
-                container.RegisterType<IJsonWriterFactory, JsonWriterFactory>(new ContainerControlledLifetimeManager(),
-                    new InjectionFactory(
-                        c => new JsonWriterFactory
-                        {
-                            JsonWhitespaceFormatter = new IndentingWhitespaceFormatter()
-                        }));
+            return container.RegisterType<IJsonWriterFactory, JsonWriterFactory>(new InjectionFactory(c => new JsonWriterFactory
+                                                                                                           {
+                                                                                                               JsonWhitespaceFormatter = new IndentingWhitespaceFormatter()
+                                                                                                           }));
         }
 
         public static IUnityContainer RegisterTypeWithTypeName<TFrom, TTo>(this IUnityContainer container,
