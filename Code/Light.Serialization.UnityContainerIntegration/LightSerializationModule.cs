@@ -64,7 +64,7 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterType<IDictionary<Type, IJsonWriterInstructor>>(new ContainerControlledLifetimeManager(),
                                                                                     new InjectionFactory(c => new Dictionary<Type, IJsonWriterInstructor>()))
                             .RegisterType<IReadOnlyList<IJsonWriterInstructor>, IJsonWriterInstructor[]>()
-                            .RegisterTypeWithTypeName<IJsonWriterInstructor, PrimitiveWriterInstructor>(new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IJsonWriterInstructor, PrimitiveTypeInstructor>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, EnumerationToStringInstructor>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, DictionaryInstructor>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, CollectionInstructor>(new ContainerControlledLifetimeManager())

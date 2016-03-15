@@ -7,13 +7,13 @@ namespace Light.Serialization.Json.WriterInstructors
 {
     public sealed class DictionaryInstructor : IJsonWriterInstructor
     {
-        private readonly IDictionary<Type, IPrimitiveTypeFormatter> _primitiveTypeToFormattersMapping;
+        public readonly IDictionary<Type, IPrimitiveTypeFormatter> PrimitiveTypeToFormattersMapping;
 
         public DictionaryInstructor(IDictionary<Type, IPrimitiveTypeFormatter> primitiveTypeToFormattersMapping)
         {
             primitiveTypeToFormattersMapping.MustNotBeNull(nameof(primitiveTypeToFormattersMapping));
 
-            _primitiveTypeToFormattersMapping = primitiveTypeToFormattersMapping;
+            PrimitiveTypeToFormattersMapping = primitiveTypeToFormattersMapping;
         }
 
         public bool AppliesToObject(object @object, Type actualType, Type referencedType)
@@ -45,9 +45,9 @@ namespace Light.Serialization.Json.WriterInstructors
                 {
                     var keyType = key.GetType();
                     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-                    if (_primitiveTypeToFormattersMapping.ContainsKey(keyType))
+                    if (PrimitiveTypeToFormattersMapping.ContainsKey(keyType))
                     {
-                        var typeFormatter = _primitiveTypeToFormattersMapping[keyType];
+                        var typeFormatter = PrimitiveTypeToFormattersMapping[keyType];
                         writer.WriteKey(typeFormatter.FormatPrimitiveType(key), typeFormatter.ShouldBeNormalizedKey);
                     }
                     else

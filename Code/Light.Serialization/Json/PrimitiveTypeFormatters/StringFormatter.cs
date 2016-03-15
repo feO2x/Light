@@ -1,13 +1,22 @@
-﻿using Light.GuardClauses;
+﻿using System.Text;
+using Light.GuardClauses;
 using Light.Serialization.FrameworkExtensions;
-using System.Text;
-using Microsoft.CSharp.RuntimeBinder;
 
 namespace Light.Serialization.Json.PrimitiveTypeFormatters
 {
     public sealed class StringFormatter : BasePrimitiveTypeFormatter<string>, IPrimitiveTypeFormatter
     {
-        private readonly ICharacterEscaper _characterEscaper;
+        private ICharacterEscaper _characterEscaper;
+
+        public ICharacterEscaper CharacterEscaper
+        {
+            get { return _characterEscaper;}
+            set
+            {
+                value.MustNotBeNull(nameof(value));
+                _characterEscaper = value;
+            }
+        }
 
         public StringFormatter(ICharacterEscaper characterEscaper) : base(true)
         {
@@ -29,7 +38,7 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
                     goto EscapeStringContent;
             }
             return @string.SurroundWithQuotationMarks();
-                
+
             EscapeStringContent:
             var stringBuilder = new StringBuilder();
             stringBuilder.Append('"');
