@@ -9,18 +9,18 @@ namespace Light.Serialization.Json.LowLevelWriting
     public sealed class JsonWriterFactory : IJsonWriterFactory
     {
         private readonly List<Func<IJsonWriter, IJsonWriter>> _decorateFunctions = new List<Func<IJsonWriter, IJsonWriter>>();
-        private IJsonFormatter _jsonFormatter = new JsonFormatterNullObject();
+        private IJsonWhitespaceFormatter _jsonWhitespaceFormatter = new WhitespaceFormatterNullObject();
         private StringBuilder _stringBuilder;
         private StringWriter _stringWriter;
         private IJsonKeyNormalizer _keyNormalizer = new FirstCharacterToLowerAndRemoveAllSpecialCharactersNormalizer();
 
-        public IJsonFormatter JsonFormatter
+        public IJsonWhitespaceFormatter JsonWhitespaceFormatter
         {
-            get { return _jsonFormatter; }
+            get { return _jsonWhitespaceFormatter; }
             set
             {
                 value.MustNotBeNull(nameof(value));
-                _jsonFormatter = value;
+                _jsonWhitespaceFormatter = value;
             }
         }
 
@@ -38,7 +38,7 @@ namespace Light.Serialization.Json.LowLevelWriting
         {
             _stringBuilder = new StringBuilder();
             _stringWriter = new StringWriter(_stringBuilder);
-            IJsonWriter returnValue = new JsonWriter(_stringWriter, _jsonFormatter, _keyNormalizer);
+            IJsonWriter returnValue = new JsonWriter(_stringWriter, _jsonWhitespaceFormatter, _keyNormalizer);
             // ReSharper disable once LoopCanBeConvertedToQuery
             foreach (var decorateFunction in _decorateFunctions)
             {

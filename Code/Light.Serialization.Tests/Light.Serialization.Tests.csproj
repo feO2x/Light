@@ -96,6 +96,7 @@
     <Compile Include="JsonNormalizedKeysTests.cs" />
     <Compile Include="JsonNullDeserializationTests.cs" />
     <Compile Include="JsonPrimitiveTypesSerializationTests.cs" />
+    <Compile Include="JsonSerializationToHumanReadableJsonTests.cs" />
     <Compile Include="JsonStringDeserializationTests.cs" />
     <Compile Include="JsonTimeSpanDeserializationTests.cs" />
     <Compile Include="JsonTimeSpanSerializationTests.cs" />

@@ -1,9 +1,10 @@
 ﻿
 namespace Light.Serialization.Json.LowLevelWriting
 {
-    public sealed class JsonFormatterNullObject : IJsonFormatter
+    public sealed class WhitespaceFormatterNullObject : IJsonWhitespaceFormatter
     {
         public int CurrentIndentationLevel { get; private set; }
+        public string IdentCharacters { get; set; }
 
         public void NewlineAndIncreaseIndent(IJsonWriter writer)
         {

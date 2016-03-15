@@ -151,6 +151,9 @@
     <Compile Include="..\Light.Serialization.Tests\JsonPrimitiveTypesSerializationTests.cs">
       <Link>JsonPrimitiveTypesSerializationTests.cs</Link>
     </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonSerializationToHumanReadableJsonTests.cs">
+      <Link>JsonSerializationToHumanReadableJsonTests.cs</Link>
+    </Compile>
     <Compile Include="..\Light.Serialization.Tests\JsonStringDeserializationTests.cs">
       <Link>JsonStringDeserializationTests.cs</Link>
     </Compile>
