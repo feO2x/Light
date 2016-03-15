@@ -67,10 +67,14 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterType<IReadOnlyList<IJsonWriterInstructor>, IJsonWriterInstructor[]>()
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, PrimitiveWriterInstructor>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, EnumerationToStringInstructor>(new ContainerControlledLifetimeManager())
-                            .RegisterTypeWithTypeName<IJsonWriterInstructor, DictionaryInstructor>(new ContainerControlledLifetimeManager())
+                            .RegisterType<IJsonWriterInstructor, DictionaryInstructor>(new ContainerControlledLifetimeManager(),
+                                                                                            new InjectionFactory(c => new PreserveObjectReferencesDecorator(
+                                                                                                new DictionaryInstructor(c.Resolve<IDictionary<Type, IPrimitiveTypeFormatter>>()),
+                                                                                                new ObjectReferencePreserver(new Dictionary<object, uint>()))))
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, CollectionInstructor>(new ContainerControlledLifetimeManager())
                             .RegisterType<IJsonWriterInstructor, ComplexObjectInstructor>(new ContainerControlledLifetimeManager(),
-                                                                                            new InjectionFactory(c => new PreserveObjectReferencesDecorator(new ComplexObjectInstructor(c.Resolve<IReadableValuesTypeAnalyzer>()),
+                                                                                            new InjectionFactory(c => new PreserveObjectReferencesDecorator(
+                                                                                                new ComplexObjectInstructor(c.Resolve<IReadableValuesTypeAnalyzer>()),
                                                                                                 new ObjectReferencePreserver(new Dictionary<object, uint>()))))
                             .RegisterType<IDictionary<Type, IPrimitiveTypeFormatter>>(new ContainerControlledLifetimeManager(),
                                                                                       new InjectionFactory(c => c.ResolveAll<IPrimitiveTypeFormatter>().ToDictionary(f => f.TargetType)))

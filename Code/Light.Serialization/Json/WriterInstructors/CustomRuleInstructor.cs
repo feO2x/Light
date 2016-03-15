@@ -6,7 +6,7 @@ using Light.Serialization.Json.ObjectReferencePreservation;
 
 namespace Light.Serialization.Json.WriterInstructors
 {
-    public sealed class CustomRuleInstructor : IDecoratableComplexInstructor
+    public sealed class CustomRuleInstructor : IDecoratableInstructor
     {
         private readonly Type _targetType;
         private readonly IList<IValueProvider> _valueProviders;

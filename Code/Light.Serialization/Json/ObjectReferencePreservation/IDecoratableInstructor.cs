@@ -1,6 +1,6 @@
 namespace Light.Serialization.Json.ObjectReferencePreservation
 {
-    public interface IDecoratableComplexInstructor : IJsonWriterInstructor
+    public interface IDecoratableInstructor : IJsonWriterInstructor
     {
         void SerializeInner(JsonSerializationContext serializationContext);
     }

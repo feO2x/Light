@@ -44,7 +44,9 @@ namespace Light.Serialization.Json
 
             targetList.Add(new PrimitiveWriterInstructor(primitiveTypeToFormattersMapping));
             targetList.Add(new EnumerationToStringInstructor());
-            targetList.Add(new DictionaryInstructor(primitiveTypeToFormattersMapping));
+            targetList.Add(new PreserveObjectReferencesDecorator(
+                new DictionaryInstructor(primitiveTypeToFormattersMapping),
+                new ObjectReferencePreserver(new Dictionary<object, uint>())));
             targetList.Add(new CollectionInstructor());
             targetList.Add(new PreserveObjectReferencesDecorator(
                 new ComplexObjectInstructor(readableValuesTypeAnalyzer),

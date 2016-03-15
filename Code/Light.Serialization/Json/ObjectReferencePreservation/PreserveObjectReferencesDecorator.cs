@@ -5,13 +5,13 @@ namespace Light.Serialization.Json.ObjectReferencePreservation
 {
     public sealed class PreserveObjectReferencesDecorator : IJsonWriterInstructor
     {
-        private readonly IDecoratableComplexInstructor _decoratedInstructor;
+        private readonly IDecoratableInstructor _decoratedInstructor;
         private readonly ObjectReferencePreserver _objectReferencePreserver;
 
         private string _idSymbol = JsonSymbols.DefaultIdSymbol;
         private string _referenceSymbol = JsonSymbols.DefaultReferenceSymbol;
 
-        public PreserveObjectReferencesDecorator(IDecoratableComplexInstructor decoratedInstructor, ObjectReferencePreserver objectReferencePreserver)
+        public PreserveObjectReferencesDecorator(IDecoratableInstructor decoratedInstructor, ObjectReferencePreserver objectReferencePreserver)
         {
             decoratedInstructor.MustNotBeNull(nameof(decoratedInstructor));
             objectReferencePreserver.MustNotBeNull(nameof(objectReferencePreserver));
@@ -61,7 +61,7 @@ namespace Light.Serialization.Json.ObjectReferencePreservation
                 return;
             }
 
-            writer.WriteKey(_idSymbol);
+            writer.WriteKey(_idSymbol, false);
             serializationContext.SerializeValue(objectReferenceInfo.JsonObjectId);
             _decoratedInstructor.SerializeInner(serializationContext);
             writer.EndObject();

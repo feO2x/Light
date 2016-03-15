@@ -5,7 +5,7 @@ using Light.Serialization.Json.ObjectReferencePreservation;
 
 namespace Light.Serialization.Json.WriterInstructors
 {
-    public sealed class ComplexObjectInstructor : IDecoratableComplexInstructor
+    public sealed class ComplexObjectInstructor : IDecoratableInstructor
     {
         private readonly IReadableValuesTypeAnalyzer _typeAnalyzer;
 

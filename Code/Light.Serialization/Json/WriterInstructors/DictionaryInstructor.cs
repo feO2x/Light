@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using Light.GuardClauses;
+using Light.Serialization.Json.ObjectReferencePreservation;
 
 namespace Light.Serialization.Json.WriterInstructors
 {
-    public sealed class DictionaryInstructor : IJsonWriterInstructor
+    public sealed class DictionaryInstructor : IDecoratableInstructor
     {
         private readonly IDictionary<Type, IPrimitiveTypeFormatter> _primitiveTypeToFormattersMapping;
 
@@ -23,16 +24,24 @@ namespace Light.Serialization.Json.WriterInstructors
 
         public void Serialize(JsonSerializationContext serializationContext)
         {
-            var dictionary = (IDictionary) serializationContext.ObjectToBeSerialized;
-
             var writer = serializationContext.Writer;
             writer.BeginObject();
+            SerializeInner(serializationContext);
+            writer.EndObject();
+        }
+
+        public void SerializeInner(JsonSerializationContext serializationContext)
+        {
+            var dictionary = (IDictionary)serializationContext.ObjectToBeSerialized;
+            var writer = serializationContext.Writer;
 
             if (dictionary.Count == 0)
             {
                 writer.EndObject();
                 return;
             }
+
+            serializationContext.Writer.WriteDelimiter();
 
             var dicitionaryEnumerator = dictionary.GetEnumerator();
             dicitionaryEnumerator.MoveNext();
@@ -51,7 +60,7 @@ namespace Light.Serialization.Json.WriterInstructors
                         writer.WriteKey(typeFormatter.FormatPrimitiveType(key), typeFormatter.ShouldBeNormalizedKey);
                     }
                     else
-                        writer.WriteKey(key.ToString(), false); 
+                        writer.WriteKey(key.ToString(), false);
                 }
 
                 var value = dicitionaryEnumerator.Value;
@@ -68,7 +77,6 @@ namespace Light.Serialization.Json.WriterInstructors
                 else
                     break;
             }
-            writer.EndObject();
         }
     }
 }
