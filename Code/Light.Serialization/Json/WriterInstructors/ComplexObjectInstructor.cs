@@ -10,9 +10,7 @@ namespace Light.Serialization.Json.WriterInstructors
 
         public ComplexObjectInstructor(IReadableValuesTypeAnalyzer typeAnalyzer)
         {
-            typeAnalyzer.MustNotBeNull(nameof(typeAnalyzer));
-
-            _typeAnalyzer = typeAnalyzer;
+            TypeAnalyzer = typeAnalyzer;
         }
 
         public IReadableValuesTypeAnalyzer TypeAnalyzer

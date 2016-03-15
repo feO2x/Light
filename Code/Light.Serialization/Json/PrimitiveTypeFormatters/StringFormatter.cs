@@ -20,9 +20,7 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
 
         public StringFormatter(ICharacterEscaper characterEscaper) : base(true)
         {
-            characterEscaper.MustNotBeNull(nameof(characterEscaper));
-
-            _characterEscaper = characterEscaper;
+            CharacterEscaper = characterEscaper;
         }
 
         public string FormatPrimitiveType(object @object)
