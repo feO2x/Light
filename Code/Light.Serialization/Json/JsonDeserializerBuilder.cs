@@ -1,29 +1,29 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Light.GuardClauses;
 using Light.Serialization.Json.Caching;
-using Light.Serialization.Json.ComplexTypeConstruction;
 using Light.Serialization.Json.LowLevelReading;
-using Light.Serialization.Json.TypeNaming;
+using Light.Serialization.Json.TokenParsers;
 
 namespace Light.Serialization.Json
 {
     public class JsonDeserializerBuilder
     {
-        private ICollectionFactory _collectionFactory = new DefaultGenericCollectionFactory();
-        private readonly IDictionaryFactory _dictionaryFactory = new DefaultGenericDictionaryFactory();
         private IJsonReaderFactory _jsonReaderFactory = new SingleBufferJsonReaderFactory();
+        private IList<IJsonTokenParser> _jsonTokenParsers;
 
-        private IReadOnlyList<IJsonTokenParser> _jsonTokenParsers;
-        private IInjectableValueNameNormalizer _nameNormalizer = new ToLowerWithoutSpecialCharactersNormalizer();
-        private IObjectFactory _objectFactory = new DefaultObjectFactory();
         private Dictionary<JsonTokenTypeCombination, IJsonTokenParser> _tokenParserCache = new Dictionary<JsonTokenTypeCombination, IJsonTokenParser>();
-        private ITypeDescriptionProvider _typeDescriptionProvider;
-        private ITypeSectionParser _typeSectionParser = new DefaultTypeSectionParser(new SimpleNameToTypeMapping());
 
-        public JsonDeserializerBuilder()
+        public JsonDeserializerBuilder() { }
+
+        public JsonDeserializerBuilder(IList<IJsonTokenParser> jsonTokenParsers)
         {
-            _typeDescriptionProvider = new TypeDescriptionCacheDecorator(new DefaultTypeDescriptionProvider(_nameNormalizer), new Dictionary<Type, TypeCreationDescription>());
+            jsonTokenParsers.MustNotBeNull(nameof(jsonTokenParsers));
+            _jsonTokenParsers = jsonTokenParsers;
         }
+
+        public IList<IJsonTokenParser> JsonTokenParsers => _jsonTokenParsers;
 
         public JsonDeserializerBuilder WithReaderFactory(IJsonReaderFactory readerFactory)
         {
@@ -31,7 +31,7 @@ namespace Light.Serialization.Json
             return this;
         }
 
-        public JsonDeserializerBuilder WithTokenParsers(IReadOnlyList<IJsonTokenParser> tokenParsers)
+        public JsonDeserializerBuilder WithTokenParsers(IList<IJsonTokenParser> tokenParsers)
         {
             _jsonTokenParsers = tokenParsers;
             return this;
@@ -43,49 +43,44 @@ namespace Light.Serialization.Json
             return this;
         }
 
-        public JsonDeserializerBuilder WithObjectFactory(IObjectFactory objectFactory)
+        public JsonDeserializerBuilder ConfigureTokenParser<T>(Action<T> configureParser)
+            where T : IJsonTokenParser
         {
-            _objectFactory = objectFactory;
+            configureParser(_jsonTokenParsers.OfType<T>().First());
             return this;
         }
 
-        public JsonDeserializerBuilder WithNameNormalizer(IInjectableValueNameNormalizer nameNormalizer)
+        public JsonDeserializerBuilder AddTokenParserBefore<T>(IJsonTokenParser additionalParser)
+            where T : IJsonTokenParser
         {
-            _nameNormalizer = nameNormalizer;
+            var targetIndex = _jsonTokenParsers.IndexOf(_jsonTokenParsers.OfType<T>().First());
+            if (targetIndex == -1)
+                throw new ArgumentException($"The specified IJsonTokenParser {additionalParser} could not be added before the {typeof (T)} parser because the latter one could not be found.");
+
+            _jsonTokenParsers.Insert(targetIndex, additionalParser);
             return this;
         }
 
-        public JsonDeserializerBuilder WithTypeSectionParser(ITypeSectionParser parser)
+        public JsonDeserializerBuilder AddTokenParserAfter<T>(IJsonTokenParser additionalParser)
+            where T : IJsonTokenParser
         {
-            _typeSectionParser = parser;
-            return this;
-        }
+            var targetTindex = _jsonTokenParsers.IndexOf(_jsonTokenParsers.OfType<T>().First());
+            if (targetTindex == -1)
+                throw new ArgumentException($"The specified IJsonTokenParser {additionalParser} could not be added after the {typeof (T)} parser because the latter one could not be found.");
 
-        public JsonDeserializerBuilder WithTypeCreationInfoAnalyzer(ITypeDescriptionProvider analyzer)
-        {
-            _typeDescriptionProvider = analyzer;
-            return this;
-        }
+            if (targetTindex == _jsonTokenParsers.Count - 1)
+                _jsonTokenParsers.Add(additionalParser);
+            else
+                _jsonTokenParsers.Insert(targetTindex + 1, additionalParser);
 
-        public JsonDeserializerBuilder WithCollectionFactory(ICollectionFactory collectionFactory)
-        {
-            _collectionFactory = collectionFactory;
             return this;
         }
 
         public JsonDeserializer Build()
         {
-            if (_jsonTokenParsers == null)
-            {
-                _jsonTokenParsers = new List<IJsonTokenParser>().AddDefaultTokenParsers(_collectionFactory,
-                                                                                        _dictionaryFactory,
-                                                                                        _objectFactory,
-                                                                                        _typeSectionParser,
-                                                                                        _nameNormalizer,
-                                                                                        _typeDescriptionProvider);
-            }
+            var jsonTokenParsers = _jsonTokenParsers ?? new DefaultJsonTokenParsersBuilder().Build();
 
-            return new JsonDeserializer(_jsonReaderFactory, _jsonTokenParsers, _tokenParserCache);
+            return new JsonDeserializer(_jsonReaderFactory, (IReadOnlyList<IJsonTokenParser>) jsonTokenParsers, _tokenParserCache);
         }
     }
 }

@@ -2,22 +2,29 @@ using System;
 using System.Reflection;
 using Light.GuardClauses;
 using Light.Serialization.Json.LowLevelReading;
-using Light.Serialization.Json.TokenParsers;
 
 namespace Light.Serialization.Json.TypeNaming
 {
     public sealed class DefaultTypeSectionParser : ITypeSectionParser
     {
-        private readonly INameToTypeMapping _nameToTypeMapping;
         private string _concreteTypeSymbol = JsonSymbols.DefaultConcreteTypeSymbol;
+        private INameToTypeMapping _nameToTypeMapping;
         private string _typeArgumentsSymbol = JsonSymbols.DefaultTypeArgumentSymbol;
         private string _typeNameSymbol = JsonSymbols.DefaultTypeNameSymbol;
 
         public DefaultTypeSectionParser(INameToTypeMapping nameToTypeMapping)
         {
-            nameToTypeMapping.MustNotBeNull(nameof(nameToTypeMapping));
+            NameToTypeMapping = nameToTypeMapping;
+        }
 
-            _nameToTypeMapping = nameToTypeMapping;
+        public INameToTypeMapping NameToTypeMapping
+        {
+            get { return _nameToTypeMapping; }
+            set
+            {
+                value.MustNotBeNull(nameof(value));
+                _nameToTypeMapping = value;
+            }
         }
 
         public string TypeNameSymbol

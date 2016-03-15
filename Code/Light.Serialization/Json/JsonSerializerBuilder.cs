@@ -14,16 +14,11 @@ namespace Light.Serialization.Json
     {
         private readonly List<Rule> _rules = new List<Rule>();
         public readonly List<IJsonWriterInstructor> BasicWriterInstructors;
+        private ICharacterEscaper _characterEscaper = new DefaultCharacterEscaper();
+        private Func<IList<IJsonWriterInstructor>> _createList = CreateDefaultList;
         private IDictionary<Type, IJsonWriterInstructor> _instructorCache;
         private IReadableValuesTypeAnalyzer _typeAnalyzer = new ValueProvidersCacheDecorator(new PublicPropertiesAndFieldsAnalyzer(), new Dictionary<Type, IList<IValueProvider>>());
         private IJsonWriterFactory _writerFactory;
-        private ICharacterEscaper _characterEscaper = new DefaultCharacterEscaper();
-        private Func<IList<IJsonWriterInstructor>> _createList = CreateDefaultList;
-
-        private static IList<IJsonWriterInstructor> CreateDefaultList()
-        {
-            return new List<IJsonWriterInstructor>();
-        } 
 
         public JsonSerializerBuilder()
         {
@@ -34,6 +29,11 @@ namespace Light.Serialization.Json
                 .AddDefaultWriterInstructors(new List<IPrimitiveTypeFormatter>().AddDefaultPrimitiveTypeFormatters(_characterEscaper)
                                                                                 .ToDictionary(f => f.TargetType),
                                              _typeAnalyzer);
+        }
+
+        private static IList<IJsonWriterInstructor> CreateDefaultList()
+        {
+            return new List<IJsonWriterInstructor>();
         }
 
         public JsonSerializerBuilder WithWriterFactory(IJsonWriterFactory writerFactory)
@@ -110,11 +110,11 @@ namespace Light.Serialization.Json
             where T : IPrimitiveTypeFormatter
         {
             configureFormatter(BasicWriterInstructors.OfType<PrimitiveTypeInstructor>()
-                                                 .First()
-                                                 .PrimitiveTypeToFormattersMapping
-                                                 .Values
-                                                 .OfType<T>()
-                                                 .First());
+                                                     .First()
+                                                     .PrimitiveTypeToFormattersMapping
+                                                     .Values
+                                                     .OfType<T>()
+                                                     .First());
             return this;
         }
 
@@ -143,7 +143,7 @@ namespace Light.Serialization.Json
             {
                 writerInstructors.Add(instructor);
             }
-            return new JsonSerializer((IReadOnlyList<IJsonWriterInstructor>)writerInstructors, _writerFactory, _instructorCache);
+            return new JsonSerializer((IReadOnlyList<IJsonWriterInstructor>) writerInstructors, _writerFactory, _instructorCache);
         }
     }
 }
