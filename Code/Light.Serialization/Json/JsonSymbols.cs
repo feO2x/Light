@@ -26,6 +26,9 @@ namespace Light.Serialization.Json
         public const char Minus = '-';
         public const char StringEscapeCharacter = '\\';
         public const char HexadecimalEscapeIndicator = 'u';
+        public const string DefaultIdSymbol = "$id";
+        public const string DefaultReferenceSymbol = "$ref";
+
 
         public static readonly IReadOnlyList<SingleEscapedCharacter> SingleEscapedCharacters =
             new[]

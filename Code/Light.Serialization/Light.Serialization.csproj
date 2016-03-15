@@ -152,8 +152,7 @@
     <Compile Include="Json\ObjectReferencePreservation\JsonReferenceInfo.cs" />
     <Compile Include="Json\ObjectReferencePreservation\ObjectReferencePreserver.cs" />
     <Compile Include="Json\ObjectReferencePreservation\PreserveObjectReferencesDecorator.cs" />
-    <Compile Include="Json\WriterInstructors\IPreserverWriting.cs" />
-    <Compile Include="Json\WriterInstructors\PreserverWriting.cs" />
+    <Compile Include="Json\ObjectReferencePreservation\IDecoratableComplexInstructor.cs" />
     <Compile Include="Json\WriterInstructors\PrimitiveWriterInstructor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Json\JsonSerializer.cs" />

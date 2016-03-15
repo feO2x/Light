@@ -30,5 +30,10 @@ namespace Light.Serialization.Json
             SerializeChildObject = serializeChildObject;
             Writer = writer;
         }
+
+        public void SerializeValue<T>(T value)
+        {
+            SerializeChildObject(value, typeof (T), typeof (T));
+        }
     }
 }

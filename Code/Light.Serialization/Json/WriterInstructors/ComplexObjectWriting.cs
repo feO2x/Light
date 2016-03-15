@@ -10,16 +10,23 @@ namespace Light.Serialization.Json.WriterInstructors
         {
             valueProvidersForComplexObject.MustNotBeNull(nameof(valueProvidersForComplexObject));
 
-            var writer = context.Writer;
-            writer.BeginObject();
+            context.Writer.BeginObject();
+
+            WriteInnerValues(context, valueProvidersForComplexObject);
+
+            context.Writer.EndObject();
+        }
+
+        public static void WriteInnerValues(JsonSerializationContext context, IList<IValueProvider> valueProvidersForComplexObject)
+        {
             for (var i = 0; i < valueProvidersForComplexObject.Count; i++)
             {
                 var valueProvider = valueProvidersForComplexObject[i];
                 var childValue = valueProvider.GetValue(context.ObjectToBeSerialized);
 
-                writer.WriteKey(valueProvider.Name); //todo: normalize or not?
+                context.Writer.WriteKey(valueProvider.Name); //todo: normalize or not?
                 if (childValue == null)
-                    writer.WriteNull();
+                    context.Writer.WriteNull();
                 else
                 {
                     // TODO: This might end up in an endless loop if e.g. a property returns a reference to the object itself. Can be solved with a dictionary that contains all objects being serialized (what I wanted to integrate in the first place).
@@ -28,9 +35,8 @@ namespace Light.Serialization.Json.WriterInstructors
                 }
 
                 if (i < valueProvidersForComplexObject.Count - 1)
-                    writer.WriteDelimiter();
+                    context.Writer.WriteDelimiter();
             }
-            writer.EndObject();
         }
     }
 }

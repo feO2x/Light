@@ -19,7 +19,6 @@ namespace Light.Serialization.Tests
                 new object[]
                 {
                     new ClassWithPublicPropertiesAndPrivateFields(42, "Foo"),
-                    new ClassWithPublicPropertiesAndPrivateFields(42, "Foo"),
                     $"{{{"int".SurroundWithQuotationMarks()}:42,{"string".SurroundWithQuotationMarks()}:\"Foo\"}}"
                 },
                 new object[]

@@ -1,24 +1,44 @@
 ﻿using System;
 using Light.GuardClauses;
-using Light.Serialization.Json.WriterInstructors;
 
 namespace Light.Serialization.Json.ObjectReferencePreservation
 {
     public sealed class PreserveObjectReferencesDecorator : IJsonWriterInstructor
     {
-        private readonly IJsonWriterInstructor _decoratedInstructor;
+        private readonly IDecoratableComplexInstructor _decoratedInstructor;
         private readonly ObjectReferencePreserver _objectReferencePreserver;
-        private readonly IPreserverWriting _preserverWriting;
 
-        public PreserveObjectReferencesDecorator(IJsonWriterInstructor decoratedInstructor, ObjectReferencePreserver objectReferencePreserver, IPreserverWriting preserverWriting)
+        private string _idSymbol = JsonSymbols.DefaultIdSymbol;
+        private string _referenceSymbol = JsonSymbols.DefaultReferenceSymbol;
+
+        public PreserveObjectReferencesDecorator(IDecoratableComplexInstructor decoratedInstructor, ObjectReferencePreserver objectReferencePreserver)
         {
             decoratedInstructor.MustNotBeNull(nameof(decoratedInstructor));
             objectReferencePreserver.MustNotBeNull(nameof(objectReferencePreserver));
-            preserverWriting.MustNotBeNull(nameof(preserverWriting));
 
             _decoratedInstructor = decoratedInstructor;
             _objectReferencePreserver = objectReferencePreserver;
-            _preserverWriting = preserverWriting;
+        }
+
+
+        public string IdSymbol
+        {
+            get { return _idSymbol; }
+            set
+            {
+                value.MustNotBeNullOrWhiteSpace(nameof(value));
+                _idSymbol = value;
+            }
+        }
+
+        public string ReferenceSymbol
+        {
+            get { return _referenceSymbol; }
+            set
+            {
+                value.MustNotBeNullOrWhiteSpace(nameof(value));
+                _referenceSymbol = value;
+            }
         }
 
         public bool AppliesToObject(object @object, Type actualType, Type referencedType)
@@ -30,14 +50,21 @@ namespace Light.Serialization.Json.ObjectReferencePreservation
         {
             var objectReferenceInfo = _objectReferencePreserver.GetObjectReferenceInfo(serializationContext.ObjectToBeSerialized);
 
+            var writer = serializationContext.Writer;
+            writer.BeginObject();
+
             if (objectReferenceInfo.WasAlreadySerialized)
             {
-                _preserverWriting.WriteReferenceKey(serializationContext, objectReferenceInfo.JsonObjectId.ToString());
+                writer.WriteKey(_referenceSymbol, false);
+                serializationContext.SerializeValue(objectReferenceInfo.JsonObjectId);
+                writer.EndObject();
                 return;
             }
 
-            _preserverWriting.WriteIdentifierKey(serializationContext, objectReferenceInfo.JsonObjectId.ToString());
-            _decoratedInstructor.Serialize(serializationContext);
+            writer.WriteKey(_idSymbol);
+            serializationContext.SerializeValue(objectReferenceInfo.JsonObjectId);
+            _decoratedInstructor.SerializeInner(serializationContext);
+            writer.EndObject();
         }
     }
 }

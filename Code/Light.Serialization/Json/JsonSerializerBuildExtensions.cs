@@ -48,7 +48,7 @@ namespace Light.Serialization.Json
             targetList.Add(new CollectionInstructor());
             targetList.Add(new PreserveObjectReferencesDecorator(
                 new ComplexObjectInstructor(readableValuesTypeAnalyzer),
-                new ObjectReferencePreserver(new Dictionary<object, uint>()), new PreserverWriting()));
+                new ObjectReferencePreserver(new Dictionary<object, uint>())));
 
             return targetList;
         }
