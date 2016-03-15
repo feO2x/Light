@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using Light.GuardClauses;
 using Light.Serialization.Json.ComplexTypeDecomposition;
+using Light.Serialization.Json.ObjectReferencePreservation;
 
 namespace Light.Serialization.Json.WriterInstructors
 {
-    public sealed class CustomRuleInstructor : IJsonWriterInstructor
+    public sealed class CustomRuleInstructor : IDecoratableComplexInstructor
     {
         private readonly Type _targetType;
         private readonly IList<IValueProvider> _valueProviders;
@@ -27,6 +28,13 @@ namespace Light.Serialization.Json.WriterInstructors
         public void Serialize(JsonSerializationContext serializationContext)
         {
             ComplexObjectWriting.WriteValues(serializationContext, _valueProviders);
+        }
+
+        public void SerializeInner(JsonSerializationContext serializationContext)
+        {
+            if (_valueProviders.Count == 0) return;
+            serializationContext.Writer.WriteDelimiter();
+            ComplexObjectWriting.WriteInnerValues(serializationContext, _valueProviders);
         }
     }
 }

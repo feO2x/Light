@@ -8,6 +8,7 @@ using Light.Serialization.Json.ComplexTypeConstruction;
 using Light.Serialization.Json.ComplexTypeDecomposition;
 using Light.Serialization.Json.LowLevelReading;
 using Light.Serialization.Json.LowLevelWriting;
+using Light.Serialization.Json.ObjectReferencePreservation;
 using Light.Serialization.Json.PrimitiveTypeFormatters;
 using Light.Serialization.Json.TokenParsers;
 using Light.Serialization.Json.TypeNaming;
@@ -68,7 +69,9 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, EnumerationToStringInstructor>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, DictionaryInstructor>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, CollectionInstructor>(new ContainerControlledLifetimeManager())
-                            .RegisterTypeWithTypeName<IJsonWriterInstructor, ComplexObjectInstructor>(new ContainerControlledLifetimeManager())
+                            .RegisterType<IJsonWriterInstructor, ComplexObjectInstructor>(new ContainerControlledLifetimeManager(),
+                                                                                            new InjectionFactory(c => new PreserveObjectReferencesDecorator(new ComplexObjectInstructor(c.Resolve<IReadableValuesTypeAnalyzer>()),
+                                                                                                new ObjectReferencePreserver(new Dictionary<object, uint>()))))
                             .RegisterType<IDictionary<Type, IPrimitiveTypeFormatter>>(new ContainerControlledLifetimeManager(),
                                                                                       new InjectionFactory(c => c.ResolveAll<IPrimitiveTypeFormatter>().ToDictionary(f => f.TargetType)))
                             .RegisterType<IPrimitiveTypeFormatter>(KnownNames.IntFormatter, new ContainerControlledLifetimeManager(),

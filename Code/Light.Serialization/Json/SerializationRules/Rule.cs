@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
+using Light.Serialization.Json.ObjectReferencePreservation;
 
 namespace Light.Serialization.Json.SerializationRules
 {
@@ -155,7 +156,9 @@ namespace Light.Serialization.Json.SerializationRules
                 i++;
             }
 
-            return new CustomRuleInstructor(TargetType, valueProviders);
+            return new PreserveObjectReferencesDecorator(
+                new CustomRuleInstructor(TargetType, valueProviders), 
+                new ObjectReferencePreserver(new Dictionary<object, uint>()));
         }
     }
 }
