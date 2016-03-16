@@ -105,7 +105,7 @@
     <Compile Include="Json\ComplexTypeConstruction\IObjectFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\ITypeDescriptionProvider.cs" />
     <Compile Include="Json\TokenParsers\IJsonStringToPrimitiveParser.cs" />
-    <Compile Include="Json\TokenParsers\Iso8601DurationParser.cs" />
+    <Compile Include="Json\TokenParsers\Iso8601DurationToTimeSpanParser.cs" />
     <Compile Include="Json\TokenParsers\JsonStringInheritenceParser.cs" />
     <Compile Include="Json\TokenParsers\NullParser.cs" />
     <Compile Include="Json\TokenParsers\ParseResult.cs" />

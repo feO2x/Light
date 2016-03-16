@@ -1,26 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Light.Serialization.Json.TokenParsers
 {
-    public class DecimalParser : IJsonTokenParser
+    public sealed class DecimalParser : IJsonTokenParser
     {
-        private readonly Type _decimalType = typeof(decimal);
-
         public bool CanBeCached => true;
 
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
-            return (token.JsonType == JsonTokenType.FloatingPointNumber || token.JsonType == JsonTokenType.IntegerNumber) && requestedType == _decimalType;
+            return (token.JsonType == JsonTokenType.FloatingPointNumber || token.JsonType == JsonTokenType.IntegerNumber || token.JsonType == JsonTokenType.String) && requestedType == typeof(decimal);
         }
 
         public object ParseValue(JsonDeserializationContext context)
         {
-            var decimalString = context.Token.ToString();
+            var token = context.Token;
+            if (token.JsonType == JsonTokenType.String)
+                token = token.RemoveOuterQuotationMarks();
+
+            var decimalString = token.ToString();
             decimal result;
             if (decimal.TryParse(decimalString, NumberStyles.Number, CultureInfo.InvariantCulture, out result))
                 return result;

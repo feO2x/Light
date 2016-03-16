@@ -41,7 +41,34 @@ namespace Light.Serialization.Tests
                 {
                     "{\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"string\",\"string\"]}, \"1\": \"Hello\", \"2\": \"World\"}",
                     new Dictionary<string, string> { ["1"] = "Hello", ["2"] = "World" }
+                },
+                new object[]
+                {
+                    "{\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"string\",\"string\"]}, \"This\": \"That\", \"Here\": \"There\"}",
+                    new Dictionary<string, string> { ["This"] = "That", ["Here"] = "There" }
                 }
+            };
+
+        [Theory(DisplayName = "The deserializer must be able to deserialize dictionaries when the key is a primitive non-string type.")]
+        [MemberData(nameof(NumericKeysData))]
+        public void NumericKeys<T>(string json, IDictionary<T, object> expected, T sampleValueForTypeResolving)
+        {
+            ConfigureDefaultDomainFriendlyNaming();
+
+            var actual = GetDeserializedJson<IDictionary<T, object>>(json);
+
+            actual.ShouldAllBeEquivalentTo(expected);
+        }
+
+        public static readonly TestData NumericKeysData =
+            new[]
+            {
+                new object[]
+                {
+                    "{\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"int32\",\"object\"]}, \"1\": \"Hello\", \"2\": \"World\"}",
+                    new Dictionary<int, object> {[1] = "Hello", [2] = "World"}, 1 
+                },
+                // TODO: more tests for other integer types, double, float, characters, and enum values
             };
     }
 }
