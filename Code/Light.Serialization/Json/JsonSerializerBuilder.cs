@@ -5,6 +5,7 @@ using Light.GuardClauses;
 using Light.Serialization.Json.Caching;
 using Light.Serialization.Json.ComplexTypeDecomposition;
 using Light.Serialization.Json.LowLevelWriting;
+using Light.Serialization.Json.ObjectReferencePreservation;
 using Light.Serialization.Json.PrimitiveTypeFormatters;
 using Light.Serialization.Json.SerializationRules;
 
@@ -18,6 +19,7 @@ namespace Light.Serialization.Json
         private IDictionary<Type, IJsonWriterInstructor> _instructorCache;
         private IReadableValuesTypeAnalyzer _readableValuesTypeAnalyzer;
         private IJsonWriterFactory _writerFactory;
+        private IRuleBuilder _ruleBuilder;
 
         public JsonSerializerBuilder()
         {
@@ -31,6 +33,7 @@ namespace Light.Serialization.Json
 
             UseDefaultWriterFactory();
             _instructorCache = new Dictionary<Type, IJsonWriterInstructor>();
+            UseDefaultRuleBuilder();
         }
 
         public JsonSerializerBuilder WithCreateFunctionForInstructorList(Func<IList<IJsonWriterInstructor>> createList)
@@ -70,6 +73,11 @@ namespace Light.Serialization.Json
             return this;
         }
 
+        private void UseDefaultRuleBuilder()
+        {
+            _ruleBuilder = new PreservedObjectsRuleBuilder();
+        }
+
         public JsonSerializerBuilder UseDefaultTypeAnalyzer()
         {
             return UseDefaultTypeAnalyzer(new Dictionary<Type, IList<IValueProvider>>());
@@ -88,13 +96,19 @@ namespace Light.Serialization.Json
             return this;
         }
 
+        public JsonSerializerBuilder WithRuleBuilder(IRuleBuilder builder)
+        {
+            _ruleBuilder = builder;
+            return this;
+        }
+
         public JsonSerializerBuilder WithRuleFor<T>(Action<Rule<T>> configureRule)
         {
             var targetType = typeof (T);
             var targetRule = (Rule<T>) _rules.FirstOrDefault(r => r.TargetType == targetType);
             if (targetRule == null)
             {
-                targetRule = new Rule<T>(_readableValuesTypeAnalyzer);
+                targetRule = _ruleBuilder.CreateRule<T>(_readableValuesTypeAnalyzer);
                 _rules.Add(targetRule);
             }
 

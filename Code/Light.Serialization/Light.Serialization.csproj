@@ -46,11 +46,14 @@
     <Compile Include="Json\ComplexTypeConstruction\DefaultObjectFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\InjectableValueKind.cs" />
     <Compile Include="Json\IntegerMetadata\DecimalPartInfo.cs" />
+    <Compile Include="Json\SerializationRules\IRuleBuilder.cs" />
     <Compile Include="Json\LowLevelWriting\IJsonKeyNormalizer.cs" />
     <Compile Include="Json\LowLevelWriting\FirstCharacterToLowerAndRemoveAllSpecialCharactersNormalizer.cs" />
     <Compile Include="Json\LowLevelWriting\IndentingWhitespaceFormatter.cs" />
     <Compile Include="Json\LowLevelWriting\KeyNormalizerNullObject.cs" />
+    <Compile Include="Json\ObjectReferencePreservation\PreservedObjectsRuleBuilder.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\DateTimeOffsetFormatter.cs" />
+    <Compile Include="Json\SerializationRules\RuleBuilder.cs" />
     <Compile Include="Json\TokenParsers\BaseIso8601DateTimeParser.cs" />
     <Compile Include="Json\TokenParsers\DateTimeOffsetParser.cs" />
     <Compile Include="Json\LowLevelReading\JsonReaderExtensions.cs" />

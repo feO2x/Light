@@ -42,7 +42,7 @@ namespace Light.Serialization.Json.SerializationRules
         public abstract IJsonWriterInstructor CreateInstructor();
     }
 
-    public sealed class Rule<T> : Rule, IButWhiteListRule<T>, IAndWhiteListRule<T>, IAndBlackListRule<T>
+    public class Rule<T> : Rule, IButWhiteListRule<T>, IAndWhiteListRule<T>, IAndBlackListRule<T>
     {
         private readonly List<string> _targetMembersToSerialize = new List<string>();
         private readonly IReadableValuesTypeAnalyzer _typeAnalyzer;
@@ -156,9 +156,26 @@ namespace Light.Serialization.Json.SerializationRules
                 i++;
             }
 
-            return new PreserveObjectReferencesDecorator(
-                new CustomRuleInstructor(TargetType, valueProviders), 
-                new ObjectReferencePreserver(new Dictionary<object, uint>()));
+            return new CustomRuleInstructor(TargetType, valueProviders);
+        }
+    }
+
+    public sealed class RuleObjectPreserverDecorator<T> : Rule<T> {
+        private readonly ObjectReferencePreserver _objectReferencePreserver;
+
+        public RuleObjectPreserverDecorator(IReadableValuesTypeAnalyzer typeAnalyzer, ObjectReferencePreserver objectReferencePreserver) : base(typeAnalyzer)
+        {
+            typeAnalyzer.MustNotBeNull(nameof(typeAnalyzer));
+            objectReferencePreserver.MustNotBeNull(nameof(objectReferencePreserver));
+
+            _objectReferencePreserver = objectReferencePreserver;
+        }
+
+        public override IJsonWriterInstructor CreateInstructor()
+        {
+            var ruleInstructor = base.CreateInstructor();
+
+            return new PreserveObjectReferencesDecorator((IDecoratableInstructor) ruleInstructor, _objectReferencePreserver);
         }
     }
 }
