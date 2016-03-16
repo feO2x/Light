@@ -82,7 +82,7 @@ namespace Light.Serialization.Json
 
         public JsonDeserializer Build()
         {
-            var jsonTokenParsers = _jsonTokenParsers ?? new DefaultJsonTokenParsersBuilder().Build();
+            var jsonTokenParsers = _jsonTokenParsers ?? new DefaultTokenParsersBuilder().Build();
 
             return new JsonDeserializer(_jsonReaderFactory, (IReadOnlyList<IJsonTokenParser>) jsonTokenParsers, _tokenParserCache);
         }

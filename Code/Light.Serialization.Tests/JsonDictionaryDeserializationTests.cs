@@ -23,26 +23,25 @@ namespace Light.Serialization.Tests
                 new object[] { "{\"1\":\"Hey\",\"2\":\"Ho!\",\"3\":\"What?\"}", new Dictionary<string, string> { ["1"] = "Hey", ["2"] = "Ho!", ["3"] = "What?" } }
             };
 
-        // TODO: The following test will only work when DomainFriendlyNameMapping is introduced with the deserializer builder.
-        // It should be activated when they are refactored
 
-        //[Theory(DisplayName = "The deserializer must be able to deserialize dictiories when the requested type is a dictionary abstraction.")]
-        //[MemberData(nameof(UseAbstractionsData))]
-        //public void UseAbstractions(string json, IDictionary<string, string> expected)
-        //{
-        //    var actual = GetDeserializedJson<IDictionary<string, string>>(json);
+        [Theory(DisplayName = "The deserializer must be able to deserialize dictiories when the requested type is a dictionary abstraction.")]
+        [MemberData(nameof(UseAbstractionsData))]
+        public void UseAbstractions(string json, IDictionary<string, string> expected)
+        {
+            ConfigureDefaultDomainFriendlyNaming();
+            var actual = GetDeserializedJson<IDictionary<string, string>>(json);
 
-        //    actual.ShouldAllBeEquivalentTo(expected);
-        //}
+            actual.ShouldAllBeEquivalentTo(expected);
+        }
 
-        //public static readonly TestData UseAbstractionsData =
-        //    new[]
-        //    {
-        //        new object[]
-        //        {
-        //            "{\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"string\",\"string\"]}, \"1\": \"Hello\", \"2\": \"World\"}",
-        //            new Dictionary<string, string> { ["1"] = "Hello", ["2"] = "World" }
-        //        }
-        //    };
+        public static readonly TestData UseAbstractionsData =
+            new[]
+            {
+                new object[]
+                {
+                    "{\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"string\",\"string\"]}, \"1\": \"Hello\", \"2\": \"World\"}",
+                    new Dictionary<string, string> { ["1"] = "Hello", ["2"] = "World" }
+                }
+            };
     }
 }

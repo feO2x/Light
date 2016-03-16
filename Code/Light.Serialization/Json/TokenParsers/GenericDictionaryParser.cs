@@ -93,7 +93,7 @@ namespace Light.Serialization.Json.TokenParsers
             while (true)
             {
                 if (currentToken.JsonType != JsonTokenType.String)
-                    throw new JsonDocumentException($"Expected JSON string or end of complex JSON object, but found {currentToken}", currentToken);
+                    throw new JsonDocumentException($"Expected key in complex JSON object, but found {currentToken}", currentToken);
 
                 var key = context.DeserializeToken<TKey>(currentToken);
 
@@ -110,8 +110,6 @@ namespace Light.Serialization.Json.TokenParsers
                     return;
 
                 currentToken = context.JsonReader.ReadNextToken();
-                if (currentToken.JsonType != JsonTokenType.String)
-                    throw new JsonDocumentException($"Expected key in complex JSON object, but found {currentToken}", currentToken);
             }
         }
     }

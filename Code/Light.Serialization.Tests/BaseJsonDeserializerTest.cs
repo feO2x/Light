@@ -1,6 +1,7 @@
 ﻿using System;
 using FluentAssertions;
 using Light.Serialization.Json;
+using Light.Serialization.Json.TokenParsers;
 
 namespace Light.Serialization.Tests
 {
@@ -30,6 +31,11 @@ namespace Light.Serialization.Tests
         {
             var testTarget = Builder.Build();
             return testTarget.Deserialize(json, requestedType);
+        }
+
+        public void ConfigureDefaultDomainFriendlyNaming()
+        {
+            Builder = new DefaultTokenParsersBuilder().EnableDefaultDomainFriendlyNaming().InjectParsersIntoSerializerBuilder();
         }
 
         public void CheckDeserializerThrowsExceptionWithMessageContaining<T>(string json, string partOfExceptionMessage)

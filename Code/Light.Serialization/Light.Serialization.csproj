@@ -46,7 +46,7 @@
     <Compile Include="Json\ComplexTypeConstruction\DefaultGenericDictionaryFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\DefaultObjectFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\InjectableValueKind.cs" />
-    <Compile Include="Json\TokenParsers\DefaultJsonTokenParsersBuilder.cs" />
+    <Compile Include="Json\TokenParsers\DefaultTokenParsersBuilder.cs" />
     <Compile Include="Json\IntegerMetadata\DecimalPartInfo.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\DateTimeOffsetFormatter.cs" />
     <Compile Include="Json\TokenParsers\BaseIso8601DateTimeParser.cs" />

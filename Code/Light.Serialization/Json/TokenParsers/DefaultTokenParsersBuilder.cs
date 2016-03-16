@@ -6,7 +6,7 @@ using Light.Serialization.Json.TypeNaming;
 
 namespace Light.Serialization.Json.TokenParsers
 {
-    public class DefaultJsonTokenParsersBuilder
+    public class DefaultTokenParsersBuilder
     {
         private ICollectionFactory _collectionFactory = new DefaultGenericCollectionFactory();
         private IDictionaryFactory _dictionaryFactory = new DefaultGenericDictionaryFactory();
@@ -15,43 +15,43 @@ namespace Light.Serialization.Json.TokenParsers
         private ITypeDescriptionProvider _typeDescriptionProvider;
         private ITypeSectionParser _typeSectionParser = new DefaultTypeSectionParser(new SimpleNameToTypeMapping());
 
-        public DefaultJsonTokenParsersBuilder()
+        public DefaultTokenParsersBuilder()
         {
             _typeDescriptionProvider = new TypeDescriptionCacheDecorator(new DefaultTypeDescriptionProvider(_nameNormalizer), new Dictionary<Type, TypeCreationDescription>());
         }
 
-        public DefaultJsonTokenParsersBuilder WithObjectFactory(IObjectFactory objectFactory)
+        public DefaultTokenParsersBuilder WithObjectFactory(IObjectFactory objectFactory)
         {
             _objectFactory = objectFactory;
             return this;
         }
 
-        public DefaultJsonTokenParsersBuilder WithCollectionFactory(ICollectionFactory collectionFactory)
+        public DefaultTokenParsersBuilder WithCollectionFactory(ICollectionFactory collectionFactory)
         {
             _collectionFactory = collectionFactory;
             return this;
         }
 
-        public DefaultJsonTokenParsersBuilder WithDictionaryFactory(IDictionaryFactory dictionaryFactory)
+        public DefaultTokenParsersBuilder WithDictionaryFactory(IDictionaryFactory dictionaryFactory)
         {
             _dictionaryFactory = dictionaryFactory;
             return this;
         }
 
-        public DefaultJsonTokenParsersBuilder WithTypeSectionParser(ITypeSectionParser parser)
+        public DefaultTokenParsersBuilder WithTypeSectionParser(ITypeSectionParser parser)
         {
             _typeSectionParser = parser;
             return this;
         }
 
-        public DefaultJsonTokenParsersBuilder ConfigureTypeSectionParser<T>(Action<T> configureParser)
+        public DefaultTokenParsersBuilder ConfigureTypeSectionParser<T>(Action<T> configureParser)
             where T : ITypeSectionParser
         {
             configureParser((T) _typeSectionParser);
             return this;
         }
 
-        public DefaultJsonTokenParsersBuilder WithNameNormalizer(IInjectableValueNameNormalizer nameNormalizer)
+        public DefaultTokenParsersBuilder WithNameNormalizer(IInjectableValueNameNormalizer nameNormalizer)
         {
             _nameNormalizer = nameNormalizer;
 
@@ -62,13 +62,13 @@ namespace Light.Serialization.Json.TokenParsers
             return this;
         }
 
-        public DefaultJsonTokenParsersBuilder WithTypeDescriptionProvider(ITypeDescriptionProvider analyzer)
+        public DefaultTokenParsersBuilder WithTypeDescriptionProvider(ITypeDescriptionProvider analyzer)
         {
             _typeDescriptionProvider = analyzer;
             return this;
         }
 
-        public DefaultJsonTokenParsersBuilder WithCacheForDefaultTypeDescriptionProvider(Dictionary<Type, TypeCreationDescription> cache)
+        public DefaultTokenParsersBuilder WithCacheForDefaultTypeDescriptionProvider(Dictionary<Type, TypeCreationDescription> cache)
         {
             ((TypeDescriptionCacheDecorator) _typeDescriptionProvider).Cache = cache;
             return this;
@@ -87,6 +87,12 @@ namespace Light.Serialization.Json.TokenParsers
         public JsonDeserializerBuilder InjectParsersIntoSerializerBuilder()
         {
             return new JsonDeserializerBuilder(Build());
+        }
+
+        public DefaultTokenParsersBuilder EnableDefaultDomainFriendlyNaming()
+        {
+            ConfigureTypeSectionParser<DefaultTypeSectionParser>(p => p.NameToTypeMapping = new DomainFriendlyNameMapping().AddDefaultMappingsForBasicTypes());
+            return this;
         }
     }
 }

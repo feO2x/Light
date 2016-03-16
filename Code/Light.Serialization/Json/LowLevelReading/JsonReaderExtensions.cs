@@ -58,5 +58,14 @@ namespace Light.Serialization.Json.LowLevelReading
 
             return reader;
         }
+
+        public static IJsonReader ReadAndExpectEndOfObject(this IJsonReader reader, string exceptionMessage = null)
+        {
+            var token = reader.ReadNextToken();
+            if (token.JsonType != JsonTokenType.EndOfObject)
+                throw new JsonDocumentException(exceptionMessage ?? $"Expected end of JSON object, but found {token}.", token);
+
+            return reader;
+        }
     }
 }
