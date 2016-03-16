@@ -53,6 +53,8 @@ namespace Light.Serialization.Json
         public JsonDeserializerBuilder AddTokenParserBefore<T>(IJsonTokenParser additionalParser)
             where T : IJsonTokenParser
         {
+            additionalParser.MustNotBeNull(nameof(additionalParser));
+
             var targetIndex = _jsonTokenParsers.IndexOf(_jsonTokenParsers.OfType<T>().First());
             if (targetIndex == -1)
                 throw new ArgumentException($"The specified IJsonTokenParser {additionalParser} could not be added before the {typeof (T)} parser because the latter one could not be found.");
@@ -64,6 +66,8 @@ namespace Light.Serialization.Json
         public JsonDeserializerBuilder AddTokenParserAfter<T>(IJsonTokenParser additionalParser)
             where T : IJsonTokenParser
         {
+            additionalParser.MustNotBeNull(nameof(additionalParser));
+
             var targetTindex = _jsonTokenParsers.IndexOf(_jsonTokenParsers.OfType<T>().First());
             if (targetTindex == -1)
                 throw new ArgumentException($"The specified IJsonTokenParser {additionalParser} could not be added after the {typeof (T)} parser because the latter one could not be found.");
