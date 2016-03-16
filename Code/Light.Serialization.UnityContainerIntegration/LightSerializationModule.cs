@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Light.GuardClauses;
 using Light.Serialization.Json;
 using Light.Serialization.Json.Caching;
@@ -67,15 +68,17 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterType<IReadOnlyList<IJsonWriterInstructor>, IJsonWriterInstructor[]>()
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, PrimitiveWriterInstructor>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, EnumerationToStringInstructor>(new ContainerControlledLifetimeManager())
-                            .RegisterType<IJsonWriterInstructor, DictionaryInstructor>(new ContainerControlledLifetimeManager(),
+                            .RegisterType<IJsonWriterInstructor, PreserveObjectReferencesDecorator>(typeof(DictionaryInstructor).Name,
+                            new ContainerControlledLifetimeManager(),
                                                                                             new InjectionFactory(c => new PreserveObjectReferencesDecorator(
                                                                                                 new DictionaryInstructor(c.Resolve<IDictionary<Type, IPrimitiveTypeFormatter>>()),
-                                                                                                new ObjectReferencePreserver(new Dictionary<object, uint>()))))
+                                                                                                c.Resolve<ObjectReferencePreserver>())))
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, CollectionInstructor>(new ContainerControlledLifetimeManager())
-                            .RegisterType<IJsonWriterInstructor, ComplexObjectInstructor>(new ContainerControlledLifetimeManager(),
+                            .RegisterType<IJsonWriterInstructor, PreserveObjectReferencesDecorator>(typeof(ComplexObjectInstructor).Name,
+                            new ContainerControlledLifetimeManager(),
                                                                                             new InjectionFactory(c => new PreserveObjectReferencesDecorator(
                                                                                                 new ComplexObjectInstructor(c.Resolve<IReadableValuesTypeAnalyzer>()),
-                                                                                                new ObjectReferencePreserver(new Dictionary<object, uint>()))))
+                                                                                                c.Resolve<ObjectReferencePreserver>())))
                             .RegisterType<IDictionary<Type, IPrimitiveTypeFormatter>>(new ContainerControlledLifetimeManager(),
                                                                                       new InjectionFactory(c => c.ResolveAll<IPrimitiveTypeFormatter>().ToDictionary(f => f.TargetType)))
                             .RegisterType<IPrimitiveTypeFormatter>(KnownNames.IntFormatter, new ContainerControlledLifetimeManager(),
@@ -117,7 +120,10 @@ namespace Light.Serialization.UnityContainerIntegration
                                                              new InjectionFactory(c => new DefaultCharacterEscaper()))
                             .RegisterType<IReadableValuesTypeAnalyzer>(new ContainerControlledLifetimeManager(),
                                                                        new InjectionFactory(c => new ValueProvidersCacheDecorator(new PublicPropertiesAndFieldsAnalyzer(),
-                                                                                                                                  new Dictionary<Type, IList<IValueProvider>>())));
+                                                                                                                                  new Dictionary<Type, IList<IValueProvider>>())))
+                            .RegisterInstance(new ObjectReferencePreserver(
+                                                                            new Dictionary<object, uint>()),
+                                                                        new ContainerControlledLifetimeManager());
         }
 
         public static IUnityContainer RegisterTypeWithTypeName<TFrom, TTo>(this IUnityContainer container,

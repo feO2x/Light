@@ -20,7 +20,7 @@ namespace Light.Serialization.UnityContainerIntegration.Tests
                                                 Location = "Abq"
                                             }
                               };
-            const string expectedJson = @"{""name"":""Walter White"",""age"":52,""address"":{""street"":""One Way"",""zipCode"":""12345"",""location"":""Abq""}}";
+            const string expectedJson = @"{""$id"":0,""name"":""Walter White"",""age"":52,""address"":{""$id"":1,""street"":""One Way"",""zipCode"":""12345"",""location"":""Abq""}}";
             var unityContainer = new UnityContainer().RegisterDefaultSerializationTypes();
             var serializer = unityContainer.Resolve<ISerializer>();
 

@@ -27,7 +27,7 @@ namespace Light.Serialization.Tests
                         { "Walter", new DummyPerson { Name = "Walter White", Age = 52 } },
                         { "Jesse", new DummyPerson { Name = "Jesse Pinkman", Age = 27 } }
                     },
-                    "{\"$id\":0,\"walter\":{\"$id\":1,\"name\":\"Walter White\",\"age\":52},\"$id\":3,\"jesse\":{\"$id\":4,\"name\":\"Jesse Pinkman\",\"age\":27}}"
+                    "{\"$id\":0,\"walter\":{\"$id\":1,\"name\":\"Walter White\",\"age\":52},\"jesse\":{\"$id\":2,\"name\":\"Jesse Pinkman\",\"age\":27}}"
                 },
                 new object[]
                 {

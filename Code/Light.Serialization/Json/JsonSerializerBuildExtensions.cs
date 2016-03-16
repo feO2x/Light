@@ -42,15 +42,17 @@ namespace Light.Serialization.Json
         {
             targetList.MustNotBeNull(nameof(targetList));
 
+            var preserver = new ObjectReferencePreserver(new Dictionary<object, uint>());
+
             targetList.Add(new PrimitiveWriterInstructor(primitiveTypeToFormattersMapping));
             targetList.Add(new EnumerationToStringInstructor());
             targetList.Add(new PreserveObjectReferencesDecorator(
                 new DictionaryInstructor(primitiveTypeToFormattersMapping),
-                new ObjectReferencePreserver(new Dictionary<object, uint>())));
+                preserver));
             targetList.Add(new CollectionInstructor());
             targetList.Add(new PreserveObjectReferencesDecorator(
                 new ComplexObjectInstructor(readableValuesTypeAnalyzer),
-                new ObjectReferencePreserver(new Dictionary<object, uint>())));
+                preserver));
 
             return targetList;
         }
