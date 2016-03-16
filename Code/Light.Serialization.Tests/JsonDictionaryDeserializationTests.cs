@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Xunit;
 using TestData = System.Collections.Generic.IEnumerable<object[]>;
@@ -68,7 +69,56 @@ namespace Light.Serialization.Tests
                     "{\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"int32\",\"object\"]}, \"1\": \"Hello\", \"2\": \"World\"}",
                     new Dictionary<int, object> {[1] = "Hello", [2] = "World"}, 1 
                 },
-                // TODO: more tests for other integer types, double, float, characters, and enum values
+                new object[]
+                {
+                    "{\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"int16\",\"object\"]}, \"-14\": \"x\", \"0\": 19 }",
+                    new Dictionary<short, object> { [-14] = "x", [0] = 19 }, new short()
+                },
+                new object[]
+                {
+                    "{\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"int64\",\"object\"]}, \"1\": \"Black\", \"2\": \"DarkBlue\", \"3\": \"Magenta\"}",
+                    new Dictionary<long, object> {[1L] = "Black", [2L] = "DarkBlue", [3L] = "Magenta"}, new long()
+                },
+                new object[]
+                {
+                    "{\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"int8\",\"object\"]}, \"-128\": \"a\", \"0\": \"b\", \"127\": \"c\"}",
+                    new Dictionary<sbyte, object> {[-128] = "a", [0] = "b", [127] = "c"}, new sbyte() 
+                },
+                new object[]
+                {
+                    "{\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"uint32\",\"object\"]}, \"1\": \"Hello\", \"2\": \"There\"}",
+                    new Dictionary<uint, object> {[1u] = "Hello", [2u] = "There"}, new uint() 
+                },
+                new object[]
+                {
+                    "{\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"uint16\",\"object\"]}, \"30000\": \"number\", \"65535\": \"large number\"}",
+                    new Dictionary<ushort, object> {[30000] = "number", [65535] = "large number"}, new ushort() 
+                },
+                new object[]
+                {
+                    $"{{\"$type\":{{\"name\":\"genericMap\",\"typeArguments\":[\"uint64\",\"object\"]}}, \"{ulong.MinValue}\": \"long minimum\", \"{ulong.MaxValue}\": \"long maximum\"}}",
+                    new Dictionary<ulong, object> {[ulong.MinValue] = "long minimum", [ulong.MaxValue] = "long maximum"}, new ulong() 
+                },
+                new object[]
+                {
+                    "{\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"byte\",\"object\"]}, \"1\": \"small byte\", \"2\": \"slightly larger byte\", \"255\": \"largest byte\"}",
+                    new Dictionary<byte, object> {[1] = "small byte", [2] = "slightly larger byte", [255] = "largest byte"}, new byte() 
+                },
+                new object[]
+                {
+                  "{\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"float64\",\"object\"]}, \"42.7\": \"nearly the answer\", \"42.0\": \"that's it\"}",
+                  new Dictionary<double, object> {[42.7] = "nearly the answer", [42.0] = "that's it"}, new double()   
+                },
+                new object[]
+                {
+                  "{\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"float32\",\"object\"]}, \"-42.7\": \"nearly the answer\", \"42.0\": \"that's it\"}",
+                  new Dictionary<float, object> {[-42.7f] = "nearly the answer", [42.0f] = "that's it"}, new float()
+                },
+                new object[]
+                {
+                  "{\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"decimal\",\"object\"]}, \"-4200.705\": \"nearly the answer\", \"42.0\": \"that's it\"}",
+                  new Dictionary<decimal, object> {[-4200.705m] = "nearly the answer", [42.0m] = "that's it"}, new decimal()
+                }
             };
     }
 }
