@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Light.GuardClauses;
 using Light.Serialization.Json.Caching;
 using Light.Serialization.Json.ComplexTypeDecomposition;
 using Light.Serialization.Json.LowLevelWriting;
@@ -69,15 +70,33 @@ namespace Light.Serialization.Json
             return this;
         }
 
-        public JsonSerializerBuilder AddWriterInstructor(IJsonWriterInstructor writerInstructor)
+        public JsonSerializerBuilder AddWriterInstructorAfter<T>(IJsonWriterInstructor additionalWriterInstructor)
+            where T : IJsonWriterInstructor
         {
-            BasicWriterInstructors.Add(writerInstructor);
+            additionalWriterInstructor.MustNotBeNull(nameof(additionalWriterInstructor));
+
+            var targetIndex = BasicWriterInstructors.IndexOf(BasicWriterInstructors.OfType<T>().First());
+            if (targetIndex == -1)
+                throw new ArgumentException($"The specified writer instructor {additionalWriterInstructor} cannot be added after the instructor {typeof(T)} because the latter was not found.");
+
+            if (targetIndex == BasicWriterInstructors.Count - 1)
+                BasicWriterInstructors.Add(additionalWriterInstructor);
+            else
+                BasicWriterInstructors.Insert(targetIndex + 1, additionalWriterInstructor);
+
             return this;
         }
 
-        public JsonSerializerBuilder InsertWriterInstructor(int index, IJsonWriterInstructor writerInstructor)
+        public JsonSerializerBuilder AddWriterInstructorBefore<T>(IJsonWriterInstructor additionalWriterInstructor)
+            where T : IJsonWriterInstructor
         {
-            BasicWriterInstructors.Insert(index, writerInstructor);
+            additionalWriterInstructor.MustNotBeNull(nameof(additionalWriterInstructor));
+
+            var targetIndex = BasicWriterInstructors.IndexOf(BasicWriterInstructors.OfType<T>().First());
+            if (targetIndex == -1)
+                throw new ArgumentException($"The specified writer instructor {additionalWriterInstructor} cannot be added before the instructor {typeof(T)} because the latter was not found.");
+
+            BasicWriterInstructors.Insert(targetIndex, additionalWriterInstructor);
             return this;
         }
 
