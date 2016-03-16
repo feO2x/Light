@@ -10,6 +10,12 @@ namespace Light.Serialization.Json.TypeNaming
     {
         private readonly Dictionary<string, List<Type>> _nameToTypeMappings = new Dictionary<string, List<Type>>();
         private readonly Dictionary<Type, string> _typeToNameMappings = new Dictionary<Type, string>();
+
+        void IAddOneToOneMapping.AddMapping(string jsonName, Type correspondingType)
+        {
+            AddMapping(jsonName, correspondingType);
+        }
+
         public Type Map(string typeName)
         {
             return _nameToTypeMappings[typeName][0];
@@ -102,12 +108,5 @@ namespace Light.Serialization.Json.TypeNaming
             _typeToNameMappings.Clear();
             return this;
         }
-
-        void IAddOneToOneMapping.AddMapping(string jsonName, Type correspondingType)
-        {
-            AddMapping(jsonName, correspondingType);
-        }
     }
-
-    
 }

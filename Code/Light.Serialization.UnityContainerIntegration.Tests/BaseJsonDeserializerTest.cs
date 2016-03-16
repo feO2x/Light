@@ -4,6 +4,7 @@ using Light.Serialization.UnityContainerIntegration;
 using Microsoft.Practices.Unity;
 
 // ReSharper disable once CheckNamespace
+
 namespace Light.Serialization.Tests
 {
     public abstract class BaseJsonDeserializerTest
@@ -34,6 +35,11 @@ namespace Light.Serialization.Tests
             var testTarget = Container.Resolve<IDeserializer>();
 
             return testTarget.Deserialize(json, requestedType);
+        }
+
+        public void ConfigureDefaultDomainFriendlyNaming()
+        {
+            Container.UseDefaultDomainFriendlyNames();
         }
 
         public void CheckDeserializerThrowsExceptionWithMessageContaining<T>(string json, string partOfExceptionMessage)

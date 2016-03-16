@@ -45,9 +45,11 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterType<IJsonTokenParser>(KnownNames.JsonStringParserOrchestrator,
                                                             new InjectionFactory(c => new JsonStringInheritenceParser(c.Resolve<IJsonStringToPrimitiveParser[]>(),
                                                                                                                       c.Resolve<StringParser>())))
+                            .RegisterTypeWithTypeName<IJsonTokenParser, GenericDictionaryParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, ArrayToGenericCollectionParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, ComplexObjectParser>(new ContainerControlledLifetimeManager())
                             .RegisterType<ICollectionFactory, DefaultGenericCollectionFactory>(new ContainerControlledLifetimeManager())
+                            .RegisterType<IDictionaryFactory, DefaultGenericDictionaryFactory>(new ContainerControlledLifetimeManager())
                             .RegisterType<IObjectFactory, UnityObjectFactory>(new ContainerControlledLifetimeManager())
                             .RegisterType<INameToTypeMapping, SimpleNameToTypeMapping>(new ContainerControlledLifetimeManager())
                             .RegisterType<ITypeSectionParser, DefaultTypeSectionParser>(new ContainerControlledLifetimeManager())
