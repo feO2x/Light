@@ -33,5 +33,26 @@ namespace Light.GuardClauses.Tests
 
             act.ShouldNotThrow();
         }
+
+        [Fact(DisplayName = "The caller can specify a custom message that MustNotBeLessThanOrEqualTo must inject instead of the default one.")]
+        public void CustomMessage()
+        {
+            const string message = "Thou shall not be less than or equal to the other!";
+
+            Action act = () => 42.MustNotBeLessThanOrEqualTo(42, message: message);
+
+            act.ShouldThrow<ArgumentOutOfRangeException>()
+               .And.Message.Should().Contain(message);
+        }
+
+        [Fact(DisplayName = "The caller can specify a custom exception that MustNotBeLessThanOrEqualTo must raise instead of the default one.")]
+        public void CustomException()
+        {
+            var exception = new Exception();
+
+            Action act = () => 42.MustNotBeLessThanOrEqualTo(42, exception: exception);
+
+            act.ShouldThrow<Exception>().Which.Should().BeSameAs(exception);
+        }
     }
 }
