@@ -62,8 +62,8 @@ namespace Light.GuardClauses
         }
 
         /// <summary>
-        ///     Ensures that parameter is of the specified type and returns the downcasted value, or throws a
-        ///     <see cref="TypeMismatchException" /> otherwise.
+        ///     Ensures that parameter is of the specified type and returns the downcasted value, or otherwise throws a
+        ///     <see cref="TypeMismatchException" />.
         /// </summary>
         /// <typeparam name="T">The type of the parameter to be checked.</typeparam>
         /// <param name="parameter">The parameter to be checked.</param>
@@ -77,6 +77,10 @@ namespace Light.GuardClauses
         ///     Please note that <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you
         ///     specify exception.
         /// </param>
+        /// <exception cref="TypeMismatchException">
+        ///     Thrown when the specified <paramref name="parameter" /> cannot be downcasted and no
+        ///     <paramref name="exception" /> was specified.
+        /// </exception>
         /// <returns>The downcasted reference to <paramref name="parameter" />.</returns>
         public static T MustBeType<T>(this object parameter, string parameterName = null, string message = null, Exception exception = null) where T : class
         {
@@ -87,11 +91,30 @@ namespace Light.GuardClauses
             return castedValue;
         }
 
+        /// <summary>
+        ///     Ensures that the specified Nullable has a value, or otherwise throws a <see cref="NullableHasNoValueException" />.
+        /// </summary>
+        /// <typeparam name="T">The type of the struct encapsulated by the Nullable.</typeparam>
+        /// <param name="parameter">The parameter to be checked.</param>
+        /// <param name="parameterName">The name of the parameter (optional).</param>
+        /// <param name="message">
+        ///     The message that will be injected into the <see cref="NullableHasNoValueException" /> (optional).
+        ///     Please note that <paramref name="parameterName" /> is ignored when you use message.
+        /// </param>
+        /// <param name="exception">
+        ///     The exception that is thrown when the specified Nullable has no value (optional).
+        ///     Please note that <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you
+        ///     specify exception.
+        /// </param>
+        /// <exception cref="NullableHasNoValueException">
+        ///     Thrown when the specified nullable has no value and no
+        ///     <paramref name="exception" /> was specified.
+        /// </exception>
         [Conditional(Check.CompileAssertionsSymbol)]
-        public static void MustHaveValue<T>(this T? parameter, string parameterName) where T : struct
+        public static void MustHaveValue<T>(this T? parameter, string parameterName = null, string message = null, Exception exception = null) where T : struct
         {
             if (parameter.HasValue == false)
-                throw new NullableHasNoValueException(parameterName);
+                throw exception ?? (message != null ? new NullableHasNoValueException(message, parameterName) : new NullableHasNoValueException(parameterName));
         }
 
         [Conditional(Check.CompileAssertionsSymbol)]

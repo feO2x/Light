@@ -1,5 +1,5 @@
-﻿using FluentAssertions;
-using System;
+﻿using System;
+using FluentAssertions;
 using Light.GuardClauses.Exceptions;
 using Xunit;
 
@@ -27,6 +27,31 @@ namespace Light.GuardClauses.Tests
             Action act = () => value.MustHaveValue(nameof(value));
 
             act.ShouldNotThrow();
+        }
+
+        [Fact(DisplayName = "The caller can specify a custom message that MustHaveValue must inject instead of the default one.")]
+        public void CustomMessage()
+        {
+            double? value = null;
+            const string message = "Thou shall have a value!";
+
+            // ReSharper disable once ExpressionIsAlwaysNull
+            Action act = () => value.MustHaveValue(message: message);
+
+            act.ShouldThrow<NullableHasNoValueException>()
+               .And.Message.Should().Be(message);
+        }
+
+        [Fact(DisplayName = "The caller can specify a custom exception that MustHaveValue must raise instead of the default one.")]
+        public void CustomException()
+        {
+            double? value = null;
+            var exception = new Exception();
+
+            // ReSharper disable once ExpressionIsAlwaysNull
+            Action act = () => value.MustHaveValue(exception: exception);
+
+            act.ShouldThrow<Exception>().Which.Should().BeSameAs(exception);
         }
     }
 }
