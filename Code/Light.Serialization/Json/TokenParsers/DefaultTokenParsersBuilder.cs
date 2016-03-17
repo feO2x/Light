@@ -89,9 +89,9 @@ namespace Light.Serialization.Json.TokenParsers
             return new JsonDeserializerBuilder(Build());
         }
 
-        public DefaultTokenParsersBuilder EnableDefaultDomainFriendlyNaming()
+        public DefaultTokenParsersBuilder EnableDefaultDomainFriendlyNaming(Action<NameToMappingTransformer.IScanningOptions> configureAdditionalTypes = null)
         {
-            ConfigureTypeSectionParser<DefaultTypeSectionParser>(p => p.NameToTypeMapping = new DomainFriendlyNameMapping().AddDefaultMappingsForBasicTypes());
+            ConfigureTypeSectionParser<DefaultTypeSectionParser>(p => p.NameToTypeMapping = new DomainFriendlyNameMapping().AddDefaultMappingsForBasicTypes().AddTypes(configureAdditionalTypes));
             return this;
         }
     }

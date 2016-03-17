@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentAssertions;
+using Light.Serialization.Json.TypeNaming;
 using Light.Serialization.UnityContainerIntegration;
 using Microsoft.Practices.Unity;
 
@@ -37,9 +38,9 @@ namespace Light.Serialization.Tests
             return testTarget.Deserialize(json, requestedType);
         }
 
-        public void ConfigureDefaultDomainFriendlyNaming()
+        public void ConfigureDefaultDomainFriendlyNaming(Action<NameToMappingTransformer.IScanningOptions> configureAdditionalTypes = null)
         {
-            Container.UseDefaultDomainFriendlyNames();
+            Container.UseDefaultDomainFriendlyNames(configureAdditionalTypes);
         }
 
         public void CheckDeserializerThrowsExceptionWithMessageContaining<T>(string json, string partOfExceptionMessage)

@@ -95,6 +95,9 @@ namespace Light.Serialization.Json.TypeNaming
 
         public DomainFriendlyNameMapping AddTypes(Action<NameToMappingTransformer.IScanningOptions> configureOptions)
         {
+            if (configureOptions == null)
+                return this;
+
             var transformer = new NameToMappingTransformer();
             configureOptions(transformer);
 
