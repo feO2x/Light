@@ -1,5 +1,5 @@
-﻿using FluentAssertions;
-using System;
+﻿using System;
+using FluentAssertions;
 using Xunit;
 using TestData = System.Collections.Generic.IEnumerable<object[]>;
 
