@@ -10,7 +10,7 @@ namespace Light.GuardClauses
 {
     public static class CollectionGuardClauses
     {
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustBeOneOf<T>(this T parameter, IReadOnlyList<T> items, string parameterName)
         {
             if (items.Contains(parameter))
@@ -20,7 +20,7 @@ namespace Light.GuardClauses
             throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must be one of the items ({stringBuilder}), but you specified {parameter}.");
         }
 
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustNotBeOneOf<T>(this T parameter, IReadOnlyList<T> items, string parameterName)
         {
             if (items.Contains(parameter) == false)
@@ -30,7 +30,7 @@ namespace Light.GuardClauses
             throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must be none of the items ({stringBuilder}), but you specified {parameter}.");
         }
 
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustNotBeNullOrEmpty<T>(this IReadOnlyCollection<T> collection, string parameterName)
         {
             if (collection == null)
@@ -40,7 +40,7 @@ namespace Light.GuardClauses
                 throw new EmptyCollectionException(parameterName);
         }
 
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustHaveUniqueItems<T>(this IReadOnlyList<T> parameter, string parameterName)
         {
             for (var i = 0; i < parameter.Count; i++)
@@ -57,7 +57,7 @@ namespace Light.GuardClauses
             }
         }
 
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustBeKeyOf<TKey, TValue>(this TKey parameter, IDictionary<TKey, TValue> dictionary, string parameterName)
         {
             if (dictionary.ContainsKey(parameter))

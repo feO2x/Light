@@ -7,7 +7,7 @@ namespace Light.GuardClauses
 {
     public static class StringGuardClauses
     {
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustNotBeNullOrEmpty(this string @string, string parameterName)
         {
             if (@string == null)
@@ -17,7 +17,7 @@ namespace Light.GuardClauses
                 throw new EmptyStringException(parameterName);
         }
 
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustMatch(this string parameter, Regex pattern, string parameterName)
         {
             var match = pattern.Match(parameter);
@@ -25,7 +25,7 @@ namespace Light.GuardClauses
                 throw new StringDoesNotMatchException(parameterName, parameter, pattern);
         }
 
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustNotBeEmpty(this Guid parameter, string parameterName)
         {
             if (parameter == Guid.Empty)
@@ -33,7 +33,7 @@ namespace Light.GuardClauses
         }
 
 
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustNotBeNullOrWhiteSpace(this string parameter, string parameterName)
         {
             parameter.MustNotBeNullOrEmpty(parameterName);
@@ -47,14 +47,14 @@ namespace Light.GuardClauses
             throw new StringIsOnlyWhiteSpaceException(parameterName, parameter);
         }
 
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustContain(this string parameter, string containedText, string parameterName)
         {
             if (parameter.Contains(containedText) == false)
                 throw new StringException($"{parameterName} must contain the text \"{containedText}\", but you specified \"{parameter}\".", parameterName);
         }
 
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustNotContain(this string parameter, string textToCompare, string parameterName)
         {
             if (parameter.Contains(textToCompare))

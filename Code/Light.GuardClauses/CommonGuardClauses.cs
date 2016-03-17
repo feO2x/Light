@@ -7,28 +7,28 @@ namespace Light.GuardClauses
 {
     public static class CommonGuardClauses
     {
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustNotBeNull(this object parameter, string parameterName)
         {
             if (parameter == null)
                 throw new ArgumentNullException(parameterName);
         }
 
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustBeNull(this object parameter, string parameterName)
         {
             if (parameter != null)
                 throw new ArgumentNotNullException(parameterName, parameter);
         }
 
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustBe<T>(this T parameter, T other, string parameterName)
         {
             if (parameter.EqualsWithHashCode(other) == false)
                 throw new ArgumentException($"{parameterName} must be {other}, but you specified {parameter}.", parameterName);
         }
 
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustBe<T>(this T parameter, T other, Exception exception)
         {
             if (parameter.EqualsWithHashCode(other) == false)
@@ -44,21 +44,21 @@ namespace Light.GuardClauses
             return castedValue;
         }
 
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustHaveValue<T>(this T? parameter, string parameterName) where T : struct
         {
             if (parameter.HasValue == false)
                 throw new NullableHasNoValueException(parameterName);
         }
 
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustNotHaveValue<T>(this T? parameter, string parameterName) where T : struct
         {
             if (parameter.HasValue)
                 throw new NullableHasValueException(parameterName, parameter.Value);
         }
 
-        [Conditional(Check.PreconditionSymbol)]
+        [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustBeValidEnumValue<T>(this T parameter, string parameterName)
         {
             var enumType = typeof(T);
