@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Light.GuardClauses;
 using Light.Serialization.Json.ComplexTypeConstruction;
 using Light.Serialization.Json.TokenParsers;
 using Light.Serialization.Json.TypeNaming;
@@ -18,8 +17,6 @@ namespace Light.Serialization.Json
                                                                       ITypeDescriptionProvider typeDescriptionProvider)
             where TCollection : IList<IJsonTokenParser>
         {
-            targetList.MustNotBeNull(nameof(targetList));
-
             targetList.Add(new UnsignedIntegerParser());
             targetList.Add(new SignedIntegerParser());
             targetList.Add(new DateTimeParser());

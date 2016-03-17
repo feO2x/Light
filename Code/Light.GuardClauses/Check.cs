@@ -3,6 +3,11 @@ using System.Diagnostics;
 
 namespace Light.GuardClauses
 {
+    /// <summary>
+    /// The Check class is the entry point to using assertions in production code: it defines the CompileAssertionsSymbol
+    /// so that assertions can be included or excluded according to the build definitions of a project, and the two
+    /// static methods That and Against that form the lowest level entry point to the library.
+    /// </summary>
     public static class Check
     {
         /// <summary>

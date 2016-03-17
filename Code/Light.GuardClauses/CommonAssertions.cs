@@ -5,13 +5,24 @@ using Light.GuardClauses.FrameworkExtensions;
 
 namespace Light.GuardClauses
 {
+    /// <summary>
+    /// This class contains the most common assertions like MustNotBeNull and assertions that are not directly related to
+    /// categories like collection assertions or string assertions.
+    /// </summary>
     public static class CommonAssertions
     {
+        /// <summary>
+        /// Checks that the specified parameter is not <c>null</c>, and otherwise throws an <see cref="ArgumentNullException"/>.
+        /// </summary>
+        /// <param name="parameter">The parameter to be checked.</param>
+        /// <param name="parameterName">The name of the parameter (optional).</param>
+        /// <param name="message">The message that should be injected into the <see cref="ArgumentNullException"/>.</param>
+        /// <exception cref="ArgumentNullException">Thrown when the specified parameter is null.</exception>
         [Conditional(Check.CompileAssertionsSymbol)]
-        public static void MustNotBeNull(this object parameter, string parameterName)
+        public static void MustNotBeNull<T>(this T parameter, string parameterName = null, string message = null) where T : class
         {
             if (parameter == null)
-                throw new ArgumentNullException(parameterName);
+                throw new ArgumentNullException(parameterName, message);
         }
 
         [Conditional(Check.CompileAssertionsSymbol)]

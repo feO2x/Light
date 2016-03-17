@@ -40,8 +40,6 @@ namespace Light.Serialization.Json
                                                                            IReadableValuesTypeAnalyzer readableValuesTypeAnalyzer)
             where TCollection : IList<IJsonWriterInstructor>
         {
-            targetList.MustNotBeNull(nameof(targetList));
-
             targetList.Add(new PrimitiveTypeInstructor(primitiveTypeToFormattersMapping));
             targetList.Add(new EnumerationToStringInstructor());
             targetList.Add(new DictionaryInstructor(primitiveTypeToFormattersMapping));
