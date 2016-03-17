@@ -3,16 +3,38 @@ using System.Diagnostics;
 
 namespace Light.GuardClauses
 {
+    /// <summary>
+    ///     The ComparableAssertions class contains extension methods that check assertions for the IComparable&lt;T&gt;
+    ///     interface.
+    /// </summary>
     public static class ComparableAssertions
     {
+        /// <summary>
+        ///     Ensures that the specified value is not less than the given boundary value, or otherwise throws an
+        ///     <see cref="ArgumentOutOfRangeException" />.
+        /// </summary>
+        /// <typeparam name="T">The type of the parameter to be checked.</typeparam>
+        /// <param name="parameter">The parameter to be checked.</param>
+        /// <param name="boundary">The boundary value that <paramref name="parameter" /> must not exceed.</param>
+        /// <param name="parameterName">The name of the parameter (optional).</param>
+        /// <param name="message">
+        ///     The message that should be injected into the <see cref="ArgumentOutOfRangeException" />
+        ///     (optional).
+        /// </param>
+        /// <param name="exception">
+        ///     The exception that is thrown when the specified <paramref name="parameter" /> is less than
+        ///     <paramref name="boundary" /> (optional). Please note that <paramref name="message" /> and
+        ///     <paramref name="parameterName" /> are both ignored when you specify exception.
+        /// </param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when the specified <paramref name="parameter" /> is less than
+        ///     <paramref name="boundary" /> and no <paramref name="exception" /> is specified.
+        /// </exception>
         [Conditional(Check.CompileAssertionsSymbol)]
-        public static void MustNotBeLessThan<T>(this T parameter, T boundary, string parameterName, string exceptionMessage = null) where T : IComparable<T>
+        public static void MustNotBeLessThan<T>(this T parameter, T boundary, string parameterName = null, string message = null, Exception exception = null) where T : IComparable<T>
         {
             if (parameter.CompareTo(boundary) < 0)
-            {
-                exceptionMessage = exceptionMessage ?? $"{parameterName} must not be less than {boundary}, but you specified {parameter}.";
-                throw new ArgumentOutOfRangeException(parameterName, parameter, exceptionMessage);
-            }
+                throw exception ?? new ArgumentOutOfRangeException(parameterName, parameter, message ?? $"{parameterName ?? "The value"} must not be less than {boundary}, but you specified {parameter}.");
         }
 
         [Conditional(Check.CompileAssertionsSymbol)]
