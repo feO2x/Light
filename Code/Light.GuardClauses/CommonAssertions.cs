@@ -140,15 +140,35 @@ namespace Light.GuardClauses
         public static void MustNotHaveValue<T>(this T? parameter, string parameterName = null, string message = null, Exception exception = null) where T : struct
         {
             if (parameter.HasValue)
-                throw exception ?? (message == null ? new NullableHasValueException(parameterName, parameter.Value) : new NullableHasValueException(message));
+                throw exception ?? (message == null ? new NullableHasValueException(parameterName, parameter.Value) : new NullableHasValueException(message, parameterName));
         }
 
+        /// <summary>
+        ///     Ensures that the specified value is defined in its corresponding enum type, or otherwise throws a
+        ///     <see cref="EnumValueNotDefinedException" />.
+        /// </summary>
+        /// <typeparam name="T">The enum type of the parameter.</typeparam>
+        /// <param name="parameter">The parameter to be checked.</param>
+        /// <param name="parameterName">The name of the parameter (optional).</param>
+        /// <param name="message">
+        ///     The message that will be injected into the <see cref="EnumValueNotDefinedException" /> (optional).
+        ///     Please note that <paramref name="parameterName" /> is ignored when you use message.
+        /// </param>
+        /// <param name="exception">
+        ///     The exception that is thrown when the specified Nullable has a value (optional).
+        ///     Please note that <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you
+        ///     specify exception.
+        /// </param>
+        /// <exception cref="EnumValueNotDefinedException">
+        ///     Thrown when the specified enum value is not defined and no
+        ///     <paramref name="exception" /> was specified.
+        /// </exception>
         [Conditional(Check.CompileAssertionsSymbol)]
-        public static void MustBeValidEnumValue<T>(this T parameter, string parameterName)
+        public static void MustBeValidEnumValue<T>(this T parameter, string parameterName = null, string message = null, Exception exception = null)
         {
             var enumType = typeof (T);
             if (Enum.IsDefined(enumType, parameter) == false)
-                throw new EnumValueNotDefinedException(parameterName, parameter, enumType);
+                throw exception ?? (message == null ? new EnumValueNotDefinedException(parameterName, parameter, enumType) : new EnumValueNotDefinedException(message, parameterName));
         }
     }
 }
