@@ -18,7 +18,7 @@ namespace Light.Serialization.Json.Caching
             JsonTokenType = jsonTokenType;
             Type = type;
 
-            _hashCode = EqualityHelper.CreateHashCode(jsonTokenType, type);
+            _hashCode = Equality.CreateHashCode(jsonTokenType, type);
         }
 
         public bool Equals(JsonTokenTypeCombination other)

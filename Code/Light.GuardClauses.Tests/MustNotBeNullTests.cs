@@ -33,7 +33,7 @@ namespace Light.GuardClauses.Tests
             };
 
         [Fact(DisplayName = "The exception thrown by MustNotBeNull must contain the message if it is specified by the caller.")]
-        public void SpecifyMessage()
+        public void CustomMessage()
         {
             object someObject = null;
             const string message = "Thou shall not be null!";
@@ -46,7 +46,7 @@ namespace Light.GuardClauses.Tests
         }
 
         [Fact(DisplayName = "MustNotBeNull must raise the specified exception when the corresponding overload is called.")]
-        public void SpecifyException()
+        public void CustomException()
         {
             object someObject = null;
             var exception = new Exception();
@@ -54,7 +54,7 @@ namespace Light.GuardClauses.Tests
             // ReSharper disable once ExpressionIsAlwaysNull
             Action act = () => someObject.MustNotBeNull(() => exception);
 
-            act.ShouldThrow<Exception>().Which.Should().Be(exception);
+            act.ShouldThrow<Exception>().Which.Should().BeSameAs(exception);
         }
 
         private static void DummyMethod<T>(T someObject) where T : class

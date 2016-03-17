@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using Light.GuardClauses.Exceptions;
-using Light.GuardClauses.FrameworkExtensions;
 
 namespace Light.GuardClauses
 {
@@ -12,7 +11,7 @@ namespace Light.GuardClauses
     public static class CommonAssertions
     {
         /// <summary>
-        ///     Ensures that the specified parameter is not <c>null</c>, and otherwise throws an
+        ///     Ensures that the specified parameter is not <c>null</c>, or otherwise throws an
         ///     <see cref="ArgumentNullException" />.
         /// </summary>
         /// <typeparam name="T">The type of the parameter to be checked.</typeparam>
@@ -28,7 +27,7 @@ namespace Light.GuardClauses
         }
 
         /// <summary>
-        ///     Ensures that the specified parameter is not <c>null</c>, and otherwise throws the specified exception.
+        ///     Ensures that the specified parameter is not <c>null</c>, or otherwise throws the specified exception.
         /// </summary>
         /// <typeparam name="T">The type of the parameter to be checked.</typeparam>
         /// <param name="parameter">The parameter to be checked.</param>
@@ -40,13 +39,16 @@ namespace Light.GuardClauses
         }
 
         /// <summary>
-        ///     Ensures that the specified parameter is <c>null</c>, and otherwise throws an
-        ///     <see cref="ArgumentNotNullException" />.
+        ///     Ensures that the specified parameter is <c>null</c>, or otherwise throws an <see cref="ArgumentNotNullException" />
+        ///     .
         /// </summary>
         /// <typeparam name="T">The type of the parameter to be checked.</typeparam>
         /// <param name="parameter">The parameter to be checked.</param>
         /// <param name="parameterName">The name of the parameter (optional).</param>
-        /// <param name="message">The message that should be injected in to the <see cref="ArgumentNotNullException" /> (optional). Please note that parameterName is ignored when you use message.</param>
+        /// <param name="message">
+        ///     The message that should be injected into the <see cref="ArgumentNotNullException" /> (optional).
+        ///     Please note that parameterName is ignored when you use message.
+        /// </param>
         /// <exception cref="ArgumentNotNullException">Thrown when the specified parameter is not <c>null</c>.</exception>
         [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustBeNull<T>(this T parameter, string parameterName = null, string message = null) where T : class
@@ -56,7 +58,7 @@ namespace Light.GuardClauses
         }
 
         /// <summary>
-        ///     Ensures that the specified parameter is <c>null</c>, and otherwise throws the specified exception.
+        ///     Ensures that the specified parameter is <c>null</c>, or otherwise throws the specified exception.
         /// </summary>
         /// <typeparam name="T">The type of the parameter to be checked.</typeparam>
         /// <param name="parameter">The parameter to be checked.</param>
@@ -68,19 +70,6 @@ namespace Light.GuardClauses
                 throw otherwiseCreateException();
         }
 
-        [Conditional(Check.CompileAssertionsSymbol)]
-        public static void MustBe<T>(this T parameter, T other, string parameterName)
-        {
-            if (parameter.EqualsWithHashCode(other) == false)
-                throw new ArgumentException($"{parameterName} must be {other}, but you specified {parameter}.", parameterName);
-        }
-
-        [Conditional(Check.CompileAssertionsSymbol)]
-        public static void MustBe<T>(this T parameter, T other, Exception exception)
-        {
-            if (parameter.EqualsWithHashCode(other) == false)
-                throw exception;
-        }
 
         public static TOut MustBeType<TOut>(this object @object, string parameterName) where TOut : class
         {

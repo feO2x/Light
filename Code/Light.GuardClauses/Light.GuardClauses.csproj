@@ -37,6 +37,7 @@
     <Compile Include="CollectionAssertions.cs" />
     <Compile Include="CommonAssertions.cs" />
     <Compile Include="ComparableAssertions.cs" />
+    <Compile Include="EqualityAssertions.cs" />
     <Compile Include="Exceptions\ArgumentNotNullException.cs" />
     <Compile Include="Exceptions\CollectionException.cs" />
     <Compile Include="Exceptions\EmptyCollectionException.cs" />
@@ -46,8 +47,7 @@
     <Compile Include="Exceptions\StringDoesNotMatchException.cs" />
     <Compile Include="Exceptions\StringException.cs" />
     <Compile Include="Exceptions\StringIsOnlyWhiteSpaceException.cs" />
-    <Compile Include="FrameworkExtensions\EqualityExtensions.cs" />
-    <Compile Include="FrameworkExtensions\EqualityHelper.cs" />
+    <Compile Include="FrameworkExtensions\Equality.cs" />
     <Compile Include="FrameworkExtensions\StringBuilderExtensions.cs" />
     <Compile Include="Check.cs" />
     <Compile Include="Exceptions\NullableHasNoValueException.cs" />

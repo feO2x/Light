@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Light.GuardClauses.FrameworkExtensions
 {
-    public sealed class EqualityHelper
+    public static class Equality
     {
         public const int FirstPrime = 17;
         public const int SecondPrime = 31;
@@ -63,7 +63,25 @@ namespace Light.GuardClauses.FrameworkExtensions
                    first.Equals(second);
         }
 
-        public static bool CompareNullableValues<T>(T first, T second) where T : class, IEquatable<T>
+        public static bool EqualsWithHashCode<T>(this T reference, T other)
+        {
+            if (reference == null)
+                return other == null || other.Equals(null);
+
+            if (other == null)
+                return reference.Equals(null);
+
+            return reference.GetHashCode() == other.GetHashCode() &&
+                   reference.Equals(other);
+        }
+
+        public static bool EqualsValueWithHashCode<T>(this T value, T other) where T : struct
+        {
+            return value.GetHashCode() == other.GetHashCode() &&
+                   value.Equals(other);
+        }
+
+        public static bool EqualsWithHashCode<T>(this IEquatable<T> first, IEquatable<T> second)
         {
             if (first == null)
                 return second == null || second.Equals(null);
@@ -75,10 +93,16 @@ namespace Light.GuardClauses.FrameworkExtensions
                    first.Equals(second);
         }
 
-        public static bool CompareNonNullableValues<T>(T first, T second) where T : struct, IEquatable<T>
+        public static bool EqualsValueWithHashCode<T>(this IEquatable<T> first, IEquatable<T> second) where T : struct
         {
             return first.GetHashCode() == second.GetHashCode() &&
                    first.Equals(second);
+        }
+
+        public static bool EqualsWithHashCode<T>(this IEqualityComparer<T> equalityComparer, T reference, T other)
+        {
+            return equalityComparer.GetHashCode(reference) == equalityComparer.GetHashCode(other) &&
+                   equalityComparer.Equals(reference, other);
         }
     }
 }
