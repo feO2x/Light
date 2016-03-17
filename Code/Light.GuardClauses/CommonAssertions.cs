@@ -14,6 +14,7 @@ namespace Light.GuardClauses
         /// <summary>
         /// Checks that the specified parameter is not <c>null</c>, and otherwise throws an <see cref="ArgumentNullException"/>.
         /// </summary>
+        /// <typeparam name="T">The type of the parameter to be checked.</typeparam>
         /// <param name="parameter">The parameter to be checked.</param>
         /// <param name="parameterName">The name of the parameter (optional).</param>
         /// <param name="message">The message that should be injected into the <see cref="ArgumentNullException"/>.</param>
@@ -23,6 +24,18 @@ namespace Light.GuardClauses
         {
             if (parameter == null)
                 throw new ArgumentNullException(parameterName, message);
+        }
+
+        /// <summary>
+        /// Checks that the specified parameter is not <c>null</c>, and otherwise throws the specified exception.
+        /// </summary>
+        /// <typeparam name="T">The type of the parameter to be checked.</typeparam>
+        /// <param name="parameter">The parameter to be checked.</param>
+        /// <param name="otherwiseCreateException">The delegate that creates the exception to be thrown.</param>
+        public static void MustNotBeNull<T>(this T parameter, Func<Exception> otherwiseCreateException) where T : class
+        {
+            if (parameter == null)
+                throw otherwiseCreateException();
         }
 
         [Conditional(Check.CompileAssertionsSymbol)]

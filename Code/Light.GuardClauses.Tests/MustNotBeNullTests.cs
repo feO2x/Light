@@ -32,6 +32,31 @@ namespace Light.GuardClauses.Tests
                 new[] { new object() }
             };
 
+        [Fact(DisplayName = "The exception thrown by MustNotBeNull must contain the message if it is specified by the caller.")]
+        public void SpecifyMessage()
+        {
+            object someObject = null;
+            const string message = "Thou shall not be null!";
+
+            // ReSharper disable once ExpressionIsAlwaysNull
+            Action act = () => someObject.MustNotBeNull(message: message);
+
+            act.ShouldThrow<ArgumentNullException>()
+               .And.Message.Should().Be(message);
+        }
+
+        [Fact(DisplayName = "MustNotBeNull must raise the specified exception when the corresponding overload is called.")]
+        public void SpecifyException()
+        {
+            object someObject = null;
+            var exception = new Exception();
+
+            // ReSharper disable once ExpressionIsAlwaysNull
+            Action act = () => someObject.MustNotBeNull(() => exception);
+
+            act.ShouldThrow<Exception>().Which.Should().Be(exception);
+        }
+
         private static void DummyMethod<T>(T someObject) where T : class
         {
             someObject.MustNotBeNull(nameof(someObject));
