@@ -16,7 +16,7 @@ namespace Light.Serialization.Json.IntegerMetadata
 
         public static DecimalPartInfo FromNumericJsonToken(JsonToken token)
         {
-            Guard.Against(token.JsonType != JsonTokenType.FloatingPointNumber,
+            Check.Against(token.JsonType != JsonTokenType.FloatingPointNumber,
                           () => new ArgumentException($"The token must be a floating point number, but you specified {token}."));
 
             var areTrailingDigitsOnlyZeros = true;

@@ -37,9 +37,9 @@ namespace Light.Serialization.Json.TypeNaming
         {
             jsonName.MustNotBeNullOrWhiteSpace(nameof(jsonName));
             mappedTypes.MustNotBeNull(nameof(mappedTypes));
-            Guard.Against(mappedTypes.Count < 1,
+            Check.Against(mappedTypes.Count < 1,
                           () => new CollectionException($"{nameof(mappedTypes)} must have at least one type that is mapped to the jsonName", nameof(mappedTypes)));
-            Guard.Against(mappedTypes.Any(t => t == null),
+            Check.Against(mappedTypes.Any(t => t == null),
                           () => new CollectionException($"{nameof(mappedTypes)} must have no entries that are null.", nameof(mappedTypes)));
 
             _nameToTypeMappings.Add(jsonName, mappedTypes);

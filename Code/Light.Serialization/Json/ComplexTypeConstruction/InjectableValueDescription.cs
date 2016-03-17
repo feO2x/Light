@@ -31,7 +31,7 @@ namespace Light.Serialization.Json.ComplexTypeConstruction
         public void AddConstructorParameter(ParameterInfo parameterInfo)
         {
             parameterInfo.MustNotBeNull(nameof(parameterInfo));
-            Guard.Against(parameterInfo.Member is ConstructorInfo == false, () => new ArgumentException($"The specified parameterInfo {parameterInfo} does not belong to a constructor."));
+            Check.Against(parameterInfo.Member is ConstructorInfo == false, () => new ArgumentException($"The specified parameterInfo {parameterInfo} does not belong to a constructor."));
 
             _kind |= InjectableValueKind.ConstructorParameter;
             _constructorParameterInfo = parameterInfo;
@@ -40,10 +40,10 @@ namespace Light.Serialization.Json.ComplexTypeConstruction
         public void AddPropertyName(PropertyInfo propertyInfo)
         {
             // ReSharper disable PossibleNullReferenceException
-            Guard.Against(propertyInfo.SetMethod == null, () => new ArgumentException($"The specified PropertyInfo {propertyInfo} of type {propertyInfo.DeclaringType} does not have a set method."));
-            Guard.Against(propertyInfo.SetMethod.IsPublic == false, () => new ArgumentException($"The specified PropertyInfo {propertyInfo} of type {propertyInfo.DeclaringType} has no public set method"));
-            Guard.Against(propertyInfo.SetMethod.IsStatic, () => new ArgumentException($"The specified PropertyInfo {propertyInfo} of type {propertyInfo.DeclaringType} is static."));
-            Guard.Against(propertyInfo.PropertyType != Type, () => new ArgumentException($"The specified PropertyInfo {propertyInfo} of type {propertyInfo.DeclaringType} does not have the same type {Type} as this injectable value info."));
+            Check.Against(propertyInfo.SetMethod == null, () => new ArgumentException($"The specified PropertyInfo {propertyInfo} of type {propertyInfo.DeclaringType} does not have a set method."));
+            Check.Against(propertyInfo.SetMethod.IsPublic == false, () => new ArgumentException($"The specified PropertyInfo {propertyInfo} of type {propertyInfo.DeclaringType} has no public set method"));
+            Check.Against(propertyInfo.SetMethod.IsStatic, () => new ArgumentException($"The specified PropertyInfo {propertyInfo} of type {propertyInfo.DeclaringType} is static."));
+            Check.Against(propertyInfo.PropertyType != Type, () => new ArgumentException($"The specified PropertyInfo {propertyInfo} of type {propertyInfo.DeclaringType} does not have the same type {Type} as this injectable value info."));
             // ReSharper restore PossibleNullReferenceException
 
             _kind |= InjectableValueKind.PropertySetter;
@@ -53,9 +53,9 @@ namespace Light.Serialization.Json.ComplexTypeConstruction
         public void AddFieldInfo(FieldInfo fieldInfo)
         {
             fieldInfo.MustNotBeNull(nameof(fieldInfo));
-            Guard.Against(fieldInfo.IsStatic, () => new ArgumentException($"The specified FieldInfo {fieldInfo} of type {fieldInfo.DeclaringType} is static."));
-            Guard.Against(fieldInfo.IsPublic == false, () => new ArgumentException($"The specified FieldInfo {fieldInfo} of type {fieldInfo.DeclaringType} is not public."));
-            Guard.Against(fieldInfo.FieldType != Type, () => new ArgumentException($"The specified FieldInfo {fieldInfo} of type {fieldInfo.DeclaringType} does not have the same type {Type} as this injectable value info."));
+            Check.Against(fieldInfo.IsStatic, () => new ArgumentException($"The specified FieldInfo {fieldInfo} of type {fieldInfo.DeclaringType} is static."));
+            Check.Against(fieldInfo.IsPublic == false, () => new ArgumentException($"The specified FieldInfo {fieldInfo} of type {fieldInfo.DeclaringType} is not public."));
+            Check.Against(fieldInfo.FieldType != Type, () => new ArgumentException($"The specified FieldInfo {fieldInfo} of type {fieldInfo.DeclaringType} does not have the same type {Type} as this injectable value info."));
 
             _kind |= InjectableValueKind.SettableField;
             _fieldInfo = fieldInfo;
@@ -104,7 +104,7 @@ namespace Light.Serialization.Json.ComplexTypeConstruction
         public void SetFieldValue(object targetObject, object value)
         {
             targetObject.MustNotBeNull(nameof(targetObject));
-            Guard.Against((_kind & InjectableValueKind.SettableField) != 0,
+            Check.Against((_kind & InjectableValueKind.SettableField) != 0,
                           () => new InvalidOperationException($"You try to set a field value on {NormalizedName}, but there is no such field on type {targetObject.GetType().FullName}."));
 
             _fieldInfo.SetValue(targetObject, value);
@@ -113,7 +113,7 @@ namespace Light.Serialization.Json.ComplexTypeConstruction
         public void SetPropertyValue(object targetObject, object value)
         {
             targetObject.MustNotBeNull(nameof(targetObject));
-            Guard.Against((_kind & InjectableValueKind.PropertySetter) != 0,
+            Check.Against((_kind & InjectableValueKind.PropertySetter) != 0,
                           () => new InvalidOperationException($"You try to set a property value on {NormalizedName}, but there is no such property on type {targetObject.GetType().FullName}."));
 
             PropertyInfo.SetValue(targetObject, value);

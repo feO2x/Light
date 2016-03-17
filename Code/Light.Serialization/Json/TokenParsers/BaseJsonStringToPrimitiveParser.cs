@@ -12,8 +12,8 @@ namespace Light.Serialization.Json.TokenParsers
         protected BaseJsonStringToPrimitiveParser()
         {
             var typeInfo = typeof (T).GetTypeInfo();
-            Guard.Against(typeInfo.IsInterface, () => new InvalidOperationException($"The specified type {typeInfo.FullName} is an interface and cannot be used with this base class."));
-            Guard.Against(typeInfo.BaseType == typeof (Delegate), () => new InvalidOperationException($"The specified type {typeInfo.FullName} is a delegate and cannot be used with this base class."));
+            Check.Against(typeInfo.IsInterface, () => new InvalidOperationException($"The specified type {typeInfo.FullName} is an interface and cannot be used with this base class."));
+            Check.Against(typeInfo.BaseType == typeof (Delegate), () => new InvalidOperationException($"The specified type {typeInfo.FullName} is a delegate and cannot be used with this base class."));
 
             _associatedInterfacesAndBaseClasses.Add(typeof (object));
             // If it is a value type, it can only be a struct or an enum

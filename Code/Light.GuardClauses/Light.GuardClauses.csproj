@@ -49,7 +49,7 @@
     <Compile Include="FrameworkExtensions\EqualityExtensions.cs" />
     <Compile Include="FrameworkExtensions\EqualityHelper.cs" />
     <Compile Include="FrameworkExtensions\StringBuilderExtensions.cs" />
-    <Compile Include="Guard.cs" />
+    <Compile Include="Check.cs" />
     <Compile Include="Exceptions\NullableHasNoValueException.cs" />
     <Compile Include="Exceptions\NullableHasValueException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,28 +7,28 @@ namespace Light.GuardClauses
 {
     public static class CommonGuardClauses
     {
-        [Conditional(Guard.PreconditionSymbol)]
+        [Conditional(Check.PreconditionSymbol)]
         public static void MustNotBeNull(this object parameter, string parameterName)
         {
             if (parameter == null)
                 throw new ArgumentNullException(parameterName);
         }
 
-        [Conditional(Guard.PreconditionSymbol)]
+        [Conditional(Check.PreconditionSymbol)]
         public static void MustBeNull(this object parameter, string parameterName)
         {
             if (parameter != null)
                 throw new ArgumentNotNullException(parameterName, parameter);
         }
 
-        [Conditional(Guard.PreconditionSymbol)]
+        [Conditional(Check.PreconditionSymbol)]
         public static void MustBe<T>(this T parameter, T other, string parameterName)
         {
             if (parameter.EqualsWithHashCode(other) == false)
                 throw new ArgumentException($"{parameterName} must be {other}, but you specified {parameter}.", parameterName);
         }
 
-        [Conditional(Guard.PreconditionSymbol)]
+        [Conditional(Check.PreconditionSymbol)]
         public static void MustBe<T>(this T parameter, T other, Exception exception)
         {
             if (parameter.EqualsWithHashCode(other) == false)
@@ -44,21 +44,21 @@ namespace Light.GuardClauses
             return castedValue;
         }
 
-        [Conditional(Guard.PreconditionSymbol)]
+        [Conditional(Check.PreconditionSymbol)]
         public static void MustHaveValue<T>(this T? parameter, string parameterName) where T : struct
         {
             if (parameter.HasValue == false)
                 throw new NullableHasNoValueException(parameterName);
         }
 
-        [Conditional(Guard.PreconditionSymbol)]
+        [Conditional(Check.PreconditionSymbol)]
         public static void MustNotHaveValue<T>(this T? parameter, string parameterName) where T : struct
         {
             if (parameter.HasValue)
                 throw new NullableHasValueException(parameterName, parameter.Value);
         }
 
-        [Conditional(Guard.PreconditionSymbol)]
+        [Conditional(Check.PreconditionSymbol)]
         public static void MustBeValidEnumValue<T>(this T parameter, string parameterName)
         {
             var enumType = typeof(T);
