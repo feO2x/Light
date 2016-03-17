@@ -18,24 +18,20 @@ namespace Light.GuardClauses
         /// <param name="parameter">The parameter to be checked.</param>
         /// <param name="parameterName">The name of the parameter (optional).</param>
         /// <param name="message">The message that should be injected into the <see cref="ArgumentNullException" /> (optional).</param>
-        /// <exception cref="ArgumentNullException">Thrown when the specified parameter is <c>null</c>.</exception>
+        /// <param name="exception">
+        ///     The exception that is thrown when the specified <paramref name="parameter" /> is <c>null</c> (optional). Please
+        ///     note that <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you specify
+        ///     exception.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when the specified parameter is <c>null</c> and no
+        ///     <paramref name="exception" /> was specified.
+        /// </exception>
         [Conditional(Check.CompileAssertionsSymbol)]
-        public static void MustNotBeNull<T>(this T parameter, string parameterName = null, string message = null) where T : class
+        public static void MustNotBeNull<T>(this T parameter, string parameterName = null, string message = null, Exception exception = null) where T : class
         {
             if (parameter == null)
-                throw new ArgumentNullException(parameterName, message);
-        }
-
-        /// <summary>
-        ///     Ensures that the specified parameter is not <c>null</c>, or otherwise throws the specified exception.
-        /// </summary>
-        /// <typeparam name="T">The type of the parameter to be checked.</typeparam>
-        /// <param name="parameter">The parameter to be checked.</param>
-        /// <param name="otherwiseCreateException">The delegate that creates the exception to be thrown.</param>
-        public static void MustNotBeNull<T>(this T parameter, Func<Exception> otherwiseCreateException) where T : class
-        {
-            if (parameter == null)
-                throw otherwiseCreateException();
+                throw exception ?? new ArgumentNullException(parameterName, message);
         }
 
         /// <summary>
@@ -47,29 +43,23 @@ namespace Light.GuardClauses
         /// <param name="parameterName">The name of the parameter (optional).</param>
         /// <param name="message">
         ///     The message that should be injected into the <see cref="ArgumentNotNullException" /> (optional).
-        ///     Please note that parameterName is ignored when you use message.
+        ///     Please note that <paramref name="parameterName" /> is ignored when you use message.
         /// </param>
-        /// <exception cref="ArgumentNotNullException">Thrown when the specified parameter is not <c>null</c>.</exception>
+        /// <param name="exception">
+        ///     The exception that is thrown when the specified <paramref name="parameter" /> is not <c>null</c> (optional). Please
+        ///     note that <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you specify
+        ///     exception.
+        /// </param>
+        /// <exception cref="ArgumentNotNullException">
+        ///     Thrown when the specified parameter is not <c>null</c> and no
+        ///     <paramref name="exception" /> was specified.
+        /// </exception>
         [Conditional(Check.CompileAssertionsSymbol)]
-        public static void MustBeNull<T>(this T parameter, string parameterName = null, string message = null) where T : class
+        public static void MustBeNull<T>(this T parameter, string parameterName = null, string message = null, Exception exception = null) where T : class
         {
             if (parameter != null)
-                throw message == null ? new ArgumentNotNullException(parameterName, parameter) : new ArgumentNotNullException(message);
+                throw exception ?? (message == null ? new ArgumentNotNullException(parameterName, parameter) : new ArgumentNotNullException(message));
         }
-
-        /// <summary>
-        ///     Ensures that the specified parameter is <c>null</c>, or otherwise throws the specified exception.
-        /// </summary>
-        /// <typeparam name="T">The type of the parameter to be checked.</typeparam>
-        /// <param name="parameter">The parameter to be checked.</param>
-        /// <param name="otherwiseCreateException">The delegate that creates the exception to be thrown.</param>
-        [Conditional(Check.CompileAssertionsSymbol)]
-        public static void MustBeNull<T>(this T parameter, Func<Exception> otherwiseCreateException)
-        {
-            if (parameter != null)
-                throw otherwiseCreateException();
-        }
-
 
         public static TOut MustBeType<TOut>(this object @object, string parameterName) where TOut : class
         {

@@ -32,7 +32,7 @@ namespace Light.GuardClauses.Tests
                 new[] { new object() }
             };
 
-        [Fact(DisplayName = "The exception thrown by MustNotBeNull must contain the message if it is specified by the caller.")]
+        [Fact(DisplayName = "The caller can specify a custom message that MustNotBeNull must inject instead of the default one.")]
         public void CustomMessage()
         {
             object someObject = null;
@@ -45,14 +45,14 @@ namespace Light.GuardClauses.Tests
                .And.Message.Should().Be(message);
         }
 
-        [Fact(DisplayName = "MustNotBeNull must raise the specified exception when the corresponding overload is called.")]
+        [Fact(DisplayName = "The caller can specify a custom exception that MustNotBeNull must raise instead of the default one.")]
         public void CustomException()
         {
             object someObject = null;
             var exception = new Exception();
 
             // ReSharper disable once ExpressionIsAlwaysNull
-            Action act = () => someObject.MustNotBeNull(() => exception);
+            Action act = () => someObject.MustNotBeNull(exception: exception);
 
             act.ShouldThrow<Exception>().Which.Should().BeSameAs(exception);
         }

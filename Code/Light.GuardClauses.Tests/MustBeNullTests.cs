@@ -29,7 +29,7 @@ namespace Light.GuardClauses.Tests
             act.ShouldNotThrow();
         }
 
-        [Fact(DisplayName = "The exception thrown by MustBeNull must contain the message if it is specified by the caller.")]
+        [Fact(DisplayName = "The caller can specify a custom message that MustBeNull must inject instead of the default one.")]
         public void SpecifyMessage()
         {
             var @object = new object();
@@ -41,13 +41,13 @@ namespace Light.GuardClauses.Tests
                .And.Message.Should().Be(message);
         }
 
-        [Fact(DisplayName = "MustBeNull must throw the specified exception when the corresponding overload is called.")]
+        [Fact(DisplayName = "The caller can specify a custom exception that MustBeNull must raise instead of the default one.")]
         public void SpecifyException()
         {
             var @object = new object();
             var exception = new Exception();
 
-            Action act = () => @object.MustBeNull(() => exception);
+            Action act = () => @object.MustBeNull(exception: exception);
 
             act.ShouldThrow<Exception>().Which.Should().Be(exception);
         }

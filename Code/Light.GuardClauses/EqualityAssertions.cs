@@ -23,7 +23,7 @@ namespace Light.GuardClauses
         ///     note that <paramref name="parameterName" /> is ignored when you use message.
         /// </param>
         /// <param name="exception">
-        ///     The exception that will be thrown when the comparison fails. Please note that
+        ///     The exception that will be thrown when the comparison fails (optional). Please note that
         ///     <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you specify exception.
         /// </param>
         /// <exception cref="ArgumentException">
@@ -52,7 +52,7 @@ namespace Light.GuardClauses
         ///     note that <paramref name="parameterName" /> is ignored when you use message.
         /// </param>
         /// <param name="exception">
-        ///     The exception that will be thrown when the comparison fails. Please note that
+        ///     The exception that will be thrown when the comparison fails (optional). Please note that
         ///     <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you specify exception.
         /// </param>
         /// <exception cref="ArgumentException">
@@ -79,7 +79,7 @@ namespace Light.GuardClauses
         ///     note that <paramref name="parameterName" /> is ignored when you use message.
         /// </param>
         /// <param name="exception">
-        ///     The exception that will be thrown when the comparison fails. Please note that
+        ///     The exception that will be thrown when the comparison fails (optional). Please note that
         ///     <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you specify exception.
         /// </param>
         /// <exception cref="ArgumentException">
@@ -106,7 +106,7 @@ namespace Light.GuardClauses
         ///     note that <paramref name="parameterName" /> is ignored when you use message.
         /// </param>
         /// <param name="exception">
-        ///     The exception that will be thrown when the comparison fails. Please note that
+        ///     The exception that will be thrown when the comparison fails (optional). Please note that
         ///     <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you specify exception.
         /// </param>
         /// <exception cref="ArgumentException">
@@ -133,7 +133,7 @@ namespace Light.GuardClauses
         ///     note that <paramref name="parameterName" /> is ignored when you use message.
         /// </param>
         /// <param name="exception">
-        ///     The exception that will be thrown when the comparison fails. Please note that
+        ///     The exception that will be thrown when the comparison fails (optional). Please note that
         ///     <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you specify exception.
         /// </param>
         /// <exception cref="ArgumentException">
@@ -162,7 +162,7 @@ namespace Light.GuardClauses
         ///     note that <paramref name="parameterName" /> is ignored when you use message.
         /// </param>
         /// <param name="exception">
-        ///     The exception that will be thrown when the comparison fails. Please note that
+        ///     The exception that will be thrown when the comparison fails (optional). Please note that
         ///     <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you specify exception.
         /// </param>
         /// <exception cref="ArgumentException">
@@ -189,7 +189,7 @@ namespace Light.GuardClauses
         ///     note that <paramref name="parameterName" /> is ignored when you use message.
         /// </param>
         /// <param name="exception">
-        ///     The exception that will be thrown when the comparison fails. Please note that
+        ///     The exception that will be thrown when the comparison fails (optional). Please note that
         ///     <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you specify exception.
         /// </param>
         /// <exception cref="ArgumentException">
@@ -216,7 +216,7 @@ namespace Light.GuardClauses
         ///     note that <paramref name="parameterName" /> is ignored when you use message.
         /// </param>
         /// <param name="exception">
-        ///     The exception that will be thrown when the comparison fails. Please note that
+        ///     The exception that will be thrown when the comparison fails (optional). Please note that
         ///     <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you specify exception.
         /// </param>
         /// <exception cref="ArgumentException">

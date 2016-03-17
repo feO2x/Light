@@ -54,7 +54,7 @@ namespace Light.GuardClauses.Tests
             act.ShouldThrow<ArgumentException>();
         }
 
-        [Fact (DisplayName = "The exception thrown by MustBe must contain the message if it is specified by the caller.")]
+        [Fact (DisplayName = "The caller can specifiy a custom message that MustBe must inject instead of the default one.")]
         public void CustomMessage()
         {
             const string message = "Thou shall be the same!";
@@ -64,7 +64,7 @@ namespace Light.GuardClauses.Tests
             act.ShouldThrow<ArgumentException>().And.Message.Should().Be(message);
         }
 
-        [Fact(DisplayName = "MustBe must raise the specified exception instead of the default one.")]
+        [Fact(DisplayName = "The caller can specify a custom exception that MustBe must raise instead of the default one.")]
         public void CustomException()
         {
             var exception = new Exception();
