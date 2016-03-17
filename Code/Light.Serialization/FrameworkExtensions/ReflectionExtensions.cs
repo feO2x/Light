@@ -9,6 +9,8 @@ namespace Light.Serialization.FrameworkExtensions
         public static IList<Type> GetAllInterfacesOfInheritanceHierarchy(this TypeInfo type)
         {
             var interfaceTypes = new List<Type>();
+            if (type.IsInterface)
+                interfaceTypes.Add(type.AsType());
             return GetAllInterfacesOfInheritanceHierarchy(type, interfaceTypes);
         }
 

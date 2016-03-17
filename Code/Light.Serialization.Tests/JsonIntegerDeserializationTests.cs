@@ -13,7 +13,7 @@ namespace Light.Serialization.Tests
         [InlineData("0", 0)]
         [InlineData("-0", 0)]
         [InlineData(int.MinValue + int.MaxValue / 2, int.MinValue + int.MaxValue / 2)]
-        public void IntValueCanBeDeserializedCorrectly(string json, int expected)
+        public void IntCanBeDeserializedCorrectly(string json, int expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
@@ -24,7 +24,7 @@ namespace Light.Serialization.Tests
         [InlineData("2247483647")]
         [InlineData("3147483647")]
         [InlineData("214748364700000000")]
-        public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
+        public void ExceptionIsThrownWhenOverflowingIntIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it produces an overflow for type System.Int32.");
         }
@@ -36,7 +36,7 @@ namespace Light.Serialization.Tests
         [InlineData("-2147483648.00000", int.MinValue)]
         [InlineData("0.0", 0)]
         [InlineData("-0.0", 0)]
-        public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, int expected)
+        public void IntWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, int expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
@@ -47,7 +47,7 @@ namespace Light.Serialization.Tests
         [InlineData("2147483647.0353")]
         [InlineData("0.00000856")]
         [InlineData("-2147483648.000000001")]
-        public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
+        public void ExceptionIsThrownWhenIntWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number.");
         }
@@ -62,7 +62,7 @@ namespace Light.Serialization.Tests
         [InlineData(uint.MaxValue, uint.MaxValue)]
         [InlineData(uint.MinValue, uint.MinValue)]
         [InlineData("-0", 0u)]
-        public void IntValueCanBeDeserializedCorrectly(string json, uint expected)
+        public void UIntCanBeDeserializedCorrectly(string json, uint expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
@@ -73,7 +73,7 @@ namespace Light.Serialization.Tests
         [InlineData("4394967295")]
         [InlineData("5294967295")]
         [InlineData("429496729500000000")]
-        public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
+        public void ExceptionIsThrownWhenOverflowingUIntIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<uint>(json, $"Could not deserialize value {json} because it produces an overflow for type System.UInt32.");
         }
@@ -84,7 +84,7 @@ namespace Light.Serialization.Tests
         [InlineData("4294967295.0000", uint.MaxValue)]
         [InlineData("0.00000", uint.MinValue)]
         [InlineData("-0.00000", uint.MinValue)]
-        public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, uint expected)
+        public void UintWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, uint expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
@@ -95,7 +95,7 @@ namespace Light.Serialization.Tests
         [InlineData("4294967295.0353")]
         [InlineData("0.00000856")]
         [InlineData("0.000000001")]
-        public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
+        public void ExceptionIsThrownWhenUIntWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number.");
         }
@@ -112,7 +112,7 @@ namespace Light.Serialization.Tests
         [InlineData("0", 0)]
         [InlineData("-0", 0)]
         [InlineData(short.MinValue + short.MaxValue / 2, short.MinValue + short.MaxValue / 2)]
-        public void IntValueCanBeDeserializedCorrectly(string json, short expected)
+        public void ShortCanBeDeserializedCorrectly(string json, short expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
@@ -123,7 +123,7 @@ namespace Light.Serialization.Tests
         [InlineData("33767")]
         [InlineData("42767")]
         [InlineData("3276700000000")]
-        public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
+        public void ExceptionIsThrownWhenOverflowingShortIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<short>(json, $"Could not deserialize value {json} because it produces an overflow for type System.Int16.");
         }
@@ -135,7 +135,7 @@ namespace Light.Serialization.Tests
         [InlineData("-32768.00000", short.MinValue)]
         [InlineData("0.0", 0)]
         [InlineData("-0.0", 0)]
-        public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, short expected)
+        public void ShortWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, short expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
@@ -146,7 +146,7 @@ namespace Light.Serialization.Tests
         [InlineData("32767.0353")]
         [InlineData("0.00000856")]
         [InlineData("-32768.000000001")]
-        public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
+        public void ExceptionIsThrownWhenShortWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number.");
         }
@@ -163,7 +163,7 @@ namespace Light.Serialization.Tests
         [InlineData("0", 0)]
         [InlineData("-0", 0)]
         [InlineData(ushort.MinValue + ushort.MaxValue / 2, ushort.MinValue + ushort.MaxValue / 2)]
-        public void IntValueCanBeDeserializedCorrectly(string json, ushort expected)
+        public void UShortCanBeDeserializedCorrectly(string json, ushort expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
@@ -174,7 +174,7 @@ namespace Light.Serialization.Tests
         [InlineData("66535")]
         [InlineData("75535")]
         [InlineData("6553500000000")]
-        public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
+        public void ExceptionIsThrownWhenOverflowingUShortIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<ushort>(json, $"Could not deserialize value {json} because it produces an overflow for type System.UInt16.");
         }
@@ -186,7 +186,7 @@ namespace Light.Serialization.Tests
         [InlineData("0.00000", ushort.MinValue)]
         [InlineData("0.0", 0)]
         [InlineData("-0.0", 0)]
-        public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, ushort expected)
+        public void UShortWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, ushort expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
@@ -197,7 +197,7 @@ namespace Light.Serialization.Tests
         [InlineData("65535.0353")]
         [InlineData("0.00000856")]
         [InlineData("0.000000001")]
-        public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
+        public void ExceptionIsThrownWhenUShortWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number.");
         }
@@ -214,7 +214,7 @@ namespace Light.Serialization.Tests
         [InlineData("0", 0)]
         [InlineData("-0", 0)]
         [InlineData(byte.MinValue + byte.MaxValue / 2, byte.MinValue + byte.MaxValue / 2)]
-        public void IntValueCanBeDeserializedCorrectly(string json, byte expected)
+        public void ByteCanBeDeserializedCorrectly(string json, byte expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
@@ -225,7 +225,7 @@ namespace Light.Serialization.Tests
         [InlineData("265")]
         [InlineData("355")]
         [InlineData("25500000000")]
-        public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
+        public void ExceptionIsThrownWhenOverflowingByteIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<byte>(json, $"Could not deserialize value {json} because it produces an overflow for type System.Byte.");
         }
@@ -237,7 +237,7 @@ namespace Light.Serialization.Tests
         [InlineData("0.00000", byte.MinValue)]
         [InlineData("0.0", 0)]
         [InlineData("-0.0", 0)]
-        public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, byte expected)
+        public void ByteWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, byte expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
@@ -248,7 +248,7 @@ namespace Light.Serialization.Tests
         [InlineData("255.0353")]
         [InlineData("0.00000856")]
         [InlineData("0.000000001")]
-        public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
+        public void ExceptionIsThrownWhenByteWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number.");
         }
@@ -265,7 +265,7 @@ namespace Light.Serialization.Tests
         [InlineData("0", 0)]
         [InlineData("-0", 0)]
         [InlineData(sbyte.MinValue + sbyte.MaxValue / 2, sbyte.MinValue + sbyte.MaxValue / 2)]
-        public void IntValueCanBeDeserializedCorrectly(string json, sbyte expected)
+        public void SByteCanBeDeserializedCorrectly(string json, sbyte expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
@@ -276,7 +276,7 @@ namespace Light.Serialization.Tests
         [InlineData("137")]
         [InlineData("227")]
         [InlineData("12700000000")]
-        public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
+        public void ExceptionIsThrownWhenOverflowingSByteIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<sbyte>(json, $"Could not deserialize value {json} because it produces an overflow for type System.SByte.");
         }
@@ -288,7 +288,7 @@ namespace Light.Serialization.Tests
         [InlineData("-128.00000", sbyte.MinValue)]
         [InlineData("0.0", 0)]
         [InlineData("-0.0", 0)]
-        public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, sbyte expected)
+        public void SByteWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, sbyte expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
@@ -299,7 +299,7 @@ namespace Light.Serialization.Tests
         [InlineData("127.0353")]
         [InlineData("0.00000856")]
         [InlineData("-128.000000001")]
-        public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
+        public void ExceptionIsThrownWhenSByteWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number.");
         }
@@ -316,7 +316,7 @@ namespace Light.Serialization.Tests
         [InlineData("0", 0L)]
         [InlineData("-0", 0L)]
         [InlineData(long.MinValue + long.MaxValue / 2L, long.MinValue + long.MaxValue / 2L)]
-        public void IntValueCanBeDeserializedCorrectly(string json, long expected)
+        public void LongCanBeDeserializedCorrectly(string json, long expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
@@ -327,7 +327,7 @@ namespace Light.Serialization.Tests
         [InlineData("9323372036854775807")]
         [InlineData("10223372036854775807")]
         [InlineData("922337203685477580700000000")]
-        public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
+        public void ExceptionIsThrownWhenOverflowingLongIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<long>(json, $"Could not deserialize value {json} because it produces an overflow for type System.Int64.");
         }
@@ -339,7 +339,7 @@ namespace Light.Serialization.Tests
         [InlineData("-9223372036854775808.00000", long.MinValue)]
         [InlineData("0.0", 0L)]
         [InlineData("-0.0", 0L)]
-        public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, long expected)
+        public void LongWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, long expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
@@ -350,7 +350,7 @@ namespace Light.Serialization.Tests
         [InlineData("9223372036854775807.0353")]
         [InlineData("0.00000856")]
         [InlineData("-9223372036854775808.000000001")]
-        public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
+        public void ExceptionIsThrownWhenLongWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number.");
         }
@@ -365,7 +365,7 @@ namespace Light.Serialization.Tests
         [InlineData(ulong.MaxValue, ulong.MaxValue)]
         [InlineData("0", 0ul)]
         [InlineData("-0", 0ul)]
-        public void IntValueCanBeDeserializedCorrectly(string json, ulong expected)
+        public void ULongCanBeDeserializedCorrectly(string json, ulong expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
@@ -376,7 +376,7 @@ namespace Light.Serialization.Tests
         [InlineData("9323372036854775807")]
         [InlineData("10223372036854775807")]
         [InlineData("922337203685477580700000000")]
-        public void ExceptionIsThrownWhenOverflowingIntValueIsDeserialized(string json)
+        public void ExceptionIsThrownWhenOverflowingULongIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<long>(json, $"Could not deserialize value {json} because it produces an overflow for type System.Int64.");
         }
@@ -387,7 +387,7 @@ namespace Light.Serialization.Tests
         [InlineData("18446744073709551615.0000", ulong.MaxValue)]
         [InlineData("0.0", 0ul)]
         [InlineData("-0.0", 0ul)]
-        public void NumbersWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, ulong expected)
+        public void ULongWithTrailingZerosAfterDecimalPointCanBeDeserialized(string json, ulong expected)
         {
             CompareDeserializedJsonToExpected(json, expected);
         }
@@ -398,7 +398,7 @@ namespace Light.Serialization.Tests
         [InlineData("9223372036854775807.0353")]
         [InlineData("0.00000856")]
         [InlineData("-9223372036854775808.000000001")]
-        public void ExceptionIsThrownWhenNumbersWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
+        public void ExceptionIsThrownWhenULongWithNonZeroDigitsAfterDecimalPointIsDeserialized(string json)
         {
             CheckDeserializerThrowsExceptionWithMessage<int>(json, $"Could not deserialize value {json} because it is no integer, but a real number.");
         }

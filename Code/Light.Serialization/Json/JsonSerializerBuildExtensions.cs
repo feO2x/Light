@@ -35,13 +35,14 @@ namespace Light.Serialization.Json
             return targetList;
         }
 
-        public static IList<IJsonWriterInstructor> AddDefaultWriterInstructors(this IList<IJsonWriterInstructor> targetList,
-                                                                               IDictionary<Type, IPrimitiveTypeFormatter> primitiveTypeToFormattersMapping,
-                                                                               IReadableValuesTypeAnalyzer readableValuesTypeAnalyzer)
+        public static TCollection AddDefaultWriterInstructors<TCollection>(this TCollection targetList,
+                                                                           IDictionary<Type, IPrimitiveTypeFormatter> primitiveTypeToFormattersMapping,
+                                                                           IReadableValuesTypeAnalyzer readableValuesTypeAnalyzer)
+            where TCollection : IList<IJsonWriterInstructor>
         {
             targetList.MustNotBeNull(nameof(targetList));
 
-            targetList.Add(new PrimitiveWriterInstructor(primitiveTypeToFormattersMapping));
+            targetList.Add(new PrimitiveTypeInstructor(primitiveTypeToFormattersMapping));
             targetList.Add(new EnumerationToStringInstructor());
             targetList.Add(new DictionaryInstructor(primitiveTypeToFormattersMapping));
             targetList.Add(new CollectionInstructor());

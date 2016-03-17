@@ -9,12 +9,17 @@ namespace Light.Serialization.Json.TokenParsers
 
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
-            return token.JsonType == JsonTokenType.FloatingPointNumber || token.JsonType == JsonTokenType.IntegerNumber && requestedType == typeof(double);
+            return ((token.JsonType == JsonTokenType.FloatingPointNumber || token.JsonType == JsonTokenType.IntegerNumber || token.JsonType == JsonTokenType.String) && requestedType == typeof (double)) ||
+                   (requestedType == typeof (object) || requestedType == typeof (ValueType)) && token.JsonType == JsonTokenType.FloatingPointNumber;
         }
 
         public object ParseValue(JsonDeserializationContext context)
         {
-            var doubleString = context.Token.ToString();
+            var token = context.Token;
+            if (token.JsonType == JsonTokenType.String)
+                token = token.RemoveOuterQuotationMarks();
+
+            var doubleString = token.ToString();
             double result;
             if (double.TryParse(doubleString, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out result))
                 return result;

@@ -127,6 +127,9 @@
     <Compile Include="..\Light.Serialization.Tests\JsonDelegateSerializationTests.cs">
       <Link>JsonDelegateSerializationTests.cs</Link>
     </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonDictionaryDeserializationTests.cs">
+      <Link>JsonDictionaryDeserializationTests.cs</Link>
+    </Compile>
     <Compile Include="..\Light.Serialization.Tests\JsonDictionarySerializationTests.cs">
       <Link>JsonDictionarySerializationTests.cs</Link>
     </Compile>
@@ -169,7 +172,7 @@
     <Compile Include="..\Light.Serialization.Tests\MoreComplexDummyClass.cs">
       <Link>MoreComplexDummyClass.cs</Link>
     </Compile>
-    <Compile Include="BaseJsonDeserializationTest.cs" />
+    <Compile Include="BaseJsonDeserializerTest.cs" />
     <Compile Include="BaseJsonSerializerTest.cs" />
     <Compile Include="RulesSupportTests.cs" />
     <Compile Include="SerializerResolveTests.cs" />

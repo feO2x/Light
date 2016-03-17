@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Light.Serialization.Json.TokenParsers
+namespace Light.Serialization.Json.TypeNaming
 {
     public interface INameToTypeMapping
     {

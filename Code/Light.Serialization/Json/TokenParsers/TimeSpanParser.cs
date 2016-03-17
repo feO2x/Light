@@ -20,8 +20,8 @@ namespace Light.Serialization.Json.TokenParsers
 
         private static object ParseValue(JsonToken token)
         {
-            var parser = new Iso8601DurationParser();
-            return parser.ParseToken(ref token);
+            var parser = new Iso8601DurationToTimeSpanParser();
+            return parser.ParseToken(token);
         }
 
         public ParseResult TryParse(JsonToken token)

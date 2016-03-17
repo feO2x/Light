@@ -1,5 +1,5 @@
-using Light.GuardClauses;
 using System;
+using Light.GuardClauses;
 
 namespace Light.Serialization.Json
 {
@@ -33,7 +33,7 @@ namespace Light.Serialization.Json
                 index.MustNotBeLessThan(0, nameof(index));
                 index.MustNotBeGreaterThanOrEqualTo(Length, nameof(index));
 
-                return _buffer[(_startIndex + index)%_buffer.Length];
+                return _buffer[(_startIndex + index) % _buffer.Length];
             }
         }
 
@@ -71,9 +71,32 @@ namespace Light.Serialization.Json
         public string ToStringWithoutQuotationMarks()
         {
             JsonType.MustBe(JsonTokenType.String,
-                            new InvalidOperationException($"This method should only be called when the JsonType of this token is String, but it is actually {JsonType}."));
+                            new InvalidOperationException($"ToStringWithoutQuotationMarks should only be called when the JsonType of this token is String, but it is actually {JsonType}."));
 
             return ToString(1, Length - 2);
+        }
+
+        public bool IsBeginOfValue => JsonType == JsonTokenType.String ||
+                                      JsonType == JsonTokenType.True ||
+                                      JsonType == JsonTokenType.False ||
+                                      JsonType == JsonTokenType.FloatingPointNumber ||
+                                      JsonType == JsonTokenType.IntegerNumber ||
+                                      JsonType == JsonTokenType.Null ||
+                                      JsonType == JsonTokenType.BeginOfArray ||
+                                      JsonType == JsonTokenType.BeginOfObject;
+
+        public void ExpectBeginOfValue()
+        {
+            if (IsBeginOfValue == false)
+                throw new JsonDocumentException($"Expected begin of JSON value, but found {this}.", this);
+        }
+
+        public JsonToken RemoveOuterQuotationMarks()
+        {
+            JsonType.MustBe(JsonTokenType.String,
+                new InvalidOperationException($"RemoveOuterQuotationMarks should only be called when the JsonType of this token is String, but it is actually {JsonType}."));
+
+            return new JsonToken(_buffer, _startIndex + 1, Length - 2, JsonTokenType.String);
         }
     }
 }

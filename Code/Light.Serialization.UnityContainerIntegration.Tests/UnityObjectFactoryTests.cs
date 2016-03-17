@@ -13,9 +13,8 @@ namespace Light.Serialization.UnityContainerIntegration.Tests
         public void ResolveTest()
         {
             var diContainer = new UnityContainer().RegisterDefaultDeserializationTypes()
-                                                  .RegisterDomainFriendlyNames(options => options.FromAssemblies(typeof (AssemblyMarker))
-                                                                                                 .IgnoreAllNamespaces()
-                                                                                                 .But(nameof(Domain)))
+                                                  .UseDefaultDomainFriendlyNames(options => options.AllTypesFromAssemblies(typeof (AssemblyMarker))
+                                                                                                   .UseOnlyNamespaces(nameof(Domain)))
                                                   .RegisterType<Ship>(new InjectionFactory(c => new Ship(Guid.NewGuid())))
                                                   .RegisterType<IClock, UtcDateTimeClock>(new ContainerControlledLifetimeManager());
 

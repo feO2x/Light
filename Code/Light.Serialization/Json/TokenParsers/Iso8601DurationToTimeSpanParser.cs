@@ -2,7 +2,7 @@ using System;
 
 namespace Light.Serialization.Json.TokenParsers
 {
-    public struct Iso8601DurationParser
+    public struct Iso8601DurationToTimeSpanParser
     {
         private int _days;
         private int _hours;
@@ -13,33 +13,33 @@ namespace Light.Serialization.Json.TokenParsers
         private bool _wasTDesignatorHit;
         private int _indexOfDot;
 
-        public TimeSpan ParseToken(ref JsonToken token)
+        public TimeSpan ParseToken(JsonToken token)
         {
             _currentIndex = 1;
             _wasTDesignatorHit = false;
 
-            ExpectCharacter('P', ref token);
+            ExpectCharacter('P',  token);
 
             while (_currentIndex < token.Length - 1)
             {
                 if (_wasTDesignatorHit == false)
-                    CheckForTDesignator(ref token);
+                    CheckForTDesignator(token);
 
                 var startIndex = _currentIndex;
-                var designator = ReadUntilDesignator(ref token);
+                var designator = ReadUntilDesignator(token);
                 var numberOfDigitsToParse = _currentIndex - startIndex - 1;
 
                 if (_wasTDesignatorHit == false ||
                     designator != 'S' ||
-                    DoesNumberContainDot(startIndex, numberOfDigitsToParse, ref token) == false)
+                    DoesNumberContainDot(startIndex, numberOfDigitsToParse, token) == false)
                 {
-                    var number = ReadNumber(numberOfDigitsToParse, ref token, startIndex);
-                    AssignNumberAccordingToDesignator(number, designator, ref token);
+                    var number = ReadNumber(numberOfDigitsToParse, token, startIndex);
+                    AssignNumberAccordingToDesignator(number, designator, token);
                 }
                 else
                 {
-                    _seconds = ReadNumber(_indexOfDot - startIndex, ref token, startIndex);
-                    _milliseconds = ReadNumber(3, ref token, _indexOfDot + 1);
+                    _seconds = ReadNumber(_indexOfDot - startIndex, token, startIndex);
+                    _milliseconds = ReadNumber(3, token, _indexOfDot + 1);
                 }
             }
 
@@ -49,11 +49,11 @@ namespace Light.Serialization.Json.TokenParsers
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                throw CreateException(ref token, ex);
+                throw CreateException(token, ex);
             }
         }
 
-        private bool DoesNumberContainDot(int startIndex, int numberOfDigitsToParse, ref JsonToken token)
+        private bool DoesNumberContainDot(int startIndex, int numberOfDigitsToParse, JsonToken token)
         {
             for (var i = 0; i < numberOfDigitsToParse; i++)
             {
@@ -69,7 +69,7 @@ namespace Light.Serialization.Json.TokenParsers
             return false;
         }
 
-        private void AssignNumberAccordingToDesignator(int number, char designator, ref JsonToken token)
+        private void AssignNumberAccordingToDesignator(int number, char designator, JsonToken token)
         {
             switch (designator)
             {
@@ -78,30 +78,30 @@ namespace Light.Serialization.Json.TokenParsers
                     break;
                 case 'H':
                     if (_wasTDesignatorHit == false)
-                        throw CreateException(ref token);
+                        throw CreateException(token);
                     _hours = number;
                     break;
                 case 'M':
                     if (_wasTDesignatorHit == false)
-                        throw CreateException(ref token);
+                        throw CreateException(token);
                     _minutes = number;
                     break;
                 case 'S':
                     if (_wasTDesignatorHit == false)
-                        throw CreateException(ref token);
+                        throw CreateException(token);
                     _seconds = number;
                     break;
                 default:
-                    throw CreateException(ref token);
+                    throw CreateException(token);
             }
         }
 
-        private static int ReadNumber(int expectedNumberOfDigits, ref JsonToken token, int startIndex)
+        private static int ReadNumber(int expectedNumberOfDigits, JsonToken token, int startIndex)
         {
             var result = 0;
             for (var base10Position = expectedNumberOfDigits; base10Position > 0; base10Position--, startIndex++)
             {
-                var digit = GetDigit(ref token, startIndex);
+                var digit = GetDigit(token, startIndex);
                 result += digit * CalculateBase(base10Position);
             }
             return result;
@@ -120,12 +120,12 @@ namespace Light.Serialization.Json.TokenParsers
             return result;
         }
 
-        private char ReadUntilDesignator(ref JsonToken token)
+        private char ReadUntilDesignator(JsonToken token)
         {
             while (true)
             {
                 if (_currentIndex == token.Length - 1)
-                    throw CreateException(ref token);
+                    throw CreateException(token);
 
                 var currentCharacter = token[_currentIndex++];
                 if (char.IsDigit(currentCharacter))
@@ -135,15 +135,15 @@ namespace Light.Serialization.Json.TokenParsers
             }
         }
 
-        private static int GetDigit(ref JsonToken token, int index)
+        private static int GetDigit(JsonToken token, int index)
         {
             var character = token[index];
             if (char.IsDigit(character) == false)
-                throw CreateException(ref token);
+                throw CreateException(token);
             return character - '0';
         }
 
-        private void CheckForTDesignator(ref JsonToken token)
+        private void CheckForTDesignator(JsonToken token)
         {
             var character = token[_currentIndex];
             if (character != 'T')
@@ -162,13 +162,13 @@ namespace Light.Serialization.Json.TokenParsers
                    character == 'T';
         }
 
-        private void ExpectCharacter(char character, ref JsonToken token)
+        private void ExpectCharacter(char character, JsonToken token)
         {
             if (token[_currentIndex++] != character)
-                throw CreateException(ref token);
+                throw CreateException(token);
         }
 
-        private static JsonDocumentException CreateException(ref JsonToken token, Exception innerException = null)
+        private static JsonDocumentException CreateException(JsonToken token, Exception innerException = null)
         {
             return new JsonDocumentException($"The specified token {token} does not represent a valid time span.", token, innerException);
         }

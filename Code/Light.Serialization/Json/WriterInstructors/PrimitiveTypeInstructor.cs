@@ -4,25 +4,25 @@ using Light.GuardClauses;
 
 namespace Light.Serialization.Json.WriterInstructors
 {
-    public sealed class PrimitiveWriterInstructor : IJsonWriterInstructor
+    public sealed class PrimitiveTypeInstructor : IJsonWriterInstructor
     {
-        private readonly IDictionary<Type, IPrimitiveTypeFormatter> _primitiveTypeToFormattersMapping;
+        public readonly IDictionary<Type, IPrimitiveTypeFormatter> PrimitiveTypeToFormattersMapping;
 
-        public PrimitiveWriterInstructor(IDictionary<Type, IPrimitiveTypeFormatter> primitiveTypeToFormattersMapping)
+        public PrimitiveTypeInstructor(IDictionary<Type, IPrimitiveTypeFormatter> primitiveTypeToFormattersMapping)
         {
             primitiveTypeToFormattersMapping.MustNotBeNull(nameof(primitiveTypeToFormattersMapping));
 
-            _primitiveTypeToFormattersMapping = primitiveTypeToFormattersMapping;
+            PrimitiveTypeToFormattersMapping = primitiveTypeToFormattersMapping;
         }
 
         public bool AppliesToObject(object @object, Type actualType, Type referencedType)
         {
-            return _primitiveTypeToFormattersMapping.ContainsKey(actualType);
+            return PrimitiveTypeToFormattersMapping.ContainsKey(actualType);
         }
 
         public void Serialize(JsonSerializationContext serializationContext)
         {
-            var typeFormatter = _primitiveTypeToFormattersMapping[serializationContext.ActualType];
+            var typeFormatter = PrimitiveTypeToFormattersMapping[serializationContext.ActualType];
             var stringRepresentation = typeFormatter.FormatPrimitiveType(serializationContext.ObjectToBeSerialized);
             serializationContext.Writer.WritePrimitiveValue(stringRepresentation);
         }

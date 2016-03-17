@@ -10,9 +10,8 @@ namespace Light.Serialization.Json.TokenParsers
     public sealed class ArrayToGenericCollectionParser : IJsonTokenParser
     {
         private readonly ICollectionFactory _collectionFactory;
-        private readonly TypeInfo _iEnumerableTypeInfo = typeof (IEnumerable<>).GetTypeInfo();
         private readonly MethodInfo _populateGenericCollectionMethodInfo;
-        private readonly object[] _populateGenericCollectionParameters = new object[3];
+        private readonly object[] _methodParameters = new object[3];
 
         public ArrayToGenericCollectionParser(ICollectionFactory collectionFactory)
         {
@@ -27,7 +26,7 @@ namespace Light.Serialization.Json.TokenParsers
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
             return token.JsonType == JsonTokenType.BeginOfArray &&
-                   requestedType.GetTypeInfo().ImplementsGenericInterface(_iEnumerableTypeInfo);
+                   requestedType.GetTypeInfo().ImplementsGenericInterface(typeof(IEnumerable<>).GetTypeInfo());
         }
 
         public object ParseValue(JsonDeserializationContext context)
@@ -39,21 +38,30 @@ namespace Light.Serialization.Json.TokenParsers
             if (firstCollectionToken.JsonType == JsonTokenType.EndOfArray)
                 return collection;
 
-            var specificEnumerableType = context.RequestedType.GetTypeInfo().GetSpecificTypeInfoThatCorrespondsToGenericInterface(_iEnumerableTypeInfo);
+            var specificEnumerableType = context.RequestedType.GetTypeInfo().GetSpecificTypeInfoThatCorrespondsToGenericInterface(typeof(IEnumerable<>).GetTypeInfo());
             var specificPopulateGenericCollectionMethod = _populateGenericCollectionMethodInfo.MakeGenericMethod(specificEnumerableType.GenericTypeArguments);
 
-            _populateGenericCollectionParameters[0] = firstCollectionToken;
-            _populateGenericCollectionParameters[1] = collection;
-            _populateGenericCollectionParameters[2] = context;
+            _methodParameters[0] = firstCollectionToken;
+            _methodParameters[1] = collection;
+            _methodParameters[2] = context;
 
-            specificPopulateGenericCollectionMethod.Invoke(null, _populateGenericCollectionParameters);
+            specificPopulateGenericCollectionMethod.Invoke(null, _methodParameters);
+
+            ClearObjectArray();
+
             return collection;
+        }
+
+        private void ClearObjectArray()
+        {
+            _methodParameters[0] = _methodParameters[1] = _methodParameters[2] = null;
         }
 
         private static void PopulateGenericCollection<T>(JsonToken nextToken, ICollection<T> collection, JsonDeserializationContext context)
         {
             while (true)
             {
+                nextToken.ExpectBeginOfValue();
                 var nextValue = context.DeserializeToken<T>(nextToken);
                 collection.Add(nextValue);
 
@@ -66,7 +74,7 @@ namespace Light.Serialization.Json.TokenParsers
                     case JsonTokenType.EndOfArray:
                         return;
                     default:
-                        throw new JsonDocumentException($"Expected value delimiter or end of array in JSON document, but found {nextToken}", nextToken);
+                        throw new JsonDocumentException($"Expected value delimiter or end of array in JSON document, but found {nextToken}.", nextToken);
                 }
             }
         }

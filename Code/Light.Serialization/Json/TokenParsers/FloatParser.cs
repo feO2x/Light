@@ -3,20 +3,22 @@ using System.Globalization;
 
 namespace Light.Serialization.Json.TokenParsers
 {
-    public class FloatParser : IJsonTokenParser
+    public sealed class FloatParser : IJsonTokenParser
     {
-        private readonly Type _floatType = typeof(float);
-
         public bool CanBeCached => true;
 
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
-            return (token.JsonType == JsonTokenType.FloatingPointNumber || token.JsonType == JsonTokenType.IntegerNumber) && requestedType == _floatType;
+            return (token.JsonType == JsonTokenType.FloatingPointNumber || token.JsonType == JsonTokenType.IntegerNumber || token.JsonType == JsonTokenType.String) && requestedType == typeof(float);
         }
 
         public object ParseValue(JsonDeserializationContext context)
         {
-            var floatString = context.Token.ToString();
+            var token = context.Token;
+            if (token.JsonType == JsonTokenType.String)
+                token = token.RemoveOuterQuotationMarks();
+
+            var floatString = token.ToString();
             float result;
             if (float.TryParse(floatString, NumberStyles.Float | NumberStyles.AllowThousands, CultureInfo.InvariantCulture, out result))
                 return result;

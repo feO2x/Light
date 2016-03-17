@@ -44,10 +44,12 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterTypeWithTypeName<IJsonTokenParser, StringParser>(new ContainerControlledLifetimeManager())
                             .RegisterType<IJsonTokenParser>(KnownNames.JsonStringParserOrchestrator,
                                                             new InjectionFactory(c => new JsonStringInheritenceParser(c.Resolve<IJsonStringToPrimitiveParser[]>(),
-                                                                                                                      c.Resolve<StringParser>())))
+                                                                                                                       c.Resolve<StringParser>())))
+                            .RegisterTypeWithTypeName<IJsonTokenParser, GenericDictionaryParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, ArrayToGenericCollectionParser>(new ContainerControlledLifetimeManager())
-                            .RegisterTypeWithTypeName<IJsonTokenParser, ComplexTypeParser>(new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IJsonTokenParser, ComplexObjectParser>(new ContainerControlledLifetimeManager())
                             .RegisterType<ICollectionFactory, DefaultGenericCollectionFactory>(new ContainerControlledLifetimeManager())
+                            .RegisterType<IDictionaryFactory, DefaultGenericDictionaryFactory>(new ContainerControlledLifetimeManager())
                             .RegisterType<IObjectFactory, UnityObjectFactory>(new ContainerControlledLifetimeManager())
                             .RegisterType<INameToTypeMapping, SimpleNameToTypeMapping>(new ContainerControlledLifetimeManager())
                             .RegisterType<ITypeSectionParser, DefaultTypeSectionParser>(new ContainerControlledLifetimeManager())
@@ -63,7 +65,7 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterType<IDictionary<Type, IJsonWriterInstructor>>(new ContainerControlledLifetimeManager(),
                                                                                     new InjectionFactory(c => new Dictionary<Type, IJsonWriterInstructor>()))
                             .RegisterType<IReadOnlyList<IJsonWriterInstructor>, IJsonWriterInstructor[]>()
-                            .RegisterTypeWithTypeName<IJsonWriterInstructor, PrimitiveWriterInstructor>(new ContainerControlledLifetimeManager())
+                            .RegisterTypeWithTypeName<IJsonWriterInstructor, PrimitiveTypeInstructor>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, EnumerationToStringInstructor>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, DictionaryInstructor>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, CollectionInstructor>(new ContainerControlledLifetimeManager())
@@ -132,15 +134,41 @@ namespace Light.Serialization.UnityContainerIntegration
             return container.RegisterType<TFrom, TTo>(typeof (TTo).Name, lifetimeManager);
         }
 
-        public static IUnityContainer RegisterDomainFriendlyNames(this IUnityContainer container,
-                                                                  Action<IAssemblyNameMappingOptions> configureMappings)
+        public static IUnityContainer UseDomainFriendlyNames(this IUnityContainer container, Action<NameToMappingTransformer.IScanningOptions> configureTypes = null)
         {
             container.MustNotBeNull(nameof(container));
-            configureMappings.MustNotBeNull(nameof(configureMappings));
 
-            var builder = new DomainFriendlyNameMappingBuilder();
-            configureMappings(builder);
-            return container.RegisterInstance<INameToTypeMapping>(builder.Build());
+            var domainFriendlyNameMapping = new DomainFriendlyNameMapping();
+            container.RegisterInstance<INameToTypeMapping>(domainFriendlyNameMapping);
+            container.RegisterInstance<ITypeToNameMapping>(domainFriendlyNameMapping);
+
+            if (configureTypes != null)
+                domainFriendlyNameMapping.AddTypes(configureTypes);
+
+            return container;
+        }
+
+        public static IUnityContainer UseDefaultDomainFriendlyNames(this IUnityContainer container, Action<NameToMappingTransformer.IScanningOptions> configureAddtionalTypes = null)
+        {
+            container.MustNotBeNull(nameof(container));
+
+            var domainFriendlyNameMapping = new DomainFriendlyNameMapping().AddDefaultMappingsForBasicTypes();
+            container.RegisterInstance<INameToTypeMapping>(domainFriendlyNameMapping);
+            container.RegisterInstance<ITypeToNameMapping>(domainFriendlyNameMapping);
+
+            if (configureAddtionalTypes != null)
+                domainFriendlyNameMapping.AddTypes(configureAddtionalTypes);
+
+            return container;
+        }
+
+        public static IUnityContainer ConfigureAdditionalDomainFriendlyNames(this IUnityContainer container, Action<NameToMappingTransformer.IScanningOptions> configureTypes)
+        {
+            container.MustNotBeNull(nameof(container));
+
+            container.Resolve<DomainFriendlyNameMapping>().AddTypes(configureTypes);
+
+            return container;
         }
     }
 }

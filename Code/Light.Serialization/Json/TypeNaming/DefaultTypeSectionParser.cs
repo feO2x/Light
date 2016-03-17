@@ -2,22 +2,29 @@ using System;
 using System.Reflection;
 using Light.GuardClauses;
 using Light.Serialization.Json.LowLevelReading;
-using Light.Serialization.Json.TokenParsers;
 
 namespace Light.Serialization.Json.TypeNaming
 {
     public sealed class DefaultTypeSectionParser : ITypeSectionParser
     {
-        private readonly INameToTypeMapping _nameToTypeMapping;
-        private string _concreteTypeSymbol = "$type";
-        private string _typeArgumentsSymbol = "typeArguments";
-        private string _typeNameSymbol = "name";
+        private string _concreteTypeSymbol = JsonSymbols.DefaultConcreteTypeSymbol;
+        private INameToTypeMapping _nameToTypeMapping;
+        private string _typeArgumentsSymbol = JsonSymbols.DefaultTypeArgumentSymbol;
+        private string _typeNameSymbol = JsonSymbols.DefaultTypeNameSymbol;
 
         public DefaultTypeSectionParser(INameToTypeMapping nameToTypeMapping)
         {
-            nameToTypeMapping.MustNotBeNull(nameof(nameToTypeMapping));
+            NameToTypeMapping = nameToTypeMapping;
+        }
 
-            _nameToTypeMapping = nameToTypeMapping;
+        public INameToTypeMapping NameToTypeMapping
+        {
+            get { return _nameToTypeMapping; }
+            set
+            {
+                value.MustNotBeNull(nameof(value));
+                _nameToTypeMapping = value;
+            }
         }
 
         public string TypeNameSymbol
@@ -65,6 +72,12 @@ namespace Light.Serialization.Json.TypeNaming
                 throw new JsonDocumentException($"Expected JSON string or begin of object to parse actual type, but found {nextToken}.", nextToken);
 
             nextToken = context.JsonReader.ReadNextToken();
+            if (nextToken.JsonType != JsonTokenType.String || context.DeserializeToken<string>(nextToken) != _typeNameSymbol)
+                throw new JsonDocumentException($"Expected \"{_typeNameSymbol}\" key of generic type in JSON document, but found {nextToken}.", nextToken);
+
+            context.JsonReader.ReadAndExpectPairDelimiterToken();
+
+            nextToken = context.JsonReader.ReadNextToken();
             if (nextToken.JsonType != JsonTokenType.String)
                 throw new JsonDocumentException($"Expected name of generic type in JSON document, but found {nextToken}.", nextToken);
 
@@ -72,9 +85,16 @@ namespace Light.Serialization.Json.TypeNaming
             var genericType = _nameToTypeMapping.Map(typeName);
             var genericTypeInfo = genericType.GetTypeInfo();
             if (genericTypeInfo.IsGenericTypeDefinition == false)
-                throw new InvalidOperationException($"The specified type {genericType} should be a generic type definition, but is not.");
+                throw new InvalidOperationException($"The specified type {genericType} should be a generic type definition, but it is not.");
 
             context.JsonReader.ReadAndExpectValueDelimiterToken();
+
+            nextToken = context.JsonReader.ReadNextToken();
+            if (nextToken.JsonType != JsonTokenType.String || context.DeserializeToken<string>(nextToken) != _typeArgumentsSymbol)
+                throw new JsonDocumentException($"Expected \"{_typeArgumentsSymbol}\" key for generic type parameters in JSON document, but found {nextToken}.", nextToken);
+
+            context.JsonReader.ReadAndExpectPairDelimiterToken();
+
             var genericTypeParameters = genericTypeInfo.GenericTypeParameters;
             var typeArguments = new Type[genericTypeParameters.Length];
 
@@ -87,6 +107,8 @@ namespace Light.Serialization.Json.TypeNaming
                 else
                     context.JsonReader.ReadAndExpectedEndOfArray();
             }
+
+            context.JsonReader.ReadAndExpectEndOfObject();
 
             return genericTypeInfo.MakeGenericType(typeArguments);
         }
