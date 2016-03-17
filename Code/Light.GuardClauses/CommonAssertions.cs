@@ -117,11 +117,30 @@ namespace Light.GuardClauses
                 throw exception ?? (message != null ? new NullableHasNoValueException(message, parameterName) : new NullableHasNoValueException(parameterName));
         }
 
+        /// <summary>
+        ///     Ensures that the specified Nullable has no value, or otherwise throws a <see cref="NullableHasValueException" />.
+        /// </summary>
+        /// <typeparam name="T">The type of the struct encapsulated by the Nullable.</typeparam>
+        /// <param name="parameter">The parameter to be checked.</param>
+        /// <param name="parameterName">The name of the parameter (optional).</param>
+        /// <param name="message">
+        ///     The message that will be injected into the <see cref="NullableHasValueException" /> (optional).
+        ///     Please note that <paramref name="parameterName" /> is ignored when you use message.
+        /// </param>
+        /// <param name="exception">
+        ///     The exception that is thrown when the specified Nullable has a value (optional).
+        ///     Please note that <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you
+        ///     specify exception.
+        /// </param>
+        /// <exception cref="NullableHasValueException">
+        ///     Thrown when the specified nullable has a value and no
+        ///     <paramref name="exception" /> was specified.
+        /// </exception>
         [Conditional(Check.CompileAssertionsSymbol)]
-        public static void MustNotHaveValue<T>(this T? parameter, string parameterName) where T : struct
+        public static void MustNotHaveValue<T>(this T? parameter, string parameterName = null, string message = null, Exception exception = null) where T : struct
         {
             if (parameter.HasValue)
-                throw new NullableHasValueException(parameterName, parameter.Value);
+                throw exception ?? (message == null ? new NullableHasValueException(parameterName, parameter.Value) : new NullableHasValueException(message));
         }
 
         [Conditional(Check.CompileAssertionsSymbol)]
