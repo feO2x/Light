@@ -5,7 +5,7 @@ using Light.GuardClauses.FrameworkExtensions;
 
 namespace Light.GuardClauses
 {
-    public static class CommonGuardClauses
+    public static class CommonAssertions
     {
         [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustNotBeNull(this object parameter, string parameterName)

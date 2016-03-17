@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Light.GuardClauses
 {
-    public static class ComparableGuardClauses
+    public static class ComparableAssertions
     {
         [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustNotBeLessThan<T>(this T parameter, T boundary, string parameterName, string exceptionMessage = null) where T : IComparable<T>

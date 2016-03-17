@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Light.GuardClauses
 {
-    public static class CollectionGuardClauses
+    public static class CollectionAssertions
     {
         [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustBeOneOf<T>(this T parameter, IReadOnlyList<T> items, string parameterName)

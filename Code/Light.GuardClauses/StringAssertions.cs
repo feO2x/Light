@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace Light.GuardClauses
 {
-    public static class StringGuardClauses
+    public static class StringAssertions
     {
         [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustNotBeNullOrEmpty(this string @string, string parameterName)
