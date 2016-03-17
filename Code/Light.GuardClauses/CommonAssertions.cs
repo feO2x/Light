@@ -42,7 +42,7 @@ namespace Light.GuardClauses
         /// <param name="parameter">The parameter to be checked.</param>
         /// <param name="parameterName">The name of the parameter (optional).</param>
         /// <param name="message">
-        ///     The message that should be injected into the <see cref="ArgumentNotNullException" /> (optional).
+        ///     The message that will be injected into the <see cref="ArgumentNotNullException" /> (optional).
         ///     Please note that <paramref name="parameterName" /> is ignored when you use message.
         /// </param>
         /// <param name="exception">
@@ -61,11 +61,28 @@ namespace Light.GuardClauses
                 throw exception ?? (message == null ? new ArgumentNotNullException(parameterName, parameter) : new ArgumentNotNullException(message));
         }
 
-        public static TOut MustBeType<TOut>(this object @object, string parameterName) where TOut : class
+        /// <summary>
+        ///     Ensures that parameter is of the specified type and returns the downcasted value, or throws a
+        ///     <see cref="TypeMismatchException" /> otherwise.
+        /// </summary>
+        /// <typeparam name="T">The type of the parameter to be checked.</typeparam>
+        /// <param name="parameter">The parameter to be checked.</param>
+        /// <param name="parameterName">The name of the parameter (optional).</param>
+        /// <param name="message">
+        ///     The message that will be injected into the <see cref="TypeMismatchException" /> (optional).
+        ///     Please note that <paramref name="parameterName" /> is ignored when you use message.
+        /// </param>
+        /// <param name="exception">
+        ///     The exception that is thrown when the specified <paramref name="parameter" /> cannot be downcasted (optional).
+        ///     Please note that <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you
+        ///     specify exception.
+        /// </param>
+        /// <returns>The downcasted reference to <paramref name="parameter" />.</returns>
+        public static T MustBeType<T>(this object parameter, string parameterName = null, string message = null, Exception exception = null) where T : class
         {
-            var castedValue = @object as TOut;
+            var castedValue = parameter as T;
             if (castedValue == null)
-                throw new TypeMismatchException(parameterName, $"{parameterName} is of type {@object.GetType().FullName} and cannot be downcasted to {typeof (TOut).FullName}.");
+                throw exception ?? new TypeMismatchException(parameterName, message ?? $"{parameterName ?? "The object"} is of type {parameter.GetType().FullName} and cannot be downcasted to {typeof (T).FullName}.");
 
             return castedValue;
         }
