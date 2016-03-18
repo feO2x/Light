@@ -99,19 +99,52 @@ namespace Light.GuardClauses
         ///     Thrown when <paramref name="parameter" /> does not match the
         ///     <paramref name="pattern" /> and no <paramref name="exception" /> is specified.
         /// </exception>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="pattern"/> is null.</exception>
         [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustMatch(this string parameter, Regex pattern, string parameterName = null, string message = null, Exception exception = null)
         {
+            pattern.MustNotBeNull(nameof(pattern), "You called MustMatch wrongly by specifying null to pattern.");
+
             var match = pattern.Match(parameter);
             if (match.Success == false)
                 throw exception ?? (message == null ? new StringDoesNotMatchException(parameterName, parameter, pattern) : new StringDoesNotMatchException(message, parameterName));
         }
 
+        /// <summary>
+        ///     Ensures that <paramref name="parameter" /> contains the specified text, or otherwise throws a
+        ///     <see cref="StringException" />.
+        /// </summary>
+        /// <param name="parameter">The parameter to be checked.</param>
+        /// <param name="containedText">The text that must be contained in <paramref name="parameter" />.</param>
+        /// <param name="parameterName">The name of the parameter (optional).</param>
+        /// <param name="message">
+        ///     The message that will be injected into the <see cref="StringException" /> or
+        ///     <see cref="ArgumentNullException" /> (optional).
+        /// </param>
+        /// <param name="exception">
+        ///     The exception that is thrown when <paramref name="parameter" /> does not contain the
+        ///     specified text (optional). Please note that <paramref name="message" /> and
+        ///     <paramref name="parameterName" /> are both ignored when you specify exception.
+        /// </param>
+        /// <exception cref="StringException">
+        ///     Thrown when <paramref name="parameter" /> does not contain the specified text and no
+        ///     <paramref name="exception" /> is specified.
+        /// </exception>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when <paramref name="parameter" /> is null and no
+        ///     <paramref name="exception" /> is specified.
+        ///     or
+        ///     Thrown when <paramref name="containedText" /> is null.
+        /// </exception>
+        /// <exception cref="EmptyStringException">Thrown when <paramref name="containedText" /> is an empty string.</exception>
         [Conditional(Check.CompileAssertionsSymbol)]
-        public static void MustContain(this string parameter, string containedText, string parameterName)
+        public static void MustContain(this string parameter, string containedText, string parameterName = null, string message = null, Exception exception = null)
         {
+            parameter.MustNotBeNull(parameterName, message, exception);
+            containedText.MustNotBeNullOrEmpty(nameof(containedText), $"You called MustContain wrongly by specifying {(containedText == null ? "null" : "an empty string")} to containedText.");
+
             if (parameter.Contains(containedText) == false)
-                throw new StringException($"{parameterName} must contain the text \"{containedText}\", but you specified \"{parameter}\".", parameterName);
+                throw exception ?? new StringException(message ?? $"{parameterName ?? "The string"} must contain the text \"{containedText}\", but you specified \"{parameter}\".", parameterName);
         }
 
         [Conditional(Check.CompileAssertionsSymbol)]
