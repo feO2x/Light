@@ -49,5 +49,26 @@ namespace Light.GuardClauses.Tests
 
             act.ShouldNotThrow();
         }
+
+        [Fact(DisplayName = "The caller can specify a custom message that MustBeIn must inject instead of the default one.")]
+        public void CustomMessage()
+        {
+            const string message = "Thou shall be in range, idiot!";
+
+            Action act = () => 42.MustBeIn(Range<int>.FromInclusive(0).ToInclusive(10), message: message);
+
+            act.ShouldThrow<ArgumentOutOfRangeException>()
+               .And.Message.Should().Contain(message);
+        }
+
+        [Fact(DisplayName = "The caller can specify a custom exception that MustBeIn must raise instead of the default one.")]
+        public void CustomException()
+        {
+            var exception = new Exception();
+
+            Action act = () => 42.MustBeIn(Range<int>.FromInclusive(10).ToExclusive(20), exception: exception);
+
+            act.ShouldThrow<Exception>().Which.Should().BeSameAs(exception);
+        }
     }
 }
