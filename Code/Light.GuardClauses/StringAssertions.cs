@@ -11,7 +11,7 @@ namespace Light.GuardClauses
     public static class StringAssertions
     {
         /// <summary>
-        ///     Ensures that the specified <paramref name="parameter" /> is not null or empty, or otherwise throws an exception.
+        ///     Ensures that the specified string is not null or empty, or otherwise throws an exception.
         /// </summary>
         /// <param name="parameter">The parameter to be checked.</param>
         /// <param name="parameterName">The name of the parameter (optional).</param>
@@ -43,6 +43,46 @@ namespace Light.GuardClauses
         }
 
         /// <summary>
+        ///     Ensures that the specified string is not null, empty or contains only whitespace, or otherwise throws an exception.
+        /// </summary>
+        /// <param name="parameter">The parameter to be checked.</param>
+        /// <param name="parameterName">The name of the parameter (optional).</param>
+        /// <param name="message">
+        ///     The message that will be injected into the <see cref="ArgumentNullException" />, or
+        ///     the <see cref="EmptyStringException" />, or  the <see cref="StringIsOnlyWhiteSpaceException" /> (optional).
+        /// </param>
+        /// <param name="exception">
+        ///     The exception that is thrown when <paramref name="parameter" /> is either null, empty, or
+        ///     whitespace (optional). Please note that <paramref name="message" /> and <paramref name="parameterName" /> are both
+        ///     ignored when you specify exception.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when <paramref name="parameter" /> is null and no
+        ///     <paramref name="exception" /> is specified.
+        /// </exception>
+        /// <exception cref="EmptyStringException">
+        ///     Thrown when <paramref name="parameter" /> is empty and no
+        ///     <paramref name="exception" /> is specified.
+        /// </exception>
+        /// <exception cref="StringIsOnlyWhiteSpaceException">
+        ///     Thrown when <paramref name="parameter" /> contains only whitespace and no <paramref name="exception" /> is
+        ///     specified.
+        /// </exception>
+        [Conditional(Check.CompileAssertionsSymbol)]
+        public static void MustNotBeNullOrWhiteSpace(this string parameter, string parameterName = null, string message = null, Exception exception = null)
+        {
+            parameter.MustNotBeNullOrEmpty(parameterName, message, exception);
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var character in parameter)
+            {
+                if (char.IsWhiteSpace(character) == false)
+                    return;
+            }
+            throw exception ?? (message == null ? StringIsOnlyWhiteSpaceException.CreateDefault(parameterName, parameter) : new StringIsOnlyWhiteSpaceException(message, parameterName));
+        }
+
+        /// <summary>
         ///     Ensures that <paramref name="parameter" /> matches the specified regular expression, or otherwise throws an
         ///     <see cref="StringDoesNotMatchException" />.
         /// </summary>
@@ -65,20 +105,6 @@ namespace Light.GuardClauses
             var match = pattern.Match(parameter);
             if (match.Success == false)
                 throw exception ?? (message == null ? new StringDoesNotMatchException(parameterName, parameter, pattern) : new StringDoesNotMatchException(message, parameterName));
-        }
-
-        [Conditional(Check.CompileAssertionsSymbol)]
-        public static void MustNotBeNullOrWhiteSpace(this string parameter, string parameterName)
-        {
-            parameter.MustNotBeNullOrEmpty(parameterName);
-
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var character in parameter)
-            {
-                if (char.IsWhiteSpace(character) == false)
-                    return;
-            }
-            throw new StringIsOnlyWhiteSpaceException(parameterName, parameter);
         }
 
         [Conditional(Check.CompileAssertionsSymbol)]

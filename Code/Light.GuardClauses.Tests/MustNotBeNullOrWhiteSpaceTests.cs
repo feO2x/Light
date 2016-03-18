@@ -1,5 +1,5 @@
-﻿using FluentAssertions;
-using System;
+﻿using System;
+using FluentAssertions;
 using Light.GuardClauses.Exceptions;
 using Xunit;
 using TestData = System.Collections.Generic.IEnumerable<object[]>;
@@ -63,6 +63,35 @@ namespace Light.GuardClauses.Tests
             Action act = () => value.MustNotBeNullOrWhiteSpace(nameof(value));
 
             act.ShouldNotThrow();
+        }
+
+        [Theory(DisplayName = "The caller can specify a custom message that MustNotBeNullOrWhiteSpace must inject instead of the default one.")]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        [InlineData("\t\r\n")]
+        public void CustomMessage(string invalidString)
+        {
+            const string message = "Thou shall have human-readable information!";
+
+            Action act = () => invalidString.MustNotBeNullOrWhiteSpace(message: message);
+
+            act.ShouldThrow<ArgumentException>()
+               .And.Message.Should().Contain(message);
+        }
+
+        [Theory(DisplayName = "The caller can specify a custom exception that MustNotBeNullOrWhiteSpace must raise instead of the default one.")]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        [InlineData("\t\r\n")]
+        public void CustomException(string invalidString)
+        {
+            var exception = new Exception();
+
+            Action act = () => invalidString.MustNotBeNullOrWhiteSpace(exception: exception);
+
+            act.ShouldThrow<Exception>().Which.Should().BeSameAs(exception);
         }
     }
 }
