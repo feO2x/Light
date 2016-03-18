@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using Light.GuardClauses.Exceptions;
-using System;
 using Xunit;
 
 namespace Light.GuardClauses.Tests
@@ -26,6 +26,27 @@ namespace Light.GuardClauses.Tests
             Action act = () => validGuid.MustNotBeEmpty(nameof(validGuid));
 
             act.ShouldNotThrow();
+        }
+
+        [Fact(DisplayName = "The caller can specify a custom message that MustNotBeEmpty must inject instead of the default one.")]
+        public void CustomMessage()
+        {
+            const string message = "Thou shall not be an empty GUID!";
+
+            Action act = () => Guid.Empty.MustNotBeEmpty(message: message);
+
+            act.ShouldThrow<EmptyGuidException>()
+               .And.Message.Should().Contain(message);
+        }
+
+        [Fact(DisplayName = "The caller can specify a custom exception that MustNotBeEmpty must raise instead of the default one.")]
+        public void CustomException()
+        {
+            var exception = new Exception();
+
+            Action act = () => Guid.Empty.MustNotBeEmpty(exception: exception);
+
+            act.ShouldThrow<Exception>().Which.Should().BeSameAs(exception);
         }
     }
 }

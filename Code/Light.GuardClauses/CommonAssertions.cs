@@ -170,5 +170,29 @@ namespace Light.GuardClauses
             if (Enum.IsDefined(enumType, parameter) == false)
                 throw exception ?? (message == null ? new EnumValueNotDefinedException(parameterName, parameter, enumType) : new EnumValueNotDefinedException(message, parameterName));
         }
+
+        /// <summary>
+        ///     Ensures that the specified GUID is not empty, or otherwise throws an <see cref="EmptyGuidException" />.
+        /// </summary>
+        /// <param name="parameter">The parameter to be checked.</param>
+        /// <param name="parameterName">The name of the parameter (optional).</param>
+        /// <param name="message">
+        ///     The message that will be injected into the <see cref="EmptyGuidException" /> (optional).
+        /// </param>
+        /// <param name="exception">
+        ///     The exception that is thrown when the specified GUID is empty (optional).
+        ///     Please note that <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you
+        ///     specify exception.
+        /// </param>
+        /// <exception cref="EmptyGuidException">
+        ///     Thrown when the specified GUID is empty and no <paramref name="exception" /> was
+        ///     specified.
+        /// </exception>
+        [Conditional(Check.CompileAssertionsSymbol)]
+        public static void MustNotBeEmpty(this Guid parameter, string parameterName = null, string message = null, Exception exception = null)
+        {
+            if (parameter == Guid.Empty)
+                throw exception ?? (message == null ? new EmptyGuidException(parameterName) : new EmptyGuidException(message, parameterName));
+        }
     }
 }

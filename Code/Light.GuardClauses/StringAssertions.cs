@@ -64,16 +64,8 @@ namespace Light.GuardClauses
         {
             var match = pattern.Match(parameter);
             if (match.Success == false)
-                throw exception ?? new StringDoesNotMatchException(parameterName, parameter, pattern);
+                throw exception ?? (message == null ? new StringDoesNotMatchException(parameterName, parameter, pattern) : new StringDoesNotMatchException(message, parameterName));
         }
-
-        [Conditional(Check.CompileAssertionsSymbol)]
-        public static void MustNotBeEmpty(this Guid parameter, string parameterName)
-        {
-            if (parameter == Guid.Empty)
-                throw new EmptyGuidException(parameterName);
-        }
-
 
         [Conditional(Check.CompileAssertionsSymbol)]
         public static void MustNotBeNullOrWhiteSpace(this string parameter, string parameterName)
