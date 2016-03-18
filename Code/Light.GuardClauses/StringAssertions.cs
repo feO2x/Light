@@ -42,12 +42,29 @@ namespace Light.GuardClauses
                 throw exception ?? (message == null ? new EmptyStringException(parameterName) : new EmptyStringException(message, parameterName));
         }
 
+        /// <summary>
+        ///     Ensures that <paramref name="parameter" /> matches the specified regular expression, or otherwise throws an
+        ///     <see cref="StringDoesNotMatchException" />.
+        /// </summary>
+        /// <param name="parameter">The parameter to be checked.</param>
+        /// <param name="pattern">The regular expression used to evaluate <paramref name="parameter" />.</param>
+        /// <param name="parameterName">The name of the parameter (optional).</param>
+        /// <param name="message">The message that will be injected into the <see cref="StringDoesNotMatchException" /> (optional).</param>
+        /// <param name="exception">
+        ///     The exception that is thrown when <paramref name="parameter" /> does not match the
+        ///     <paramref name="pattern" /> (optional). Please note that <paramref name="message" /> and
+        ///     <paramref name="parameterName" /> are both ignored when you specify exception.
+        /// </param>
+        /// <exception cref="StringDoesNotMatchException">
+        ///     Thrown when <paramref name="parameter" /> does not match the
+        ///     <paramref name="pattern" /> and no <paramref name="exception" /> is specified.
+        /// </exception>
         [Conditional(Check.CompileAssertionsSymbol)]
-        public static void MustMatch(this string parameter, Regex pattern, string parameterName)
+        public static void MustMatch(this string parameter, Regex pattern, string parameterName = null, string message = null, Exception exception = null)
         {
             var match = pattern.Match(parameter);
             if (match.Success == false)
-                throw new StringDoesNotMatchException(parameterName, parameter, pattern);
+                throw exception ?? new StringDoesNotMatchException(parameterName, parameter, pattern);
         }
 
         [Conditional(Check.CompileAssertionsSymbol)]

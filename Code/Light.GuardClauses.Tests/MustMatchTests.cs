@@ -12,7 +12,7 @@ namespace Light.GuardClauses.Tests
         public void StringDoesNotMatch()
         {
             var pattern = new Regex(@"\d{5}");
-            var @string = "12c45";
+            const string @string = "12c45";
 
             Action act = () => @string.MustMatch(pattern, nameof(@string));
 
@@ -24,11 +24,32 @@ namespace Light.GuardClauses.Tests
         public void StringMatches()
         {
             var pattern = new Regex(@"\w{5}");
-            var @string = "abcde";
+            const string @string = "abcde";
 
             Action act = () => @string.MustMatch(pattern, nameof(@string));
 
             act.ShouldNotThrow();
+        }
+
+        [Fact(DisplayName = "The caller can specify a custom message that MustMatch must inject instead of the default one.")]
+        public void CustomMessage()
+        {
+            const string message = "Thou shall match the pattern";
+
+            Action act = () => "12345".MustMatch(new Regex(@"\W{5}"), message: message);
+
+            act.ShouldThrow<StringDoesNotMatchException>()
+               .And.Message.Should().Contain(message);
+        }
+
+        [Fact(DisplayName = "The caller can specify a custom exception that MustMatch must raise instead of the default one.")]
+        public void CustomException()
+        {
+            var exception = new Exception();
+
+            Action act = () => "12345".MustMatch(new Regex(@"\W{5}"), exception: exception);
+
+            act.ShouldThrow<Exception>().Which.Should().BeSameAs(exception);
         }
     }
 }
