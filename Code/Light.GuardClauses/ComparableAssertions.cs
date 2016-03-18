@@ -65,11 +65,28 @@ namespace Light.GuardClauses
                 throw exception ?? new ArgumentOutOfRangeException(parameterName, parameter, message ?? $"{parameterName ?? "The value"} must not be less than or equal to {boundary}, but you specified {parameter}.");
         }
 
+        /// <summary>
+        ///     Ensures that the specified <paramref name="parameter" /> is not greaten than the given <paramref name="boundary" />
+        ///     value, or otherwise throws an <see cref="ArgumentOutOfRangeException" />.
+        /// </summary>
+        /// <typeparam name="T">The type of the parameter to be checked.</typeparam>
+        /// <param name="parameter">The parameter to be checked.</param>
+        /// <param name="boundary">The boundary value that <paramref name="parameter" /> must not exceed.</param>
+        /// <param name="parameterName">The name of the parameter (optional).</param>
+        /// <param name="message">
+        ///     The message that should be injected into the <see cref="ArgumentOutOfRangeException" />
+        ///     (optional).
+        /// </param>
+        /// <param name="exception">
+        ///     The exception that is thrown when the specified <paramref name="parameter" /> is greater than
+        ///     <paramref name="boundary" /> (optional). Please note that <paramref name="message" /> and
+        ///     <paramref name="parameterName" /> are both ignored when you specify exception.
+        /// </param>
         [Conditional(Check.CompileAssertionsSymbol)]
-        public static void MustNotBeGreaterThan<T>(this T parameter, T boundary, string parameterName) where T : IComparable<T>
+        public static void MustNotBeGreaterThan<T>(this T parameter, T boundary, string parameterName = null, string message = null, Exception exception = null) where T : IComparable<T>
         {
             if (parameter.CompareTo(boundary) > 0)
-                throw new ArgumentOutOfRangeException(parameterName, parameter, $"{parameterName} must not be greater than {boundary}, but you specified {parameter}.");
+                throw exception ?? new ArgumentOutOfRangeException(parameterName, parameter, message ?? $"{parameterName ?? "The value"} must not be greater than {boundary}, but you specified {parameter}.");
         }
 
         [Conditional(Check.CompileAssertionsSymbol)]
