@@ -1,20 +1,45 @@
-﻿using Light.GuardClauses.Exceptions;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using Light.GuardClauses.Exceptions;
 
 namespace Light.GuardClauses
 {
+    /// <summary>
+    ///     The StringAssertions class contains extension methods that make assertions on <see cref="string" /> instances.
+    /// </summary>
     public static class StringAssertions
     {
+        /// <summary>
+        ///     Ensures that the specified <paramref name="parameter" /> is not null or empty, or otherwise throws an exception.
+        /// </summary>
+        /// <param name="parameter">The parameter to be checked.</param>
+        /// <param name="parameterName">The name of the parameter (optional).</param>
+        /// <param name="message">
+        ///     The message that will be injected into the <see cref="ArgumentNullException" /> or
+        ///     <see cref="EmptyStringException" /> (optional).
+        /// </param>
+        /// <param name="exception">
+        ///     The exception that is thrown when <paramref name="parameter" /> is either null or empty (optional). Please
+        ///     note that <paramref name="message" /> and <paramref name="parameterName" /> are both ignored when you specify
+        ///     exception.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when <paramref name="parameter" /> is null and no
+        ///     <paramref name="exception" /> is specified.
+        /// </exception>
+        /// <exception cref="EmptyStringException">
+        ///     Thrown when <paramref name="parameter" /> is empty and no
+        ///     <paramref name="exception" /> is specified.
+        /// </exception>
         [Conditional(Check.CompileAssertionsSymbol)]
-        public static void MustNotBeNullOrEmpty(this string @string, string parameterName)
+        public static void MustNotBeNullOrEmpty(this string parameter, string parameterName = null, string message = null, Exception exception = null)
         {
-            if (@string == null)
-                throw new ArgumentNullException(parameterName);
+            if (parameter == null)
+                throw exception ?? new ArgumentNullException(parameterName, message);
 
-            if (@string == string.Empty)
-                throw new EmptyStringException(parameterName);
+            if (parameter == string.Empty)
+                throw exception ?? (message == null ? new EmptyStringException(parameterName) : new EmptyStringException(message, parameterName));
         }
 
         [Conditional(Check.CompileAssertionsSymbol)]
