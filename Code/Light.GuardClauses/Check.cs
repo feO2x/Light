@@ -12,7 +12,7 @@ namespace Light.GuardClauses
     {
         /// <summary>
         ///     The compiler symbol that must be added so that calls to this class are compiled into the assembly.
-        ///     This value is "COMPILE_PRECONDITIONS" (without quotation marks).
+        ///     This value is "COMPILE_ASSERTIONS" (without quotation marks).
         /// </summary>
         public const string CompileAssertionsSymbol = "COMPILE_ASSERTIONS";
 
