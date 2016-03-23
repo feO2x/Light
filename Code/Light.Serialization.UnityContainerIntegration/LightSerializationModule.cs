@@ -70,13 +70,13 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterType<IReadOnlyList<IJsonWriterInstructor>, IJsonWriterInstructor[]>()
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, PrimitiveTypeInstructor>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, EnumerationToStringInstructor>(new ContainerControlledLifetimeManager())
-                            .RegisterTypeWithTypeName<IJsonWriterInstructor, DictionaryInstructor>(new ContainerControlledLifetimeManager())
-                            .RegisterTypeWithTypeName<IJsonWriterInstructor, CollectionInstructor>(new ContainerControlledLifetimeManager())
+                            //.RegisterTypeWithTypeName<IJsonWriterInstructor, DictionaryInstructor>(new ContainerControlledLifetimeManager())
                             .RegisterType<IJsonWriterInstructor, PreserveObjectReferencesDecorator>(typeof(DictionaryInstructor).Name,
                             new ContainerControlledLifetimeManager(),
                                                                                             new InjectionFactory(c => new PreserveObjectReferencesDecorator(
                                                                                                 new DictionaryInstructor(c.Resolve<IDictionary<Type, IPrimitiveTypeFormatter>>()),
                                                                                                 c.Resolve<ObjectReferencePreserver>())))
+                            .RegisterTypeWithTypeName<IJsonWriterInstructor, CollectionInstructor>(new ContainerControlledLifetimeManager())
                             .RegisterType<IJsonWriterInstructor, PreserveObjectReferencesDecorator>(typeof(ComplexObjectInstructor).Name,
                             new ContainerControlledLifetimeManager(),
                                                                                             new InjectionFactory(c => new PreserveObjectReferencesDecorator(
