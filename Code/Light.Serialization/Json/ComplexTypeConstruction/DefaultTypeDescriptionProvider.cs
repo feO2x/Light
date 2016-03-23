@@ -7,13 +7,23 @@ namespace Light.Serialization.Json.ComplexTypeConstruction
 {
     public sealed class DefaultTypeDescriptionProvider : ITypeDescriptionProvider
     {
-        private readonly IInjectableValueNameNormalizer _injectableValueNameNormalizer;
+        private IInjectableValueNameNormalizer _injectableValueNameNormalizer;
 
         public DefaultTypeDescriptionProvider(IInjectableValueNameNormalizer injectableValueNameNormalizer)
         {
             injectableValueNameNormalizer.MustNotBeNull(nameof(injectableValueNameNormalizer));
 
             _injectableValueNameNormalizer = injectableValueNameNormalizer;
+        }
+
+        public IInjectableValueNameNormalizer InjectableValueNameNormalizer
+        {
+            get { return _injectableValueNameNormalizer; }
+            set
+            {
+                value.MustNotBeNull(nameof(value));
+                _injectableValueNameNormalizer = value;
+            }
         }
 
         public TypeCreationDescription GetTypeCreationDescription(Type typeToAnalyze)

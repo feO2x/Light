@@ -9,5 +9,7 @@ namespace Light.GuardClauses.Exceptions
         {
             
         }
+
+        public EnumValueNotDefinedException(string message, string parameterName) : base(message, parameterName) { }
     }
 }

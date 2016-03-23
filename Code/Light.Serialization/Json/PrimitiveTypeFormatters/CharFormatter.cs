@@ -5,13 +5,21 @@ namespace Light.Serialization.Json.PrimitiveTypeFormatters
 {
     public sealed class CharFormatter : BasePrimitiveTypeFormatter<char>, IPrimitiveTypeFormatter
     {
-        private readonly ICharacterEscaper _characterEscaper;
+        private ICharacterEscaper _characterEscaper;
+
+        public ICharacterEscaper CharacterEscaper
+        {
+            get { return _characterEscaper; }
+            set
+            {
+                value.MustNotBeNull(nameof(value));
+                _characterEscaper = value;
+            }
+        }
 
         public CharFormatter(ICharacterEscaper characterEscaper) : base(true)
         {
-            characterEscaper.MustNotBeNull(nameof(characterEscaper));
-
-            _characterEscaper = characterEscaper;
+            CharacterEscaper = characterEscaper;
         }
 
         public string FormatPrimitiveType(object @object)

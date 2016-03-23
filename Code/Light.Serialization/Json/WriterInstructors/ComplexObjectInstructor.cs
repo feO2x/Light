@@ -7,13 +7,21 @@ namespace Light.Serialization.Json.WriterInstructors
 {
     public sealed class ComplexObjectInstructor : IDecoratableInstructor
     {
-        private readonly IReadableValuesTypeAnalyzer _typeAnalyzer;
+        private IReadableValuesTypeAnalyzer _typeAnalyzer;
 
         public ComplexObjectInstructor(IReadableValuesTypeAnalyzer typeAnalyzer)
         {
-            typeAnalyzer.MustNotBeNull(nameof(typeAnalyzer));
+            TypeAnalyzer = typeAnalyzer;
+        }
 
-            _typeAnalyzer = typeAnalyzer;
+        public IReadableValuesTypeAnalyzer TypeAnalyzer
+        {
+            get { return _typeAnalyzer; }
+            set
+            {
+                value.MustNotBeNull(nameof(value));
+                _typeAnalyzer = value;
+            }
         }
 
         public bool AppliesToObject(object @object, Type actualType, Type referencedType)

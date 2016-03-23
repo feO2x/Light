@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Light.GuardClauses.Tests
@@ -29,14 +30,48 @@ namespace Light.GuardClauses.Tests
             act.ShouldNotThrow();
         }
 
-        [Fact(DisplayName = "User can throw a custom exception.")]
+        [Fact(DisplayName = "MustBe must throw an exception when the specified value is not the expected one, using an equality comparer for comparison.")]
+        public void ValuesNotEqualWithEqualityComparer()
+        {
+            Action act = () => 55.0.MustBe(55.1, EqualityComparer<double>.Default);
+
+            act.ShouldThrow<ArgumentException>();
+        }
+
+        [Fact(DisplayName = "MustBeEqualToValue must throw an exception when the specified IEquatable<T> values (Value Type) are not equal.")]
+        public void EquatableStructsComparison()
+        {
+            Action act = () => 42.MustBeEqualToValue(44);
+
+            act.ShouldThrow<ArgumentException>();
+        }
+
+        [Fact(DisplayName = "MustBeEqualTo must throw an exception when the specified IEquatable<T> values (Reference Types) are not equal.")]
+        public void EquatableComparison()
+        {
+            Action act = () => "Hello".MustBeEqualTo("There!");
+
+            act.ShouldThrow<ArgumentException>();
+        }
+
+        [Fact (DisplayName = "The caller can specifiy a custom message that MustBe must inject instead of the default one.")]
+        public void CustomMessage()
+        {
+            const string message = "Thou shall be the same!";
+
+            Action act = () => 42.MustBe(48, message: message);
+
+            act.ShouldThrow<ArgumentException>().And.Message.Should().Be(message);
+        }
+
+        [Fact(DisplayName = "The caller can specify a custom exception that MustBe must raise instead of the default one.")]
         public void CustomException()
         {
-            var exception = new InvalidOperationException("Foo");
+            var exception = new Exception();
 
-            Action act = () => 42.MustBe(45, exception);
+            Action act = () => "Hello".MustBe("World", exception: exception);
 
-            act.ShouldThrowExactly<InvalidOperationException>().Which.Should().BeSameAs(exception);
+            act.ShouldThrow<Exception>().Which.Should().BeSameAs(exception);
         }
     }
 }

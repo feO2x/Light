@@ -21,6 +21,7 @@ namespace Light.Serialization.Tests
                 new object[] { "[1,2,3]", new[] { 1, 2, 3 } },
                 new object[] { "[9,83]", new[] { 9, 83 } },
                 new object[] { "[138, 145, 633]", new[] { 138, 145, 633 } },
+                new object[] { "[\r\n  1,\r\n  2,\r\n  3\r\n]", new [] { 1, 2, 3}}, 
                 new object[] { "[]", new int[0] }
             };
 

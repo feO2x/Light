@@ -27,5 +27,28 @@ namespace Light.GuardClauses.Tests
 
             act.ShouldNotThrow();
         }
+
+        [Fact(DisplayName = "The caller can specify a custom message that MustBeValidEnumValue must inject instead of the default one.")]
+        public void CustomMessage()
+        {
+            const ConsoleSpecialKey invalidValue = (ConsoleSpecialKey) 15;
+            const string message = "Though shall be a defined enum value!";
+
+            Action act = () => invalidValue.MustBeValidEnumValue(message: message);
+
+            act.ShouldThrow<EnumValueNotDefinedException>()
+               .And.Message.Should().Be(message);
+        }
+
+        [Fact(DisplayName = "The caller can specify a custom exception that MustBeValidEnumValue must raise instead of the default one.")]
+        public void CustomException()
+        {
+            const ConsoleSpecialKey invalidValue = (ConsoleSpecialKey)15;
+            var exception = new Exception();
+
+            Action act = () => invalidValue.MustBeValidEnumValue(exception: exception);
+
+            act.ShouldThrow<Exception>().Which.Should().BeSameAs(exception);
+        }
     }
 }

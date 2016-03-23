@@ -12,13 +12,13 @@ namespace Light.Serialization.Json.Caching
 
         public JsonTokenTypeCombination(JsonTokenType jsonTokenType, Type type)
         {
-            jsonTokenType.MustNotBeNull(nameof(jsonTokenType));
+            jsonTokenType.MustBeValidEnumValue(nameof(jsonTokenType));
             type.MustNotBeNull(nameof(type));
 
             JsonTokenType = jsonTokenType;
             Type = type;
 
-            _hashCode = EqualityHelper.CreateHashCode(jsonTokenType, type);
+            _hashCode = Equality.CreateHashCode(jsonTokenType, type);
         }
 
         public bool Equals(JsonTokenTypeCombination other)

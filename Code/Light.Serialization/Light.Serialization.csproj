@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;COMPILE_PRECONDITIONS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;COMPILE_ASSERTIONS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -43,8 +43,10 @@
     <Compile Include="IDeserializer.cs" />
     <Compile Include="Json\Caching\JsonTokenTypeCombination.cs" />
     <Compile Include="Json\ComplexTypeConstruction\ConstructorDescription.cs" />
+    <Compile Include="Json\ComplexTypeConstruction\DefaultGenericDictionaryFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\DefaultObjectFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\InjectableValueKind.cs" />
+    <Compile Include="Json\TokenParsers\DefaultTokenParsersBuilder.cs" />
     <Compile Include="Json\IntegerMetadata\DecimalPartInfo.cs" />
     <Compile Include="Json\SerializationRules\IRuleBuilder.cs" />
     <Compile Include="Json\LowLevelWriting\IJsonKeyNormalizer.cs" />
@@ -57,13 +59,18 @@
     <Compile Include="Json\TokenParsers\BaseIso8601DateTimeParser.cs" />
     <Compile Include="Json\TokenParsers\DateTimeOffsetParser.cs" />
     <Compile Include="Json\LowLevelReading\JsonReaderExtensions.cs" />
+    <Compile Include="Json\TokenParsers\GenericDictionaryParser.cs" />
+    <Compile Include="Json\ComplexTypeConstruction\IDictionaryFactory.cs" />
+    <Compile Include="Json\TypeNaming\BasicNetTypeNames.cs" />
     <Compile Include="Json\TypeNaming\DefaultTypeSectionParser.cs" />
+    <Compile Include="Json\TypeNaming\IAddOneToOneMapping.cs" />
     <Compile Include="Json\TypeNaming\ITypeSectionParser.cs" />
     <Compile Include="Json\TokenParsers\SignedIntegerParser.cs" />
     <Compile Include="Json\IntegerMetadata\SignedIntegerTypes.cs" />
     <Compile Include="Json\IntegerMetadata\UnsignedIntegerTypeInfo.cs" />
     <Compile Include="Json\IntegerMetadata\SignedIntegerTypeInfo.cs" />
     <Compile Include="Json\TokenParsers\UnsignedIntegerParser.cs" />
+    <Compile Include="Json\TypeNaming\ITypeToNameMapping.cs" />
     <Compile Include="Json\TypeNaming\SimpleNameToTypeMapping.cs" />
     <Compile Include="Json\Caching\ValueProvidersCacheDecorator.cs" />
     <Compile Include="Json\JsonDeserializerBuilderExtensions.cs" />
@@ -85,7 +92,7 @@
     <Compile Include="Json\TokenParsers\BaseJsonStringToPrimitiveParser.cs" />
     <Compile Include="Json\TokenParsers\BooleanParser.cs" />
     <Compile Include="Json\TokenParsers\CharacterParser.cs" />
-    <Compile Include="Json\TokenParsers\ComplexTypeParser.cs" />
+    <Compile Include="Json\TokenParsers\ComplexObjectParser.cs" />
     <Compile Include="Json\ComplexTypeConstruction\DefaultGenericCollectionFactory.cs" />
     <Compile Include="Json\TokenParsers\DateTimeParser.cs" />
     <Compile Include="Json\TokenParsers\DecimalParser.cs" />
@@ -94,7 +101,7 @@
     <Compile Include="Json\ComplexTypeConstruction\IInjectableValueNameNormalizer.cs" />
     <Compile Include="Json\TokenParsers\EnumerationValueParser.cs" />
     <Compile Include="Json\TokenParsers\FloatParser.cs" />
-    <Compile Include="Json\TokenParsers\INameToTypeMapping.cs" />
+    <Compile Include="Json\TypeNaming\INameToTypeMapping.cs" />
     <Compile Include="Json\ComplexTypeConstruction\InjectableValueDescription.cs" />
     <Compile Include="Json\JsonToken.cs" />
     <Compile Include="ISerializer.cs" />
@@ -105,7 +112,7 @@
     <Compile Include="Json\ComplexTypeConstruction\IObjectFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\ITypeDescriptionProvider.cs" />
     <Compile Include="Json\TokenParsers\IJsonStringToPrimitiveParser.cs" />
-    <Compile Include="Json\TokenParsers\Iso8601DurationParser.cs" />
+    <Compile Include="Json\TokenParsers\Iso8601DurationToTimeSpanParser.cs" />
     <Compile Include="Json\TokenParsers\JsonStringInheritenceParser.cs" />
     <Compile Include="Json\TokenParsers\NullParser.cs" />
     <Compile Include="Json\TokenParsers\ParseResult.cs" />
@@ -145,7 +152,7 @@
     <Compile Include="Json\Caching\TypeDescriptionCacheDecorator.cs" />
     <Compile Include="Json\TokenParsers\TimeSpanParser.cs" />
     <Compile Include="Json\TypeNaming\DomainFriendlyNameMapping.cs" />
-    <Compile Include="Json\TypeNaming\DomainFriendlyNameMappingBuilder.cs" />
+    <Compile Include="Json\TypeNaming\NameToMappingTransformer.cs" />
     <Compile Include="Json\WriterInstructors\CollectionInstructor.cs" />
     <Compile Include="Json\WriterInstructors\ComplexObjectInstructor.cs" />
     <Compile Include="Json\WriterInstructors\ComplexObjectWriting.cs" />
@@ -156,7 +163,7 @@
     <Compile Include="Json\ObjectReferencePreservation\ObjectReferencePreserver.cs" />
     <Compile Include="Json\ObjectReferencePreservation\PreserveObjectReferencesDecorator.cs" />
     <Compile Include="Json\ObjectReferencePreservation\IDecoratableInstructor.cs" />
-    <Compile Include="Json\WriterInstructors\PrimitiveWriterInstructor.cs" />
+    <Compile Include="Json\WriterInstructors\PrimitiveTypeInstructor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Json\JsonSerializer.cs" />
     <Compile Include="SerializationException.cs" />

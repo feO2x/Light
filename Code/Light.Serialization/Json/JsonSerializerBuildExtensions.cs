@@ -36,15 +36,16 @@ namespace Light.Serialization.Json
             return targetList;
         }
 
-        public static IList<IJsonWriterInstructor> AddDefaultWriterInstructors(this IList<IJsonWriterInstructor> targetList,
+        public static TCollection AddDefaultWriterInstructors<TCollection>(this TCollection targetList,
                                                                                IDictionary<Type, IPrimitiveTypeFormatter> primitiveTypeToFormattersMapping,
                                                                                IReadableValuesTypeAnalyzer readableValuesTypeAnalyzer)
+            where TCollection : IList<IJsonWriterInstructor>
         {
-            targetList.MustNotBeNull(nameof(targetList));
+            if(targetList == null) throw new ArgumentNullException();
 
             var preserver = new ObjectReferencePreserver(new Dictionary<object, uint>());
 
-            targetList.Add(new PrimitiveWriterInstructor(primitiveTypeToFormattersMapping));
+            targetList.Add(new PrimitiveTypeInstructor(primitiveTypeToFormattersMapping));
             targetList.Add(new EnumerationToStringInstructor());
             targetList.Add(new PreserveObjectReferencesDecorator(
                 new DictionaryInstructor(primitiveTypeToFormattersMapping),

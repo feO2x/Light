@@ -8,16 +8,18 @@ using Light.Serialization.Json.LowLevelWriting;
 using Light.Serialization.Json.ObjectReferencePreservation;
 using Light.Serialization.Json.PrimitiveTypeFormatters;
 using Light.Serialization.Json.SerializationRules;
+using Light.Serialization.Json.WriterInstructors;
 
 namespace Light.Serialization.Json
 {
     public class JsonSerializerBuilder
     {
         private readonly List<Rule> _rules = new List<Rule>();
-        private Func<IList<IJsonWriterInstructor>> _createWriterInstructorList = CreateList;
-        private IList<IJsonWriterInstructor> _defaultWriterInstructors;
+        public readonly List<IJsonWriterInstructor> BasicWriterInstructors;
+        private ICharacterEscaper _characterEscaper = new DefaultCharacterEscaper();
+        private Func<IList<IJsonWriterInstructor>> _createList = CreateDefaultList;
         private IDictionary<Type, IJsonWriterInstructor> _instructorCache;
-        private IReadableValuesTypeAnalyzer _readableValuesTypeAnalyzer;
+        private IReadableValuesTypeAnalyzer _typeAnalyzer = new ValueProvidersCacheDecorator(new PublicPropertiesAndFieldsAnalyzer(), new Dictionary<Type, IList<IValueProvider>>());
         private IJsonWriterFactory _writerFactory;
         private IRuleBuilder _ruleBuilder;
 
@@ -27,32 +29,23 @@ namespace Light.Serialization.Json
             var primitiveTypeToFormattersMapping = new List<IPrimitiveTypeFormatter>().AddDefaultPrimitiveTypeFormatters(characterEscaper)
                                                                                       .ToDictionary(f => f.TargetType);
 
-            UseDefaultTypeAnalyzer();
-            _defaultWriterInstructors = new List<IJsonWriterInstructor>().AddDefaultWriterInstructors(primitiveTypeToFormattersMapping,
-                                                                                                      _readableValuesTypeAnalyzer);
+            //UseDefaultTypeAnalyzer();
+            //_defaultWriterInstructors = new List<IJsonWriterInstructor>().AddDefaultWriterInstructors(primitiveTypeToFormattersMapping,
+            //                                                                                          _readableValuesTypeAnalyzer);
 
             UseDefaultWriterFactory();
             _instructorCache = new Dictionary<Type, IJsonWriterInstructor>();
+
+            BasicWriterInstructors = new List<IJsonWriterInstructor>()
+                .AddDefaultWriterInstructors(new List<IPrimitiveTypeFormatter>().AddDefaultPrimitiveTypeFormatters(_characterEscaper)
+                                                                                .ToDictionary(f => f.TargetType),
+                                             _typeAnalyzer);
             UseDefaultRuleBuilder();
         }
 
-        public JsonSerializerBuilder WithCreateFunctionForInstructorList(Func<IList<IJsonWriterInstructor>> createList)
-        {
-            createList.MustNotBeNull(nameof(createList));
-
-            _createWriterInstructorList = createList;
-            return this;
-        }
-
-        private static IList<IJsonWriterInstructor> CreateList()
+        private static IList<IJsonWriterInstructor> CreateDefaultList()
         {
             return new List<IJsonWriterInstructor>();
-        }
-
-        public JsonSerializerBuilder WithWriterInstructors(IList<IJsonWriterInstructor> writerInstructors)
-        {
-            _defaultWriterInstructors = writerInstructors;
-            return this;
         }
 
         public JsonSerializerBuilder WithWriterFactory(IJsonWriterFactory writerFactory)
@@ -61,15 +54,72 @@ namespace Light.Serialization.Json
             return this;
         }
 
-        public JsonSerializerBuilder WithInstructorCache(IDictionary<Type, IJsonWriterInstructor> instructorCache)
+        public JsonSerializerBuilder WithListCreationFunction(Func<IList<IJsonWriterInstructor>> createList)
         {
-            _instructorCache = instructorCache;
+            _createList = createList;
+            return this;
+        }
+
+        public JsonSerializerBuilder WithCharacterEscaper(ICharacterEscaper characterEscaper)
+        {
+            _characterEscaper = characterEscaper;
+
+            ConfigureFormatterOfPrimitiveTypeInstructor<CharFormatter>(f => f.CharacterEscaper = characterEscaper);
+            ConfigureFormatterOfPrimitiveTypeInstructor<StringFormatter>(f => f.CharacterEscaper = characterEscaper);
+
             return this;
         }
 
         public JsonSerializerBuilder WithTypeAnalyzer(IReadableValuesTypeAnalyzer typeAnalyzer)
         {
-            _readableValuesTypeAnalyzer = typeAnalyzer;
+            _typeAnalyzer = typeAnalyzer;
+
+            var complexObjectInstructor = BasicWriterInstructors.OfType<ComplexObjectInstructor>().FirstOrDefault();
+            if (complexObjectInstructor != null)
+                complexObjectInstructor.TypeAnalyzer = _typeAnalyzer;
+
+            return this;
+        }
+
+        public JsonSerializerBuilder AddWriterInstructorAfter<T>(IJsonWriterInstructor additionalWriterInstructor)
+            where T : IJsonWriterInstructor
+        {
+            additionalWriterInstructor.MustNotBeNull(nameof(additionalWriterInstructor));
+
+            var targetIndex = BasicWriterInstructors.IndexOf(BasicWriterInstructors.OfType<T>().First());
+            if (targetIndex == -1)
+                throw new ArgumentException($"The specified writer instructor {additionalWriterInstructor} cannot be added after the instructor {typeof(T)} because the latter was not found.");
+
+            if (targetIndex == BasicWriterInstructors.Count - 1)
+                BasicWriterInstructors.Add(additionalWriterInstructor);
+            else
+                BasicWriterInstructors.Insert(targetIndex + 1, additionalWriterInstructor);
+
+            return this;
+        }
+
+        public JsonSerializerBuilder AddWriterInstructorBefore<T>(IJsonWriterInstructor additionalWriterInstructor)
+            where T : IJsonWriterInstructor
+        {
+            additionalWriterInstructor.MustNotBeNull(nameof(additionalWriterInstructor));
+
+            var targetIndex = BasicWriterInstructors.IndexOf(BasicWriterInstructors.OfType<T>().First());
+            if (targetIndex == -1)
+                throw new ArgumentException($"The specified writer instructor {additionalWriterInstructor} cannot be added before the instructor {typeof(T)} because the latter was not found.");
+
+            BasicWriterInstructors.Insert(targetIndex, additionalWriterInstructor);
+            return this;
+        }
+
+        public JsonSerializerBuilder UseDefaultWriterFactory()
+        {
+            _writerFactory = new JsonWriterFactory();
+            return this;
+        }
+
+        public JsonSerializerBuilder ConfigureDefaultWriterFactory(Action<JsonWriterFactory> configureFactory)
+        {
+            configureFactory((JsonWriterFactory) _writerFactory);
             return this;
         }
 
@@ -78,21 +128,33 @@ namespace Light.Serialization.Json
             _ruleBuilder = new PreservedObjectsRuleBuilder();
         }
 
-        public JsonSerializerBuilder UseDefaultTypeAnalyzer()
+        /*public JsonSerializerBuilder UseDefaultTypeAnalyzer()
         {
             return UseDefaultTypeAnalyzer(new Dictionary<Type, IList<IValueProvider>>());
-        }
+        }*/
 
-        public JsonSerializerBuilder UseDefaultTypeAnalyzer(IDictionary<Type, IList<IValueProvider>> valueProvidersCache)
+        public JsonSerializerBuilder WithInstructorCache(IDictionary<Type, IJsonWriterInstructor> instructorCache)
         {
-            _readableValuesTypeAnalyzer = new ValueProvidersCacheDecorator(new PublicPropertiesAndFieldsAnalyzer(),
-                                                                           valueProvidersCache);
+            _instructorCache = instructorCache;
             return this;
         }
 
-        public JsonSerializerBuilder UseDefaultWriterFactory()
+        public JsonSerializerBuilder ConfigureInstructor<T>(Action<T> configureInstructor)
+            where T : IJsonWriterInstructor
         {
-            _writerFactory = new JsonWriterFactory();
+            configureInstructor(BasicWriterInstructors.OfType<T>().First());
+            return this;
+        }
+
+        public JsonSerializerBuilder ConfigureFormatterOfPrimitiveTypeInstructor<T>(Action<T> configureFormatter)
+            where T : IPrimitiveTypeFormatter
+        {
+            configureFormatter(BasicWriterInstructors.OfType<PrimitiveTypeInstructor>()
+                                                     .First()
+                                                     .PrimitiveTypeToFormattersMapping
+                                                     .Values
+                                                     .OfType<T>()
+                                                     .First());
             return this;
         }
 
@@ -108,7 +170,7 @@ namespace Light.Serialization.Json
             var targetRule = (Rule<T>) _rules.FirstOrDefault(r => r.TargetType == targetType);
             if (targetRule == null)
             {
-                targetRule = _ruleBuilder.CreateRule<T>(_readableValuesTypeAnalyzer);
+                targetRule = _ruleBuilder.CreateRule<T>(_typeAnalyzer);
                 _rules.Add(targetRule);
             }
 
@@ -118,21 +180,15 @@ namespace Light.Serialization.Json
 
         public ISerializer Build()
         {
-            var writerInstructors = _createWriterInstructorList();
-            foreach (var defaultWriterInstructor in _defaultWriterInstructors)
+            var writerInstructors = _createList();
+            foreach (var rule in _rules)
             {
-                writerInstructors.Add(defaultWriterInstructor);
+                writerInstructors.Add(rule.CreateInstructor());
             }
-
-            for (var i = 0; i < _rules.Count; i++)
+            foreach (var instructor in BasicWriterInstructors)
             {
-                var targetRule = _rules[i];
-                var customInstructor = targetRule.CreateInstructor();
-                writerInstructors.Insert(i, customInstructor);
-                if (_instructorCache.ContainsKey(targetRule.TargetType) == false)
-                    _instructorCache.Add(targetRule.TargetType, customInstructor);
+                writerInstructors.Add(instructor);
             }
-
             return new JsonSerializer((IReadOnlyList<IJsonWriterInstructor>) writerInstructors, _writerFactory, _instructorCache);
         }
     }

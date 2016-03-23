@@ -23,12 +23,16 @@ namespace Light.Serialization.Json.TokenParsers
 
         public bool IsSuitableFor(JsonToken token, Type requestedType)
         {
-            return (token.JsonType == JsonTokenType.IntegerNumber || token.JsonType == JsonTokenType.FloatingPointNumber) && _unsignedIntegerTypes.ContainsKey(requestedType);
+            return (token.JsonType == JsonTokenType.IntegerNumber || token.JsonType == JsonTokenType.FloatingPointNumber || token.JsonType == JsonTokenType.String) && 
+                _unsignedIntegerTypes.ContainsKey(requestedType);
         }
 
         public object ParseValue(JsonDeserializationContext context)
         {
             var token = context.Token;
+            if (token.JsonType == JsonTokenType.String)
+                token = token.RemoveOuterQuotationMarks();
+
             var currentIndex = 0;
             var digitsLeftToRead = token.Length;
 

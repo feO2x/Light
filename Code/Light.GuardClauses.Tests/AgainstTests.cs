@@ -6,18 +6,18 @@ namespace Light.GuardClauses.Tests
 {
     public sealed class AgainstTests
     {
-        [Fact(DisplayName = "Against must execute exception delegate when condition returns true.")]
-        public void DelegateExecutesOnTrue()
+        [Fact(DisplayName = "Against must throw the specified exception when condition returns true.")]
+        public void ExceptionThrownOnTrue()
         {
-            Action act = () => Guard.Against(true, () => new Exception());
+            Action act = () => Check.Against(true, () => new Exception());
 
             act.ShouldThrow<Exception>();
         }
 
-        [Fact(DisplayName = "Against must not execute exception delegate when condition returns false.")]
-        public void DelegateDoesNotExecuteOnFalse()
+        [Fact(DisplayName = "Against must not throw the specified exception when condition returns false.")]
+        public void ExceptionNotThrownOnFalse()
         {
-            Action act = () => Guard.Against(false, () => new Exception());
+            Action act = () => Check.Against(false, () => new Exception());
 
             act.ShouldNotThrow();
         }

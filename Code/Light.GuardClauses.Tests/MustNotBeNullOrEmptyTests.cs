@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using FluentAssertions;
 using Light.GuardClauses.Exceptions;
 using Xunit;
 using TestData = System.Collections.Generic.IEnumerable<object[]>;
@@ -44,9 +44,9 @@ namespace Light.GuardClauses.Tests
         public static readonly TestData ListNotEmptyTestData =
             new[]
             {
-                new object[] { new List<int> {1} },
-                new object[] { new List<int> {1, 2, 3} },
-                new object[] { new List<int> {10, -11, 187, 22557} }
+                new object[] { new List<int> { 1 } },
+                new object[] { new List<int> { 1, 2, 3 } },
+                new object[] { new List<int> { 10, -11, 187, 22557 } }
             };
 
         [Fact(DisplayName = "MustNotBeNullOrEmpty must throw an ArgumentNullException when a string is null.")]
@@ -80,6 +80,31 @@ namespace Light.GuardClauses.Tests
             Action act = () => @string.MustNotBeNullOrEmpty(nameof(@string));
 
             act.ShouldNotThrow();
+        }
+
+        [Theory(DisplayName = "The caller can specify a custom message that MustNotBeNullOrEmpty must inject instead of the default one.")]
+        [InlineData(null)]
+        [InlineData("")]
+        public void CustomMessage(string invalidString)
+        {
+            const string message = "Thou shall not be null or empty!";
+
+            Action act = () => invalidString.MustNotBeNullOrEmpty(message: message);
+
+            act.ShouldThrow<ArgumentException>()
+               .And.Message.Should().Contain(message);
+        }
+
+        [Theory(DisplayName = "The caller can specify a custom exception that MustBeValidEnumValue must raise instead of the default one.")]
+        [InlineData(null)]
+        [InlineData("")]
+        public void CustomException(string invalidString)
+        {
+            var exception = new Exception();
+
+            Action act = () => invalidString.MustNotBeNullOrEmpty(exception: exception);
+
+            act.ShouldThrow<Exception>().Which.Should().BeSameAs(exception);
         }
     }
 }
