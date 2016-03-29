@@ -10,6 +10,7 @@ namespace Light.BayesianNetwork
         private readonly IList<RandomVariableNode> _nodes;
         private readonly IReadOnlyList<RandomVariableNode> _nodesAsReadOnlyList;
         public readonly ICollectionFactory CollectionFactory;
+        private RandomVariableNode _networkParentNode;
 
         public BayesianNetwork(Guid id) : this(id, new DefaultCollectionFactory())
         {
@@ -33,6 +34,25 @@ namespace Light.BayesianNetwork
             _nodes.Add(node);
 
             // TODO: Check the network for consistency (no circular references etc.)
+        }
+
+        public void AddNetworkParentNode(RandomVariableNode node)
+        {
+            node.MustNotBeNull(nameof(node));
+            if(_networkParentNode != null) throw new Exception("The bayes network already has one parent node. Adding more network parent nodes not possbile");
+            if(node.ParentNodes.Count != 0) throw new ArgumentException($"The new network parent node {node} has parents but the network parent node is not allowed to have parent nodes.");
+
+            _networkParentNode = node;
+        }
+
+        public void ReplaceNetworkParentNode(RandomVariableNode node)
+        {
+            node.MustNotBeNull(nameof(node));
+
+            if(_networkParentNode != null)
+                RemoveNode(_networkParentNode);
+
+            AddNetworkParentNode(node);
         }
 
         public void RemoveNode(RandomVariableNode node)
