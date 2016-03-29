@@ -11,21 +11,27 @@ namespace Light.BayesianNetwork
         private readonly IReadOnlyList<RandomVariableNode> _nodesAsReadOnlyList;
         public readonly ICollectionFactory CollectionFactory;
         private RandomVariableNode _networkParentNode;
+        private readonly IReasoner _reasoner;
 
-        public BayesianNetwork(Guid id) : this(id, new DefaultCollectionFactory())
+        public BayesianNetwork(Guid id, IReasonerFactory reasonerFactory, IProbabilityCalculatorFactory probabilityCalculatorFactory) : this(id, new DefaultCollectionFactory(), reasonerFactory, probabilityCalculatorFactory)
         {
         }
 
-        public BayesianNetwork(Guid id, ICollectionFactory collectionFactory)
+        public BayesianNetwork(Guid id, ICollectionFactory collectionFactory, IReasonerFactory reasonerFactory, IProbabilityCalculatorFactory probabilityCalculatorFactory)
             : base(id)
         {
             collectionFactory.MustNotBeNull(nameof(collectionFactory));
+            reasonerFactory.MustNotBeNull(nameof(reasonerFactory));
+            probabilityCalculatorFactory.MustNotBeNull(nameof(probabilityCalculatorFactory));
 
             CollectionFactory = collectionFactory;
             CollectionFactory.InitializeListFields(out _nodes, out _nodesAsReadOnlyList);
+            _reasoner = reasonerFactory.Create((IReadOnlyList<RandomVariableNode>)_nodes, probabilityCalculatorFactory.Create());
         }
 
         public IReadOnlyList<RandomVariableNode> Nodes => _nodesAsReadOnlyList;
+
+        public IReasoner Reasoner => _reasoner;
 
         public void AddNode(RandomVariableNode node)
         {

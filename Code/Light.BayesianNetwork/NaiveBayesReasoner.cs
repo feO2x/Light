@@ -7,15 +7,15 @@ namespace Light.BayesianNetwork
 {
     public class NaiveBayesReasoner : IReasoner
     {
-        private readonly BayesianNetwork _network;
+        private readonly IReadOnlyList<RandomVariableNode> _networkNodes;
         private readonly IProbabilityCalculator _probabilityCalculator;
 
-        public NaiveBayesReasoner(BayesianNetwork network, IProbabilityCalculator probabilityCalculator)
+        public NaiveBayesReasoner(IReadOnlyList<RandomVariableNode> networkNodes, IProbabilityCalculator probabilityCalculator)
         {
-            network.MustNotBeNull(nameof(network));
+            networkNodes.MustNotBeNull(nameof(networkNodes));
             probabilityCalculator.MustNotBeNull(nameof(probabilityCalculator));
 
-            _network = network;
+            _networkNodes = networkNodes;
             _probabilityCalculator = probabilityCalculator;
         }
 
@@ -28,7 +28,7 @@ namespace Light.BayesianNetwork
 
         private void PropagateNewParentPropability()
         {
-            List<RandomVariableNode> networkParentNodes = _network.Nodes.Where(node => node.ParentNodes.Count == 0).ToList();
+            List<RandomVariableNode> networkParentNodes = _networkNodes.Where(node => node.ParentNodes.Count == 0).ToList();
 
             if(networkParentNodes.Count == 0) throw new Exception("Naive bayes networks must have one parent node. The current network do not have a parent node.");
             if(networkParentNodes.Count > 1) throw new Exception($"Every naive bayes network must have one parent node. The current network consists of {networkParentNodes.Count} parent nodes.");

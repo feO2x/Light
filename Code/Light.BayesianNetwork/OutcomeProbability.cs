@@ -11,7 +11,9 @@ namespace Light.BayesianNetwork
             Value = value;
         }
 
-        public static OutcomeProbability Default => new OutcomeProbability(0.0);
+        public static OutcomeProbability DefaultMin => new OutcomeProbability(0.0);
+        public static OutcomeProbability DefaultMax => new OutcomeProbability(1.0);
+
 
         public static OutcomeProbability FromValue(double value)
         {

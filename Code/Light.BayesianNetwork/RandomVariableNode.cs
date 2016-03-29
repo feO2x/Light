@@ -144,9 +144,11 @@ namespace Light.BayesianNetwork
             {
                 if (evidenceOutcome == outcome)
                     continue;
+
+                outcome.UpdateEvidenceRelatedToEvidenceChangeInNode();
             }
 
-            throw new NotImplementedException("Whom do we have to notify that our outcome values have changed?");
+            Network.Reasoner.PropagateNewEvidence(evidenceOutcome.Node);
         }
     }
 }
