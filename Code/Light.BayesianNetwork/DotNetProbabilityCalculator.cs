@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Light.GuardClauses;
 
 namespace Light.BayesianNetwork
 {
@@ -22,16 +23,19 @@ namespace Light.BayesianNetwork
 
                 foreach (var outcome in node.Outcomes)
                 {
-                    CalculateOutcomeProbabilityUpdates(outcome);
+                    CalculateOutcomeProbabilityForSpecificOutcome(outcome);
                 }
             }
         }
 
         //calculator has to know the change (or just the new value) of the networks parent probability
-        private void CalculateOutcomeProbabilityUpdates(Outcome outcome)
+        public double CalculateOutcomeProbabilityForSpecificOutcome(Outcome outcome)
         {
-            //var outcomeProbability = new OutcomeProbability();
+            outcome.MustNotBeNull(nameof(outcome));
+
             throw new NotImplementedException();
         }
+
+
     }
 }

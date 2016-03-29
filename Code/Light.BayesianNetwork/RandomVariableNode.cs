@@ -15,13 +15,16 @@ namespace Light.BayesianNetwork
         private readonly IList<RandomVariableNode> _parentNodes;
         private readonly IReadOnlyList<RandomVariableNode> _parentNodesAsReadOnlyList;
         private OutcomeProbabilityKind _probabilityKind;
+        private IProbabilityCalculator _probabilityCalculator;
 
-        public RandomVariableNode(Guid id, BayesianNetwork network, OutcomeProbabilityKind probabilityKind = OutcomeProbabilityKind.CalculatedValue)
+        public RandomVariableNode(Guid id, BayesianNetwork network, IProbabilityCalculatorFactory probabilityCalculatorFactory, OutcomeProbabilityKind probabilityKind = OutcomeProbabilityKind.CalculatedValue)
             : base(id)
         {
             network.MustNotBeNull(nameof(network));
+            probabilityCalculatorFactory.MustNotBeNull(nameof(probabilityCalculatorFactory));
 
             Network = network;
+            _probabilityCalculator = probabilityCalculatorFactory.Create();
             _probabilityKind = probabilityKind;
             network.CollectionFactory.InitializeListFields(out _parentNodes, out _parentNodesAsReadOnlyList);
             network.CollectionFactory.InitializeListFields(out _childNodes, out _childNodesAsReadOnlyList);
@@ -101,6 +104,7 @@ namespace Light.BayesianNetwork
 
             _outcomes.Add(newOutcome);
             newOutcome.EvidenceSet += OnEvidenceSet;
+            newOutcome.EvidenceRemove += OnEvidenceRemove;
         }
 
         public void RemoveOutcome(Outcome existingOutcome)
@@ -149,6 +153,19 @@ namespace Light.BayesianNetwork
             }
 
             Network.Reasoner.PropagateNewEvidence(evidenceOutcome.Node);
+        }
+
+        private void OnEvidenceRemove(Outcome evidenceOutcome)
+        {
+            foreach (var outcome in _outcomes)
+            {
+                outcome.CurrentProbability = OutcomeProbability.FromValue(_probabilityCalculator.CalculateOutcomeProbabilityForSpecificOutcome(outcome));
+
+                if(evidenceOutcome == outcome)
+                    continue;
+
+                outcome.RemoveEvidence();
+            }
         }
     }
 }

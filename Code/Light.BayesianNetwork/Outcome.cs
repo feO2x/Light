@@ -36,6 +36,13 @@ namespace Light.BayesianNetwork
             EvidenceSet?.Invoke(this);
         }
 
+        public void RemoveEvidence()
+        {
+            _probabilityKind = OutcomeProbabilityKind.CalculatedValue;
+
+            EvidenceRemove?.Invoke(this);
+        }
+
         public void UpdateEvidenceRelatedToEvidenceChangeInNode()
         {
             _probabilityKind = OutcomeProbabilityKind.Evidence;
@@ -43,5 +50,6 @@ namespace Light.BayesianNetwork
         }
 
         public event Action<Outcome> EvidenceSet;
+        public event Action<Outcome> EvidenceRemove;
     }
 }

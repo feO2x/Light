@@ -6,5 +6,6 @@ namespace Light.BayesianNetwork
     {
         void CalculateParentProbabilityFromEvidence(RandomVariableNode node);
         void CalculateObservedProbabilitiesFromParentProbability(IReadOnlyList<RandomVariableNode> childNodes);
+        double CalculateOutcomeProbabilityForSpecificOutcome(Outcome outcome);
     }
 }
