@@ -71,7 +71,7 @@ namespace Light.Serialization.Json
         public string ToStringWithoutQuotationMarks()
         {
             JsonType.MustBe(JsonTokenType.String,
-                            exception: new InvalidOperationException($"ToStringWithoutQuotationMarks should only be called when the JsonType of this token is String, but it is actually {JsonType}."));
+                            exception: () => new InvalidOperationException("ToStringWithoutQuotationMarks should only be called when the JsonType of this token is String."));
 
             return ToString(1, Length - 2);
         }
@@ -94,7 +94,7 @@ namespace Light.Serialization.Json
         public JsonToken RemoveOuterQuotationMarks()
         {
             JsonType.MustBe(JsonTokenType.String,
-                            exception: new InvalidOperationException($"RemoveOuterQuotationMarks should only be called when the JsonType of this token is String, but it is actually {JsonType}."));
+                            exception: () => new InvalidOperationException("RemoveOuterQuotationMarks should only be called when the JsonType of this token is String."));
 
             return new JsonToken(_buffer, _startIndex + 1, Length - 2, JsonTokenType.String);
         }
