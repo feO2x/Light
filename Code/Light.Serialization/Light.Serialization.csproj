@@ -58,6 +58,7 @@
     <Compile Include="Json\LowLevelReading\JsonReaderExtensions.cs" />
     <Compile Include="Json\TokenParsers\GenericDictionaryParser.cs" />
     <Compile Include="Json\ComplexTypeConstruction\IDictionaryFactory.cs" />
+    <Compile Include="Json\TokenParsers\GuidParser.cs" />
     <Compile Include="Json\TypeNaming\BasicNetTypeNames.cs" />
     <Compile Include="Json\TypeNaming\DefaultTypeSectionParser.cs" />
     <Compile Include="Json\TypeNaming\IAddOneToOneMapping.cs" />

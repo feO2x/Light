@@ -34,7 +34,7 @@ namespace Light.Serialization.Json.TokenParsers
 
             // Else it is a class - get all base classes and interfaces along the inheritance hierarchy
             var currentType = typeInfo;
-            while (currentType.GetType() != typeof (object))
+            while (currentType.AsType() != typeof (object))
             {
                 foreach (var @interface in currentType.ImplementedInterfaces)
                 {
