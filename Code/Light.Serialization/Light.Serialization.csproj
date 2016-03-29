@@ -46,6 +46,9 @@
     <Compile Include="Json\ComplexTypeConstruction\DefaultGenericDictionaryFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\DefaultObjectFactory.cs" />
     <Compile Include="Json\ComplexTypeConstruction\InjectableValueKind.cs" />
+    <Compile Include="Json\ObjectReferencePreservation\DefaultIdentifierParser.cs" />
+    <Compile Include="Json\ObjectReferencePreservation\IIdentifierParser.cs" />
+    <Compile Include="Json\ObjectReferencePreservation\IReferenceParser.cs" />
     <Compile Include="Json\TokenParsers\DefaultTokenParsersBuilder.cs" />
     <Compile Include="Json\IntegerMetadata\DecimalPartInfo.cs" />
     <Compile Include="Json\SerializationRules\IRuleBuilder.cs" />

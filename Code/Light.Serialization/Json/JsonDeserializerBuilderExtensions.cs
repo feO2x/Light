@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Light.Serialization.Json.ComplexTypeConstruction;
+using Light.Serialization.Json.ObjectReferencePreservation;
 using Light.Serialization.Json.TokenParsers;
 using Light.Serialization.Json.TypeNaming;
 
@@ -13,6 +14,8 @@ namespace Light.Serialization.Json
                                                                       IDictionaryFactory dictionaryFactory,
                                                                       IObjectFactory objectFactory,
                                                                       ITypeSectionParser typeSectionParser,
+                                                                      IIdentifierParser identifierParser,
+                                                                      IReferenceParser referenceParser,
                                                                       IInjectableValueNameNormalizer nameNormalizer,
                                                                       ITypeDescriptionProvider typeDescriptionProvider)
             where TCollection : IList<IJsonTokenParser>
@@ -33,7 +36,7 @@ namespace Light.Serialization.Json
             targetList.Add(stringParser);
             targetList.Add(new JsonStringInheritenceParser(targetList.OfType<IJsonStringToPrimitiveParser>().ToList(), stringParser));
             targetList.Add(new ArrayToGenericCollectionParser(collectionFactory));
-            targetList.Add(new GenericDictionaryParser(dictionaryFactory, typeSectionParser));
+            targetList.Add(new GenericDictionaryParser(dictionaryFactory, typeSectionParser, identifierParser, referenceParser));
             targetList.Add(new ComplexObjectParser(objectFactory, nameNormalizer, typeDescriptionProvider, typeSectionParser));
 
             return targetList;

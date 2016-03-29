@@ -55,6 +55,8 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterType<IObjectFactory, UnityObjectFactory>(new ContainerControlledLifetimeManager())
                             .RegisterType<INameToTypeMapping, SimpleNameToTypeMapping>(new ContainerControlledLifetimeManager())
                             .RegisterType<ITypeSectionParser, DefaultTypeSectionParser>(new ContainerControlledLifetimeManager())
+                            .RegisterType<IIdentifierParser, DefaultIdentifierParser>(new ContainerControlledLifetimeManager())
+                            .RegisterType<IReferenceParser, DefaultReferenceParser>(new ContainerControlledLifetimeManager())
                             .RegisterType<IInjectableValueNameNormalizer, ToLowerWithoutSpecialCharactersNormalizer>(new ContainerControlledLifetimeManager())
                             .RegisterType<ITypeDescriptionProvider, DefaultTypeDescriptionProvider>(new ContainerControlledLifetimeManager());
         }

@@ -20,7 +20,7 @@ namespace Light.Serialization.Tests
         public static readonly TestData DeserializeStringDictionariesData =
             new[]
             {
-                new object[] { "{\"Hello\":\"World\"}", new Dictionary<string, string> { ["Hello"] = "World" } },
+                new object[] { "{\"$id\":0,\"Hello\":\"World\"}", new Dictionary<string, string> { ["Hello"] = "World" } },
                 new object[] { "{\"1\":\"Hey\",\"2\":\"Ho!\",\"3\":\"What?\"}", new Dictionary<string, string> { ["1"] = "Hey", ["2"] = "Ho!", ["3"] = "What?" } }
             };
 

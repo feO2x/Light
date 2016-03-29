@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Light.Serialization.Json.Caching;
 using Light.Serialization.Json.ComplexTypeConstruction;
+using Light.Serialization.Json.ObjectReferencePreservation;
 using Light.Serialization.Json.TypeNaming;
 
 namespace Light.Serialization.Json.TokenParsers
@@ -14,6 +15,8 @@ namespace Light.Serialization.Json.TokenParsers
         private IObjectFactory _objectFactory = new DefaultObjectFactory();
         private ITypeDescriptionProvider _typeDescriptionProvider;
         private ITypeSectionParser _typeSectionParser = new DefaultTypeSectionParser(new SimpleNameToTypeMapping());
+        private IIdentifierParser _identifierParser = new DefaultIdentifierParser();
+        private IReferenceParser _referenceParser = new DefaultReferenceParser();
 
         public DefaultTokenParsersBuilder()
         {
@@ -51,6 +54,18 @@ namespace Light.Serialization.Json.TokenParsers
             return this;
         }
 
+        public DefaultTokenParsersBuilder WithIdentifierParser(IIdentifierParser parser)
+        {
+            _identifierParser = parser;
+            return this;
+        }
+
+        public DefaultTokenParsersBuilder WithReferenceParser(IReferenceParser parser)
+        {
+            _referenceParser = parser;
+            return this;
+        }
+
         public DefaultTokenParsersBuilder WithNameNormalizer(IInjectableValueNameNormalizer nameNormalizer)
         {
             _nameNormalizer = nameNormalizer;
@@ -80,6 +95,8 @@ namespace Light.Serialization.Json.TokenParsers
                                                                        _dictionaryFactory,
                                                                        _objectFactory,
                                                                        _typeSectionParser,
+                                                                       _identifierParser,
+                                                                       _referenceParser,
                                                                        _nameNormalizer,
                                                                        _typeDescriptionProvider);
         }
