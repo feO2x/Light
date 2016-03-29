@@ -6,13 +6,16 @@ namespace Light.BayesianNetwork
 {
     public class Outcome : EntityWithName
     {
+        private OutcomeProbabilityKind _probabilityKind;
         private OutcomeProbability _currentProbability = OutcomeProbability.Default;
 
-        public Outcome(Guid id, RandomVariableNode node) : base(id)
+        public Outcome(Guid id, RandomVariableNode node, OutcomeProbabilityKind probabilityKind = OutcomeProbabilityKind.CalculatedValue) : base(id)
         {
+            _probabilityKind = probabilityKind;
             node.MustNotBeNull(nameof(node));
 
             Node = node;
+            _probabilityKind = probabilityKind;
         }
 
         public OutcomeProbability CurrentProbability
@@ -21,14 +24,13 @@ namespace Light.BayesianNetwork
             set { _currentProbability = value; }
         }
 
+        public OutcomeProbabilityKind ProbabilityKind => _probabilityKind;
+
         public RandomVariableNode Node { get; }
 
         public void SetEvidence()
         {
-            if (_currentProbability.Kind == OutcomeProbabilityKind.SelectedEvidence)
-                return;
-
-            _currentProbability = OutcomeProbability.ValueIsEvidence;
+            _probabilityKind = OutcomeProbabilityKind.Evidence;
             EvidenceSet?.Invoke(this);
         }
 

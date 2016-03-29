@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Light.BayesianNetwork.FrameworkExtensions;
 using Light.GuardClauses;
 
@@ -13,13 +14,15 @@ namespace Light.BayesianNetwork
         private readonly IReadOnlyList<Outcome> _outcomesAsReadOnlyList;
         private readonly IList<RandomVariableNode> _parentNodes;
         private readonly IReadOnlyList<RandomVariableNode> _parentNodesAsReadOnlyList;
+        private OutcomeProbabilityKind _probabilityKind;
 
-        public RandomVariableNode(Guid id, BayesianNetwork network)
+        public RandomVariableNode(Guid id, BayesianNetwork network, OutcomeProbabilityKind probabilityKind = OutcomeProbabilityKind.CalculatedValue)
             : base(id)
         {
             network.MustNotBeNull(nameof(network));
 
             Network = network;
+            _probabilityKind = probabilityKind;
             network.CollectionFactory.InitializeListFields(out _parentNodes, out _parentNodesAsReadOnlyList);
             network.CollectionFactory.InitializeListFields(out _childNodes, out _childNodesAsReadOnlyList);
             network.CollectionFactory.InitializeListFields(out _outcomes, out _outcomesAsReadOnlyList);
@@ -121,14 +124,26 @@ namespace Light.BayesianNetwork
             outcomeToBeRemoved.EvidenceSet -= OnEvidenceSet;
         }
 
+        public OutcomeProbabilityKind ProbabilityKind()
+        {
+            if(_outcomesAsReadOnlyList.Count > 0)
+            {
+                var probabilityKindOfFirstElement = _outcomesAsReadOnlyList.First().ProbabilityKind;
+                if(_outcomesAsReadOnlyList.Any(o => o.ProbabilityKind == probabilityKindOfFirstElement))
+                    return probabilityKindOfFirstElement;
+
+                throw new Exception("All outcome probabilty kinds of one random variable node must be the same.");
+            }
+
+            throw new Exception("A random variable node must contain at least one outcome.");
+        }
+
         private void OnEvidenceSet(Outcome evidenceOutcome)
         {
             foreach (var outcome in _outcomes)
             {
                 if (evidenceOutcome == outcome)
                     continue;
-
-                outcome.CurrentProbability = OutcomeProbability.ValueIsNotEvidence;
             }
 
             throw new NotImplementedException("Whom do we have to notify that our outcome values have changed?");
