@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Light.GuardClauses;
 using Light.Serialization.Json.ComplexTypeConstruction;
 using Light.Serialization.Json.LowLevelReading;
+using Light.Serialization.Json.ObjectReferencePreservation;
 using Light.Serialization.Json.TypeNaming;
 
 namespace Light.Serialization.Json.TokenParsers
@@ -13,21 +14,26 @@ namespace Light.Serialization.Json.TokenParsers
         private readonly IObjectFactory _objectFactory;
         private readonly ITypeDescriptionProvider _typeDescriptionProvider;
         private readonly ITypeSectionParser _typeSectionParser;
+        private readonly IObjectDeserializationReferencePreserver _referencePreserver;
+        int? _preservationIdentifier;
 
         public ComplexObjectParser(IObjectFactory objectFactory,
                                    IInjectableValueNameNormalizer nameNormalizer,
                                    ITypeDescriptionProvider typeDescriptionProvider,
-                                   ITypeSectionParser typeSectionParser)
+                                   ITypeSectionParser typeSectionParser,
+                                   IObjectDeserializationReferencePreserver referencePreserver)
         {
             objectFactory.MustNotBeNull(nameof(objectFactory));
             nameNormalizer.MustNotBeNull(nameof(nameNormalizer));
             typeDescriptionProvider.MustNotBeNull(nameof(typeDescriptionProvider));
             typeSectionParser.MustNotBeNull(nameof(typeSectionParser));
+            referencePreserver.MustNotBeNull(nameof(referencePreserver));
 
             _objectFactory = objectFactory;
             _nameNormalizer = nameNormalizer;
             _typeDescriptionProvider = typeDescriptionProvider;
             _typeSectionParser = typeSectionParser;
+            _referencePreserver = referencePreserver;
         }
 
         public bool CanBeCached => false;
@@ -91,7 +97,29 @@ namespace Light.Serialization.Json.TokenParsers
 
             DeserializeAfterReadingKey:
             var label = context.DeserializeToken<string>(currentLabelToken);
+
+            if (label == "$ref" || label == "$id")
+            {
+                jsonReader.ReadAndExpectPairDelimiterToken();
+                var token = jsonReader.ReadNextToken();
+                _preservationIdentifier = (int) context.DeserializeToken(token, typeof (int));
+
+                if (label == "$ref")
+                {
+                    object referenceObject;
+
+                    if(_referencePreserver.TryGetReference(_preservationIdentifier.Value, out referenceObject))
+                        return referenceObject;
+
+                    throw new Exception($"Expected that the referencePreserver holds a reference to id {_preservationIdentifier.Value}, but the referencePreserver don't hold the expected reference.");
+                }
+
+                jsonReader.ReadAndExpectEndOfObjectOrValueDelimiter();
+                goto DeserializeKeyValuePair;
+            }
+
             var normalizedLabel = _nameNormalizer.Normalize(label);
+
             var injectableValueInfo = typeCreationDescription.GetInjectableValueDescriptionFromNormalizedName(normalizedLabel) ??
                                       InjectableValueDescription.FromUnknownValue(normalizedLabel, typeof (object));
 
@@ -104,7 +132,13 @@ namespace Light.Serialization.Json.TokenParsers
             deserializedChildValues.Add(injectableValueInfo, value);
 
             if (jsonReader.ReadAndExpectEndOfObjectOrValueDelimiter() == JsonTokenType.EndOfObject)
-                return _objectFactory.Create(typeCreationDescription, deserializedChildValues);
+            { 
+                var complexObject = _objectFactory.Create(typeCreationDescription, deserializedChildValues);
+                if(_preservationIdentifier != null)
+                    _referencePreserver.AddReference(_preservationIdentifier.Value, complexObject);
+
+                return complexObject;
+            }
 
             goto DeserializeKeyValuePair;
         }

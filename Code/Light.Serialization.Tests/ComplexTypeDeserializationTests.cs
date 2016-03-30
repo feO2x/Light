@@ -8,7 +8,7 @@ namespace Light.Serialization.Tests
         [Fact(DisplayName = "The deserializer must be able to deserialize a JSON document containing a complex object.")]
         public void ComplexObject()
         {
-            const string json = "{\"x\": 42}";
+            const string json = "{\"$id\":0,\"x\": 42}";
 
             var result = GetDeserializedJson<DummyClass>(json);
 
