@@ -97,6 +97,7 @@
     <Compile Include="JsonDoubleDeserializationTests.cs" />
     <Compile Include="JsonEnumerationDeserializationTests.cs" />
     <Compile Include="JsonFloatDeserializationTests.cs" />
+    <Compile Include="JsonGuidDeserializationTests.cs" />
     <Compile Include="JsonIntegerDeserializationTests.cs" />
     <Compile Include="JsonNormalizedKeysTests.cs" />
     <Compile Include="JsonNullDeserializationTests.cs" />

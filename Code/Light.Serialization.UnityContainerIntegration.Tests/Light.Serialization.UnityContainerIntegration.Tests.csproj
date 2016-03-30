@@ -146,6 +146,9 @@
     <Compile Include="..\Light.Serialization.Tests\JsonFloatDeserializationTests.cs">
       <Link>JsonFloatDeserializationTests.cs</Link>
     </Compile>
+    <Compile Include="..\Light.Serialization.Tests\JsonGuidDeserializationTests.cs">
+      <Link>JsonGuidDeserializationTests.cs</Link>
+    </Compile>
     <Compile Include="..\Light.Serialization.Tests\JsonIntegerDeserializationTests.cs">
       <Link>JsonIntegerDeserializationTests.cs</Link>
     </Compile>

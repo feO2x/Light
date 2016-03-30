@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Light.Serialization.Json.ComplexTypeConstruction;
-using Light.Serialization.Json.TokenParsers;
 using Light.Serialization.Json.TypeNaming;
 
-namespace Light.Serialization.Json
+namespace Light.Serialization.Json.TokenParsers
 {
-    public static class JsonDeserializerBuilderExtensions
+    public static class DefaultTokenParsersBuilderExtensions
     {
         public static TCollection AddDefaultTokenParsers<TCollection>(this TCollection targetList,
                                                                       ICollectionFactory collectionFactory,
@@ -31,6 +30,7 @@ namespace Light.Serialization.Json
             targetList.Add(new EnumerationValueParser());
             var stringParser = new StringParser();
             targetList.Add(stringParser);
+            targetList.Add(new GuidParser());
             targetList.Add(new JsonStringInheritenceParser(targetList.OfType<IJsonStringToPrimitiveParser>().ToList(), stringParser));
             targetList.Add(new ArrayToGenericCollectionParser(collectionFactory));
             targetList.Add(new GenericDictionaryParser(dictionaryFactory, typeSectionParser));

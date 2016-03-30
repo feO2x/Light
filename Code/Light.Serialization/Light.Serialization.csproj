@@ -71,7 +71,7 @@
     <Compile Include="Json\TypeNaming\ITypeToNameMapping.cs" />
     <Compile Include="Json\TypeNaming\SimpleNameToTypeMapping.cs" />
     <Compile Include="Json\Caching\ValueProvidersCacheDecorator.cs" />
-    <Compile Include="Json\JsonDeserializerBuilderExtensions.cs" />
+    <Compile Include="Json\TokenParsers\DefaultTokenParsersBuilderExtensions.cs" />
     <Compile Include="Json\PrimitiveTypeFormatters\TimeSpanFormatter.cs" />
     <Compile Include="Json\SerializationRules\IAndBlackListRule.cs" />
     <Compile Include="Json\SerializationRules\IAndWhiteListRule.cs" />
