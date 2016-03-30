@@ -6,18 +6,18 @@ namespace Light.Serialization.Json.ObjectReferencePreservation
     public sealed class PreserveObjectReferencesDecorator : IJsonWriterInstructor
     {
         private readonly IDecoratableInstructor _decoratedInstructor;
-        private readonly ObjectReferencePreserver _objectReferencePreserver;
+        private readonly ObjectSerializationReferencePreserver _objectSerializationReferencePreserver;
 
         private string _idSymbol = JsonSymbols.DefaultIdSymbol;
         private string _referenceSymbol = JsonSymbols.DefaultReferenceSymbol;
 
-        public PreserveObjectReferencesDecorator(IDecoratableInstructor decoratedInstructor, ObjectReferencePreserver objectReferencePreserver)
+        public PreserveObjectReferencesDecorator(IDecoratableInstructor decoratedInstructor, ObjectSerializationReferencePreserver objectSerializationReferencePreserver)
         {
             decoratedInstructor.MustNotBeNull(nameof(decoratedInstructor));
-            objectReferencePreserver.MustNotBeNull(nameof(objectReferencePreserver));
+            objectSerializationReferencePreserver.MustNotBeNull(nameof(objectSerializationReferencePreserver));
 
             _decoratedInstructor = decoratedInstructor;
-            _objectReferencePreserver = objectReferencePreserver;
+            _objectSerializationReferencePreserver = objectSerializationReferencePreserver;
         }
 
 
@@ -48,7 +48,7 @@ namespace Light.Serialization.Json.ObjectReferencePreservation
 
         public void Serialize(JsonSerializationContext serializationContext)
         {
-            var objectReferenceInfo = _objectReferencePreserver.GetObjectReferenceInfo(serializationContext.ObjectToBeSerialized);
+            var objectReferenceInfo = _objectSerializationReferencePreserver.GetObjectReferenceInfo(serializationContext.ObjectToBeSerialized);
 
             var writer = serializationContext.Writer;
             writer.BeginObject();

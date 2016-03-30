@@ -4,12 +4,12 @@ using Light.GuardClauses;
 
 namespace Light.Serialization.Json.ObjectReferencePreservation
 {
-    public sealed class ObjectReferencePreserver
+    public sealed class ObjectSerializationReferencePreserver
     {
         private readonly Dictionary<object, uint> _serializedReferences;
         private uint _currentId;
 
-        public ObjectReferencePreserver(Dictionary<object, uint> serializedReferences)
+        public ObjectSerializationReferencePreserver(Dictionary<object, uint> serializedReferences)
         {
             _serializedReferences = serializedReferences;
         }

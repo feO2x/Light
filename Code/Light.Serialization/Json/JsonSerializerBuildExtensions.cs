@@ -43,7 +43,7 @@ namespace Light.Serialization.Json
         {
             if(targetList == null) throw new ArgumentNullException();
 
-            var preserver = new ObjectReferencePreserver(new Dictionary<object, uint>());
+            var preserver = new ObjectSerializationReferencePreserver(new Dictionary<object, uint>());
 
             targetList.Add(new PrimitiveTypeInstructor(primitiveTypeToFormattersMapping));
             targetList.Add(new EnumerationToStringInstructor());

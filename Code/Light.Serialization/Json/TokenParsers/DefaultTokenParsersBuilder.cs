@@ -17,6 +17,7 @@ namespace Light.Serialization.Json.TokenParsers
         private ITypeSectionParser _typeSectionParser = new DefaultTypeSectionParser(new SimpleNameToTypeMapping());
         private IIdentifierParser _identifierParser = new DefaultIdentifierParser();
         private IReferenceParser _referenceParser = new DefaultReferenceParser();
+        private IObjectDeserializationReferencePreserver _referencePreserver = new DefaultObjectDeserializationReferencePreserver(new Dictionary<int, object>());
 
         public DefaultTokenParsersBuilder()
         {
@@ -66,6 +67,12 @@ namespace Light.Serialization.Json.TokenParsers
             return this;
         }
 
+        public DefaultTokenParsersBuilder WithReferencePreserver(IObjectDeserializationReferencePreserver preserver)
+        {
+            _referencePreserver = preserver;
+            return this;
+        }
+
         public DefaultTokenParsersBuilder WithNameNormalizer(IInjectableValueNameNormalizer nameNormalizer)
         {
             _nameNormalizer = nameNormalizer;
@@ -97,6 +104,7 @@ namespace Light.Serialization.Json.TokenParsers
                                                                        _typeSectionParser,
                                                                        _identifierParser,
                                                                        _referenceParser,
+                                                                       _referencePreserver,
                                                                        _nameNormalizer,
                                                                        _typeDescriptionProvider);
         }

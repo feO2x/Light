@@ -15,23 +15,26 @@ namespace Light.Serialization.Json.TokenParsers
         private readonly IDictionaryFactory _dictionaryFactory;
         private readonly ITypeSectionParser _typeSectionParser;
         private readonly IReferenceParser _referenceParser;
+        private readonly IObjectDeserializationReferencePreserver _referencePreserver;
         private readonly IIdentifierParser _identifierParser;
         private readonly MethodInfo _populateGenericDictionaryInfo = typeof (GenericDictionaryParser).GetTypeInfo().GetDeclaredMethod(nameof(PopulateGenericDictionary));
         private readonly object[] _methodParameters = new object[3];
 
         public bool CanBeCached => true;
 
-        public GenericDictionaryParser(IDictionaryFactory dictionaryFactory, ITypeSectionParser typeSectionParser, IIdentifierParser identifierParser, IReferenceParser referenceParser)
+        public GenericDictionaryParser(IDictionaryFactory dictionaryFactory, ITypeSectionParser typeSectionParser, IIdentifierParser identifierParser, IReferenceParser referenceParser, IObjectDeserializationReferencePreserver referencePreserver)
         {
             dictionaryFactory.MustNotBeNull(nameof(dictionaryFactory));
             typeSectionParser.MustNotBeNull(nameof(typeSectionParser));
             identifierParser.MustNotBeNull(nameof(identifierParser));
             referenceParser.MustNotBeNull(nameof(referenceParser));
+            referencePreserver.MustNotBeNull(nameof(referencePreserver));
 
             _dictionaryFactory = dictionaryFactory;
             _typeSectionParser = typeSectionParser;
             _identifierParser = identifierParser;
             _referenceParser = referenceParser;
+            _referencePreserver = referencePreserver;
         }
 
         public bool IsSuitableFor(JsonToken token, Type requestedType)
@@ -55,11 +58,34 @@ namespace Light.Serialization.Json.TokenParsers
 
             var firstTokenString = context.DeserializeToken<string>(currentToken);
             Type targetType;
-            int identifier;
-            int reference;
+            var identifier = -1;
             object dictionary;
 
-            // Check if the first string is the concrete type symbol
+            if (firstTokenString == _identifierParser.IdentifierSymbol)
+            {
+                jsonReader.ReadAndExpectPairDelimiterToken();
+
+                identifier = _identifierParser.ParseIdentifier(context);
+                currentToken = jsonReader.ReadNextToken();
+
+                if (currentToken.JsonType == JsonTokenType.ValueDelimiter)
+                    currentToken = jsonReader.ReadNextToken();
+
+                firstTokenString = context.DeserializeToken<string>(currentToken);
+            }
+
+            if (firstTokenString == _referenceParser.ReferenceSymbol)
+            {
+                jsonReader.ReadAndExpectPairDelimiterToken();
+
+                var reference = _referenceParser.ParseReference(context);
+                object objectReference;
+                if(_referencePreserver.TryGetReference(reference, out objectReference) == false)
+                    throw new Exception($"Preservation of reference with identifier {reference} failed.");
+
+                return objectReference;
+            }
+
             if (firstTokenString == _typeSectionParser.ConcreteTypeSymbol)
             {
                 jsonReader.ReadAndExpectPairDelimiterToken();
@@ -72,24 +98,7 @@ namespace Light.Serialization.Json.TokenParsers
 
                 currentToken = jsonReader.ReadNextToken();
             }
-            else
-            {
-                if (firstTokenString == _identifierParser.IdentifierSymbol)
-                {
-                    jsonReader.ReadAndExpectPairDelimiterToken();
-
-                    identifier = _identifierParser.ParseIdentifier(context);
-                    currentToken = jsonReader.ReadNextToken();
-                }
-
-                if (firstTokenString == _referenceParser.ReferenceSymbol)
-                {
-                    jsonReader.ReadAndExpectPairDelimiterToken();
-
-                    reference = _referenceParser.ParseReference(context);
-                    currentToken = jsonReader.ReadNextToken();
-                }
-
+            else { 
                 targetType = context.RequestedType;
                 dictionary = _dictionaryFactory.CreateDictionary(targetType);
             }
@@ -104,6 +113,9 @@ namespace Light.Serialization.Json.TokenParsers
             specificPopulateGenericDictionaryMethod.Invoke(null, _methodParameters);
 
             ClearObjectArray();
+
+            if (firstTokenString == _identifierParser.IdentifierSymbol && identifier != -1)
+                _referencePreserver.AddReference(identifier, dictionary);
 
             return dictionary;
         }

@@ -16,6 +16,7 @@ namespace Light.Serialization.Json
                                                                       ITypeSectionParser typeSectionParser,
                                                                       IIdentifierParser identifierParser,
                                                                       IReferenceParser referenceParser,
+                                                                      IObjectDeserializationReferencePreserver referencePreserver,
                                                                       IInjectableValueNameNormalizer nameNormalizer,
                                                                       ITypeDescriptionProvider typeDescriptionProvider)
             where TCollection : IList<IJsonTokenParser>
@@ -36,7 +37,7 @@ namespace Light.Serialization.Json
             targetList.Add(stringParser);
             targetList.Add(new JsonStringInheritenceParser(targetList.OfType<IJsonStringToPrimitiveParser>().ToList(), stringParser));
             targetList.Add(new ArrayToGenericCollectionParser(collectionFactory));
-            targetList.Add(new GenericDictionaryParser(dictionaryFactory, typeSectionParser, identifierParser, referenceParser));
+            targetList.Add(new GenericDictionaryParser(dictionaryFactory, typeSectionParser, identifierParser, referenceParser, referencePreserver));
             targetList.Add(new ComplexObjectParser(objectFactory, nameNormalizer, typeDescriptionProvider, typeSectionParser));
 
             return targetList;

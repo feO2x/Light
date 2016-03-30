@@ -161,21 +161,21 @@ namespace Light.Serialization.Json.SerializationRules
     }
 
     public sealed class RuleObjectPreserverDecorator<T> : Rule<T> {
-        private readonly ObjectReferencePreserver _objectReferencePreserver;
+        private readonly ObjectSerializationReferencePreserver _objectSerializationReferencePreserver;
 
-        public RuleObjectPreserverDecorator(IReadableValuesTypeAnalyzer typeAnalyzer, ObjectReferencePreserver objectReferencePreserver) : base(typeAnalyzer)
+        public RuleObjectPreserverDecorator(IReadableValuesTypeAnalyzer typeAnalyzer, ObjectSerializationReferencePreserver objectSerializationReferencePreserver) : base(typeAnalyzer)
         {
             typeAnalyzer.MustNotBeNull(nameof(typeAnalyzer));
-            objectReferencePreserver.MustNotBeNull(nameof(objectReferencePreserver));
+            objectSerializationReferencePreserver.MustNotBeNull(nameof(objectSerializationReferencePreserver));
 
-            _objectReferencePreserver = objectReferencePreserver;
+            _objectSerializationReferencePreserver = objectSerializationReferencePreserver;
         }
 
         public override IJsonWriterInstructor CreateInstructor()
         {
             var ruleInstructor = base.CreateInstructor();
 
-            return new PreserveObjectReferencesDecorator((IDecoratableInstructor) ruleInstructor, _objectReferencePreserver);
+            return new PreserveObjectReferencesDecorator((IDecoratableInstructor) ruleInstructor, _objectSerializationReferencePreserver);
         }
     }
 }

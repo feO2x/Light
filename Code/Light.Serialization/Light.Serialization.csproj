@@ -48,7 +48,9 @@
     <Compile Include="Json\ComplexTypeConstruction\InjectableValueKind.cs" />
     <Compile Include="Json\ObjectReferencePreservation\DefaultIdentifierParser.cs" />
     <Compile Include="Json\ObjectReferencePreservation\IIdentifierParser.cs" />
+    <Compile Include="Json\ObjectReferencePreservation\IObjectDeserializationReferencePreserver.cs" />
     <Compile Include="Json\ObjectReferencePreservation\IReferenceParser.cs" />
+    <Compile Include="Json\ObjectReferencePreservation\DefaultObjectDeserializationReferencePreserver.cs" />
     <Compile Include="Json\TokenParsers\DefaultTokenParsersBuilder.cs" />
     <Compile Include="Json\IntegerMetadata\DecimalPartInfo.cs" />
     <Compile Include="Json\SerializationRules\IRuleBuilder.cs" />
@@ -163,7 +165,7 @@
     <Compile Include="Json\WriterInstructors\DictionaryInstructor.cs" />
     <Compile Include="Json\WriterInstructors\EnumerationToStringInstructor.cs" />
     <Compile Include="Json\ObjectReferencePreservation\JsonReferenceInfo.cs" />
-    <Compile Include="Json\ObjectReferencePreservation\ObjectReferencePreserver.cs" />
+    <Compile Include="Json\ObjectReferencePreservation\ObjectSerializationReferencePreserver.cs" />
     <Compile Include="Json\ObjectReferencePreservation\PreserveObjectReferencesDecorator.cs" />
     <Compile Include="Json\ObjectReferencePreservation\IDecoratableInstructor.cs" />
     <Compile Include="Json\WriterInstructors\PrimitiveTypeInstructor.cs" />

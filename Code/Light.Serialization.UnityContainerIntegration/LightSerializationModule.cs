@@ -29,6 +29,9 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterType<IReadOnlyList<IJsonTokenParser>, IJsonTokenParser[]>()
                             .RegisterType<Dictionary<JsonTokenTypeCombination, IJsonTokenParser>>(new ContainerControlledLifetimeManager(),
                                                                                                   new InjectionFactory(c => new Dictionary<JsonTokenTypeCombination, IJsonTokenParser>()))
+                            .RegisterType<IDictionary<int, object>>(new ContainerControlledLifetimeManager(),
+                                                                                                  new InjectionFactory(c => new Dictionary<int, object>()))
+                            .RegisterType<IObjectDeserializationReferencePreserver, DefaultObjectDeserializationReferencePreserver>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, UnsignedIntegerParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, SignedIntegerParser>(new ContainerControlledLifetimeManager())
                             .RegisterTypeWithTypeName<IJsonTokenParser, DateTimeParser>(new ContainerControlledLifetimeManager())
@@ -77,13 +80,13 @@ namespace Light.Serialization.UnityContainerIntegration
                             new ContainerControlledLifetimeManager(),
                                                                                             new InjectionFactory(c => new PreserveObjectReferencesDecorator(
                                                                                                 new DictionaryInstructor(c.Resolve<IDictionary<Type, IPrimitiveTypeFormatter>>()),
-                                                                                                c.Resolve<ObjectReferencePreserver>())))
+                                                                                                c.Resolve<ObjectSerializationReferencePreserver>())))
                             .RegisterTypeWithTypeName<IJsonWriterInstructor, CollectionInstructor>(new ContainerControlledLifetimeManager())
                             .RegisterType<IJsonWriterInstructor, PreserveObjectReferencesDecorator>(typeof(ComplexObjectInstructor).Name,
                             new ContainerControlledLifetimeManager(),
                                                                                             new InjectionFactory(c => new PreserveObjectReferencesDecorator(
                                                                                                 new ComplexObjectInstructor(c.Resolve<IReadableValuesTypeAnalyzer>()),
-                                                                                                c.Resolve<ObjectReferencePreserver>())))
+                                                                                                c.Resolve<ObjectSerializationReferencePreserver>())))
                             .RegisterType<IDictionary<Type, IPrimitiveTypeFormatter>>(new ContainerControlledLifetimeManager(),
                                                                                       new InjectionFactory(c => c.ResolveAll<IPrimitiveTypeFormatter>().ToDictionary(f => f.TargetType)))
                             .RegisterType<IPrimitiveTypeFormatter>(KnownNames.IntFormatter, new ContainerControlledLifetimeManager(),
@@ -126,7 +129,7 @@ namespace Light.Serialization.UnityContainerIntegration
                             .RegisterType<IReadableValuesTypeAnalyzer>(new ContainerControlledLifetimeManager(),
                                                                        new InjectionFactory(c => new ValueProvidersCacheDecorator(new PublicPropertiesAndFieldsAnalyzer(),
                                                                                                                                   new Dictionary<Type, IList<IValueProvider>>())))
-                            .RegisterInstance(new ObjectReferencePreserver(
+                            .RegisterInstance(new ObjectSerializationReferencePreserver(
                                                                             new Dictionary<object, uint>()),
                                                                         new ContainerControlledLifetimeManager())
                             .RegisterType<IJsonWriterFactory, JsonWriterFactory>();
