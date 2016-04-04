@@ -20,6 +20,28 @@ namespace Light.Serialization.Tests
                         new DummyPerson {Name = "Walter White", Age = 52},
                         new DummyPerson {Name = "Walter White", Age = 52}
                     }
+                },
+                new object[]
+                {
+                    "[{\"$id\":0,\"name\":\"Walter White\",\"age\":52},{\"$ref\":0},{\"$id\":1,\"name\":\"White Walter\",\"age\":53},{\"$ref\":0},{\"$ref\":0},{\"$ref\":0}]",
+                    new ObservableCollection<DummyPerson>
+                    {
+                        new DummyPerson {Name = "Walter White", Age = 52},
+                        new DummyPerson {Name = "Walter White", Age = 52},
+                        new DummyPerson {Name = "White Walter", Age = 53},
+                        new DummyPerson {Name = "Walter White", Age = 52},
+                        new DummyPerson {Name = "Walter White", Age = 52},
+                        new DummyPerson {Name = "Walter White", Age = 52}
+                    }
+                },
+                new object[]
+                {
+                    "[{\"$id\":0,\"name\":\"Walter White\",\"age\":52},{\"$id\":1,\"name\":\"White Walter\",\"age\":53}]",
+                    new ObservableCollection<DummyPerson>
+                    {
+                        new DummyPerson {Name = "Walter White", Age = 52},
+                        new DummyPerson {Name = "White Walter", Age = 53}
+                    }
                 }
             };
 
