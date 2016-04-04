@@ -28,14 +28,7 @@ namespace Light.BayesianNetwork.NaiveBayes
 
         private void PropagateNewParentPropability()
         {
-            var networkNodes = _network.Nodes;
-            List<RandomVariableNode> networkParentNodes = networkNodes.Where(node => node.ParentNodes.Count == 0).ToList();
-
-            if(networkParentNodes.Count == 0) throw new Exception("Naive bayes networks must have one parent node. The current network do not have a parent node.");
-            if(networkParentNodes.Count > 1) throw new Exception($"Every naive bayes network must have one parent node. The current network consists of {networkParentNodes.Count} parent nodes.");
-
-            var networkParentNode = networkParentNodes.First();
-
+            var networkParentNode = _network.NetworkParentNode;
             _probabilityCalculator.CalculateObservedProbabilitiesFromParentProbability(networkParentNode.ChildNodes);
         }
 
