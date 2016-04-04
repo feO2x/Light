@@ -6,6 +6,5 @@ namespace Light.Serialization.Json
     {
         IJsonWriter Create();
         string FinishWriteProcessAndReleaseResources();
-        IJsonWhitespaceFormatter JsonWhitespaceFormatter { get; set; }
     }
 }
