@@ -71,6 +71,11 @@ namespace Light.Serialization.Json.TokenParsers
                     case JsonTokenType.ValueDelimiter:
                         nextToken = context.JsonReader.ReadNextToken();
                         continue;
+                    case JsonTokenType.EndOfObject:
+                        nextToken = context.JsonReader.ReadNextToken();
+                        if (nextToken.JsonType == JsonTokenType.ValueDelimiter)
+                            continue;
+                        return; //expect end of array
                     case JsonTokenType.EndOfArray:
                         return;
                     default:
