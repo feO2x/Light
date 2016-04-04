@@ -48,6 +48,7 @@
     <Compile Include="IProbabilityCalculatorFactory.cs" />
     <Compile Include="IReasoner.cs" />
     <Compile Include="IReasonerFactory.cs" />
+    <Compile Include="NaiveBayes\NaiveBayesBuilder.cs" />
     <Compile Include="NaiveBayes\NaiveBayesReasoner.cs" />
     <Compile Include="NaiveBayes\NaiveBayesReasonerFactory.cs" />
     <Compile Include="OutcomeProbability.cs" />
