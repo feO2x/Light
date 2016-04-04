@@ -4,20 +4,20 @@ using Light.GuardClauses;
 
 namespace Light.BayesianNetwork.NaiveBayes
 {
-    public class NaiveBayesBuilder
+    public class NaiveBayesNetworkBuilder
     {
         private Guid _guid = Guid.NewGuid();
         private ICollectionFactory _collectionFactory = new DefaultCollectionFactory();
         private IReasonerFactory _reasonerFactory = new NaiveBayesReasonerFactory();
         private IProbabilityCalculatorFactory _probabilityCalculatorFactory = new DotNetProbabilityCalculatorFactory();
 
-        public NaiveBayesBuilder WithGuid(Guid guid)
+        public NaiveBayesNetworkBuilder WithGuid(Guid guid)
         {
             _guid = guid;
             return this;
         }
 
-        public NaiveBayesBuilder WithCollectionFactory(ICollectionFactory collectionFactory)
+        public NaiveBayesNetworkBuilder WithCollectionFactory(ICollectionFactory collectionFactory)
         {
             collectionFactory.MustNotBeNull(nameof(collectionFactory));
 
@@ -25,7 +25,7 @@ namespace Light.BayesianNetwork.NaiveBayes
             return this;
         }
 
-        public NaiveBayesBuilder WithReasonerFactory(IReasonerFactory reasonerFactory)
+        public NaiveBayesNetworkBuilder WithReasonerFactory(IReasonerFactory reasonerFactory)
         {
             reasonerFactory.MustNotBeNull(nameof(reasonerFactory));
 
@@ -33,7 +33,7 @@ namespace Light.BayesianNetwork.NaiveBayes
             return this;
         }
 
-        public NaiveBayesBuilder WithProbabilityCalculatorFactory(
+        public NaiveBayesNetworkBuilder WithProbabilityCalculatorFactory(
             IProbabilityCalculatorFactory probabilityCalculatorFactory)
         {
             probabilityCalculatorFactory.MustNotBeNull(nameof(probabilityCalculatorFactory));

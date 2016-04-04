@@ -48,7 +48,7 @@
     <Compile Include="IProbabilityCalculatorFactory.cs" />
     <Compile Include="IReasoner.cs" />
     <Compile Include="IReasonerFactory.cs" />
-    <Compile Include="NaiveBayes\NaiveBayesBuilder.cs" />
+    <Compile Include="NaiveBayes\NaiveBayesNetworkBuilder.cs" />
     <Compile Include="NaiveBayes\NaiveBayesReasoner.cs" />
     <Compile Include="NaiveBayes\NaiveBayesReasonerFactory.cs" />
     <Compile Include="OutcomeProbability.cs" />
@@ -57,6 +57,8 @@
     <Compile Include="Outcome.cs" />
     <Compile Include="OutcomeCombination.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomVariableNodeBuilder.cs" />
+    <Compile Include="RandomVariableNodeBuilderFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Light.GuardClauses, Version=0.2.0.0, Culture=neutral, PublicKeyToken=573727035c45e5b3, processorArchitecture=MSIL">

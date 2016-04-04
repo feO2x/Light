@@ -15,16 +15,15 @@ namespace Light.BayesianNetwork
         private readonly IList<RandomVariableNode> _parentNodes;
         private readonly IReadOnlyList<RandomVariableNode> _parentNodesAsReadOnlyList;
         private OutcomeProbabilityKind _probabilityKind;
-        private IProbabilityCalculator _probabilityCalculator;
+        private readonly IProbabilityCalculator _probabilityCalculator;
 
-        public RandomVariableNode(Guid id, BayesianNetwork network, IProbabilityCalculatorFactory probabilityCalculatorFactory, OutcomeProbabilityKind probabilityKind = OutcomeProbabilityKind.CalculatedValue)
+        public RandomVariableNode(Guid id, BayesianNetwork network, OutcomeProbabilityKind probabilityKind = OutcomeProbabilityKind.CalculatedValue)
             : base(id)
         {
             network.MustNotBeNull(nameof(network));
-            probabilityCalculatorFactory.MustNotBeNull(nameof(probabilityCalculatorFactory));
 
             Network = network;
-            _probabilityCalculator = probabilityCalculatorFactory.Create(network);
+            _probabilityCalculator = network.ProbabilityCalculator;
             _probabilityKind = probabilityKind;
             network.CollectionFactory.InitializeListFields(out _parentNodes, out _parentNodesAsReadOnlyList);
             network.CollectionFactory.InitializeListFields(out _childNodes, out _childNodesAsReadOnlyList);
@@ -128,22 +127,12 @@ namespace Light.BayesianNetwork
             outcomeToBeRemoved.EvidenceSet -= OnEvidenceSet;
         }
 
-        public OutcomeProbabilityKind ProbabilityKind()
-        {
-            if(_outcomesAsReadOnlyList.Count > 0)
-            {
-                var probabilityKindOfFirstElement = _outcomesAsReadOnlyList.First().ProbabilityKind;
-                if(_outcomesAsReadOnlyList.Any(o => o.ProbabilityKind == probabilityKindOfFirstElement))
-                    return probabilityKindOfFirstElement;
-
-                throw new Exception("All outcome probabilty kinds of one random variable node must be the same.");
-            }
-
-            throw new Exception("A random variable node must contain at least one outcome.");
-        }
+        public OutcomeProbabilityKind ProbabilityKind() => _probabilityKind;
 
         private void OnEvidenceSet(Outcome evidenceOutcome)
         {
+            _probabilityKind = OutcomeProbabilityKind.Evidence;
+
             foreach (var outcome in _outcomes)
             {
                 if (evidenceOutcome == outcome)
@@ -157,6 +146,8 @@ namespace Light.BayesianNetwork
 
         private void OnEvidenceRemove(Outcome evidenceOutcome)
         {
+            _probabilityKind = OutcomeProbabilityKind.CalculatedValue;
+
             foreach (var outcome in _outcomes)
             {
                 _probabilityCalculator.CalculateOutcomeProbabilityForSpecificOutcome(outcome);
