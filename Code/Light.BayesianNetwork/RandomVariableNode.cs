@@ -24,7 +24,7 @@ namespace Light.BayesianNetwork
             probabilityCalculatorFactory.MustNotBeNull(nameof(probabilityCalculatorFactory));
 
             Network = network;
-            _probabilityCalculator = probabilityCalculatorFactory.Create();
+            _probabilityCalculator = probabilityCalculatorFactory.Create(network);
             _probabilityKind = probabilityKind;
             network.CollectionFactory.InitializeListFields(out _parentNodes, out _parentNodesAsReadOnlyList);
             network.CollectionFactory.InitializeListFields(out _childNodes, out _childNodesAsReadOnlyList);
@@ -152,14 +152,14 @@ namespace Light.BayesianNetwork
                 outcome.UpdateEvidenceRelatedToEvidenceChangeInNode();
             }
 
-            Network.Reasoner.PropagateNewEvidence(evidenceOutcome.Node);
+            Network.Reasoner.PropagateNewEvidence(evidenceOutcome);
         }
 
         private void OnEvidenceRemove(Outcome evidenceOutcome)
         {
             foreach (var outcome in _outcomes)
             {
-                outcome.CurrentProbability = OutcomeProbability.FromValue(_probabilityCalculator.CalculateOutcomeProbabilityForSpecificOutcome(outcome));
+                _probabilityCalculator.CalculateOutcomeProbabilityForSpecificOutcome(outcome);
 
                 if(evidenceOutcome == outcome)
                     continue;

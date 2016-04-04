@@ -37,8 +37,8 @@
     <Compile Include="BayesianNetwork.cs" />
     <Compile Include="DefaultCollectionFactory.cs" />
     <Compile Include="CollectionFactoryExtensions.cs" />
-    <Compile Include="DotNetProbabilityCalculator.cs" />
-    <Compile Include="DotNetProbabilityCalculatorFactory.cs" />
+    <Compile Include="Calculators\DotNetProbabilityCalculator.cs" />
+    <Compile Include="Calculators\DotNetProbabilityCalculatorFactory.cs" />
     <Compile Include="EqualityHelper.cs" />
     <Compile Include="FrameworkExtensions\EntityWithName.cs" />
     <Compile Include="FrameworkExtensions\GuidEntity.cs" />
@@ -48,8 +48,8 @@
     <Compile Include="IProbabilityCalculatorFactory.cs" />
     <Compile Include="IReasoner.cs" />
     <Compile Include="IReasonerFactory.cs" />
-    <Compile Include="NaiveBayesReasoner.cs" />
-    <Compile Include="NaiveBayesReasonerFactory.cs" />
+    <Compile Include="NaiveBayes\NaiveBayesReasoner.cs" />
+    <Compile Include="NaiveBayes\NaiveBayesReasonerFactory.cs" />
     <Compile Include="OutcomeProbability.cs" />
     <Compile Include="OutcomeProbabilityKind.cs" />
     <Compile Include="RandomVariableNode.cs" />

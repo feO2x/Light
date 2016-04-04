@@ -2,6 +2,6 @@
 {
     public interface IReasoner
     {
-        void PropagateNewEvidence(RandomVariableNode node);
+        void PropagateNewEvidence(Outcome childNode);
     }
 }

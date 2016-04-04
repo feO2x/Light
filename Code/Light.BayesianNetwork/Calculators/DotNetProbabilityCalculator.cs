@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Light.GuardClauses;
 
-namespace Light.BayesianNetwork
+namespace Light.BayesianNetwork.Calculators
 {
     public class DotNetProbabilityCalculator : IProbabilityCalculator
     {
@@ -14,12 +14,12 @@ namespace Light.BayesianNetwork
             _network = network;
         }
 
-        public void CalculateParentProbabilityFromEvidence(RandomVariableNode parentNode, Outcome outcomeToSetEvidenceOn)
+        public void CalculateParentProbabilityFromEvidence(Outcome outcomeToSetEvidenceOn)
         {
-            parentNode.MustNotBeNull(nameof(parentNode));
             outcomeToSetEvidenceOn.MustNotBeNull(nameof(outcomeToSetEvidenceOn));
 
             var childNode = outcomeToSetEvidenceOn.Node;
+            var parentNode = _network.NetworkParentNode;
 
             foreach (var parentNodeOutcome in parentNode.Outcomes)
             {

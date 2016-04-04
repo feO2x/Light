@@ -2,6 +2,6 @@
 {
     public interface IProbabilityCalculatorFactory
     {
-        IProbabilityCalculator Create();
+        IProbabilityCalculator Create(BayesianNetwork network);
     }
 }

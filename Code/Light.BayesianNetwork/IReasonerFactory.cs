@@ -4,6 +4,6 @@ namespace Light.BayesianNetwork
 {
     public interface IReasonerFactory
     {
-        IReasoner Create(IReadOnlyList<RandomVariableNode> networkNodes, IProbabilityCalculator probabilityCalculator);
+        IReasoner Create(BayesianNetwork network, IProbabilityCalculator probabilityCalculator);
     }
 }

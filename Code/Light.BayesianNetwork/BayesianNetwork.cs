@@ -26,7 +26,7 @@ namespace Light.BayesianNetwork
 
             CollectionFactory = collectionFactory;
             CollectionFactory.InitializeListFields(out _nodes, out _nodesAsReadOnlyList);
-            _reasoner = reasonerFactory.Create((IReadOnlyList<RandomVariableNode>)_nodes, probabilityCalculatorFactory.Create());
+            _reasoner = reasonerFactory.Create(this, probabilityCalculatorFactory.Create(this));
         }
 
         public IReadOnlyList<RandomVariableNode> Nodes => _nodesAsReadOnlyList;
