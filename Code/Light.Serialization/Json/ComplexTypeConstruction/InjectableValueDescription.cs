@@ -113,7 +113,7 @@ namespace Light.Serialization.Json.ComplexTypeConstruction
         public void SetPropertyValue(object targetObject, object value)
         {
             targetObject.MustNotBeNull(nameof(targetObject));
-            Check.Against((_kind & InjectableValueKind.PropertySetter) != 0,
+            Check.That((_kind & InjectableValueKind.PropertySetter) != 0,
                           () => new InvalidOperationException($"You try to set a property value on {NormalizedName}, but there is no such property on type {targetObject.GetType().FullName}."));
 
             PropertyInfo.SetValue(targetObject, value);

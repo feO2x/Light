@@ -109,7 +109,10 @@ namespace Light.Serialization.Json.TokenParsers
                     object referenceObject;
 
                     if(_referencePreserver.TryGetReference(_preservationIdentifier.Value, out referenceObject))
+                    {
+                        jsonReader.ReadAndExpectEndOfObjectOrValueDelimiter();
                         return referenceObject;
+                    }
 
                     throw new Exception($"Expected that the referencePreserver holds a reference to id {_preservationIdentifier.Value}, but the referencePreserver don't hold the expected reference.");
                 }
