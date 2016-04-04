@@ -88,7 +88,7 @@
     <Compile Include="JsonDateTimeSerializationTests.cs" />
     <Compile Include="JsonDecimalDeserializationTests.cs" />
     <Compile Include="JsonDelegateSerializationTests.cs" />
-    <Compile Include="JsonDictionaryDeserializationPreservationTests.cs" />
+    <Compile Include="JsonDeserializationPreservationTests.cs" />
     <Compile Include="JsonDictionaryDeserializationTests.cs" />
     <Compile Include="JsonDictionarySerializationTests.cs" />
     <Compile Include="JsonDoubleDeserializationTests.cs" />
