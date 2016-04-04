@@ -58,7 +58,7 @@ namespace Light.Serialization.Json.TokenParsers
 
             var firstTokenString = context.DeserializeToken<string>(currentToken);
             Type targetType;
-            var identifier = -1;
+            int? identifier = null;
             object dictionary;
 
             if (firstTokenString == _identifierParser.IdentifierSymbol)
@@ -114,8 +114,8 @@ namespace Light.Serialization.Json.TokenParsers
 
             ClearObjectArray();
 
-            if (firstTokenString == _identifierParser.IdentifierSymbol && identifier != -1)
-                _referencePreserver.AddReference(identifier, dictionary);
+            if (firstTokenString == _identifierParser.IdentifierSymbol && identifier != null)
+                _referencePreserver.AddReference(identifier.Value, dictionary);
 
             return dictionary;
         }
