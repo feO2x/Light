@@ -25,14 +25,14 @@ namespace Light.Serialization.Tests
                     }
                 };
 
-        [Theory(DisplayName = "The deserializer must be able to deserialize complex objects in a collection without preservation.")]
+        [Theory(DisplayName = "The serializer must be able to serialize complex objects in a collection without preservation.")]
         [MemberData("CollectionTestData")]
         public void CollectionsAreSerializedCorrectly(IEnumerable enumerable, string expected)
         {
             CompareJsonToExpectedWithoutPreservation(enumerable, expected);
         }
 
-        [Theory]
+        [Theory(DisplayName = "The serializer must be able to serialize dictionaries correctly without preservation.")]
         [MemberData("DictionaryTestData")]
         public void DictionariesMustBeSerializedCorrectly(object dictionary, string expected)
         {
