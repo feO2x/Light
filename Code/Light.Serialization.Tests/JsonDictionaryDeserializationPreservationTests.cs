@@ -9,8 +9,6 @@ namespace Light.Serialization.Tests
 {
     public class JsonDictionaryDeserializationPreservationTests : BaseJsonDeserializerTest
     {
-        private static readonly DummyPerson _person = new DummyPerson {Name = "Walter White", Age = 52};
-
         public static readonly IEnumerable<object[]> CollectionTestData =
             new[]
             {
@@ -19,8 +17,8 @@ namespace Light.Serialization.Tests
                     "[{\"$id\":0,\"name\":\"Walter White\",\"age\":52},{\"$ref\":0}]",
                     new ObservableCollection<DummyPerson>
                     {
-                        _person,
-                        _person
+                        new DummyPerson {Name = "Walter White", Age = 52},
+                        new DummyPerson {Name = "Walter White", Age = 52}
                     }
                 }
             };

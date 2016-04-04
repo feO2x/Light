@@ -112,6 +112,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Light.GuardClauses\Light.GuardClauses.csproj">
+      <Project>{65BB1768-E9A0-46ED-B698-B92DE2BB8504}</Project>
+      <Name>Light.GuardClauses</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Light.Serialization\Light.Serialization.csproj">
       <Project>{a9586f6b-11ee-4984-ac27-7211da43f656}</Project>
       <Name>Light.Serialization</Name>
