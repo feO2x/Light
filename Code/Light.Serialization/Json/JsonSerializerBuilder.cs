@@ -15,7 +15,7 @@ namespace Light.Serialization.Json
     public class JsonSerializerBuilder
     {
         private readonly List<Rule> _rules = new List<Rule>();
-        public readonly List<IJsonWriterInstructor> BasicWriterInstructors;
+        public List<IJsonWriterInstructor> BasicWriterInstructors;
         private ICharacterEscaper _characterEscaper = new DefaultCharacterEscaper();
         private Func<IList<IJsonWriterInstructor>> _createList = CreateDefaultList;
         private IDictionary<Type, IJsonWriterInstructor> _instructorCache;
@@ -46,6 +46,14 @@ namespace Light.Serialization.Json
         private static IList<IJsonWriterInstructor> CreateDefaultList()
         {
             return new List<IJsonWriterInstructor>();
+        }
+
+        public JsonSerializerBuilder WithoutPreservation()
+        {
+            BasicWriterInstructors = new List<IJsonWriterInstructor>().AddWriterInstructorsWithoutPreservation(new List<IPrimitiveTypeFormatter>().AddDefaultPrimitiveTypeFormatters(_characterEscaper)
+                                                                                .ToDictionary(f => f.TargetType),
+                                             _typeAnalyzer);
+            return this;
         }
 
         public JsonSerializerBuilder WithWriterFactory(IJsonWriterFactory writerFactory)

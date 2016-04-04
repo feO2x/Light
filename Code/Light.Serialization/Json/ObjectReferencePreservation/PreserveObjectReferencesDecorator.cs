@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Light.GuardClauses;
+using Light.Serialization.Json.WriterInstructors;
 
 namespace Light.Serialization.Json.ObjectReferencePreservation
 {
@@ -63,6 +66,8 @@ namespace Light.Serialization.Json.ObjectReferencePreservation
 
             writer.WriteKey(_idSymbol, false);
             serializationContext.SerializeValue(objectReferenceInfo.JsonObjectId);
+            if (_decoratedInstructor is DictionaryInstructor && ((IDictionary)serializationContext.ObjectToBeSerialized).Count > 0)
+                writer.WriteDelimiter();
             _decoratedInstructor.SerializeInner(serializationContext);
             writer.EndObject();
         }

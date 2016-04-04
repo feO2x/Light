@@ -41,8 +41,6 @@ namespace Light.Serialization.Json.WriterInstructors
                 return;
             }
 
-            serializationContext.Writer.WriteDelimiter();
-
             var dicitionaryEnumerator = dictionary.GetEnumerator();
             dicitionaryEnumerator.MoveNext();
             while (true)

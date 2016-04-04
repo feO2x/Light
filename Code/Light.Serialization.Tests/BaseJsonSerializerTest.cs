@@ -25,6 +25,13 @@ namespace Light.Serialization.Tests
             json.Should().Be(expected);
         }
 
+        protected void CompareJsonToExpectedWithoutPreservation<T>(T value, string expected)
+        {
+            var json = GetSerializedJsonWithoutPreservation(value);
+
+            json.Should().Be(expected);
+        }
+
         protected void CompareHumanReadableJsonToExpected<T>(T value, string expected)
         {
             var json = GetSerializedHumanReadableJson(value);
@@ -35,6 +42,13 @@ namespace Light.Serialization.Tests
         protected string GetSerializedJson<T>(T value)
         {
             var jsonSerializer = JsonSerializerBuilder.Build();
+
+            return jsonSerializer.Serialize(value);
+        }
+
+        private object GetSerializedJsonWithoutPreservation(object value)
+        {
+            var jsonSerializer = JsonSerializerBuilder.WithoutPreservation().Build();
 
             return jsonSerializer.Serialize(value);
         }

@@ -57,5 +57,21 @@ namespace Light.Serialization.Json
 
             return targetList;
         }
+
+        public static TCollection AddWriterInstructorsWithoutPreservation<TCollection>(this TCollection targetList,
+                                                                       IDictionary<Type, IPrimitiveTypeFormatter> primitiveTypeToFormattersMapping,
+                                                                       IReadableValuesTypeAnalyzer readableValuesTypeAnalyzer)
+    where TCollection : IList<IJsonWriterInstructor>
+        {
+            if (targetList == null) throw new ArgumentNullException();
+
+            targetList.Add(new PrimitiveTypeInstructor(primitiveTypeToFormattersMapping));
+            targetList.Add(new EnumerationToStringInstructor());
+            targetList.Add(new DictionaryInstructor(primitiveTypeToFormattersMapping));
+            targetList.Add(new CollectionInstructor());
+            targetList.Add(new ComplexObjectInstructor(readableValuesTypeAnalyzer));
+
+            return targetList;
+        }
     }
 }

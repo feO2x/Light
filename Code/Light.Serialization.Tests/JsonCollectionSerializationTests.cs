@@ -34,7 +34,7 @@ namespace Light.Serialization.Tests
                 }
             };
 
-        [Theory]
+        [Theory(DisplayName = "The deserializer must be able to deserialize complex objects in a collection.")]
         [MemberData("CollectionTestData")]
         public void CollectionsAreSerializedCorrectly(IEnumerable enumerable, string expected)
         {
