@@ -45,7 +45,7 @@ namespace Light.Serialization.Tests
                 }
             };
 
-        [Theory]
+        [Theory(DisplayName = "The deserializer must be able to deserialize preserved objects in a collection.")]
         [MemberData("CollectionTestData")]
         public void CollectionsAreDeserializedCorrectly(string json, IEnumerable expected)
         {
