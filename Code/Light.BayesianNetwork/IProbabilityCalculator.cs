@@ -4,8 +4,8 @@ namespace Light.BayesianNetwork
 {
     public interface IProbabilityCalculator
     {
-        void CalculateParentProbabilityFromEvidence(RandomVariableNode node);
+        void CalculateParentProbabilityFromEvidence(RandomVariableNode parentNode, Outcome outcomeToSetEvidenceOn);
         void CalculateObservedProbabilitiesFromParentProbability(IReadOnlyList<RandomVariableNode> childNodes);
-        double CalculateOutcomeProbabilityForSpecificOutcome(Outcome outcome);
+        void CalculateOutcomeProbabilityForSpecificOutcome(Outcome outcome);
     }
 }

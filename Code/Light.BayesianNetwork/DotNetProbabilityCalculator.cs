@@ -1,15 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Light.GuardClauses;
 
 namespace Light.BayesianNetwork
 {
     public class DotNetProbabilityCalculator : IProbabilityCalculator
     {
-        public void CalculateParentProbabilityFromEvidence(RandomVariableNode node)
+        private readonly BayesianNetwork _network;
+
+        public DotNetProbabilityCalculator(BayesianNetwork network)
         {
-            throw new System.NotImplementedException();
+            network.MustNotBeNull(nameof(network));
+
+            _network = network;
+        }
+
+        public void CalculateParentProbabilityFromEvidence(RandomVariableNode parentNode, Outcome outcomeToSetEvidenceOn)
+        {
+            parentNode.MustNotBeNull(nameof(parentNode));
+            outcomeToSetEvidenceOn.MustNotBeNull(nameof(outcomeToSetEvidenceOn));
+
+            var childNode = outcomeToSetEvidenceOn.Node;
+
+            foreach (var parentNodeOutcome in parentNode.Outcomes)
+            {
+                var childsStandardOutcomeProbabilityValue = childNode.ProbabilityTable[new OutcomeCombination(parentNodeOutcome, outcomeToSetEvidenceOn)];
+                var newParentNodeOutcomeProbabilityValue = parentNodeOutcome.CurrentProbability.Value / outcomeToSetEvidenceOn.CurrentProbability.Value * childsStandardOutcomeProbabilityValue;
+
+                parentNodeOutcome.CurrentProbability = OutcomeProbability.FromValue(newParentNodeOutcomeProbabilityValue);
+            }
         }
 
         //calculator has to know the change (or just the new value) of the networks parent probability
@@ -29,11 +47,21 @@ namespace Light.BayesianNetwork
         }
 
         //calculator has to know the change (or just the new value) of the networks parent probability
-        public double CalculateOutcomeProbabilityForSpecificOutcome(Outcome outcome)
+        public void CalculateOutcomeProbabilityForSpecificOutcome(Outcome outcome)
         {
             outcome.MustNotBeNull(nameof(outcome));
 
-            throw new NotImplementedException();
+            if (outcome.Node.ProbabilityKind() == OutcomeProbabilityKind.Evidence)
+                return;
+
+            double result = 0;
+
+            foreach (var parentNodeOutcome in _network.NetworkParentNode.Outcomes)
+            {
+                result += parentNodeOutcome.CurrentProbability.Value * outcome.CurrentProbability.Value;
+            }
+
+            outcome.CurrentProbability = OutcomeProbability.FromValue(result);
         }
 
 
