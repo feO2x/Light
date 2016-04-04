@@ -108,7 +108,7 @@ namespace Light.Serialization.Tests
                 },
                 new object[]
                 {
-                    "{\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"int8\",\"object\"]}, \"-128\": \"a\", \"0\": \"b\", \"127\": \"c\"}",
+                    "{\"$id\":0,\"$type\":{\"name\":\"genericMap\",\"typeArguments\":[\"int8\",\"object\"]}, \"-128\": \"a\", \"0\": \"b\", \"127\": \"c\"}",
                     new Dictionary<sbyte, object> { [-128] = "a", [0] = "b", [127] = "c" }, new sbyte()
                 },
                 new object[]
