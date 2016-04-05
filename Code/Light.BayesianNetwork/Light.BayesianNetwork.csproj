@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BayesianNetwork.cs" />
+    <Compile Include="BayesNetworkBuilder.cs" />
     <Compile Include="DefaultCollectionFactory.cs" />
     <Compile Include="CollectionFactoryExtensions.cs" />
     <Compile Include="Calculators\DotNetProbabilityCalculator.cs" />
@@ -50,6 +51,8 @@
     <Compile Include="IReasoner.cs" />
     <Compile Include="IReasonerFactory.cs" />
     <Compile Include="IBayesNetworkBuilder.cs" />
+    <Compile Include="BayesReasonerNullObject.cs" />
+    <Compile Include="BayesReasonerNullObjectFactory.cs" />
     <Compile Include="NaiveBayes\NaiveBayesRandomVariableNodeBuilderFactory.cs" />
     <Compile Include="NaiveBayes\NaiveBayesNetworkBuilder.cs" />
     <Compile Include="NaiveBayes\NaiveBayesRandomVariableNodeBuilder.cs" />

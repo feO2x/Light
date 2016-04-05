@@ -35,7 +35,7 @@ namespace Light.BayesianNetwork
         public void AddNetworkParentNode(IRandomVariableNode node)
         {
             node.MustNotBeNull(nameof(node));
-            if(NetworkParentNode != null) throw new Exception("The bayes network already has one parent node. Adding more network parent nodes not possbile");
+            if(NetworkParentNode != null) throw new Exception($"The bayes network already has one parent node. Adding {node} as second network parent node is not possbile.");
             if(node.ParentNodes.Count != 0) throw new ArgumentException($"The new network parent node {node} has parents but the network parent node is not allowed to have parent nodes.");
 
             NetworkParentNode = node;

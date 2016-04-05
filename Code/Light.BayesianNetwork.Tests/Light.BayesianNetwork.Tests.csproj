@@ -60,6 +60,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BayesNetworkBaseTests.cs" />
+    <Compile Include="BayesNetworkTests.cs" />
     <Compile Include="NaiveBayesNetworkBaseTests.cs" />
     <Compile Include="NaiveBayesNetworkTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
