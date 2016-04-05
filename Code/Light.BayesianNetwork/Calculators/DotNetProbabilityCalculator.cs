@@ -24,7 +24,7 @@ namespace Light.BayesianNetwork.Calculators
             foreach (var parentNodeOutcome in parentNode.Outcomes)
             {
                 var childsStandardOutcomeProbabilityValue = childNode.ProbabilityTable[new OutcomeCombination(parentNodeOutcome, outcomeToSetEvidenceOn)];
-                var newParentNodeOutcomeProbabilityValue = parentNodeOutcome.CurrentProbability.Value / outcomeToSetEvidenceOn.CurrentProbability.Value * childsStandardOutcomeProbabilityValue;
+                var newParentNodeOutcomeProbabilityValue = parentNodeOutcome.CurrentProbability.Value / outcomeToSetEvidenceOn.StandardProbability.Value * childsStandardOutcomeProbabilityValue;
 
                 parentNodeOutcome.CurrentProbability = OutcomeProbability.FromValue(newParentNodeOutcomeProbabilityValue);
             }

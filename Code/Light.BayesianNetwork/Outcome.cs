@@ -8,14 +8,16 @@ namespace Light.BayesianNetwork
     {
         private OutcomeProbabilityKind _probabilityKind;
         private OutcomeProbability _currentProbability = OutcomeProbability.DefaultMin;
+        private readonly OutcomeProbability _standardProbability = OutcomeProbability.DefaultMin;
 
-        public Outcome(Guid id, IRandomVariableNode node, OutcomeProbabilityKind probabilityKind = OutcomeProbabilityKind.CalculatedValue) : base(id)
+        public Outcome(Guid id, IRandomVariableNode node, double standardProbabilityValue, OutcomeProbabilityKind probabilityKind = OutcomeProbabilityKind.CalculatedValue) : base(id)
         {
-            _probabilityKind = probabilityKind;
             node.MustNotBeNull(nameof(node));
 
             Node = node;
             _probabilityKind = probabilityKind;
+            _standardProbability = OutcomeProbability.FromValue(standardProbabilityValue);
+            _currentProbability = _standardProbability;
         }
 
         public OutcomeProbability CurrentProbability
@@ -23,6 +25,8 @@ namespace Light.BayesianNetwork
             get { return _currentProbability; }
             set { _currentProbability = value; }
         }
+
+        public OutcomeProbability StandardProbability => _standardProbability;
 
         public OutcomeProbabilityKind ProbabilityKind => _probabilityKind;
 

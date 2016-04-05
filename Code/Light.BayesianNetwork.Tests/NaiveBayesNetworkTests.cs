@@ -15,7 +15,7 @@ namespace Light.BayesianNetwork.Tests
         // ReSharper disable once InconsistentNaming
         public void NaiveBNWithZeroNodes()
         {
-            var network = GetNaiveBayesianNetwork();
+            var network = GetRawNaiveBayesianNetwork();
             network.NetworkParentNode.Should().Be(null);
         }
 
@@ -23,7 +23,7 @@ namespace Light.BayesianNetwork.Tests
         // ReSharper disable once InconsistentNaming
         public void NaiveBNWithProbabilityTableOnParent()
         {
-            var network = GetNaiveBayesianNetwork();
+            var network = GetRawNaiveBayesianNetwork();
 
             AddNetworkParentIncludingThreeOutcomes();
 
@@ -34,7 +34,7 @@ namespace Light.BayesianNetwork.Tests
         // ReSharper disable once InconsistentNaming
         public void NaiveBNWithProbabilityTableOnChild()
         {
-            var network = GetNaiveBayesianNetwork();
+            var network = GetRawNaiveBayesianNetwork();
             AddNetworkParentIncludingThreeOutcomes();
 
             AddNetworkChildIncludingTwoOutcomes();
@@ -43,26 +43,25 @@ namespace Light.BayesianNetwork.Tests
             network.NetworkParentNode.ChildNodes.FirstOrDefault().Outcomes.Count.Should().Be(2);
         }
 
-        [Fact(DisplayName = "Adding a probability table to a naive bayes networks child node and parent.")]
+        [Fact(DisplayName = "Propagate evidence in child to parent, calculate new childs and parents probability values and set them to outcomes.")]
         // ReSharper disable once InconsistentNaming
         public void NaiveBNWithTwoNodesSetChildEvidence()
         {
-            var network = GetNaiveBayesianNetwork();
-            AddNetworkParentIncludingThreeOutcomes();
-            var networkChildNode = AddNetworkChildIncludingTwoOutcomes();
+            var network = GetSimplePreconfiguredBayesianNetwork();
 
             // ReSharper disable once PossibleNullReferenceException
-            networkChildNode.Outcomes.FirstOrDefault().SetEvidence();
-
+            network.NetworkParentNode.ChildNodes.FirstOrDefault().Outcomes[0].SetEvidence();
             // ReSharper disable once PossibleNullReferenceException
-            network.NetworkParentNode.ChildNodes.FirstOrDefault().ProbabilityKind().Should().Be(OutcomeProbabilityKind.Evidence);
+            var isOutcomeProbability = network.NetworkParentNode.Outcomes[0].CurrentProbability.Value;
+
+            ((isOutcomeProbability - 0.054) < 0.001).Should().Be(true);
         }
 
         [Fact(DisplayName = "One parent node can be added to a naive bayes network.")]
         // ReSharper disable once InconsistentNaming
         public void NaiveBNWithParentNode()
         {
-            var network = GetNaiveBayesianNetwork();
+            var network = GetRawNaiveBayesianNetwork();
             var parentNode = NewNaiveBayesRandomVariableNode();
 
             network.AddNetworkParentNode(parentNode);
@@ -74,7 +73,7 @@ namespace Light.BayesianNetwork.Tests
         // ReSharper disable once InconsistentNaming
         public void NaiveBNWithTwoParentNodesFails()
         {
-            var network = GetNaiveBayesianNetwork();
+            var network = GetRawNaiveBayesianNetwork();
             var parentNode = NewNaiveBayesRandomVariableNode();
             var secondParentNode = NewNaiveBayesRandomVariableNode();
 
@@ -90,7 +89,7 @@ namespace Light.BayesianNetwork.Tests
         // ReSharper disable once InconsistentNaming
         public void AddParentToNaiveBNParentNodeFails()
         {
-            var network = GetNaiveBayesianNetwork();
+            var network = GetRawNaiveBayesianNetwork();
             var networkParentNode = NewNaiveBayesRandomVariableNode();
             var parentParentNode = NewNaiveBayesRandomVariableNode();
 
@@ -107,7 +106,7 @@ namespace Light.BayesianNetwork.Tests
         // ReSharper disable once InconsistentNaming
         public void AddParentToNaiveBNThatHasAParent()
         {
-            var network = GetNaiveBayesianNetwork();
+            var network = GetRawNaiveBayesianNetwork();
             var networkParentNode = NewNaiveBayesRandomVariableNode();
             var parentParentNode = NewNaiveBayesRandomVariableNode();
 
@@ -124,7 +123,7 @@ namespace Light.BayesianNetwork.Tests
         // ReSharper disable once InconsistentNaming
         public void AddNonNetworkParentAsParent()
         {
-            GetNaiveBayesianNetwork();
+            GetRawNaiveBayesianNetwork();
             var networkParentNode = NewNaiveBayesRandomVariableNode();
             var parentParentNode = NewNaiveBayesRandomVariableNode();
 
