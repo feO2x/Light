@@ -105,9 +105,22 @@ namespace Light.BayesianNetwork
             // TODO: unhook from events of removed node
         }
 
-        public void AddOutcome(Outcome newOutcome)
+        public void AddOutcomes(IReadOnlyList<Outcome> outcomes)
         {
-            newOutcome.MustNotBeNull(nameof(newOutcome));
+            if(outcomes.Count < 2) throw new ArgumentException($"{outcomes} must include at least 2 outcomes but has {outcomes.Count}.");
+
+            var outcomeProbabilitySum = outcomes.Sum(outcome => outcome.CurrentProbability.Value);
+            if (Math.Abs(outcomeProbabilitySum - 1.0) > 0.01)
+                throw new ArgumentException($"The sum of all nodes outcomes must be 1 but is {outcomeProbabilitySum}");
+
+            foreach (var outcome in outcomes)
+            {
+                AddOutcome(outcome);
+            }
+        }
+
+        private void AddOutcome(Outcome newOutcome)
+        {
             newOutcome.MustNotBeOneOf(_outcomesAsReadOnlyList, nameof(newOutcome));
 
             _outcomes.Add(newOutcome);

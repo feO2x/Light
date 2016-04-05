@@ -10,7 +10,7 @@ namespace Light.BayesianNetwork
         IList<IRandomVariableNode> ParentNodes { get; set; }
         IDictionary<OutcomeCombination, double> ProbabilityTable { get; }
 
-        void AddOutcome(Outcome newOutcome);
+        void AddOutcomes(IReadOnlyList<Outcome> outcomes);
         void ConnectChild(IRandomVariableNode childNode);
         void ConnectParent(IRandomVariableNode parentNode);
         void DisconnectChild(IRandomVariableNode childNode);

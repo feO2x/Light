@@ -25,19 +25,18 @@ namespace Light.BayesianNetwork.Tests
         public NaiveBayesRandomVariableNodeDecorator AddNetworkParentIncludingThreeOutcomes()
         {
             var networkParentNode = NewNaiveBayesRandomVariableNode();
-            networkParentNode.AddOutcome(new Outcome(Guid.NewGuid(), networkParentNode)
+            var nodeOutcomes = new List<Outcome> {new Outcome(Guid.NewGuid(), networkParentNode)
             {
                 CurrentProbability = OutcomeProbability.FromValue(0.2)
-            });
-            networkParentNode.AddOutcome(new Outcome(Guid.NewGuid(), networkParentNode)
+            }, new Outcome(Guid.NewGuid(), networkParentNode)
             {
                 CurrentProbability = OutcomeProbability.FromValue(0.08)
-            });
-
-            networkParentNode.AddOutcome(new Outcome(Guid.NewGuid(), networkParentNode)
+            }, new Outcome(Guid.NewGuid(), networkParentNode)
             {
-                CurrentProbability = OutcomeProbability.FromValue(0.72) 
-            });
+                CurrentProbability = OutcomeProbability.FromValue(0.72)
+            }};
+
+            networkParentNode.AddOutcomes(nodeOutcomes);
 
             if (_network == null)
                 _network = new NaiveBayesNetworkBuilder().Build();
@@ -50,8 +49,9 @@ namespace Light.BayesianNetwork.Tests
         public NaiveBayesRandomVariableNodeDecorator AddNetworkChildIncludingTwoOutcomes()
         {
             var networkChildNode = NewNaiveBayesRandomVariableNode();
-            networkChildNode.AddOutcome(new Outcome(Guid.NewGuid(), networkChildNode) { CurrentProbability = OutcomeProbability.FromValue(0.55) });
-            networkChildNode.AddOutcome(new Outcome(Guid.NewGuid(), networkChildNode) { CurrentProbability = OutcomeProbability.FromValue(0.45) });
+            var nodeOutcomes = new List<Outcome> { new Outcome(Guid.NewGuid(), networkChildNode) { CurrentProbability = OutcomeProbability.FromValue(0.55) },new Outcome(Guid.NewGuid(), networkChildNode) { CurrentProbability = OutcomeProbability.FromValue(0.45) }};
+
+            networkChildNode.AddOutcomes(nodeOutcomes);
 
             if (_network == null)
                 _network = new NaiveBayesNetworkBuilder().Build();

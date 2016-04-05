@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Light.GuardClauses;
 
 namespace Light.BayesianNetwork.NaiveBayes
@@ -20,6 +17,11 @@ namespace Light.BayesianNetwork.NaiveBayes
             decoratedNode.MustNotBeNull(nameof(decoratedNode));
 
             _decoratedNode = decoratedNode;
+        }
+
+        public void AddOutcomes(IReadOnlyList<Outcome> outcomes)
+        {
+            _decoratedNode.AddOutcomes(outcomes);
         }
 
         public void ConnectChild(IRandomVariableNode childNode)
@@ -52,11 +54,6 @@ namespace Light.BayesianNetwork.NaiveBayes
 
                 _decoratedNode.ParentNodes = value;
             }
-        }
-
-        public void AddOutcome(Outcome newOutcome)
-        {
-            _decoratedNode.AddOutcome(newOutcome);
         }
 
         public void DisconnectChild(IRandomVariableNode childNode)
