@@ -22,6 +22,45 @@ namespace Light.BayesianNetwork.Tests
             return _network;
         }
 
+        public NaiveBayesRandomVariableNodeDecorator AddNetworkParentIncludingThreeOutcomes()
+        {
+            var networkParentNode = NewNaiveBayesRandomVariableNode();
+            networkParentNode.AddOutcome(new Outcome(Guid.NewGuid(), networkParentNode)
+            {
+                CurrentProbability = OutcomeProbability.FromValue(0.2)
+            });
+            networkParentNode.AddOutcome(new Outcome(Guid.NewGuid(), networkParentNode)
+            {
+                CurrentProbability = OutcomeProbability.FromValue(0.08)
+            });
+
+            networkParentNode.AddOutcome(new Outcome(Guid.NewGuid(), networkParentNode)
+            {
+                CurrentProbability = OutcomeProbability.FromValue(0.72) 
+            });
+
+            if (_network == null)
+                _network = new NaiveBayesNetworkBuilder().Build();
+
+            _network.NetworkParentNode = networkParentNode;
+
+            return networkParentNode;
+        }
+
+        public NaiveBayesRandomVariableNodeDecorator AddNetworkChildIncludingTwoOutcomes()
+        {
+            var networkChildNode = NewNaiveBayesRandomVariableNode();
+            networkChildNode.AddOutcome(new Outcome(Guid.NewGuid(), networkChildNode) { CurrentProbability = OutcomeProbability.FromValue(0.55) });
+            networkChildNode.AddOutcome(new Outcome(Guid.NewGuid(), networkChildNode) { CurrentProbability = OutcomeProbability.FromValue(0.45) });
+
+            if (_network == null)
+                _network = new NaiveBayesNetworkBuilder().Build();
+
+            _network.NetworkParentNode.ConnectChild(networkChildNode);
+
+            return networkChildNode;
+        }
+
         public NaiveBayesRandomVariableNodeDecorator NewNaiveBayesRandomVariableNode()
         {
             return _nodeBuilder.Build();

@@ -15,8 +15,47 @@ namespace Light.BayesianNetwork.Tests
         // ReSharper disable once InconsistentNaming
         public void NaiveBNWithZeroNodes()
         {
-            var network = new NaiveBayesNetworkBuilder().Build();
+            var network = GetNaiveBayesianNetwork();
             network.NetworkParentNode.Should().Be(null);
+        }
+
+        [Fact(DisplayName = "Adding three outcomes to a naive bayes networks parent node.")]
+        // ReSharper disable once InconsistentNaming
+        public void NaiveBNWithProbabilityTableOnParent()
+        {
+            var network = GetNaiveBayesianNetwork();
+
+            AddNetworkParentIncludingThreeOutcomes();
+
+            network.NetworkParentNode.Outcomes.Count.Should().Be(3);
+        }
+
+        [Fact(DisplayName = "Adding a child node with outcomes to a naive bayes networks parent node.")]
+        // ReSharper disable once InconsistentNaming
+        public void NaiveBNWithProbabilityTableOnChild()
+        {
+            var network = GetNaiveBayesianNetwork();
+            AddNetworkParentIncludingThreeOutcomes();
+
+            AddNetworkChildIncludingTwoOutcomes();
+
+            // ReSharper disable once PossibleNullReferenceException
+            network.NetworkParentNode.ChildNodes.FirstOrDefault().Outcomes.Count.Should().Be(2);
+        }
+
+        [Fact(DisplayName = "Adding a probability table to a naive bayes networks child node and parent.")]
+        // ReSharper disable once InconsistentNaming
+        public void NaiveBNWithTwoNodesSetChildEvidence()
+        {
+            var network = GetNaiveBayesianNetwork();
+            AddNetworkParentIncludingThreeOutcomes();
+            var networkChildNode = AddNetworkChildIncludingTwoOutcomes();
+
+            // ReSharper disable once PossibleNullReferenceException
+            networkChildNode.Outcomes.FirstOrDefault().SetEvidence();
+
+            // ReSharper disable once PossibleNullReferenceException
+            network.NetworkParentNode.ChildNodes.FirstOrDefault().ProbabilityKind().Should().Be(OutcomeProbabilityKind.Evidence);
         }
 
         [Fact(DisplayName = "One parent node can be added to a naive bayes network.")]

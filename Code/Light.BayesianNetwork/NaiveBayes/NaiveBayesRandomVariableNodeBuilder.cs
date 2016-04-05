@@ -1,29 +1,23 @@
-﻿using System;
-using Light.GuardClauses;
+﻿using Light.GuardClauses;
 
 namespace Light.BayesianNetwork.NaiveBayes
 {
     public class NaiveBayesRandomVariableNodeBuilder
     {
-        private IRandomVariableNode _node;
+        private readonly BayesianNetwork _network;
 
         public NaiveBayesRandomVariableNodeBuilder(BayesianNetwork network)
         {
+            _network = network;
             network.MustNotBeNull(nameof(network));
-
-            _node = new RandomVariableNodeBuilder(network).Build();
         }
 
-        public NaiveBayesRandomVariableNodeBuilder WithDecorateRandomVariableNode(IRandomVariableNode node)
+        public NaiveBayesRandomVariableNodeDecorator Build(IRandomVariableNode node = null)
         {
-            node.MustNotBeNull(nameof(node));
-            _node = node;
-            return this;
-        }
+            if(node == null)
+                node = new RandomVariableNodeBuilder(_network).Build();
 
-        public NaiveBayesRandomVariableNodeDecorator Build()
-        {
-            return new NaiveBayesRandomVariableNodeDecorator(_node);
+            return new NaiveBayesRandomVariableNodeDecorator(node);
         }
     }
 }
