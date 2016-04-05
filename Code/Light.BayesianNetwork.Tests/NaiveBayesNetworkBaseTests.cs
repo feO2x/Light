@@ -10,19 +10,19 @@ namespace Light.BayesianNetwork.Tests
     public class NaiveBayesNetworkBaseTests
     {
         private BayesianNetwork _network;
-        private RandomVariableNodeBuilder _nodeBuilder;
+        private NaiveBayesRandomVariableNodeBuilder _nodeBuilder;
 
         public BayesianNetwork GetNaiveBayesianNetwork()
         {
             if(_network == null)
                 _network = new NaiveBayesNetworkBuilder().Build();
 
-            _nodeBuilder = new RandomVariableNodeBuilderFactory().Create(_network);
+            _nodeBuilder = new NaiveBayesRandomVariableNodeBuilderFactory().Create(_network);
 
             return _network;
         }
 
-        public RandomVariableNode NewRandomVariableNode()
+        public NaiveBayesRandomVariableNodeDecorator NewNaiveBayesRandomVariableNode()
         {
             return _nodeBuilder.Build();
         }

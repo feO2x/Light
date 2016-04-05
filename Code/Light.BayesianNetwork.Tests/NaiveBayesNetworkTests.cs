@@ -24,7 +24,7 @@ namespace Light.BayesianNetwork.Tests
         public void NaiveBNWithParentNode()
         {
             var network = GetNaiveBayesianNetwork();
-            var parentNode = NewRandomVariableNode();
+            var parentNode = NewNaiveBayesRandomVariableNode();
 
             network.AddNetworkParentNode(parentNode);
 
@@ -36,8 +36,8 @@ namespace Light.BayesianNetwork.Tests
         public void NaiveBNWithTwoParentNodesFails()
         {
             var network = GetNaiveBayesianNetwork();
-            var parentNode = NewRandomVariableNode();
-            var secondParentNode = NewRandomVariableNode();
+            var parentNode = NewNaiveBayesRandomVariableNode();
+            var secondParentNode = NewNaiveBayesRandomVariableNode();
 
             network.AddNetworkParentNode(parentNode);
             Action act = () => network.AddNetworkParentNode(secondParentNode);
@@ -52,8 +52,8 @@ namespace Light.BayesianNetwork.Tests
         public void AddParentToNaiveBNParentNodeFails()
         {
             var network = GetNaiveBayesianNetwork();
-            var networkParentNode = NewRandomVariableNode();
-            var parentParentNode = NewRandomVariableNode();
+            var networkParentNode = NewNaiveBayesRandomVariableNode();
+            var parentParentNode = NewNaiveBayesRandomVariableNode();
 
             network.AddNetworkParentNode(networkParentNode);
             Action act = () => network.NetworkParentNode.ConnectParent(parentParentNode);
@@ -61,24 +61,39 @@ namespace Light.BayesianNetwork.Tests
             //todo: need an RandomVariableNode decorator for naive bayes networks where multiple parents are not allowed and may other stuff 
             act.ShouldThrow<ArgumentException>()
                 .And.Message.Should()
-                .Be($"The new network parent node {networkParentNode} has parents but the network parent node is not allowed to have parent nodes.");
+                .Be($"Cannot add node {parentParentNode} as parent to {networkParentNode} because {parentParentNode} is not the networks parent node.");
         }
 
-        [Fact(DisplayName = "Adding a parent node that already has a parent node to the naive bayes network parent node fails.")]
+        [Fact(DisplayName = "Adding a parent node that already is the naive bayes network parent node fails.")]
         // ReSharper disable once InconsistentNaming
         public void AddParentToNaiveBNThatHasAParent()
         {
             var network = GetNaiveBayesianNetwork();
-            var networkParentNode = NewRandomVariableNode();
-            var parentParentNode = NewRandomVariableNode();
+            var networkParentNode = NewNaiveBayesRandomVariableNode();
+            var parentParentNode = NewNaiveBayesRandomVariableNode();
 
-            networkParentNode.ConnectParent(parentParentNode);
+            network.AddNetworkParentNode(networkParentNode);
 
-            Action act = () => network.AddNetworkParentNode(networkParentNode);
+            Action act = () => network.NetworkParentNode.ConnectParent(parentParentNode);
 
             act.ShouldThrow<ArgumentException>()
                 .And.Message.Should()
-                .Be($"The new network parent node {networkParentNode} has parents but the network parent node is not allowed to have parent nodes.");
+                .Be($"Cannot add node {parentParentNode} as parent to {networkParentNode} because {parentParentNode} is not the networks parent node.");
+        }
+
+        [Fact(DisplayName = "Try adding a parent node that is not the networks parent node fails.")]
+        // ReSharper disable once InconsistentNaming
+        public void AddNonNetworkParentAsParent()
+        {
+            GetNaiveBayesianNetwork();
+            var networkParentNode = NewNaiveBayesRandomVariableNode();
+            var parentParentNode = NewNaiveBayesRandomVariableNode();
+
+            Action act = () => networkParentNode.ConnectParent(parentParentNode);
+
+            act.ShouldThrow<ArgumentException>()
+                .And.Message.Should()
+                .Be($"Cannot add node {parentParentNode} as parent to {networkParentNode} because {parentParentNode} is not the networks parent node.");
         }
     }
 }

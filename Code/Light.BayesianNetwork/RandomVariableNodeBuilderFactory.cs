@@ -1,3 +1,4 @@
+using Light.BayesianNetwork.NaiveBayes;
 using Light.GuardClauses;
 
 namespace Light.BayesianNetwork

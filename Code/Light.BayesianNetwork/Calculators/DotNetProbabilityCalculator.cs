@@ -31,7 +31,7 @@ namespace Light.BayesianNetwork.Calculators
         }
 
         //calculator has to know the change (or just the new value) of the networks parent probability
-        public void CalculateObservedProbabilitiesFromParentProbability(IReadOnlyList<RandomVariableNode> childNodes)
+        public void CalculateObservedProbabilitiesFromParentProbability(IReadOnlyList<IRandomVariableNode> childNodes)
         {
             foreach (var node in childNodes)
             {

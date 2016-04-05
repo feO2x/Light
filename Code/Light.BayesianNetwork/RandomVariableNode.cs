@@ -6,14 +6,14 @@ using Light.GuardClauses;
 
 namespace Light.BayesianNetwork
 {
-    public class RandomVariableNode : EntityWithName
+    public class RandomVariableNode : EntityWithName, IRandomVariableNode
     {
-        private readonly IList<RandomVariableNode> _childNodes;
-        private readonly IReadOnlyList<RandomVariableNode> _childNodesAsReadOnlyList;
+        private readonly IList<IRandomVariableNode> _childNodes;
+        private readonly IReadOnlyList<IRandomVariableNode> _childNodesAsReadOnlyList;
         private readonly IList<Outcome> _outcomes;
         private readonly IReadOnlyList<Outcome> _outcomesAsReadOnlyList;
-        private readonly IList<RandomVariableNode> _parentNodes;
-        private readonly IReadOnlyList<RandomVariableNode> _parentNodesAsReadOnlyList;
+        private IList<IRandomVariableNode> _parentNodes;
+        private readonly IReadOnlyList<IRandomVariableNode> _parentNodesAsReadOnlyList;
         private OutcomeProbabilityKind _probabilityKind;
         private readonly IProbabilityCalculator _probabilityCalculator;
 
@@ -33,12 +33,21 @@ namespace Light.BayesianNetwork
 
         public BayesianNetwork Network { get; }
 
-        public IReadOnlyList<RandomVariableNode> ParentNodes => _parentNodesAsReadOnlyList;
-        public IReadOnlyList<RandomVariableNode> ChildNodes => _childNodesAsReadOnlyList;
+        public IList<IRandomVariableNode> ParentNodes
+        {
+            get { return _parentNodes; }
+            set
+            {
+                value.MustNotBeNull(nameof(value));
+
+                _parentNodes = value;
+            }
+        }
+        public IReadOnlyList<IRandomVariableNode> ChildNodes => _childNodesAsReadOnlyList;
         public IReadOnlyList<Outcome> Outcomes => _outcomesAsReadOnlyList;
         public IDictionary<OutcomeCombination, double> ProbabilityTable { get; }
 
-        public void ConnectChild(RandomVariableNode childNode)
+        public void ConnectChild(IRandomVariableNode childNode)
         {
             childNode.MustNotBeNull(nameof(childNode));
 
@@ -47,7 +56,7 @@ namespace Light.BayesianNetwork
             // TODO: hook up to events of the child node
         }
 
-        public void DisconnectChild(RandomVariableNode childNode)
+        public void DisconnectChild(IRandomVariableNode childNode)
         {
             childNode.MustNotBeNull(nameof(childNode));
 
@@ -67,7 +76,7 @@ namespace Light.BayesianNetwork
             // TODO: unhook from events of removed node
         }
 
-        public void ConnectParent(RandomVariableNode parentNode)
+        public void ConnectParent(IRandomVariableNode parentNode)
         {
             parentNode.MustNotBeNull(nameof(parentNode));
 
@@ -76,7 +85,7 @@ namespace Light.BayesianNetwork
             // TODO: hook up to events of the parent node
         }
 
-        public void DisconnectParent(RandomVariableNode parentNode)
+        public void DisconnectParent(IRandomVariableNode parentNode)
         {
             parentNode.MustNotBeNull(nameof(parentNode));
 
