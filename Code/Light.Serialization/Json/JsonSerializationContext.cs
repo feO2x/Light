@@ -8,14 +8,14 @@ namespace Light.Serialization.Json
         public readonly object ObjectToBeSerialized;
         public readonly Type ActualType;
         public readonly Type ReferencedType;
-        public readonly Action<object, Type, Type> SerializeChildObject;
+        public readonly Action<object, Type, Type, bool> SerializeChildObject;
         public readonly IJsonWriter Writer;
 
 
         public JsonSerializationContext(object objectToBeSerialized,
                                         Type actualType,
                                         Type referencedType,
-                                        Action<object, Type, Type> serializeChildObject,
+                                        Action<object, Type, Type,bool> serializeChildObject,
                                         IJsonWriter writer)
         {
             objectToBeSerialized.MustNotBeNull(nameof(objectToBeSerialized));

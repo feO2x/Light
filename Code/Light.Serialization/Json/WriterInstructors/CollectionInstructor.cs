@@ -10,36 +10,44 @@ namespace Light.Serialization.Json.WriterInstructors
             return @object is IEnumerable;
         }
 
-        public void Serialize(JsonSerializationContext serializationContext)
+        public bool Serialize(JsonSerializationContext serializationContext)
         {
             var enumerable = (IEnumerable)serializationContext.@ObjectToBeSerialized;
-
+            var decreaseIndentAfterSerialization = true;
             var writer = serializationContext.Writer;
             var enumerator = enumerable.GetEnumerator();
             if (enumerator.MoveNext() == false)
             {
                 writer.BeginArray();
                 writer.EndArray();
-                return;
+                return decreaseIndentAfterSerialization;
             }
 
             writer.BeginArray();
+            var collectionIndex = 0;
             while (true)
             {
+                var firstObjectInCollection = false;
                 var currentChildObject = enumerator.Current;
                 if (currentChildObject == null)
                     writer.WriteNull();
                 else
                 {
                     var childType = currentChildObject.GetType();
-                    serializationContext.SerializeChildObject(currentChildObject, childType, childType);
+
+                    if (collectionIndex == 0)
+                        firstObjectInCollection = true;
+                    serializationContext.SerializeChildObject(currentChildObject, childType, childType, firstObjectInCollection);
                 }
                 if (enumerator.MoveNext())
                     writer.WriteDelimiter();
                 else
                     break;
+                collectionIndex++;
             }
             writer.EndArray();
+
+            return decreaseIndentAfterSerialization;
         }
     }
 }

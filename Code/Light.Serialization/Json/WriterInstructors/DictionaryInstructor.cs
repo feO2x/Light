@@ -21,24 +21,27 @@ namespace Light.Serialization.Json.WriterInstructors
             return @object is IDictionary;
         }
 
-        public void Serialize(JsonSerializationContext serializationContext)
+        public bool Serialize(JsonSerializationContext serializationContext)
         {
             var dictionary = (IDictionary) serializationContext.ObjectToBeSerialized;
-
+            var decreaseIndentAfterSerialization = true;
             var writer = serializationContext.Writer;
             writer.BeginObject();
 
             if (dictionary.Count == 0)
             {
                 writer.EndObject();
-                return;
+                return decreaseIndentAfterSerialization;
             }
 
             var dicitionaryEnumerator = dictionary.GetEnumerator();
             dicitionaryEnumerator.MoveNext();
+
+            var indexDictionaryIteration = 0;
             while (true)
             {
                 var key = dicitionaryEnumerator.Key;
+                var firstDictionaryIteration = false;
                 if (key == null)
                     writer.WriteKey(JsonSymbols.Null);
                 else
@@ -60,15 +63,21 @@ namespace Light.Serialization.Json.WriterInstructors
                 else
                 {
                     var valueType = value.GetType();
-                    serializationContext.SerializeChildObject(value, valueType, valueType);
+                    if (indexDictionaryIteration == 0)
+                        firstDictionaryIteration = true;
+                    serializationContext.SerializeChildObject(value, valueType, valueType, firstDictionaryIteration);
                 }
 
                 if (dicitionaryEnumerator.MoveNext())
                     writer.WriteDelimiter();
                 else
                     break;
+
+                indexDictionaryIteration++;
             }
             writer.EndObject();
+
+            return decreaseIndentAfterSerialization;
         }
     }
 }

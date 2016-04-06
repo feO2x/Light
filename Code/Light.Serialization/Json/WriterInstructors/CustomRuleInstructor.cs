@@ -24,9 +24,11 @@ namespace Light.Serialization.Json.WriterInstructors
             return actualType == _targetType;
         }
 
-        public void Serialize(JsonSerializationContext serializationContext)
+        public bool Serialize(JsonSerializationContext serializationContext)
         {
+            bool decreaseIndentAfterSerialzation = false;
             ComplexObjectWriting.WriteValues(serializationContext, _valueProviders);
+            return decreaseIndentAfterSerialzation;
         }
     }
 }

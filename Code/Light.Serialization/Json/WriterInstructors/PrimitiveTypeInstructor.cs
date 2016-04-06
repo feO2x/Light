@@ -20,11 +20,13 @@ namespace Light.Serialization.Json.WriterInstructors
             return PrimitiveTypeToFormattersMapping.ContainsKey(actualType);
         }
 
-        public void Serialize(JsonSerializationContext serializationContext)
+        public bool Serialize(JsonSerializationContext serializationContext)
         {
+            bool decreaseIndentAfterSerialization = false;
             var typeFormatter = PrimitiveTypeToFormattersMapping[serializationContext.ActualType];
             var stringRepresentation = typeFormatter.FormatPrimitiveType(serializationContext.ObjectToBeSerialized);
             serializationContext.Writer.WritePrimitiveValue(stringRepresentation);
+            return decreaseIndentAfterSerialization;
         }
     }
 }

@@ -20,6 +20,7 @@ namespace Light.Serialization.Json
         private IDictionary<Type, IJsonWriterInstructor> _instructorCache;
         private IReadableValuesTypeAnalyzer _typeAnalyzer = new ValueProvidersCacheDecorator(new PublicPropertiesAndFieldsAnalyzer(), new Dictionary<Type, IList<IValueProvider>>());
         private IJsonWriterFactory _writerFactory;
+        private int _maxIndent = 0;
 
         public JsonSerializerBuilder()
         {
@@ -67,6 +68,14 @@ namespace Light.Serialization.Json
             if (complexObjectInstructor != null)
                 complexObjectInstructor.TypeAnalyzer = _typeAnalyzer;
 
+            return this;
+        }
+
+        public JsonSerializerBuilder WithMaxIndent(int maxIndent)
+        {
+            maxIndent.MustNotBeLessThan(1);
+
+            _maxIndent = maxIndent;
             return this;
         }
 
@@ -162,7 +171,11 @@ namespace Light.Serialization.Json
             {
                 writerInstructors.Add(instructor);
             }
-            return new JsonSerializer((IReadOnlyList<IJsonWriterInstructor>) writerInstructors, _writerFactory, _instructorCache);
+
+            if(_maxIndent != 0)
+                return new JsonSerializer((IReadOnlyList<IJsonWriterInstructor>)writerInstructors, _writerFactory, _instructorCache, _maxIndent);
+
+            return new JsonSerializer((IReadOnlyList<IJsonWriterInstructor>)writerInstructors, _writerFactory, _instructorCache);
         }
     }
 }

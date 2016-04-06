@@ -102,6 +102,7 @@
     <Compile Include="JsonNormalizedKeysTests.cs" />
     <Compile Include="JsonNullDeserializationTests.cs" />
     <Compile Include="JsonPrimitiveTypesSerializationTests.cs" />
+    <Compile Include="JsonSerializationMaxIndentTests.cs" />
     <Compile Include="JsonSerializationToHumanReadableJsonTests.cs" />
     <Compile Include="JsonStringDeserializationTests.cs" />
     <Compile Include="JsonTimeSpanDeserializationTests.cs" />

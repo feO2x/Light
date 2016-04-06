@@ -63,7 +63,7 @@ namespace Light.Serialization.UnityContainerIntegration
         {
             container.MustNotBeNull(nameof(container));
 
-            return container.RegisterType<ISerializer, JsonSerializer>()
+            return container.RegisterType<ISerializer, JsonSerializer>(new InjectionFactory(c => new JsonSerializer(c.Resolve<IReadOnlyList<IJsonWriterInstructor>>(), c.Resolve<IJsonWriterFactory>(), c.Resolve<IDictionary<Type, IJsonWriterInstructor>>())))
                             .RegisterType<IDictionary<Type, IJsonWriterInstructor>>(new ContainerControlledLifetimeManager(),
                                                                                     new InjectionFactory(c => new Dictionary<Type, IJsonWriterInstructor>()))
                             .RegisterType<IReadOnlyList<IJsonWriterInstructor>, IJsonWriterInstructor[]>()

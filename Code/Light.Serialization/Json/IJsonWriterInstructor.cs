@@ -6,6 +6,6 @@ namespace Light.Serialization.Json
     {
         bool AppliesToObject(object @object, Type actualType, Type referencedType);
 
-        void Serialize(JsonSerializationContext serializationContext);
+        bool Serialize(JsonSerializationContext serializationContext);
     }
 }

@@ -28,10 +28,12 @@ namespace Light.Serialization.Json.WriterInstructors
             return @object is Delegate == false;
         }
 
-        public void Serialize(JsonSerializationContext serializationContext)
+        public bool Serialize(JsonSerializationContext serializationContext)
         {
+            var decreaseIndentAfterSerialization = true;
             var valueProviders = _typeAnalyzer.AnalyzeType(serializationContext.ActualType);
             ComplexObjectWriting.WriteValues(serializationContext, valueProviders);
+            return decreaseIndentAfterSerialization;
         }
     }
 }

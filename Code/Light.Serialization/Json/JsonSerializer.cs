@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Light.GuardClauses;
+using Light.Serialization.Json.WriterInstructors;
 
 namespace Light.Serialization.Json
 {
@@ -10,18 +12,23 @@ namespace Light.Serialization.Json
         private readonly IJsonWriterFactory _writerFactory;
         private readonly IDictionary<Type, IJsonWriterInstructor> _instructorCache;
         private IJsonWriter _jsonWriter;
+        private int _currentIndentLevel;
+        private readonly int _maxIndentLevel;
 
         public JsonSerializer(IReadOnlyList<IJsonWriterInstructor> writerInstructors,
                               IJsonWriterFactory writerFactory,
-                              IDictionary<Type, IJsonWriterInstructor> instructorCache)
+                              IDictionary<Type, IJsonWriterInstructor> instructorCache,
+                              int maxIndentLevel = 20)
         {
             writerInstructors.MustNotBeNull(nameof(writerInstructors));
             writerFactory.MustNotBeNull(nameof(writerFactory));
             instructorCache.MustNotBeNull(nameof(instructorCache));
+            maxIndentLevel.MustNotBeLessThan(1);
 
             _writerInstructors = writerInstructors;
             _writerFactory = writerFactory;
             _instructorCache = instructorCache;
+            _maxIndentLevel = maxIndentLevel;
         }
 
         public string Serialize<T>(T objectGraphRoot)
@@ -35,14 +42,14 @@ namespace Light.Serialization.Json
             referencedType.MustNotBeNull(nameof(referencedType));
 
             _jsonWriter = _writerFactory.Create();
-            SerializeObject(objectGraphRoot, objectGraphRoot.GetType(), referencedType);
+            SerializeObject(objectGraphRoot, objectGraphRoot.GetType(), referencedType, true);
 
             var json = _writerFactory.FinishWriteProcessAndReleaseResources();
             _jsonWriter = null;
             return json;
         }
 
-        private void SerializeObject(object @object, Type actualType, Type referencedType)
+        private void SerializeObject(object @object, Type actualType, Type referencedType, bool increaseIndent)
         {
             IJsonWriterInstructor targetWriterInstructor;
             if (_instructorCache.TryGetValue(actualType, out targetWriterInstructor) == false)
@@ -54,7 +61,16 @@ namespace Light.Serialization.Json
                 _instructorCache.Add(actualType, targetWriterInstructor);
             }
 
-            targetWriterInstructor.Serialize(new JsonSerializationContext(@object, actualType, referencedType, SerializeObject, _jsonWriter));
+            if (increaseIndent)
+                _currentIndentLevel++;
+
+            if(_currentIndentLevel > _maxIndentLevel)
+                throw new SerializationException($"Serializing {@object} would produce the indent of {_currentIndentLevel} which exceeds the maximal indent of {_maxIndentLevel}.");
+
+            var decreaseIndent = targetWriterInstructor.Serialize(new JsonSerializationContext(@object, actualType, referencedType, SerializeObject, _jsonWriter));
+
+            if (decreaseIndent)
+                _currentIndentLevel--;
         }
 
         private IJsonWriterInstructor FindTargetInstructor(object @object, Type objectType, Type referencedType)
