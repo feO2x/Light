@@ -7,8 +7,8 @@ namespace Light.BayesianNetwork
     public class Outcome : EntityWithName
     {
         private OutcomeProbabilityKind _probabilityKind;
-        private OutcomeProbability _currentProbability = OutcomeProbability.DefaultMin;
-        private readonly OutcomeProbability _standardProbability = OutcomeProbability.DefaultMin;
+        private OutcomeProbability _currentProbabilityValue;
+        private OutcomeProbability _previousProbabilityValue;
 
         public Outcome(Guid id, IRandomVariableNode node, double standardProbabilityValue, OutcomeProbabilityKind probabilityKind = OutcomeProbabilityKind.CalculatedValue) : base(id)
         {
@@ -16,17 +16,17 @@ namespace Light.BayesianNetwork
 
             Node = node;
             _probabilityKind = probabilityKind;
-            _standardProbability = OutcomeProbability.FromValue(standardProbabilityValue);
-            _currentProbability = _standardProbability;
+            _previousProbabilityValue = OutcomeProbability.FromValue(standardProbabilityValue);
+            _currentProbabilityValue = _previousProbabilityValue;
         }
 
-        public OutcomeProbability CurrentProbability
+        public OutcomeProbability CurrentProbabilityValue
         {
-            get { return _currentProbability; }
-            set { _currentProbability = value; }
+            get { return _currentProbabilityValue; }
+            set { _currentProbabilityValue = value; }
         }
 
-        public OutcomeProbability StandardProbability => _standardProbability;
+        public OutcomeProbability PreviousProbabilityValue => _previousProbabilityValue;
 
         public OutcomeProbabilityKind ProbabilityKind => _probabilityKind;
 
@@ -34,8 +34,9 @@ namespace Light.BayesianNetwork
 
         public void SetEvidence()
         {
+            _previousProbabilityValue = _currentProbabilityValue;
             _probabilityKind = OutcomeProbabilityKind.Evidence;
-            _currentProbability = OutcomeProbability.DefaultMax;
+            _currentProbabilityValue = OutcomeProbability.DefaultMax;
 
             EvidenceSet?.Invoke(this);
         }
@@ -49,8 +50,9 @@ namespace Light.BayesianNetwork
 
         public void UpdateEvidenceRelatedToEvidenceChangeInNode()
         {
+            _previousProbabilityValue = _currentProbabilityValue;
             _probabilityKind = OutcomeProbabilityKind.Evidence;
-            _currentProbability = OutcomeProbability.DefaultMin;
+            _currentProbabilityValue = OutcomeProbability.DefaultMin;
         }
 
         public event Action<Outcome> EvidenceSet;

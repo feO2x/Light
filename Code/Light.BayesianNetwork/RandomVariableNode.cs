@@ -109,7 +109,7 @@ namespace Light.BayesianNetwork
         {
             if(outcomes.Count < 2) throw new ArgumentException($"{outcomes} must include at least 2 outcomes but has {outcomes.Count}.");
 
-            var outcomeProbabilitySum = outcomes.Sum(outcome => outcome.CurrentProbability.Value);
+            var outcomeProbabilitySum = outcomes.Sum(outcome => outcome.CurrentProbabilityValue.Value);
             if (Math.Abs(outcomeProbabilitySum - 1.0) > 0.01)
                 throw new ArgumentException($"The sum of all nodes outcomes must be 1 but is {outcomeProbabilitySum}");
 

@@ -25,9 +25,9 @@ namespace Light.BayesianNetwork.Calculators
             foreach (var parentNodeOutcome in parentNode.Outcomes)
             {
                 var childsStandardOutcomeProbabilityValue = childNode.ProbabilityTable[new OutcomeCombination(parentNodeOutcome, outcomeToSetEvidenceOn)];
-                var newParentNodeOutcomeProbabilityValue = parentNodeOutcome.CurrentProbability.Value / outcomeToSetEvidenceOn.StandardProbability.Value * childsStandardOutcomeProbabilityValue;
+                var newParentNodeOutcomeProbabilityValue = parentNodeOutcome.CurrentProbabilityValue.Value / outcomeToSetEvidenceOn.PreviousProbabilityValue.Value * childsStandardOutcomeProbabilityValue;
 
-                parentNodeOutcome.CurrentProbability = OutcomeProbability.FromValue(newParentNodeOutcomeProbabilityValue);
+                parentNodeOutcome.CurrentProbabilityValue = OutcomeProbability.FromValue(newParentNodeOutcomeProbabilityValue);
             }
         }
 
@@ -64,10 +64,10 @@ namespace Light.BayesianNetwork.Calculators
                 var outcomeCombinationChildParentOutcome = new OutcomeCombination(parentNodeOutcome, childNodeOutcome);
                 if (childNode.ProbabilityTable.TryGetValue(outcomeCombinationChildParentOutcome, out childParentOutcomeProbabilityFromTable) == false)
                     throw new Exception($"The child nodes {childNode} probability table does not contain a probability combination for outcomes {childNodeOutcome} (childNodeOutcome) and {parentNodeOutcome} (parentNodeOutcome).");
-                result += parentNodeOutcome.CurrentProbability.Value * childParentOutcomeProbabilityFromTable;
+                result += parentNodeOutcome.CurrentProbabilityValue.Value * childParentOutcomeProbabilityFromTable;
             }
 
-            childNodeOutcome.CurrentProbability = OutcomeProbability.FromValue(result);
+            childNodeOutcome.CurrentProbabilityValue = OutcomeProbability.FromValue(result);
         }
 
 
