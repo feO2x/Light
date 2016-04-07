@@ -172,7 +172,7 @@ namespace Light.BayesianNetwork
 
             foreach (var outcome in _outcomes)
             {
-                _probabilityCalculator.CalculateOutcomeProbabilityForSpecificOutcome(outcome);
+                _probabilityCalculator.CalculateOutcomeProbabilityForSpecificChildNodesOutcome(outcome);
 
                 if(evidenceOutcome == outcome)
                     continue;

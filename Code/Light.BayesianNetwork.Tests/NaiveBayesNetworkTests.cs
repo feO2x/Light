@@ -47,14 +47,29 @@ namespace Light.BayesianNetwork.Tests
         // ReSharper disable once InconsistentNaming
         public void NaiveBNWithTwoNodesSetChildEvidence()
         {
-            var network = GetSimplePreconfiguredBayesianNetwork();
+            var network = GetPreconfiguredBayesianNetworkWithOneParentAndOneChild();
 
             // ReSharper disable once PossibleNullReferenceException
             network.NetworkParentNode.ChildNodes.FirstOrDefault().Outcomes[0].SetEvidence();
             // ReSharper disable once PossibleNullReferenceException
             var isOutcomeProbability = network.NetworkParentNode.Outcomes[0].CurrentProbability.Value;
 
-            ((isOutcomeProbability - 0.054) < 0.001).Should().Be(true);
+            (Math.Abs(isOutcomeProbability - 0.054) < 0.001).Should().Be(true);
+        }
+
+        [Fact(DisplayName = "Propagate evidence in one child to parent, calculate new childs and parents probability values and set them to outcomes.")]
+        // ReSharper disable once InconsistentNaming
+        public void NaiveBNWithThreeNodesSetOneChildsEvidence()
+        {
+            var network = GetPreconfiguredBayesianNetworkWithOneParentAndTwoChild();
+            var secondChildNode = network.NetworkParentNode.ChildNodes[1];
+
+            // ReSharper disable once PossibleNullReferenceException
+            network.NetworkParentNode.ChildNodes.FirstOrDefault().Outcomes[0].SetEvidence();
+            // ReSharper disable once PossibleNullReferenceException
+            var secondChildsFirstOutcome = secondChildNode.Outcomes[0].CurrentProbability.Value;
+
+            (Math.Abs(secondChildsFirstOutcome - 0.38) < 0.001).Should().Be(true);
         }
 
         [Fact(DisplayName = "One parent node can be added to a naive bayes network.")]

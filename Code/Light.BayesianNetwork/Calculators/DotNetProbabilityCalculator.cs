@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Light.GuardClauses;
 
 namespace Light.BayesianNetwork.Calculators
@@ -41,27 +42,32 @@ namespace Light.BayesianNetwork.Calculators
 
                 foreach (var outcome in node.Outcomes)
                 {
-                    CalculateOutcomeProbabilityForSpecificOutcome(outcome);
+                    CalculateOutcomeProbabilityForSpecificChildNodesOutcome(outcome);
                 }
             }
         }
 
         //calculator has to know the change (or just the new value) of the networks parent probability
-        public void CalculateOutcomeProbabilityForSpecificOutcome(Outcome outcome)
+        public void CalculateOutcomeProbabilityForSpecificChildNodesOutcome(Outcome childNodeOutcome)
         {
-            outcome.MustNotBeNull(nameof(outcome));
+            childNodeOutcome.MustNotBeNull(nameof(childNodeOutcome));
 
-            if (outcome.Node.ProbabilityKind() == OutcomeProbabilityKind.Evidence)
+            if (childNodeOutcome.Node.ProbabilityKind() == OutcomeProbabilityKind.Evidence)
                 return;
 
             double result = 0;
+            var childNode = childNodeOutcome.Node;
 
             foreach (var parentNodeOutcome in _network.NetworkParentNode.Outcomes)
             {
-                result += parentNodeOutcome.CurrentProbability.Value * outcome.CurrentProbability.Value;
+                double childParentOutcomeProbabilityFromTable;
+                var outcomeCombinationChildParentOutcome = new OutcomeCombination(parentNodeOutcome, childNodeOutcome);
+                if (childNode.ProbabilityTable.TryGetValue(outcomeCombinationChildParentOutcome, out childParentOutcomeProbabilityFromTable) == false)
+                    throw new Exception($"The child nodes {childNode} probability table does not contain a probability combination for outcomes {childNodeOutcome} (childNodeOutcome) and {parentNodeOutcome} (parentNodeOutcome).");
+                result += parentNodeOutcome.CurrentProbability.Value * childParentOutcomeProbabilityFromTable;
             }
 
-            outcome.CurrentProbability = OutcomeProbability.FromValue(result);
+            childNodeOutcome.CurrentProbability = OutcomeProbability.FromValue(result);
         }
 
 
