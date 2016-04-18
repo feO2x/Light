@@ -1,14 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Light.BayesianNetwork
 {
     public interface IRandomVariableNode
     {
-        IReadOnlyList<IRandomVariableNode> ChildNodes { get; }
+        IList<IRandomVariableNode> ChildNodes { get; set; }
         BayesianNetwork Network { get; }
         IReadOnlyList<Outcome> Outcomes { get; }
         IList<IRandomVariableNode> ParentNodes { get; set; }
-        IDictionary<OutcomeCombination, double> ProbabilityTable { get; }
+        IDictionary<OutcomeCombination, float> ProbabilityTable { get; }
+        string Name { get; set; }
+        Guid Id { get; }
 
         void AddOutcomes(IReadOnlyList<Outcome> outcomes);
         void ConnectChild(IRandomVariableNode childNode);

@@ -10,7 +10,7 @@ namespace Light.BayesianNetwork
         private OutcomeProbability _currentProbabilityValue;
         private OutcomeProbability _previousProbabilityValue;
 
-        public Outcome(Guid id, IRandomVariableNode node, double standardProbabilityValue, OutcomeProbabilityKind probabilityKind = OutcomeProbabilityKind.CalculatedValue) : base(id)
+        public Outcome(Guid id, IRandomVariableNode node, float standardProbabilityValue = 0, OutcomeProbabilityKind probabilityKind = OutcomeProbabilityKind.CalculatedValue) : base(id)
         {
             node.MustNotBeNull(nameof(node));
 
@@ -23,7 +23,11 @@ namespace Light.BayesianNetwork
         public OutcomeProbability CurrentProbabilityValue
         {
             get { return _currentProbabilityValue; }
-            set { _currentProbabilityValue = value; }
+            set
+            {
+                _previousProbabilityValue = _currentProbabilityValue;
+                _currentProbabilityValue = value;
+            }
         }
 
         public OutcomeProbability PreviousProbabilityValue => _previousProbabilityValue;

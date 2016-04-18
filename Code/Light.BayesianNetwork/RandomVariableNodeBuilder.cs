@@ -6,7 +6,6 @@ namespace Light.BayesianNetwork
     public class RandomVariableNodeBuilder
     {
         private readonly BayesianNetwork _network;
-        private Guid _guid = Guid.NewGuid();
 
         public RandomVariableNodeBuilder(BayesianNetwork network)
         {
@@ -15,15 +14,9 @@ namespace Light.BayesianNetwork
             _network = network;
         }
 
-        public RandomVariableNodeBuilder WithGuid(Guid guid)
-        {
-            _guid = guid;
-            return this;
-        }
-
         public RandomVariableNode Build()
         {
-            return new RandomVariableNode(_guid, _network);
+            return new RandomVariableNode(Guid.NewGuid(), _network);
         }
     }
 }

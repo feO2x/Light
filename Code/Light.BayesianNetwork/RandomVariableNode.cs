@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Light.BayesianNetwork.FrameworkExtensions;
+using Light.BayesianNetwork.NaiveBayes;
 using Light.GuardClauses;
 
 namespace Light.BayesianNetwork
 {
     public class RandomVariableNode : EntityWithName, IRandomVariableNode
     {
-        private readonly IList<IRandomVariableNode> _childNodes;
+        private IList<IRandomVariableNode> _childNodes;
         private readonly IReadOnlyList<IRandomVariableNode> _childNodesAsReadOnlyList;
         private readonly IList<Outcome> _outcomes;
         private readonly IReadOnlyList<Outcome> _outcomesAsReadOnlyList;
@@ -28,7 +29,7 @@ namespace Light.BayesianNetwork
             network.CollectionFactory.InitializeListFields(out _parentNodes, out _parentNodesAsReadOnlyList);
             network.CollectionFactory.InitializeListFields(out _childNodes, out _childNodesAsReadOnlyList);
             network.CollectionFactory.InitializeListFields(out _outcomes, out _outcomesAsReadOnlyList);
-            ProbabilityTable = network.CollectionFactory.CreateDictionary<OutcomeCombination, double>();
+            ProbabilityTable = network.CollectionFactory.CreateDictionary<OutcomeCombination, float>();
         }
 
         public BayesianNetwork Network { get; }
@@ -43,17 +44,26 @@ namespace Light.BayesianNetwork
                 _parentNodes = value;
             }
         }
-        public IReadOnlyList<IRandomVariableNode> ChildNodes => _childNodesAsReadOnlyList;
+
+        public IList<IRandomVariableNode> ChildNodes
+        {
+            get { return _childNodes; }
+            set
+            {
+                value.MustNotBeNull(nameof(value));
+                _childNodes = value;
+            }
+        }
+
         public IReadOnlyList<Outcome> Outcomes => _outcomesAsReadOnlyList;
-        public IDictionary<OutcomeCombination, double> ProbabilityTable { get; }
+        public IDictionary<OutcomeCombination, float> ProbabilityTable { get; }
 
         public void ConnectChild(IRandomVariableNode childNode)
         {
             childNode.MustNotBeNull(nameof(childNode));
 
-            _childNodes.Add(childNode);
-
-            // TODO: hook up to events of the child node
+            if(TryAddChild(childNode))
+                childNode.ConnectParent(this);
         }
 
         public void DisconnectChild(IRandomVariableNode childNode)
@@ -62,8 +72,7 @@ namespace Light.BayesianNetwork
 
             if (_childNodes.Remove(childNode) == false)
                 throw new ArgumentException($"The node {childNode} is no child node of {this}.", nameof(childNode));
-
-            // TODO: unhook from events of removed node
+            //todo: remove at parent
         }
 
         public void DisconnectChildAt(int index)
@@ -72,17 +81,15 @@ namespace Light.BayesianNetwork
             index.MustNotBeGreaterThanOrEqualTo(_childNodes.Count, nameof(index));
 
             _childNodes.RemoveAt(index);
-
-            // TODO: unhook from events of removed node
+            //todo: remove at parent
         }
 
         public void ConnectParent(IRandomVariableNode parentNode)
         {
             parentNode.MustNotBeNull(nameof(parentNode));
 
-            _parentNodes.Add(parentNode);
-
-            // TODO: hook up to events of the parent node
+            if(TryAddParent(parentNode))
+                parentNode.ConnectChild(this);
         }
 
         public void DisconnectParent(IRandomVariableNode parentNode)
@@ -91,8 +98,7 @@ namespace Light.BayesianNetwork
 
             if (_parentNodes.Remove(parentNode) == false)
                 throw new ArgumentException($"The node {parentNode} is no parent node of {this}.", nameof(parentNode));
-
-            // TODO: unhook from events of removed node
+            //todo: remove at child
         }
 
         public void DisconnectParentAt(int index)
@@ -101,8 +107,7 @@ namespace Light.BayesianNetwork
             index.MustNotBeGreaterThanOrEqualTo(_parentNodes.Count, nameof(index));
 
             _parentNodes.RemoveAt(index);
-
-            // TODO: unhook from events of removed node
+            //todo: remove at child
         }
 
         public void AddOutcomes(IReadOnlyList<Outcome> outcomes)
@@ -110,8 +115,9 @@ namespace Light.BayesianNetwork
             if(outcomes.Count < 2) throw new ArgumentException($"{outcomes} must include at least 2 outcomes but has {outcomes.Count}.");
 
             var outcomeProbabilitySum = outcomes.Sum(outcome => outcome.CurrentProbabilityValue.Value);
-            if (Math.Abs(outcomeProbabilitySum - 1.0) > 0.01)
-                throw new ArgumentException($"The sum of all nodes outcomes must be 1 but is {outcomeProbabilitySum}");
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
+            if (Math.Abs(outcomeProbabilitySum - 1.0) > 0.01 && outcomeProbabilitySum != OutcomeProbability.DefaultMin.Value)
+                throw new ArgumentException($"The sum of all nodes outcomes must be either 0 or 1 but is {outcomeProbabilitySum}");
 
             foreach (var outcome in outcomes)
             {
@@ -179,6 +185,24 @@ namespace Light.BayesianNetwork
 
                 outcome.RemoveEvidence();
             }
+        }
+
+        private bool TryAddParent(IRandomVariableNode newParent)
+        {
+            if (_parentNodes.Contains(newParent))
+                return false;
+
+            _parentNodes.Add(newParent);
+            return true;
+        }
+
+        private bool TryAddChild(IRandomVariableNode newChild)
+        {
+            if (_childNodes.Contains(newChild))
+                return false;
+
+            _childNodes.Add(newChild);
+            return true;
         }
     }
 }

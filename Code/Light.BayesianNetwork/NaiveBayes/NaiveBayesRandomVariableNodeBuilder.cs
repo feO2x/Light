@@ -12,10 +12,9 @@ namespace Light.BayesianNetwork.NaiveBayes
             network.MustNotBeNull(nameof(network));
         }
 
-        public NaiveBayesRandomVariableNodeDecorator Build(IRandomVariableNode node = null)
+        public NaiveBayesRandomVariableNodeDecorator Build()
         {
-            if(node == null)
-                node = new RandomVariableNodeBuilder(_network).Build();
+            var node = new RandomVariableNodeBuilder(_network).Build();
 
             return new NaiveBayesRandomVariableNodeDecorator(node);
         }

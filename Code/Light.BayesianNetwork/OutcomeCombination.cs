@@ -14,7 +14,7 @@ namespace Light.BayesianNetwork
         {
             parentOutcome.MustNotBeNull(nameof(parentOutcome));
             childOutcome.MustNotBeNull(nameof(childOutcome));
-            Check.Against(childOutcome.Node.ParentNodes.Contains(parentOutcome.Node),
+            Check.Against(childOutcome.Node.ParentNodes.Contains(parentOutcome.Node) == false,
                           () => new ArgumentException($"The node {childOutcome.Node} of the specified child outcome {childOutcome} is no child of the parent node {parentOutcome.Node}."));
             
             ParentOutcome = parentOutcome;

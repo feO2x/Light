@@ -19,16 +19,22 @@ namespace Light.BayesianNetwork.NaiveBayes
             _probabilityCalculator = probabilityCalculator;
         }
 
-        private void PropagateNewChildsEvidenceToParent(Outcome outcome)
+        private void PropagateNewChildsEvidenceToNetworkParent(Outcome outcome)
         {
             //should work for networks with two layers (one parent per network and one or more child nodes)
-            _probabilityCalculator.CalculateParentProbabilityFromEvidence(outcome);
-            PropagateNewParentPropability();
+            var currentNode = outcome.Node;
+            while (currentNode.ParentNodes.Count != 0)
+            {
+                _probabilityCalculator.CalculateParentProbabilityFromEvidence(currentNode.Outcomes.First());
+                currentNode = currentNode.ParentNodes.First();
+            }
+
+            PropagateNewParentPropability(outcome);
         }
 
-        private void PropagateNewParentPropability()
+        private void PropagateNewParentPropability(Outcome outcome)
         {
-            var networkParentNode = _network.NetworkParentNode;
+            var networkParentNode = outcome.Node.ParentNodes.First();
             _probabilityCalculator.CalculateObservedProbabilitiesFromParentProbability(networkParentNode.ChildNodes);
         }
 
@@ -36,7 +42,7 @@ namespace Light.BayesianNetwork.NaiveBayes
         {
             outcomeWithNewEvidence.MustNotBeNull(nameof(outcomeWithNewEvidence));
 
-            PropagateNewChildsEvidenceToParent(outcomeWithNewEvidence);
+            PropagateNewChildsEvidenceToNetworkParent(outcomeWithNewEvidence);
             //if evidence on naive bayes networks parent node is set, no more updates and calculations are needed
         }
     }

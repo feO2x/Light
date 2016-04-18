@@ -28,14 +28,14 @@ namespace Light.BayesianNetwork.Tests
             var parentNode = AddNetworkParentIncludingThreeOutcomes();
             var childNode = AddNetworkChildIncludingTwoOutcomes();
 
-            childNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[0], childNode.Outcomes[0]), 0.15);
-            childNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[0], childNode.Outcomes[1]), 0.85);
+            childNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[0], childNode.Outcomes[0]), (float) 0.15);
+            childNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[0], childNode.Outcomes[1]), (float) 0.85);
 
-            childNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[1], childNode.Outcomes[0]), 0.2);
-            childNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[1], childNode.Outcomes[1]), 0.8);
+            childNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[1], childNode.Outcomes[0]), (float) 0.2);
+            childNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[1], childNode.Outcomes[1]), (float) 0.8);
 
-            childNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[2], childNode.Outcomes[0]), 0.7);
-            childNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[2], childNode.Outcomes[1]), 0.3);
+            childNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[2], childNode.Outcomes[0]), (float) 0.7);
+            childNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[2], childNode.Outcomes[1]), (float) 0.3);
 
             return network;
         }
@@ -46,17 +46,17 @@ namespace Light.BayesianNetwork.Tests
             var parentNode = network.NetworkParentNode;
             var secondChildNode = AddNetworkChildIncludingThreeOutcomes();
 
-            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[0], secondChildNode.Outcomes[0]), 0.1);
-            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[0], secondChildNode.Outcomes[1]), 0.2);
-            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[0], secondChildNode.Outcomes[2]), 0.7);
+            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[0], secondChildNode.Outcomes[0]), (float) 0.1);
+            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[0], secondChildNode.Outcomes[1]), (float) 0.2);
+            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[0], secondChildNode.Outcomes[2]), (float) 0.7);
 
-            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[1], secondChildNode.Outcomes[0]), 0.25);
-            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[1], secondChildNode.Outcomes[1]), 0.25);
-            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[1], secondChildNode.Outcomes[2]), 0.5);
+            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[1], secondChildNode.Outcomes[0]), (float) 0.25);
+            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[1], secondChildNode.Outcomes[1]), (float) 0.25);
+            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[1], secondChildNode.Outcomes[2]), (float) 0.5);
 
-            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[2], secondChildNode.Outcomes[0]), 0.4);
-            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[2], secondChildNode.Outcomes[1]), 0.4);
-            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[2], secondChildNode.Outcomes[2]), 0.2);
+            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[2], secondChildNode.Outcomes[0]), (float) 0.4);
+            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[2], secondChildNode.Outcomes[1]), (float) 0.4);
+            secondChildNode.ProbabilityTable.Add(new OutcomeCombination(parentNode.Outcomes[2], secondChildNode.Outcomes[2]), (float) 0.2);
 
             return network;
         }
@@ -64,13 +64,13 @@ namespace Light.BayesianNetwork.Tests
         public NaiveBayesRandomVariableNodeDecorator AddNetworkParentIncludingThreeOutcomes()
         {
             var networkParentNode = NewNaiveBayesRandomVariableNode();
-            var nodeOutcomes = new List<Outcome> {new Outcome(Guid.NewGuid(), networkParentNode, 0.2)
+            var nodeOutcomes = new List<Outcome> {new Outcome(Guid.NewGuid(), networkParentNode, (float) 0.2)
             {
                 Name = "is"
-            }, new Outcome(Guid.NewGuid(), networkParentNode, 0.08)
+            }, new Outcome(Guid.NewGuid(), networkParentNode, (float) 0.08)
             {
                 Name = "h"
-            }, new Outcome(Guid.NewGuid(), networkParentNode, 0.72)
+            }, new Outcome(Guid.NewGuid(), networkParentNode, (float) 0.72)
             {
                 Name = "m"
             }};
@@ -88,7 +88,7 @@ namespace Light.BayesianNetwork.Tests
         public NaiveBayesRandomVariableNodeDecorator AddNetworkChildIncludingTwoOutcomes()
         {
             var networkChildNode = NewNaiveBayesRandomVariableNode();
-            var nodeOutcomes = new List<Outcome> { new Outcome(Guid.NewGuid(), networkChildNode, 0.55) { Name = "in"},new Outcome(Guid.NewGuid(), networkChildNode, 0.45) { Name = "n"}};
+            var nodeOutcomes = new List<Outcome> { new Outcome(Guid.NewGuid(), networkChildNode, (float) 0.55) { Name = "in"},new Outcome(Guid.NewGuid(), networkChildNode, (float) 0.45) { Name = "n"}};
 
             networkChildNode.AddOutcomes(nodeOutcomes);
 
@@ -103,7 +103,7 @@ namespace Light.BayesianNetwork.Tests
         public NaiveBayesRandomVariableNodeDecorator AddNetworkChildIncludingThreeOutcomes()
         {
             var networkChildNode = NewNaiveBayesRandomVariableNode();
-            var nodeOutcomes = new List<Outcome> { new Outcome(Guid.NewGuid(), networkChildNode, 0.33) { Name = "s" }, new Outcome(Guid.NewGuid(), networkChildNode, 0.35) { Name = "m" }, new Outcome(Guid.NewGuid(), networkChildNode, 0.32) { Name = "n" } };
+            var nodeOutcomes = new List<Outcome> { new Outcome(Guid.NewGuid(), networkChildNode, (float) 0.33) { Name = "s" }, new Outcome(Guid.NewGuid(), networkChildNode, (float) 0.35) { Name = "m" }, new Outcome(Guid.NewGuid(), networkChildNode, (float) 0.32) { Name = "n" } };
 
             networkChildNode.AddOutcomes(nodeOutcomes);
 

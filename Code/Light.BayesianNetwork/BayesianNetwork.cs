@@ -55,5 +55,10 @@ namespace Light.BayesianNetwork
         {
             NetworkParentNode = null;
         }
+
+        public void CalculateAllNetworkChildProbabilitiesAccordingToParentOutcomeValues()
+        {
+            ProbabilityCalculator.CalculateObservedProbabilitiesFromParentProbability(NetworkParentNode.ChildNodes);
+        }
     }
 }

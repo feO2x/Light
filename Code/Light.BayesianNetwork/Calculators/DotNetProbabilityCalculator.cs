@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Light.GuardClauses;
 
 namespace Light.BayesianNetwork.Calculators
@@ -20,7 +21,7 @@ namespace Light.BayesianNetwork.Calculators
             outcomeToSetEvidenceOn.MustNotBeNull(nameof(outcomeToSetEvidenceOn));
 
             var childNode = outcomeToSetEvidenceOn.Node;
-            var parentNode = _network.NetworkParentNode;
+            var parentNode = childNode.ParentNodes.First();
 
             foreach (var parentNodeOutcome in parentNode.Outcomes)
             {
@@ -32,7 +33,7 @@ namespace Light.BayesianNetwork.Calculators
         }
 
         //calculator has to know the change (or just the new value) of the networks parent probability
-        public void CalculateObservedProbabilitiesFromParentProbability(IReadOnlyList<IRandomVariableNode> childNodes)
+        public void CalculateObservedProbabilitiesFromParentProbability(IList<IRandomVariableNode> childNodes)
         {
             foreach (var node in childNodes)
             {
@@ -44,6 +45,9 @@ namespace Light.BayesianNetwork.Calculators
                 {
                     CalculateOutcomeProbabilityForSpecificChildNodesOutcome(outcome);
                 }
+
+                if (node.ChildNodes.Count > 0)
+                    CalculateObservedProbabilitiesFromParentProbability(node.ChildNodes);
             }
         }
 
@@ -55,12 +59,13 @@ namespace Light.BayesianNetwork.Calculators
             if (childNodeOutcome.Node.ProbabilityKind() == OutcomeProbabilityKind.Evidence)
                 return;
 
-            double result = 0;
+            float result = 0;
             var childNode = childNodeOutcome.Node;
+            var childsParentNode = childNode.ParentNodes.First();
 
-            foreach (var parentNodeOutcome in _network.NetworkParentNode.Outcomes)
+            foreach (var parentNodeOutcome in childsParentNode.Outcomes)
             {
-                double childParentOutcomeProbabilityFromTable;
+                float childParentOutcomeProbabilityFromTable;
                 var outcomeCombinationChildParentOutcome = new OutcomeCombination(parentNodeOutcome, childNodeOutcome);
                 if (childNode.ProbabilityTable.TryGetValue(outcomeCombinationChildParentOutcome, out childParentOutcomeProbabilityFromTable) == false)
                     throw new Exception($"The child nodes {childNode} probability table does not contain a probability combination for outcomes {childNodeOutcome} (childNodeOutcome) and {parentNodeOutcome} (parentNodeOutcome).");
